@@ -1,0 +1,23 @@
+﻿@*@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor httpcontextAccessor*@
+<ul class="navbar-nav">
+
+    <li class="nav-item">
+        <a class="nav-link text-light FontSizeHeaders" asp-area="" asp-controller="Home" asp-action="Logout">Log ud</a>
+    </li>
+
+    @*@if (Convert.ToBoolean(httpcontextAccessor.HttpContext.Session.GetString("loggedIn")))
+    {
+        <li class="nav-item">
+            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Logout">Log ud</a>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Login">Log ind</a>
+        </li>
+    }*@
+
+
+</ul>

@@ -23,7 +23,7 @@ namespace HUS_project.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult MySite()
         {
             return View();
         }
