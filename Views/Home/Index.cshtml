@@ -3,18 +3,45 @@
 }
 
 <div class="UpperBar">
-    <div class="row">
-        <div class="col-md-4">
-            <label>Søgeord:</label>
+    
+    <form action="" method="post">
+        
+        <div class="row">
+            <div class="col-md-3">
+                <label>Søgeord:</label>
+            </div>
+            <div class="col-md-3">
+                <label>Kategori:</label>
+            </div>
+            <div class="col-md-3">
+                <label>Udlån Start:</label>
+            </div>
+            <div class="col-md-3">
+                <label>Udlån Slut:</label>
+            </div>
         </div>
-        <div class="col-md-4">
-            <label>Søgeord:</label>
+
+        <div class="row">
+            <div class="col-md-3">
+                <input />
+            </div>
+            <div class="col-md-3">
+                <select>
+                    <option>PC</option>
+                    <option>printer</option>
+                    <option>Switch</option>
+                    <option>Rack</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input placeholder="Vælg Dato" class="textbox-n" type="text" onfocusin="(this.type='date')" onfocusout="(this.type='text')" id="date">
+            </div>
+            <div class="col-md-3">
+                <input placeholder="Vælg Dato" class="textbox-n" type="text" onfocusin="(this.type='date')" onfocusout="(this.type='text')" id="date">
+            </div>
         </div>
-        <div class="col-md-4">
-            <label>Søgeord:</label>
-        </div>
-        <div class="col-md-4">
-            <label>Søgeord:</label>
-        </div>
-    </div>
+
+    </form>
+    
+    
 </div>
