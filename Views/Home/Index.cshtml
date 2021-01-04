@@ -3,9 +3,9 @@
 }
 
 <div class="UpperBar">
-    
-    <form action="" method="post">
-        
+    @*SEARCH FORM*@
+    <form action="" method="post" id="SearchForm">
+        @*TITLES*@
         <div class="row">
             <div class="col-md-3">
                 <label>Søgeord:</label>
@@ -20,28 +20,29 @@
                 <label>Udlån Slut:</label>
             </div>
         </div>
-
         <div class="row">
+            @*Search Input*@
             <div class="col-md-3">
-                <input />
+                <input autocomplete="off" />
             </div>
+            @*Category Selector*@
             <div class="col-md-3">
                 <select>
                     <option>PC</option>
-                    <option>printer</option>
+                    <option>Printer</option>
                     <option>Switch</option>
                     <option>Rack</option>
                 </select>
             </div>
+            @*Borrow from this date*@
             <div class="col-md-3">
-                <input placeholder="Vælg Dato" class="textbox-n" type="text" onfocusin="(this.type='date')" onfocusout="(this.type='text')" id="date">
+                <input placeholder="Vælg Dato" type="date" @*onfocusin="(this.type='date')" onfocusout="(this.type='text')"*@ class="date">
             </div>
+            @*Borrow until this date*@
             <div class="col-md-3">
-                <input placeholder="Vælg Dato" class="textbox-n" type="text" onfocusin="(this.type='date')" onfocusout="(this.type='text')" id="date">
+                <input placeholder="Vælg Dato" type="date" @*onfocusin="(this.type='date')" onfocusout="(this.type='text')"*@ class="date">
             </div>
         </div>
-
     </form>
-    
-    
+    @*SEARCH FORM END*@
 </div>
