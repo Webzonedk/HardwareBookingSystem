@@ -11,7 +11,7 @@ namespace HUS_project.Models
 
         private int bookingID;
         private string customer;
-        private List<ItemLine> items;
+        private List<ItemLineModel> items;
         private List<DeviceModel> devices;
         private List<DeviceModel> logs;
         private BuildingModel location;
@@ -30,25 +30,25 @@ namespace HUS_project.Models
             set { bookingID = value; }
         }
 
-        public User Customer
+        public string Customer
         {
             get { return customer; }
             set { customer = value; }
         }
 
-        public List<ItemLine> Items
+        public List<ItemLineModel> Items
         {
             get { return items; }
             set { items = value; }
         }
 
-        public List<ItemLine> Devices
+        public List<DeviceModel> Devices
         {
             get { return devices; }
             set { devices = value; }
         }
 
-        public List<ItemLine> Logs
+        public List<DeviceModel> Logs
         {
             get { return logs; }
             set { logs = value; }
@@ -56,8 +56,8 @@ namespace HUS_project.Models
 
         public BuildingModel Location
         {
-            get { return myVar; }
-            set { myVar = value; }
+            get { return location; }
+            set { location = value; }
         }
 
         public DateTime DateBorrowed
@@ -83,7 +83,7 @@ namespace HUS_project.Models
 
         }
 
-        public BookingModel(int bookingID, string customer, List<ItemLine> items, List<DeviceModel> devices, List<DeviceModel> logs, BuildingModel location, DateTime dateBorrowed, string deliveredBy)
+        public BookingModel(int bookingID, string customer, List<ItemLineModel> items, List<DeviceModel> devices, List<DeviceModel> logs, BuildingModel location, DateTime dateBorrowed, string deliveredBy)
         {
             this.bookingID = bookingID;
             this.customer = customer;
