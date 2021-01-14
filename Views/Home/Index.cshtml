@@ -1,48 +1,31 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model HUS_project.Models.UserLoginDataModel
+@{
+    ViewData["Title"] = "Login";
 }
-
 <div class="UpperBar">
-    @*SEARCH FORM*@
-    <form action="" method="post" id="SearchForm">
+    @*LOGIN FORM*@
+    <form asp-action="Login" method="post" id="loginForm">
         @*TITLES*@
         <div class="row">
             <div class="col-md-3">
-                <label>Søgeord:</label>
+                <label>uni-Login:</label>
             </div>
             <div class="col-md-3">
-                <label>Kategori:</label>
-            </div>
-            <div class="col-md-3">
-                <label>Udlån Start:</label>
-            </div>
-            <div class="col-md-3">
-                <label>Udlån Slut:</label>
+                <label>Kodeord:</label>
             </div>
         </div>
         <div class="row">
-            @*Search Input*@
             <div class="col-md-3">
-                <input autocomplete="off" />
+                <input asp-for="@Model.UNILogin" type="text" id="uniLogin" />
             </div>
-            @*Category Selector*@
-            <div class="col-md-3">
-                <select>
-                    <option>PC</option>
-                    <option>Printer</option>
-                    <option>Switch</option>
-                    <option>Rack</option>
-                </select>
+            <div class="col-md-3" >
+                <input  asp-for="@Model.Password" type="password" id="password" />
             </div>
-            @*Borrow from this date*@
             <div class="col-md-3">
-                <input placeholder="Vælg Dato" type="text" DateTimeFormat="d/M/yyyy" onfocusin="(this.type='date')" @*onfocusout="(this.type='text')"*@ class="date">
-            </div>
-            @*Borrow until this date*@
-            <div class="col-md-3">
-                <input placeholder="Vælg Dato" type="text" DateTimeFormat="d/M/yyyy" onfocusin="(this.type='date')" @*onfocusout="(this.type='text')"*@ class="date">
+                <button class="btn btn-primary" type="submit">Log ind</button>
             </div>
         </div>
     </form>
-    @*SEARCH FORM END*@
+    @*LOGIN FORM END*@
+
 </div>
