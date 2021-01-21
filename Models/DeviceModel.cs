@@ -10,7 +10,7 @@ namespace HUS_project.Models
         #region Fields
 
         private int deviceID;
-        private Model model;
+        private ModelModel model;
         private byte status;
         private StorageLocationModel location;
         private string notes;
@@ -31,7 +31,7 @@ namespace HUS_project.Models
             set { deviceID = value; }
         }
 
-        public Model Model
+        public ModelModel Model
         {
             get { return model; }
             set { model = value; }
@@ -90,7 +90,7 @@ namespace HUS_project.Models
         }
         
         
-        public DeviceModel(int deviceID, Model model, byte status, StorageLocationModel location, string notes,
+        public DeviceModel(int deviceID, ModelModel model, byte status, StorageLocationModel location, string notes,
             DateTime changeDate, string changedBy, string returnedBy, DateTime dateReturned)
         {
             this.deviceID = deviceID;
