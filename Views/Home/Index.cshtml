@@ -1,4 +1,6 @@
-﻿@model HUS_project.Models.UserLoginDataModel
+﻿@using Microsoft.AspNetCore.Http;
+@model HUS_project.Models.UserLoginDataModel
+@inject IHttpContextAccessor httpContextAccessor;
 @{
     ViewData["Title"] = "Login";
 }
@@ -15,14 +17,25 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-3">
-                <input asp-for="@Model.UNILogin" type="text" id="uniLogin" />
+            <div class="col-md-3 form-group">
+                <input asp-for="@Model.UNILogin" type="text" class="form-control" />
+                <span asp-validation-for="@Model.UNILogin" class="text-danger"></span>
+
             </div>
-            <div class="col-md-3" >
-                <input  asp-for="@Model.Password" type="password" id="password" />
+            <div class="col-md-3 form-group">
+                <input asp-for="@Model.Password" type="password" class="form-control" />
+                <span asp-validation-for="@Model.Password" class="text-danger"></span>
             </div>
-            <div class="col-md-3">
-                <button class="btn btn-primary" type="submit">Log ind</button>
+            <div class="col-md-3 form-group">
+                <button class="btn btn-primary border-white" type="submit">Log ind</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 alert-danger" id="loginError">
+                @if (httpContextAccessor.HttpContext.Session.GetString("loginError") != null && httpContextAccessor.HttpContext.Session.GetString("loginError") != "")
+                {
+                    <p>@httpContextAccessor.HttpContext.Session.GetString("loginError").ToString()</p>
+                }
             </div>
         </div>
     </form>

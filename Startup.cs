@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Http;
 
 namespace HUS_project
 {
@@ -28,6 +30,7 @@ namespace HUS_project
             services.AddDistributedMemoryCache();
 
             services.AddControllersWithViews();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         //This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

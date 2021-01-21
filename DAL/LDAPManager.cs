@@ -6,17 +6,27 @@ using System.DirectoryServices;
 using Microsoft.AspNetCore.Http;
 using HUS_project.Models;
 
+using System.Diagnostics;
+
+
 namespace HUS_project.DAL
 {
     public class LDAPManager
     {
+        /// <summary>
+        /// TESTING: For trying out various levels of accesses. Meant to simulate GetAccessResponses();
+        /// </summary>
+        /// <param name="uniLogin"></param>
+        /// <param name="pass"></param>
+        /// <returns></returns>
         public static List<string> TestLogin(string uniLogin, string pass)
         {
             List<UserLoginDataModel> TestAccounts = new List<UserLoginDataModel>()
             {
                 new UserLoginDataModel("teach", "Kode1234"), // ZBC-RIAH-Ansatte
                 new UserLoginDataModel("skpstud", "Kode1234"), // ZBC-Ri-skpElev
-                new UserLoginDataModel("skpteach", "Kode1234") // ZBC-Ri-skpElev + ZBC-RIAH-Ansatte
+                new UserLoginDataModel("skpteach", "Kode1234"), // ZBC-Ri-skpElev + ZBC-RIAH-Ansatte
+                new UserLoginDataModel("dude", "Kode1234") // NO ACCESS
             };
 
             List<string> groups = new List<string>();
@@ -40,90 +50,73 @@ namespace HUS_project.DAL
                                 break;
                         }
                     }
-
-                    break;
+                    else
+                    {
+                        groups.Add("FEJL: (testlogin) Adgangskode forkert");
+                    }
                 }
             }
-
-
             return groups;
         }
 
-        public static List<string> AcquireAccessLevel(string uniLogin, string password)
+        /// <summary>
+        /// This function acquires all the relevant AD group memberships which the user attempting to login has, as well as any errors encountered along the way.
+        /// </summary>
+        /// <param name="uniLogin"></param>
+        /// <param name="password"></param>
+        /// <returns>All relevant memberships in "List<string>", as well as any errors encountered in this endeavour.</returns>
+        public static List<string> GetAccessResponses(string uniLogin, string password)
         {
             // Directory Entry - This is the thing which controls how we connect to AD: the path there and our authentication.
             // ConnectionString, username, password - Any valid ZBC user can use their credentials for LDAP,
-            // - However! They will still have to be a student or a teacher, as we will test for such further below.
+            // - However! They will still have to be a SKP student or a teacher, as we will test for such further below.
             DirectoryEntry ldapAccess = new DirectoryEntry(
                 "LDAP://ldap.efif.dk/ou=zbc,ou=UserAccounts,dc=efif,dc=dk",
                 uniLogin,
                 password);
 
-            
-            string emailFound = "";
-            List<string> groups = new List<string>();
+            List<string> reponses = new List<string>();
 
             try
             {
-                // See if there's a Student with this username, return info if yes
-                SearchResult result = AcquireUserFromGroup(uniLogin, "ZBC-Ri-skpElev", ldapAccess);
-
-                if (result != null)
+                // See if there's a SKP Student with this username, return info if yes
+                if(ConfirmUserMembership(uniLogin, "ZBC-Ri-skpElev", ldapAccess))
                 {
-                    // Here we will try to get the user's email address, just to see if the user exists.
-                    // "result" itself is never empty, even if it does not find a user. Therefore we have to check if there's any useful info in "mail".
-                    if (result.Properties["mail"] != null)
-                    {
-                        emailFound = result.Properties["mail"][0].ToString();
-                    }
-
-                    // User is not a SKP Student if no email was pulled.
-                    if (emailFound.Length > 0)
-                    {
-                        groups.Add("ZBC-Ri-skpElev");
-                    }
+                    reponses.Add("ZBC-Ri-skpElev");
                 }
-                
-                // Resetting "result" for good measure.
-                result = null;
-                result = AcquireUserFromGroup(uniLogin, "ZBC-RIAH-Ansatte", ldapAccess);
 
-                if (result != null)
+                // Now going to do the same, to see if there's a ZBC Ringsted Employee with this uniLogin.
+                if(ConfirmUserMembership(uniLogin, "ZBC-RIAH-Ansatte", ldapAccess))
                 {
-                    if (result.Properties["mail"] != null)
-                    {
-                        emailFound = result.Properties["mail"][0].ToString();
-                    }
-                    if (emailFound.Length > 0)
-                    {
-                        groups.Add("ZBC-RIAH-Ansatte");
-                    }
+                    reponses.Add("ZBC-RIAH-Ansatte");
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                // This is a very janky way of doing error handling, and I am justly ashamed of it, but it works. Hopefully to be touched up on later.
+                reponses.Add("FEJL: " + e.Message);
             }
 
-            return groups;
+            return reponses;
         }
 
         /// <summary>
-        /// Returns SearchResult for user, if user is in a Group.
+        /// True if user is in the specified Group.
         /// </summary>
-        /// <param name="uniLogin">User to chekc if in group.</param>
+        /// <param name="uniLogin">User to check if in group.</param>
         /// <param name="group">Group to check if user a member of.</param>
         /// <param name="ldapAccess"></param>
         /// <returns></returns>
-        static SearchResult AcquireUserFromGroup(string uniLogin, string group, DirectoryEntry ldapAccess)
+        static bool ConfirmUserMembership(string uniLogin, string group, DirectoryEntry ldapAccess)
         {
+            // A "DirectorySearcher" can search a directory for all kinds of AD objects. We are trying to find a user.
             DirectorySearcher dsFindUser = new DirectorySearcher(ldapAccess);
             dsFindUser.SearchScope = SearchScope.Subtree;
 
-            // If no properties are specified, it will load them all
-            // OBS!!! We Must limit it to what we need in the final product.
+            // If no properties are specified, it will load them all - However, common sense dictates we limit it to what we need. "mail" in our case.
             dsFindUser.PropertiesToLoad.Add("mail");
-            // Below is a LDAP Syntax Filter. It decides how the search works
+
+            // Below is a LDAP Syntax Filter. It decides how the search works. It looks for a Person whose email is "uniLogin + @zbc.dk" and is a member of "group"
             dsFindUser.Filter = string.Format
                 (
                     "(&" +
@@ -131,13 +124,27 @@ namespace HUS_project.DAL
                         "(mail={0})" +
                         "(memberof=CN={1},OU=ZBC,OU=Groups,DC=efif,DC=dk)" +
                     ")",
-                    uniLogin + "@zbc.dk", group // This way "uniLogin" will be put where it says "{0}", same for Group for {1}. This is to prevent injections.
+                    uniLogin + "@zbc.dk", group
+                    // ^ This way 'uniLogin' + "@zbc.dk" will be put where it says {0}, same for 'group' for {1}. This is to prevent injections.
                 );
 
-            // Not sure why I make a SearchResult and not just directly "return dsFindUser.FindOne();". I think it has to do with error messages.
+            // This is where the program tries to find in AD what we set it to look for. See the comments for the Filter above.
             SearchResult result = dsFindUser.FindOne();
 
-            return result;
+            if (result != null && result.Properties["mail"] != null)
+            {
+                // Here we will try to get the user's email address, just to see if the user exists.
+                // "result" itself is almost never null, even if it does not find a user. Therefore we have to check if there's any useful info in "mail".
+                string emailFound = result.Properties["mail"][0].ToString();
+
+                // User is not a member of the group, if user's email was not found.
+                if (emailFound == uniLogin + "@zbc.dk")
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
