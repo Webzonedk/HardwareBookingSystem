@@ -106,3 +106,22 @@ body {
 #SearchForm * {
     text-align: center;
 }
+
+/* CreateDevice CSS */
+.createDeviceContainer {
+    height: 100px;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    right: 0;
+    background-color: black;
+    padding: 5% 0 5% 0;
+}
+.createDeviceContainerTwo {
+    height: 100px;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    right: 0;
+    background-color: navajowhite;
+}
