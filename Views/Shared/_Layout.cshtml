@@ -18,19 +18,31 @@
                 <ul class="navbar-nav flex-grow-1">
 
                     <li class="nav-item">
-                        <a class="nav-link text-light FontSizeHeaders" style="font-weight: bold;" asp-area="" asp-controller="Home" asp-action="Index">ZBC HUS</a>
+                        <a class="nav-link text-light FontSizeHeaders font-weight-bold" asp-area="" asp-controller="Home" asp-action="Index">ZBC HUS</a>
                     </li>
-                    
+
+                    <li class="nav-item">
+                        <a class="nav-link text-light FontSizeHeaders" asp-area="" asp-controller="Overview" asp-action="History">Historik</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-light FontSizeHeaders" asp-area="" asp-controller="Overview" asp-action="Inventory">Lagerstyring</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-light FontSizeHeaders" asp-area="" asp-controller="Shared" asp-action="Error">Placeringer</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-light FontSizeHeaders" asp-area="" asp-controller="Shared" asp-action="Error">Log</a>
+                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link text-light FontSizeHeaders" asp-area="" asp-controller="Device" asp-action="EditDevice">Edit</a>
                     </li>
-                    
+
                     <li class="nav-item">
                         <a class="nav-link text-light FontSizeHeaders" asp-area="" asp-controller="Device" asp-action="CreateDevice">Create</a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link text-light FontSizeHeaders" asp-area="" asp-controller="Home" asp-action="MySite">Min side</a>
                     </li>
 
                 </ul>
@@ -45,7 +57,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - HUS Project
+            &copy; @DateTime.Now.Year - HUS Project
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
