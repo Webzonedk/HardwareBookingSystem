@@ -1,48 +1,44 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using Microsoft.AspNetCore.Http;
+@model HUS_project.Models.UserLoginDataModel
+@inject IHttpContextAccessor httpContextAccessor;
+@{
+    ViewData["Title"] = "Login";
 }
-
 <div class="UpperBar">
-    @*SEARCH FORM*@
-    <form action="" method="post" id="SearchForm">
+    @*LOGIN FORM*@
+    <form asp-action="Login" method="post" id="loginForm">
         @*TITLES*@
         <div class="row">
             <div class="col-md-3">
-                <label>Søgeord:</label>
+                <label>uni-Login:</label>
             </div>
             <div class="col-md-3">
-                <label>Kategori:</label>
-            </div>
-            <div class="col-md-3">
-                <label>Udlån Start:</label>
-            </div>
-            <div class="col-md-3">
-                <label>Udlån Slut:</label>
+                <label>Kodeord:</label>
             </div>
         </div>
         <div class="row">
-            @*Search Input*@
-            <div class="col-md-3">
-                <input autocomplete="off" />
+            <div class="col-md-3 form-group">
+                <input asp-for="@Model.UNILogin" type="text" class="form-control" />
+                <span asp-validation-for="@Model.UNILogin" class="text-danger"></span>
+
             </div>
-            @*Category Selector*@
-            <div class="col-md-3">
-                <select>
-                    <option>PC</option>
-                    <option>Printer</option>
-                    <option>Switch</option>
-                    <option>Rack</option>
-                </select>
+            <div class="col-md-3 form-group">
+                <input asp-for="@Model.Password" type="password" class="form-control" />
+                <span asp-validation-for="@Model.Password" class="text-danger"></span>
             </div>
-            @*Borrow from this date*@
-            <div class="col-md-3">
-                <input placeholder="Vælg Dato" type="text" DateTimeFormat="d/M/yyyy" onfocusin="(this.type='date')" @*onfocusout="(this.type='text')"*@ class="date">
+            <div class="col-md-3 form-group">
+                <button class="btn btn-primary border-white" type="submit">Log ind</button>
             </div>
-            @*Borrow until this date*@
-            <div class="col-md-3">
-                <input placeholder="Vælg Dato" type="text" DateTimeFormat="d/M/yyyy" onfocusin="(this.type='date')" @*onfocusout="(this.type='text')"*@ class="date">
+        </div>
+        <div class="row">
+            <div class="col-md-6 alert-danger" id="loginError">
+                @if (httpContextAccessor.HttpContext.Session.GetString("loginError") != null && httpContextAccessor.HttpContext.Session.GetString("loginError") != "")
+                {
+                    <p>@httpContextAccessor.HttpContext.Session.GetString("loginError").ToString()</p>
+                }
             </div>
         </div>
     </form>
-    @*SEARCH FORM END*@
+    @*LOGIN FORM END*@
+
 </div>
