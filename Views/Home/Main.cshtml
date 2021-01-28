@@ -1,0 +1,49 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="UpperBar">
+    @*SEARCH FORM*@
+    <form action="" method="post" id="SearchForm">
+        @*TITLES*@
+        <div class="row">
+            <div class="col-md-3">
+                <label>Søgeord:</label>
+            </div>
+            <div class="col-md-3">
+                <label>Kategori:</label>
+            </div>
+            <div class="col-md-3">
+                <label>Udlån Start:</label>
+            </div>
+            <div class="col-md-3">
+                <label>Udlån Slut:</label>
+            </div>
+        </div>
+        <div class="row">
+            @*Search Input*@
+            <div class="col-md-3">
+                <input autocomplete="off" />
+            </div>
+            @*Category Selector*@
+            <div class="col-md-3">
+                <select>
+                    <option>PC</option>
+                    <option>Printer</option>
+                    <option>Switch</option>
+                    <option>Rack</option>
+                </select>
+            </div>
+            @*Borrow from this date*@
+            <div class="col-md-3">
+                <input placeholder="Vælg Dato" type="text" DateTimeFormat="d/M/yyyy" onfocusin="(this.type='date')" @*onfocusout="(this.type='text')"*@ class="date">
+            </div>
+            @*Borrow until this date*@
+            <div class="col-md-3">
+                <input placeholder="Vælg Dato" type="text" DateTimeFormat="d/M/yyyy" onfocusin="(this.type='date')" @*onfocusout="(this.type='text')"*@ class="date">
+            </div>
+        </div>
+    </form>
+    @*SEARCH FORM END*@
+</div>

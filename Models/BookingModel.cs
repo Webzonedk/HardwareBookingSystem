@@ -17,9 +17,12 @@ namespace HUS_project.Models
         private BuildingModel location;
         private DateTime dateBorrowed;
         private string deliveredBy;
+        private SearchTermsModel searchTerms;
 
         #endregion
 
+
+      
 
 
         #region Properties
@@ -71,7 +74,13 @@ namespace HUS_project.Models
             get{  return deliveredBy; }
             set{ deliveredBy = value;}
         }
-       
+
+        public SearchTerms SearchTerms
+        {
+            get { return searchTerms; }
+            set { searchTerms = value; }
+        }
+
         #endregion
 
 
@@ -83,7 +92,7 @@ namespace HUS_project.Models
 
         }
 
-        public BookingModel(int bookingID, string customer, List<ItemLineModel> items, List<DeviceModel> devices, List<DeviceModel> logs, BuildingModel location, DateTime dateBorrowed, string deliveredBy)
+        public BookingModel(int bookingID, string customer, List<ItemLineModel> items, List<DeviceModel> devices, List<DeviceModel> logs, BuildingModel location, DateTime dateBorrowed, string deliveredBy, SearchTerms searchTerms)
         {
             this.bookingID = bookingID;
             this.customer = customer;
@@ -93,6 +102,7 @@ namespace HUS_project.Models
             this.location = location;
             this.dateBorrowed = dateBorrowed;
             this.deliveredBy = deliveredBy;
+            this.searchTerms = searchTerms;
         }
 
         #endregion
