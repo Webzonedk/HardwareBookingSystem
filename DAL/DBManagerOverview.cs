@@ -33,7 +33,7 @@ namespace HUS_project.DAL
             return null;
         }
         
-        internal List<DeviceModel> GetDeletedDevices(List<DeviceModel> dummy)
+        internal List<DeviceModel> GetInactiveDevices(List<DeviceModel> dummy)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
@@ -44,7 +44,19 @@ namespace HUS_project.DAL
             con.Close();
             return null;
         }
-          
+
+        internal List<BuildingModel> GetInactiveRooms(List<BuildingModel> dummy)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+
+            con.Close();
+            return null;
+        }
+
         internal List<DeviceModel> GetDeviceInventory(string dummy)
         {
             SqlConnection con = new SqlConnection(connectionString);

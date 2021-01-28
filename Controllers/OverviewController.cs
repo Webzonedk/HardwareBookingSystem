@@ -23,7 +23,7 @@ namespace HUS_project.Controllers
             return View();
         }
          
-        public IActionResult DeletedDevices()
+        public IActionResult InactiveLogs()
         {
             return View();
         }
