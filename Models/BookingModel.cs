@@ -75,7 +75,7 @@ namespace HUS_project.Models
             set{ deliveredBy = value;}
         }
 
-        public SearchTerms SearchTerms
+        public SearchTermsModel SearchTerms
         {
             get { return searchTerms; }
             set { searchTerms = value; }
@@ -92,7 +92,7 @@ namespace HUS_project.Models
 
         }
 
-        public BookingModel(int bookingID, string customer, List<ItemLineModel> items, List<DeviceModel> devices, List<DeviceModel> logs, BuildingModel location, DateTime dateBorrowed, string deliveredBy, SearchTerms searchTerms)
+        public BookingModel(int bookingID, string customer, List<ItemLineModel> items, List<DeviceModel> devices, List<DeviceModel> logs, BuildingModel location, DateTime dateBorrowed, string deliveredBy, SearchTermsModel searchTerms)
         {
             this.bookingID = bookingID;
             this.customer = customer;
