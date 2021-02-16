@@ -18,7 +18,7 @@ namespace HUS_project.Models
         private DateTime dateBorrowed;
         private string deliveredBy;
         private SearchTermsModel searchTerms;
-        private BookingStatusModel status; //to be changed to enum
+        private int bookingStatus;
 
         #endregion
 
@@ -82,10 +82,10 @@ namespace HUS_project.Models
             set { searchTerms = value; }
         }
 
-        public BookingStatusModel Status //to be changed to enum
+        public int BookingStatus
         {
-            get { return status; }
-            set { status = value; }
+            get { return bookingStatus; }
+            set { bookingStatus = value; }
         }
 
         #endregion
@@ -99,7 +99,7 @@ namespace HUS_project.Models
 
         }
 
-        public BookingModel(int bookingID, string customer, List<ItemLineModel> items, List<DeviceModel> devices, List<DeviceModel> logs, BuildingModel location, DateTime dateBorrowed, string deliveredBy, SearchTermsModel searchTerms, BookingStatusModel status)
+        public BookingModel(int bookingID, string customer, List<ItemLineModel> items, List<DeviceModel> devices, List<DeviceModel> logs, BuildingModel location, DateTime dateBorrowed, string deliveredBy, SearchTermsModel searchTerms, int bookingStatus)
         {
             this.bookingID = bookingID;
             this.customer = customer;
@@ -110,7 +110,7 @@ namespace HUS_project.Models
             this.dateBorrowed = dateBorrowed;
             this.deliveredBy = deliveredBy;
             this.searchTerms = searchTerms;
-            this.status = status;
+            this.bookingStatus = bookingStatus;
         }
 
         #endregion
