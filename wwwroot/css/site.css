@@ -3,6 +3,12 @@ for details on configuring this project to bundle and minify static web assets. 
 
 
 /*----------------------------------------------------------------------
+Parameters
+----------------------------------------------------------------------*/
+
+
+
+/*----------------------------------------------------------------------
 Navigation bar
 ----------------------------------------------------------------------*/
 
@@ -315,6 +321,7 @@ Overviews with lines in sides to avaoid double lines Friendly borrowed from HKS 
 
 .img-bg {
     background-color: #1c209a;
+    height: 100%;
     text-align: center;
     padding: 10px 10px 10px 10px;
     border: solid;
@@ -333,6 +340,24 @@ Alignment
     top: 50%;
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
+}
+
+.horisontal-center {
+    margin: 0;
+    position: absolute;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+
+.center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
 
 /*----------------------------------------------------------------------
