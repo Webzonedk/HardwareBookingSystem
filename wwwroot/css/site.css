@@ -1,21 +1,27 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
+
+
+/*----------------------------------------------------------------------
+Navigation bar
+----------------------------------------------------------------------*/
+
 a.navbar-brand {
     white-space: normal;
     text-align: center;
     word-break: break-all;
+    color: #fd0202;
 }
 
-/* Provide sufficient contrast against white background */
-a {
-    color: #0366d6;
+.nav-link {
+    color: #ffffff;
+    font-weight: bold;
 }
 
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
-}
+/*    .nav-link:hover {
+        color: #eeeeee !important;
+        font-weight: bold !important;
+    }*/
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     color: #fff;
@@ -23,8 +29,33 @@ a {
     border-color: #1861ac;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
+.navbar {
+    background-color: #353535;
+}
+
+
+
+/*----------------------------------------------------------------------
+Blue area below navigation bar
+----------------------------------------------------------------------*/
+
+.blue-oyster-bar {
+    height: 100px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: rgb(64,81,255);
+    background: radial-gradient(circle, rgba(64,81,255,1) 0%, rgba(30,38,111,1) 100%);
+    border-bottom: 5px solid;
+}
+
+
+/*----------------------------------------------------------------------
+Generel
+----------------------------------------------------------------------*/
+
+
 html {
     font-size: 14px;
 }
@@ -35,34 +66,11 @@ html {
     }
 }
 
-.border-top {
-    border-top: 1px solid #e5e5e5;
-}
-
-.border-bottom {
-    border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
-
-button.accept-policy {
-    font-size: 1rem;
-    line-height: inherit;
-}
-
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-    position: relative;
-    min-height: 100%;
-}
 
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    overflow-x: hidden;
+    overflow-x: scroll; /*Alternative can be set to hidden but it will disturb the pageload and make it jumpy*/
 }
 
 .footer {
@@ -73,31 +81,244 @@ body {
     line-height: 60px; /* Vertically center the text there */
 }
 
-.blue {
-    background-color: #1861ac;
+
+
+
+
+
+/*----------------------------------------------------------------------
+Links
+----------------------------------------------------------------------*/
+
+a {
+    color: #0366d6;
 }
 
-.black {
+    a:hover {
+        font-weight: bold;
+        color: #000000;
+    }
+
+    a:active {
+        font-weight: bold;
+        color: #fd0202;
+    }
+
+
+
+/*----------------------------------------------------------------------
+Buttons
+----------------------------------------------------------------------*/
+.btn-blue {
+    color: #ffffff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.btn-red {
+    color: #fff;
+    background-color: #FF0000;
+    border-color: #FF0000;
+}
+
+
+/*----------------------------------------------------------------------
+Borders
+----------------------------------------------------------------------*/
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+
+/*----------------------------------------------------------------------
+Spacers
+----------------------------------------------------------------------*/
+
+.spacer-black {
+    color: #fff;
     background-color: #000000;
+    border-color: #000000;
 }
 
-.whiteText {
-    color: white;
+
+
+/*----------------------------------------------------------------------
+shadows
+----------------------------------------------------------------------*/
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
-.UpperBar {
-    height: 100px;
-    width: 100%;
-    position: absolute;
-    left: 0;
-    right: 0;
-    background-color: #1861ac;
-    border-bottom: 5px solid;
+
+/*----------------------------------------------------------------------
+text colors
+----------------------------------------------------------------------*/
+
+.text-blue {
+    color: #1861ac;
+}
+
+.text-red {
+    color: #ff0000;
+}
+
+.text-black {
+    color: #000000;
+}
+
+.text-white {
+     color: #ffffff;
 }
 
 .FontSizeHeaders {
     font-size: 30px;
 }
+
+
+/*----------------------------------------------------------------------
+Containers
+----------------------------------------------------------------------*/
+
+.containerHeader {
+    margin: 10px 0 0 0;
+    height: 15px;
+    background-color: #1861ac;
+    border-top-color: #eeeeee;
+    border-top-width: 2px;
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
+}
+
+    .containerHeader h1, h2, h3, h4, h5, h6 {
+        width: 100%;
+        text-align: center;
+    }
+
+.containerFooter {
+    margin: 0 0 10px 0;
+    height: 15px;
+    background-color: #1861ac;
+    border-bottom-color: #eeeeee;
+    border-bottom-width: 2px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+
+
+/*----------------------------------------------------------------------
+Columns inside containers
+----------------------------------------------------------------------*/
+.columnHeaderLeft {
+    padding: 2px;
+    background-color: #353535;
+}
+
+.columnHeader {
+    padding: 2px;
+    background-color: #353535;
+    border-left: 1px;
+    border-right: 1px;
+    border-left-color: #ffffff;
+    border-right-color: #ffffff;
+}
+
+.columnHeaderRight {
+    padding: 2px;
+    background-color: #353535;
+}
+
+.columnContentLeft {
+    padding: 2px;
+    background-color: #DBE7F2;
+}
+
+.columnContent {
+    padding: 2px;
+    background-color: #DBE7F2;
+    border-left: 1px;
+    border-right: 1px;
+    border-left-color: #ffffff;
+    border-right-color: #ffffff;
+}
+
+.columnContentRight {
+    padding: 2px;
+    background-color: #DBE7F2;
+}
+
+/*Changing background colors in rows will be set in the code */
+
+
+
+
+/*----------------------------------------------------------------------
+Overviews with lines in sides to avaoid double lines Friendly borrowed from HKS Might be usefull to overviews, but not sure about it
+----------------------------------------------------------------------*/
+
+.overViewHeader {
+    font-weight: bold;
+    border-bottom-color: #1c289a !important;
+    border-bottom-width: 2px;
+    border-bottom: solid;
+    background-color: #353535;
+}
+
+.rowPadding {
+    padding-bottom: 2px !important;
+    padding-top: 2px !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
+
+.rowPaddingSwitch {
+    padding-bottom: 2px !important;
+    padding-top: 5px !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
+
+.overViewFooter {
+    height: 10px;
+    background-color: #353535;
+}
+
+.shadow {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+    border-radius: 10px;
+    border: solid;
+    border-width: 2px;
+    border-color: #1c289a;
+}
+
+
+
+
+/*----------------------------------------------------------------------
+
+----------------------------------------------------------------------*/
+
+.ImgBG {
+    background-color: #1c209a;
+    padding: 10px 10px 10px 10px;
+    border: solid;
+    border-width: 2px;
+    border-color: #1c209a;
+    border-radius: 10px;
+}
+
+
+
+
+/*----------------------------------------------------------------------
+Special assignments by ID
+----------------------------------------------------------------------*/
 
 #SearchForm label {
     color: white;
@@ -107,12 +328,17 @@ body {
     text-align: center;
 }
 
-.containerHeader {
-    margin: 10px 0 0 0;
-    height: 30vh;
+
+/*
+----------------------------------------------------------------------
+Validation
+----------------------------------------------------------------------
+*/
+
+.form-control.is-invalid, .was-validated .form-control:invalid {
+    background-image: none !important;
 }
 
-.containerHeader h1, h2, h3, h4, h5, h6 {
-    width: 100%;
-    text-align: center;
+.form-control.is-valid, .was-validated .form-control:valid {
+    background-image: none !important;
 }
