@@ -188,11 +188,11 @@ Containers
 .containerHeader {
     margin: 10px 0 0 0;
     height: 15px;
-    background-color: #1861ac;
-    border-top-color: #eeeeee;
+    background-color: #353535;
+    border-top-color: #353535;
     border-top-width: 2px;
-    border-top-left-radius:10px;
-    border-top-right-radius:10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
     .containerHeader h1, h2, h3, h4, h5, h6 {
@@ -200,11 +200,20 @@ Containers
         text-align: center;
     }
 
+.containerBody {
+    margin: 0 0 0 0;
+    background-color: #1861ac;
+    border-left-color: #eeeeee;
+    border-left-width: 2px;
+    border-right-color: #eeeeee;
+    border-right-width: 2px;
+}
+
 .containerFooter {
     margin: 0 0 10px 0;
     height: 15px;
-    background-color: #1861ac;
-    border-bottom-color: #eeeeee;
+    background-color: #353535;
+    border-bottom-color: #353535;
     border-bottom-width: 2px;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -304,8 +313,9 @@ Overviews with lines in sides to avaoid double lines Friendly borrowed from HKS 
 
 ----------------------------------------------------------------------*/
 
-.ImgBG {
+.img-bg {
     background-color: #1c209a;
+    text-align: center;
     padding: 10px 10px 10px 10px;
     border: solid;
     border-width: 2px;
@@ -313,18 +323,27 @@ Overviews with lines in sides to avaoid double lines Friendly borrowed from HKS 
     border-radius: 10px;
 }
 
+/*----------------------------------------------------------------------
+Alignment
+----------------------------------------------------------------------*/
 
-
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
 
 /*----------------------------------------------------------------------
 Special assignments by ID
 ----------------------------------------------------------------------*/
 
-#SearchForm label {
+#searchForm label {
     color: white;
 }
 
-#SearchForm * {
+#searchForm * {
     text-align: center;
 }
 
