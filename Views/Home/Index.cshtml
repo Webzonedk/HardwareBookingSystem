@@ -5,18 +5,26 @@
     ViewData["Title"] = "Login";
 }
 <div class="blue-oyster-bar">
+    <h2 class="text-white">ZBC HUS - Login side</h2>
+    <h4 class="text-white">Kun for lærere eller SKP Elever</h4>
+</div>
+
+<div style="padding-top:150px" class="columnContent">
     @*LOGIN FORM*@
     <form asp-action="Login" method="post" id="loginForm">
         @*TITLES*@
+
         <div class="row">
+            <div class="col-md-2"></div>
             <div class="col-md-3">
-                <label>uni-Login:</label>
+                <label>uniLogin:</label>
             </div>
             <div class="col-md-3">
                 <label>Kodeord:</label>
             </div>
         </div>
         <div class="row">
+            <div class="col-md-2"></div>
             <div class="col-md-3 form-group">
                 <input asp-for="@Model.UNILogin" type="text" class="form-control" />
                 <span asp-validation-for="@Model.UNILogin" class="text-danger"></span>
@@ -31,6 +39,7 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-md-2"></div>
             <div class="col-md-6 alert-danger" id="loginError">
                 @if (httpContextAccessor.HttpContext.Session.GetString("loginError") != null && httpContextAccessor.HttpContext.Session.GetString("loginError") != "")
                 {
@@ -40,5 +49,4 @@
         </div>
     </form>
     @*LOGIN FORM END*@
-
 </div>
