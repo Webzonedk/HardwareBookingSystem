@@ -5,24 +5,36 @@
     ViewData["Title"] = "Placerings Administration";
 }
 <div class="container-fluid blue-oyster-bar">
-
-    <form class="row" Asp-action="LocationAdmin" method="post">
-        <div class="col-md-1">
-            <div class="row">
-
+    <form Asp-action="LocationAdmin" method="post">
+        <div class="row">
+            <div class="col-md-1 form-floating mb-3">
+                <label class="text-white">
+                    Bygning: <input list="buildings" placeholder="Vælg" />
+                </label>
             </div>
-            <div class="row">
-
+            <div class="col-md-1">
+                <label class="text-white my-1">
+                    Lokale: <input list="roomNr" placeholder="Vælg" />
+                </label>
             </div>
-        </div>
-        <div class="col-md-1">
-            <div class="col-md-12">
-                <div class="row my-1">
-                    <label class="text-white my-1">
-                        Bygning: <input list="buildings" placeholder="Vælg" />
-                    </label>
-                </div>
-                <div class="row my-1" >
+             <div class="col-md-1">
+                <label class="text-white my-1">
+                    Lokale: <input list="roomNr" placeholder="Vælg" />
+                </label>
+            </div>
+             <div class="col-md-1">
+                <label class="text-white my-1">
+                    Lokale: <input list="roomNr" placeholder="Vælg" />
+                </label>
+            </div>
+             <div class="col-md-1">
+                <label class="text-white my-1">
+                    Lokale: <input list="roomNr" placeholder="Vælg" />
+                </label>
+            </div>
+
+            <div class="row ">
+                <div class="col-md-12 px-2">
                     <datalist id="buildings">
                         <option value="Modtagelse"></option>
                         <option value="A"></option>
@@ -33,13 +45,13 @@
             </div>
         </div>
         <div class="col-md-1">
-            <div class="col-md-12">
-                <div class="row my-1">
-                    <label class="text-white my-1">
-                        Lokale: <input list="roomNr" placeholder="Vælg" />
-                    </label>
+            <div class="row">
+                <div class="col-md-12 px-2">
+
                 </div>
-                <div class="row my-1">
+            </div>
+            <div class="row">
+                <div class="col-md-12 px-2">
                     <datalist id="roomNr">
                         <option value="1"></option>
                         <option value="2"></option>
@@ -94,6 +106,7 @@
 
             </div>
         </div>
+</div>
     </form>
 
 
