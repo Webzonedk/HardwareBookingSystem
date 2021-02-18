@@ -4,14 +4,49 @@
 @{
     ViewData["Title"] = "Placerings Administration";
 }
-<div class="blue-oyster-bar">
-    <div class="row">
+<div class="container-fluid blue-oyster-bar">
+
+    <form class="row" Asp-action="LocationAdmin" method="post">
         <div class="col-md-1">
             <div class="row">
 
             </div>
             <div class="row">
 
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="col-md-12">
+                <div class="row my-1">
+                    <label class="text-white my-1">
+                        Bygning: <input list="buildings" placeholder="Vælg" />
+                    </label>
+                </div>
+                <div class="row my-1" >
+                    <datalist id="buildings">
+                        <option value="Modtagelse"></option>
+                        <option value="A"></option>
+                        <option value="B"></option>
+                        <option value="C"></option>
+                    </datalist>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="col-md-12">
+                <div class="row my-1">
+                    <label class="text-white my-1">
+                        Lokale: <input list="roomNr" placeholder="Vælg" />
+                    </label>
+                </div>
+                <div class="row my-1">
+                    <datalist id="roomNr">
+                        <option value="1"></option>
+                        <option value="2"></option>
+                        <option value="3"></option>
+                        <option value="4"></option>
+                    </datalist>
+                </div>
             </div>
         </div>
         <div class="col-md-1">
@@ -38,15 +73,7 @@
 
             </div>
         </div>
-        <div class="col-md-1">
-            <div class="row">
-
-            </div>
-            <div class="row">
-
-            </div>
-        </div>
-        <div class="col-md-5">        
+        <div class="col-md-3">
             <div class="row">
 
             </div>
@@ -59,6 +86,16 @@
 
             </div>
         </div>
-    </div>
+        <div class="col-md-1">
+            <div class="row">
+
+            </div>
+            <div class="row">
+
+            </div>
+        </div>
+    </form>
+
 
 </div>
+
