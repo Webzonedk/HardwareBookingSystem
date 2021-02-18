@@ -22,14 +22,17 @@ namespace HUS_project.DAL
         }
 
 
-        internal void CreateDevice(DeviceModel dummy)
+        internal void CreateDevice(DeviceModel deviceData)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
+            SqlCommand cmd = new SqlCommand("CreateDevice", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-
+            cmd.Parameters.Add("@modelName", System.Data.SqlDbType.VarChar).Value = deviceData.Model.ModelName;
+            cmd.Parameters.Add("@modelDescription", System.Data.SqlDbType.VarChar).Value = deviceData.Model.ModelDescription;
+            cmd.Parameters.Add("@category", System.Data.SqlDbType.VarChar).Value = deviceData.Model.Category.Category;
+            cmd.Parameters.Add("@changedBy", System.Data.SqlDbType.VarChar).Value = deviceData.ChangedBy;
+          //  cmd.Parameters.Add("@serialNumber", System.Data.SqlDbType.VarChar).Value = deviceData.;
             con.Close();
 
         }

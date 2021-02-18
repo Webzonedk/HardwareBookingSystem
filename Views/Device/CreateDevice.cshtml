@@ -2,36 +2,76 @@
 @{
     ViewData["Title"] = "Opret enhed";
 }
-<div class="container bg-dark rounded containerHeader">
-    <div class="row">
-        <h5 style="color: #064bfd;">Opret enhed</h5>
-        <div class="col-md-3">
-            <div class="row">
-                <img src="" alt="Upload foto" />
+
+<div class="containerHeader " style=" background-color:darkgrey;height:50px"></div>
+
+<div class=" container " style="background-color: deepskyblue; height:300px">
+
+    <div class="row ">
+        <h4>Opret enhed</h4>
+        <form class="row" asp-action="EditDevice" method="post">
+
+            <div class="col m-md-3">
+                <div class=" row">
+                    <div class="col img-bg" style="height:150px">
+                        <img src="~/Graphic/missing-image-640x360.png" style="width:150px" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col text-center">
+                        <button type="button" class=" btn-primary btn" asp-action="CreateQRCode" >upload foto</button>
+
+                    </div>
+                </div>
+
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="row">
-                <h6 class="text-light text-left">Kategori:</h6>
-                <select>
-                    <option value="none">Vælg kategori</option>
-                </select>
+
+
+            <div class="col m-md-3">
+                <div>
+                    <label>
+                        Kategori:<input list="categories" placeholder="Vælg kategori" />
+                    </label>
+                    <datalist id="categories">
+                        <option value="modelA"></option>
+                        <option value="modelB"></option>
+                        <option value="modelC"></option>
+                        <option value="modelD"></option>
+                    </datalist>
+                </div>
+
+                <div>
+                    <label>
+                        Enhedsnavn:<input list="models" placeholder="Indtast enhedsnavn" />
+                    </label>
+                    <datalist id="models">
+                        <option value="modelA"></option>
+                        <option value="modelB"></option>
+                        <option value="modelC"></option>
+                        <option value="modelD"></option>
+                    </datalist>
+                </div>
+
+                <input class="btn-blue" type="submit" value="Gem" />
+
+
             </div>
-            <div class="row">
-                <h6 class="text-light text-left font-weight-bold">Enhedsnavn:</h6>
-                <select>
-                    <option value="none">Indtast enhedsnavn</option>
-                </select>
+
+            <div class="col-md-3 ">
+                <div>
+                    <label>Serienummer:</label>
+                    <input placeholder="indtast serienr." />
+
+                </div>
             </div>
-            <div class="row">
-                <button class="rounded text-white bg-success">Gem</button>
+
+            <div class="col-md-3 ">
+                <label>Beskrivelse</label>
+                <input placeholder="Tilføj beskrivelse" />
             </div>
-        </div>
-        <div class="col-md-5">
-            <div class="row">
-                <h6 class="text-light text-left font-weight-bold">Beskrivelse:</h6>
-                <textarea style="width: 90%" placeholder="Tilføj beskrivelse..."></textarea>
-            </div>
-        </div>
+        </form>
     </div>
+
 </div>
+
+<div class=" containerFooter" style=" background-color:darkgrey;height:50px"></div>
