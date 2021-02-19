@@ -98,7 +98,7 @@ namespace HUS_project.Models
         }
 
 
-        public DeviceModel(int deviceID,string serialnr, byte status, string notes,
+        public DeviceModel(int deviceID,string serialnr, ModelModel model, StorageLocationModel location, byte status, string notes,
             DateTime changeDate, string changedBy, string returnedBy, DateTime dateReturned)
         {
            
@@ -106,9 +106,9 @@ namespace HUS_project.Models
             //set  fields
             this.deviceID = deviceID;
             this.serialNumber = serialnr;
-          //  this.model = model;
+            this.model = model;
             this.status = status;
-         //   this.location = location;
+            this.location = location;
             this.notes = notes;
             this.changeDate = changeDate;
             this.changedBy = changedBy;
@@ -117,24 +117,6 @@ namespace HUS_project.Models
         }
 
         #endregion
-        public void Initialize()
-        {
-            //instance of category
-            CategoryModel category = new CategoryModel(null);
-
-            //instance of model
-            ModelModel model = new ModelModel();
-            model.Category = category;
-
-            //instance of building
-            BuildingModel building = new BuildingModel();
-
-            //instance of storagelocation
-            StorageLocationModel location = new StorageLocationModel();
-            location.Location = building;
-
-            this.model = model;
-            this.location = location;
-        }
+        
     }
 }
