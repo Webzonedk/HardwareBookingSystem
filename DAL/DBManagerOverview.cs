@@ -57,17 +57,5 @@ namespace HUS_project.DAL
             return null;
         }
 
-        internal List<DeviceModel> GetDeviceInventory(string dummy)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-
-            con.Close();
-            return null;
-        }
-
     }
 }

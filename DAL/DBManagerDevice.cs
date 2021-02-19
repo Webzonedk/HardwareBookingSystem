@@ -22,7 +22,7 @@ namespace HUS_project.DAL
         }
 
 
-        internal void CreateDevice(DeviceModel deviceData)
+        internal int CreateDevice(DeviceModel deviceData)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
@@ -32,9 +32,17 @@ namespace HUS_project.DAL
             cmd.Parameters.Add("@modelDescription", System.Data.SqlDbType.VarChar).Value = deviceData.Model.ModelDescription;
             cmd.Parameters.Add("@category", System.Data.SqlDbType.VarChar).Value = deviceData.Model.Category.Category;
             cmd.Parameters.Add("@changedBy", System.Data.SqlDbType.VarChar).Value = deviceData.ChangedBy;
-          //  cmd.Parameters.Add("@serialNumber", System.Data.SqlDbType.VarChar).Value = deviceData.;
+            cmd.Parameters.Add("@serialNumber", System.Data.SqlDbType.VarChar).Value = deviceData.SerialNumber;
+            cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
+
+            //execute query
+            cmd.ExecuteNonQuery();
+
+            //return output parameter
+            int deviceID = Convert.ToInt32(cmd.Parameters["deviceID"].Value);
             con.Close();
 
+            return deviceID;
         }
 
 
@@ -62,5 +70,16 @@ namespace HUS_project.DAL
             return null;
         }
 
+        internal List<DeviceModel> GetDeviceInventory(string dummy)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+
+            con.Close();
+            return null;
+        }
     }
 }

@@ -1,0 +1,71 @@
+﻿@model HUS_project.Models.ModelInfoModel
+@{
+    ViewData["Title"] = "Lagerstyring";
+}
+
+<div class=" blue-oyster-bar">
+
+    <!--first row-->
+    <div class="row">
+        <div class="col text-white">
+            <label>søgeord:</label>
+        </div>
+
+        <div class="col text-white">
+            <label>Kategori:</label>
+        </div>
+
+        <div class="col text-white">
+            <label>Status:</label>
+        </div>
+
+        <div class="col text-white">
+            <form class="" asp-area="" asp-controller="Administration" asp-action="CategoryAdmin" method="post">
+
+                <button class="btn-blue" type="submit">Ny Kategori</button>
+            </form>
+
+         
+            
+        </div>
+
+        <div class="col text-white">
+            <form class="" asp-area="" asp-controller="Device" asp-action="CreateDevice" method="post">
+
+                <button class="btn-blue" type="submit">Opret enhed</button>
+            </form>
+        </div>
+
+
+       
+
+    </div>
+
+    <div class="row">
+        <form class="row" action="" method="post">
+            <div class="col">
+                <input />
+
+            </div>
+
+            <div class="col">
+                <div>
+                    <input />
+                    @*<label>
+            Kategori:<input list="categories" placeholder="Vælg kategori" />
+        </label>
+        <datalist id="categories">
+            <option value="modelA"></option>
+            <option value="modelB"></option>
+            <option value="modelC"></option>
+            <option value="modelD"></option>
+        </datalist>*@
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+
+
+</div>
