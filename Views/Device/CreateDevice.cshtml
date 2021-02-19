@@ -1,4 +1,4 @@
-﻿@model List<HUS_project.Models.DeviceModel>
+﻿@model HUS_project.Models.EditDeviceModel
 @{
     ViewData["Title"] = "Opret enhed";
 }
@@ -14,7 +14,7 @@
             <div class="col m-md-3">
                 <div class=" row">
                     <div class="col img-bg" style="height:150px">
-                        <img src="~/Graphic/missing-image-640x360.png" style="width:150px" />
+                        <img src="~/Graphic/billede-mangler.png" style="width:150px" />
                     </div>
                 </div>
                 <div class="row">
@@ -30,12 +30,13 @@
             <div class="col m-md-3">
                 <div>
                     <label>Kategori:</label>
-                    @*  <input list="categories" placeholder="Vælg kategori" asp-for="@Model.Model.Category.Category" />*@
+                    <input list="categories" placeholder="Vælg kategori" asp-for="@Model.Device.Model.Category.Category" />
                     <datalist id="categories">
-                        <option value="modelA"></option>
-                        <option value="modelB"></option>
-                        <option value="modelC"></option>
-                        <option value="modelD"></option>
+                        <option selected></option>
+                        @foreach (var item in Model.Categories)
+                        {
+                            <option>@item</option>
+                        }
                     </datalist>
                 </div>
 
@@ -43,12 +44,12 @@
 
                 <div>
                     <label>Enhedsnavn:</label>
-                    @*  <input list="models" placeholder="Indtast enhedsnavn" asp-for="@Model.Model.ModelName" />*@
+                    <input list="models" placeholder="Indtast enhedsnavn" asp-for="@Model.Device.Model.ModelName" />
                     <datalist id="models">
-                        <option value="modelA"></option>
-                        <option value="modelB"></option>
-                        <option value="modelC"></option>
-                        <option value="modelD"></option>
+                        @foreach (var item in Model.ModelNames)
+                        {
+                            <option>@item</option>
+                        }
                     </datalist>
                 </div>
 
@@ -56,33 +57,21 @@
 
                 <input class="btn-blue" type="submit" value="Gem" />
 
-                <div>
-                    <label>Enhedsnavn:</label>
-                    @*<input list="models" placeholder="Indtast enhedsnavn" asp-for="@Model.Model.ModelName" />*@
 
-                    <input list="test" />
-                    <datalist id="test" placeholder="Indtast enhedsnavn">
-                        @foreach (var item in Model)
-                        {
-                            <option>@item.Model.ModelName</option>
-                        }
-                    </datalist>
-
-                </div>
 
             </div>
 
             <div class="col-md-3 ">
                 <div>
                     <label>Serienummer:</label>
-                    @*  <input placeholder="indtast serienr." asp-for="@Model.SerialNumber"/>*@
+                    <input placeholder="indtast serienr." asp-for="@Model.Device.SerialNumber" />
 
                 </div>
             </div>
 
             <div class="col-md-3 ">
                 <label>Beskrivelse</label>
-                @* <input placeholder="Tilføj beskrivelse" asp-for="@Model.Notes"/>*@
+                <input placeholder="Tilføj beskrivelse" asp-for="@Model.Device.Model.ModelDescription" />
             </div>
 
 

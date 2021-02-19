@@ -28,6 +28,11 @@ namespace HUS_project.Models
 
 
         #region Constructors
+        public CategoryModel()
+        {
+
+        }
+
 
         public CategoryModel(string category)
         {

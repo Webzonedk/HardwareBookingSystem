@@ -10,7 +10,7 @@ namespace HUS_project.Models
         #region fields
         private DeviceModel device;
         private List<string> modelNames;
-        private List<string> categories;
+        private List<string> categoryNames;
         #endregion
 
         #region Properties
@@ -31,8 +31,8 @@ namespace HUS_project.Models
 
         public List<string> Categories
         {
-            get { return categories; }
-            set { categories = value; }
+            get { return categoryNames; }
+            set { categoryNames = value; }
         }
 
 
@@ -42,14 +42,16 @@ namespace HUS_project.Models
         #region Constructors
         public EditDeviceModel()
         {
-
+            //initialize lists
+            categoryNames = new List<string>();
+            modelNames = new List<string>();
         }
 
         public EditDeviceModel(DeviceModel device, List<string> modelNames, List<string> categories)
         {
             this.device = device;
             this.modelNames = modelNames;
-            this.categories = categories;
+            this.categoryNames = categories;
         }
         #endregion
     }

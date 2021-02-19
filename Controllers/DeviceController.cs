@@ -35,31 +35,36 @@ namespace HUS_project.Controllers
 
             return View(infoList);
         }
-
+        
         public IActionResult CreateDevice()
         {
-            List<DeviceModel> list = new List<DeviceModel>();
-            
-
-            for (int i = 0; i < 10; i++)
+            EditDeviceModel deviceData = new EditDeviceModel();
+            deviceData.Device = new DeviceModel();
+            deviceData.Device.ChangedBy = HttpContext.Session.GetString("uniLogin");
+            for (int i = 0; i < 5; i++)
             {
-                DeviceModel deviceData = new DeviceModel();
-                deviceData.Initialize();
-                deviceData.Model.ModelName = "serial_" +i;
-                list.Add(deviceData);
+                string modelname = "modelxx_" + i;
+                string category = "category_" + i;
+                deviceData.ModelNames.Add(modelname);
+                deviceData.Categories.Add(category);
             }
-            
+
 
             
 
-            return View(list);
+            return View(deviceData);
         }
 
-        public IActionResult AddDeviceToDB (DeviceModel deviceData)
+      //  [HttpPost]
+        public IActionResult AddDeviceToDB (EditDeviceModel deviceData)
         {
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
-           int deviceID = dbManager.CreateDevice(deviceData);
-            return View("EditDevice", deviceID);
+            DeviceModel data = deviceData.Device;
+
+            Debug.Write($"modelname: {deviceData.Device.Model.ModelName}/modelDescription: {deviceData.Device.Model.ModelDescription}/category: {deviceData.Device.Model.Category.Category}/changedBy {deviceData.Device.ChangedBy}/serialnumber: {deviceData.Device.SerialNumber} ");
+
+          // int deviceID = dbManager.CreateDevice(data);
+            return View("EditDevice", 0);
         }
 
          public IActionResult EditDevice(DeviceModel deviceData)
