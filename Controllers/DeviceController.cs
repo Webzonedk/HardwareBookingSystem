@@ -39,6 +39,7 @@ namespace HUS_project.Controllers
         public IActionResult CreateDevice()
         {
             List<DeviceModel> list = new List<DeviceModel>();
+            
 
             for (int i = 0; i < 10; i++)
             {

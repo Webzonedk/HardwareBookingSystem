@@ -30,6 +30,25 @@ namespace HUS_project.Controllers
         
         public IActionResult LocationAdmin()
         {
+            List<BuildingModel> buildings = new List<BuildingModel>
+            {
+                new BuildingModel() { Building = "Modtagelse", RoomNr = 1 },
+                new BuildingModel() { Building = "A", RoomNr = 2 },
+                new BuildingModel() { Building = "B", RoomNr = 3 },
+                new BuildingModel() { Building = "C", RoomNr = 4 },
+                new BuildingModel() { Building = "D", RoomNr = 5 },
+                new BuildingModel() { Building = "E", RoomNr = 6 },
+                new BuildingModel() { Building = "F", RoomNr = 7 },
+                new BuildingModel() { Building = "G", RoomNr = 8 },
+                new BuildingModel() { Building = "H", RoomNr = 9 },
+                new BuildingModel() { Building = "I", RoomNr = 10 },
+                new BuildingModel() { Building = "J", RoomNr = 11 }
+            };
+
+
+
+
+
             return View();
         }
          
