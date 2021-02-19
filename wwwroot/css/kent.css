@@ -1,2 +1,26 @@
-﻿body {
+﻿/*----------------------------------------------------------------------
+Special assignments by ID
+----------------------------------------------------------------------*/
+
+.padding-top{
+    padding-top: 2px;
+}
+.padding-right{
+
+}
+
+.padding.bottom{
+
+}
+
+.padding-left{
+
+}
+.padding-top-and-bottom{
+
+}
+
+.label{
+    margin:2px 0 2px 0;
+    padding:5px 0 5px 0;
 }
