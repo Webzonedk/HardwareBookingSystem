@@ -12,7 +12,7 @@ namespace HUS_project.Controllers
 {
     public class OverviewController : Controller
     {
-
+        [HttpPost]
         public IActionResult History()
         {
             return View();

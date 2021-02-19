@@ -1,4 +1,4 @@
-﻿@model HUS_project.Models.DeviceModel
+﻿@model List<HUS_project.Models.DeviceModel>
 @{
     ViewData["Title"] = "Opret enhed";
 }
@@ -9,7 +9,7 @@
 
     <div class="row ">
         <h4>Opret enhed</h4>
-        <form class="row" asp-action="EditDevice" method="post">
+        <form class="row" asp-action="AddDeviceToDB" method="post">
 
             <div class="col m-md-3">
                 <div class=" row">
@@ -19,7 +19,7 @@
                 </div>
                 <div class="row">
                     <div class="col text-center">
-                        <button type="button" class=" btn-primary btn" asp-action="CreateQRCode" >upload foto</button>
+                        <button type="button" class=" btn-primary btn" asp-action="CreateQRCode">upload foto</button>
 
                     </div>
                 </div>
@@ -29,9 +29,8 @@
 
             <div class="col m-md-3">
                 <div>
-                    <label>
-                        Kategori:<input list="categories" placeholder="Vælg kategori" />
-                    </label>
+                    <label>Kategori:</label>
+                    @*  <input list="categories" placeholder="Vælg kategori" asp-for="@Model.Model.Category.Category" />*@
                     <datalist id="categories">
                         <option value="modelA"></option>
                         <option value="modelB"></option>
@@ -40,10 +39,11 @@
                     </datalist>
                 </div>
 
+                <br />
+
                 <div>
-                    <label>
-                        Enhedsnavn:<input list="models" placeholder="Indtast enhedsnavn" />
-                    </label>
+                    <label>Enhedsnavn:</label>
+                    @*  <input list="models" placeholder="Indtast enhedsnavn" asp-for="@Model.Model.ModelName" />*@
                     <datalist id="models">
                         <option value="modelA"></option>
                         <option value="modelB"></option>
@@ -52,23 +52,41 @@
                     </datalist>
                 </div>
 
+                <br />
+
                 <input class="btn-blue" type="submit" value="Gem" />
 
+                <div>
+                    <label>Enhedsnavn:</label>
+                    @*<input list="models" placeholder="Indtast enhedsnavn" asp-for="@Model.Model.ModelName" />*@
+
+                    <input list="test" />
+                    <datalist id="test" placeholder="Indtast enhedsnavn">
+                        @foreach (var item in Model)
+                        {
+                            <option>@item.Model.ModelName</option>
+                        }
+                    </datalist>
+
+                </div>
 
             </div>
 
             <div class="col-md-3 ">
                 <div>
                     <label>Serienummer:</label>
-                    <input placeholder="indtast serienr." />
+                    @*  <input placeholder="indtast serienr." asp-for="@Model.SerialNumber"/>*@
 
                 </div>
             </div>
 
             <div class="col-md-3 ">
                 <label>Beskrivelse</label>
-                <input placeholder="Tilføj beskrivelse" />
+                @* <input placeholder="Tilføj beskrivelse" asp-for="@Model.Notes"/>*@
             </div>
+
+
+
         </form>
     </div>
 

@@ -10,6 +10,7 @@ namespace HUS_project.Models
         #region Fields
 
         private int deviceID;
+        private string serialNumber;
         private ModelModel model;
         private byte status;
         private StorageLocationModel location;
@@ -29,6 +30,12 @@ namespace HUS_project.Models
         {
             get { return deviceID; }
             set { deviceID = value; }
+        }
+
+        public string SerialNumber
+        {
+            get { return serialNumber; }
+            set { serialNumber = value; }
         }
 
         public ModelModel Model
@@ -86,17 +93,22 @@ namespace HUS_project.Models
 
         public DeviceModel()
         {
+           
 
         }
-        
-        
-        public DeviceModel(int deviceID, ModelModel model, byte status, StorageLocationModel location, string notes,
+
+
+        public DeviceModel(int deviceID,string serialnr, byte status, string notes,
             DateTime changeDate, string changedBy, string returnedBy, DateTime dateReturned)
         {
+           
+
+            //set  fields
             this.deviceID = deviceID;
-            this.model = model;
+            this.serialNumber = serialnr;
+          //  this.model = model;
             this.status = status;
-            this.location = location;
+         //   this.location = location;
             this.notes = notes;
             this.changeDate = changeDate;
             this.changedBy = changedBy;
@@ -105,5 +117,24 @@ namespace HUS_project.Models
         }
 
         #endregion
+        public void Initialize()
+        {
+            //instance of category
+            CategoryModel category = new CategoryModel(null);
+
+            //instance of model
+            ModelModel model = new ModelModel();
+            model.Category = category;
+
+            //instance of building
+            BuildingModel building = new BuildingModel();
+
+            //instance of storagelocation
+            StorageLocationModel location = new StorageLocationModel();
+            location.Location = building;
+
+            this.model = model;
+            this.location = location;
+        }
     }
 }
