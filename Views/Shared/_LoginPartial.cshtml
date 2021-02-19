@@ -5,8 +5,9 @@
 
     @if (httpcontextAccessor.HttpContext.Session.GetInt32("accessLevel") > 0)
         {
+        <li class="nav-item text-white navbar-text">@httpcontextAccessor.HttpContext.Session.GetString("uniLogin")</li>
         <li class="nav-item">
-            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Logout">Log ud</a>
+            <a class="nav-link" asp-controller="Home" asp-action="Logout">Log ud</a>
         </li>
         }
 

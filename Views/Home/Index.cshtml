@@ -6,7 +6,7 @@
 }
 <div class="blue-oyster-bar">
     <h2 class="text-white">ZBC HUS - Login side</h2>
-    <h4 class="text-white">Kun for lærere eller SKP Elever</h4>
+    <h4 class="text-white">Kun for Lærere eller SKP Elever</h4>
 </div>
 
 <div style="padding-top:150px" class="columnContent">
@@ -16,26 +16,17 @@
 
         <div class="row">
             <div class="col-md-2"></div>
-            <div class="col-md-3">
-                <label>uniLogin:</label>
+            <div class="col-md-3 form-floating">
+                <input id="uniLoginBox" asp-for="@Model.UNILogin" type="text" class="form-control" />
+                <label for="uniLoginBox">uniLogin:</label>
             </div>
-            <div class="col-md-3">
-                <label>Kodeord:</label>
+            <div class="col-md-3 form-floating">
+                <input id="passwordBox" asp-for="@Model.Password" type="password" class="form-control" />
+                <label for="passwordBox">Kodeord:</label>
+                
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-3 form-group">
-                <input asp-for="@Model.UNILogin" type="text" class="form-control" />
-                <span asp-validation-for="@Model.UNILogin" class="text-danger"></span>
-
-            </div>
-            <div class="col-md-3 form-group">
-                <input asp-for="@Model.Password" type="password" class="form-control" />
-                <span asp-validation-for="@Model.Password" class="text-danger"></span>
-            </div>
-            <div class="col-md-3 form-group">
-                <button class="btn btn-primary border-white" type="submit">Log ind</button>
+            <div class="col-md-3 form-floating">
+                <button class="btn btn-primary border-white vertical-center" type="submit">Log ind</button>
             </div>
         </div>
         <div class="row">

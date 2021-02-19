@@ -36,24 +36,24 @@
                     <ul class="navbar-nav flex-grow-1">
 
                         <li class="nav-item">
-                            <a class="nav-link font-weight-bold" asp-area="" asp-controller="Home" asp-action="Index">ZBC HUS</a>
+                            <a class="nav-link font-weight-bold" asp-controller="Home" asp-action="RelocateUser">ZBC HUS</a>
                         </li>
                         @if (httpcontextAccessor.HttpContext.Session.GetInt32("accessLevel") > 1)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Overview" asp-action="History">Historik</a>
+                                <a class="nav-link" asp-controller="Overview" asp-action="History">Historik</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Device" asp-action="Inventory">Lagerstyring</a>
+                                <a class="nav-link" asp-controller="Device" asp-action="Inventory">Lagerstyring</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Administration" asp-action="LocationAdmin">Placeringer</a>
+                                <a class="nav-link" asp-controller="Administration" asp-action="LocationAdmin">Placeringer</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Overview" asp-action="DeletedDevices">Log</a>
+                                <a class="nav-link" asp-controller="Overview" asp-action="DeletedDevices">Log</a>
                             </li>
                         }
                     </ul>
