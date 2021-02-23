@@ -23,6 +23,41 @@ namespace HUS_project.DAL
         }
 
 
+        internal List<EditStorageLocationModel> GetDropDowns(EditStorageLocationModel dropDownContent)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("SelectBuildingName ", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = dropDownContent.StorageLocation.Location.Building;
+
+            List<EditStorageLocationModel> dropDownData = new List<EditStorageLocationModel>();
+
+            try
+            {
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    EditStorageLocationModel output = new EditStorageLocationModel();
+                    output.StorageLocation.Location.Building = (string)reader["buildingName"];
+
+                    dropDownData.Add(output);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+
+            con.Close();
+            return dropDownData;
+        }
+
+
 
         internal StorageLocationModel CreateLocation(StorageLocationModel dummy)
         {
