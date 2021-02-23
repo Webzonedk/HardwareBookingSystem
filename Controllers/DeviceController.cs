@@ -21,26 +21,26 @@ namespace HUS_project.Controllers
             this.configuration = config;
         }
 
-       
+
 
         public IActionResult Inventory(ModelInfoModel infoList)
         {
             //generate an instance of the database manager
             DBManagerDevice DBDevice = new DBManagerDevice(configuration);
             //get data from the manager
-           
-            
+
+
             //send data to the manager
 
 
             return View(infoList);
         }
-        
+
         public IActionResult CreateDevice()
         {
             EditDeviceModel deviceData = new EditDeviceModel();
             deviceData.Device = new DeviceModel();
-            deviceData.Device.ChangedBy = HttpContext.Session.GetString("uniLogin");
+
             for (int i = 0; i < 5; i++)
             {
                 string modelname = "modelxx_" + i;
@@ -50,30 +50,32 @@ namespace HUS_project.Controllers
             }
 
 
-            
+
 
             return View(deviceData);
         }
 
-      //  [HttpPost]
-        public IActionResult AddDeviceToDB (EditDeviceModel deviceData)
+        //  [HttpPost]
+        public IActionResult AddDeviceToDB(EditDeviceModel deviceData)
         {
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
             DeviceModel data = deviceData.Device;
-
+            data.ChangedBy = HttpContext.Session.GetString("uniLogin");
             Debug.Write($"modelname: {deviceData.Device.Model.ModelName}/modelDescription: {deviceData.Device.Model.ModelDescription}/category: {deviceData.Device.Model.Category.Category}/changedBy {deviceData.Device.ChangedBy}/serialnumber: {deviceData.Device.SerialNumber} ");
 
-          // int deviceID = dbManager.CreateDevice(data);
-            return View("EditDevice", 0);
+            int deviceID = dbManager.CreateDevice(data);
+            data = dbManager.GetDeviceInfo(deviceID);
+
+            return View("EditDevice", data);
         }
 
-         public IActionResult EditDevice(DeviceModel deviceData)
+        public IActionResult EditDevice(DeviceModel deviceData)
         {
             return View(deviceData);
         }
 
 
-         public IActionResult MoveLocation()
+        public IActionResult MoveLocation()
         {
             return View();
         }

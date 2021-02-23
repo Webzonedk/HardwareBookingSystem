@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using HUS_project.Models;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace HUS_project.DAL
 {
@@ -24,6 +25,8 @@ namespace HUS_project.DAL
 
         internal int CreateDevice(DeviceModel deviceData)
         {
+            Debug.WriteLine(connectionString);
+            Debug.WriteLine("Server=ANDREASPC; Database=HardwareUdlaanSystem; User Id=Husv1ld; Password=Wh3nY0uN33dSom3th1ng;");
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("CreateDevice", con);
@@ -65,9 +68,37 @@ namespace HUS_project.DAL
             SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
+            
 
             con.Close();
             return null;
+        }
+
+        //get device info from database before edit
+        internal DeviceModel GetDeviceInfo(int deviceID)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("GetDeviceInfo", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceID;
+
+            //execute query
+            cmd.ExecuteNonQuery();
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            DeviceModel device = new DeviceModel();
+
+            while (reader.Read())
+            {
+                device.DeviceID = (int)reader["deviceID"];
+                device.Model.Category.Category = (string)reader["category"];
+                device.Model.ModelName = (string)reader["modelName"];
+                device.Model.ModelDescription = (string)reader["modelDescription"];
+            }
+
+            con.Close();
+            return device;
         }
 
         internal List<DeviceModel> GetDeviceInventory(string dummy)
