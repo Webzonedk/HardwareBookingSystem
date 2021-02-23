@@ -23,13 +23,13 @@ namespace HUS_project.DAL
         }
 
 
-        internal List<EditStorageLocationModel> GetDropDowns(EditStorageLocationModel dropDownContent)
+        internal List<EditStorageLocationModel> GetDropDowns()
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("SelectBuildingName ", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = dropDownContent.StorageLocation.Location.Building;
+           // cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = dropDownContent.StorageLocation.Location.Building;
 
             List<EditStorageLocationModel> dropDownData = new List<EditStorageLocationModel>();
 
