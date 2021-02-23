@@ -10,6 +10,8 @@ using System.Linq;
 using System;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using System.Data.SqlClient;
 
 namespace HUS_project
 {
@@ -31,6 +33,8 @@ namespace HUS_project
 
             services.AddControllersWithViews();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+           
         }
 
         //This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
