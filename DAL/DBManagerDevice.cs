@@ -42,7 +42,7 @@ namespace HUS_project.DAL
             cmd.ExecuteNonQuery();
 
             //return output parameter
-            int deviceID = Convert.ToInt32(cmd.Parameters["deviceID"].Value);
+            int deviceID = Convert.ToInt32(cmd.Parameters["@deviceID"].Value);
             con.Close();
 
             return deviceID;
@@ -88,17 +88,59 @@ namespace HUS_project.DAL
 
             SqlDataReader reader = cmd.ExecuteReader();
             DeviceModel device = new DeviceModel();
-
+            ModelModel m = new ModelModel();
+            CategoryModel c = new CategoryModel();
+            m.Category = c;
             while (reader.Read())
             {
                 device.DeviceID = (int)reader["deviceID"];
-                device.Model.Category.Category = (string)reader["category"];
-                device.Model.ModelName = (string)reader["modelName"];
-                device.Model.ModelDescription = (string)reader["modelDescription"];
+                m.Category.Category = (string)reader["categoryName"];
+                m.ModelName = (string)reader["modelName"];
+                m.ModelDescription = (string)reader["modelDescription"];
             }
+
+            device.Model = m;
 
             con.Close();
             return device;
+        }
+
+        //Get device Logs from database before edit
+        internal List<DeviceModel> GetDeviceLogs(int deviceID)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("GetDeviceLogs", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceID;
+
+            //execute query
+            cmd.ExecuteNonQuery();
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            List<DeviceModel> Logs = new List<DeviceModel>();
+            while (reader.Read())
+            {
+                DeviceModel device = new DeviceModel();
+                ModelModel m = new ModelModel();
+                CategoryModel c = new CategoryModel();
+                m.Category = c;
+
+                device.DeviceID = (int)reader["deviceID"];
+                device.ChangedBy = (string)reader["changedBy"];
+                device.ChangeDate = (DateTime)reader["logDate"];
+                m.Category.Category = (string)reader["categoryName"];
+                m.ModelName = (string)reader["modelName"];
+                m.ModelDescription = (string)reader["modelDescription"];
+
+                device.Model = m;
+                Logs.Add(device);
+            }
+
+           
+
+            con.Close();
+            return Logs;
         }
 
         internal List<DeviceModel> GetDeviceInventory(string dummy)
