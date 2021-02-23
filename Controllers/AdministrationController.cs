@@ -30,7 +30,10 @@ namespace HUS_project.Controllers
         
         public IActionResult LocationAdmin()
         {
-            List<BuildingModel> buildings = new List<BuildingModel>
+            
+            EditStorageLocationModel dropDowns = new EditStorageLocationModel();
+            dropDowns.Rooms= new List<BuildingModel>
+            //List<BuildingModel> buildings = new List<BuildingModel>
             {
                 new BuildingModel() { Building = "Modtagelse", RoomNr = 1 },
                 new BuildingModel() { Building = "A", RoomNr = 2 },
@@ -49,7 +52,7 @@ namespace HUS_project.Controllers
 
 
 
-            return View();
+            return View(dropDowns);
         }
          
         public void CreateQRCode()

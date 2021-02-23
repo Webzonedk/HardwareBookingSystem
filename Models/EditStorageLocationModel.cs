@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace HUS_project.Models
 {
-    public class LocationDropDownModel
+    public class EditStorageLocationModel
     {
         #region fields
         private StorageLocationModel storageLocation;
@@ -34,13 +34,14 @@ namespace HUS_project.Models
 
 
 
-        #region Constructors
-        public LocationDropDownModel()
-        {
 
+        #region Constructors
+        public EditStorageLocationModel()
+        {
+            rooms = new List<BuildingModel>();
         }
 
-        public LocationDropDownModel(StorageLocationModel storageLocation, List<BuildingModel> rooms)
+        public EditStorageLocationModel(StorageLocationModel storageLocation, List<BuildingModel> rooms)
         {
             this.storageLocation = storageLocation;
             this.rooms = rooms;
