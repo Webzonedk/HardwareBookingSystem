@@ -67,43 +67,52 @@ namespace HUS_project.Controllers
             // New attempt at logging in, means old login attempt errors are irrelevant.
             HttpContext.Session.SetString("loginError", "");
 
-            // Verify and acquire the user's relevant groups for access and any errors encountered in this endeavour (i.e. "Unable to establish connection")
-            //List<string> reponses = LDAPManager.GetAccessResponses(userLogin.UNILogin, userLogin.Password);
-            List<string> responses = LDAPManager.TestLogin(userLogin.UNILogin, userLogin.Password);
-
-            // Set Session data accordingly.
-            if (responses.Count > 0)
+            if((userLogin.UNILogin != "" && userLogin.UNILogin != null) && (userLogin.Password != "" && userLogin.Password != null))
             {
-                HttpContext.Session.SetString("uniLogin", userLogin.UNILogin);
+                // Verify and acquire the user's relevant groups for access and any errors encountered in this endeavour (i.e. "Unable to establish connection")
+                //List<string> reponses = LDAPManager.GetAccessResponses(userLogin.UNILogin, userLogin.Password);
+                List<string> responses = LDAPManager.TestLogin(userLogin.UNILogin, userLogin.Password);
 
-                // 0 (Impossible) = No access to anything. 1 = Teacher, access to frontend.
-                // 2 = SKP Student, access to most backend. 3 = SKP Teacher, full backend access.
-                int accessLevel = 0;
-                foreach (string response in responses)
+                // Set Session data accordingly.
+                if (responses.Count > 0)
                 {
-                    if (response == "ZBC-Ri-skpElev")
+                    HttpContext.Session.SetString("uniLogin", userLogin.UNILogin);
+
+                    // 0 (Impossible) = No access to anything. 1 = Teacher, access to frontend.
+                    // 2 = SKP Student, access to most backend. 3 = SKP Teacher, full backend access.
+                    int accessLevel = 0;
+                    foreach (string response in responses)
                     {
-                        accessLevel += 2;
+                        if (response == "ZBC-Ri-skpElev")
+                        {
+                            accessLevel += 2;
+                        }
+                        else if (response == "ZBC-RIAH-Ansatte")
+                        {
+                            accessLevel += 1;
+                        }
+                        else if (response.Contains("FEJL: "))
+                        {
+                            HttpContext.Session.SetString("loginError", response.Substring(6));
+                        }
                     }
-                    else if (response == "ZBC-RIAH-Ansatte")
-                    {
-                        accessLevel += 1;
-                    }
-                    else if(response.Contains("FEJL: "))
-                    {
-                        HttpContext.Session.SetString("loginError", response.Substring(6));
-                    }
+
+                    HttpContext.Session.SetInt32("accessLevel", accessLevel);
                 }
 
-                HttpContext.Session.SetInt32("accessLevel", accessLevel);
+                // If the user is not a member of any groups, and there is no existing explanation as to why (i.e. error saying username or password incorrect)
+                // -Then it means that the user is neither a SKP student or a ZBC Employee.
+                if (responses.Count == 0 && HttpContext.Session.GetString("loginError") == "")
+                {
+                    HttpContext.Session.SetString("loginError", "Adgang Nægtet: Du har ikke medlemskab af relevante grupper");
+                }
             }
-
-            // If the user is not a member of any groups, and there is no existing explanation as to why (i.e. error saying username or password incorrect)
-            // -Then it means that the user is neither a SKP student or a ZBC Employee.
-            if (responses.Count == 0 && HttpContext.Session.GetString("loginError") == "")
+            else
             {
-                HttpContext.Session.SetString("loginError", "Adgang Nægtet: Du har ikke medlemskab af relevante grupper");
+                HttpContext.Session.SetString("loginError", "Udfyld uniLogin og kodeord. UniLogin er din ZBC email uden \"@zbc.dk\".");
             }
+            
+
 
             return RelocateUser();
         }
