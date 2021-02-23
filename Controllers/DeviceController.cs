@@ -36,6 +36,7 @@ namespace HUS_project.Controllers
             return View(infoList);
         }
 
+        //get model name and category names before returning to view
         public IActionResult CreateDevice()
         {
             EditDeviceModel deviceData = new EditDeviceModel();
@@ -65,7 +66,7 @@ namespace HUS_project.Controllers
 
             int deviceID = dbManager.CreateDevice(data);
             data = dbManager.GetDeviceInfo(deviceID);
-
+            List<DeviceModel> logs = dbManager.GetDeviceLogs(deviceID);
             return View("EditDevice", data);
         }
 
