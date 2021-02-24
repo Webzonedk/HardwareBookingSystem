@@ -23,26 +23,30 @@ namespace HUS_project.DAL
         }
 
 
-        internal List<EditStorageLocationModel> GetDropDowns()
+        internal List<EditStorageLocationModel> GetDropDowns(string seachInputBuilding)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("SelectBuildingName ", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-           // cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = dropDownContent.StorageLocation.Location.Building;
+            cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = seachInputBuilding;
+            //List<EditStorageLocationModel> dropDownData = new List<EditStorageLocationModel>();
+            
+            //Execute the input parametre query
+            cmd.ExecuteNonQuery();
 
-            List<EditStorageLocationModel> dropDownData = new List<EditStorageLocationModel>();
-
+                SqlDataReader reader = cmd.ExecuteReader();
+                List<EditStorageLocationModel> dropDownData = new List<EditStorageLocationModel>();
             try
             {
 
-                SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    EditStorageLocationModel output = new EditStorageLocationModel();
-                    output.StorageLocation.Location.Building = (string)reader["buildingName"];
+                    //EditStorageLocationModel output = new EditStorageLocationModel();
+                    EditStorageLocationModel building = new EditStorageLocationModel();
+                    building.StorageLocation.Location.Building = (string)reader["buildingName"];
 
-                    dropDownData.Add(output);
+                    dropDownData.Add(building);
                 }
             }
             catch (Exception)

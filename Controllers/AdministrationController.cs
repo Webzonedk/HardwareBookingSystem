@@ -28,10 +28,10 @@ namespace HUS_project.Controllers
             return View();
         }
         
-        public IActionResult LocationAdmin()
+        public IActionResult LocationAdmin(string seachInputBuilding)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            List<EditStorageLocationModel> dropDowns = manager.GetDropDowns();
+            List<EditStorageLocationModel> dropDowns = manager.GetDropDowns(seachInputBuilding);
            
 
 

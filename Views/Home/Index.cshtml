@@ -4,40 +4,41 @@
 @{
     ViewData["Title"] = "Login";
 }
-<div class="blue-oyster-bar">
+<div class="container-fluid blue-oyster-bar">
     <h2 class="text-white">ZBC HUS - Login side</h2>
     <h4 class="text-white">Kun for Lærere eller SKP Elever</h4>
 </div>
 
-<div style="padding-top:150px" class="columnContent">
+
+
+<div class="container bg-light">
     @*LOGIN FORM*@
     <form asp-action="Login" method="post" id="loginForm">
-        @*TITLES*@
-
         <div class="row">
             <div class="col-md-2"></div>
             <div class="col-md-3 form-floating">
-                <input id="uniLoginBox" asp-for="@Model.UNILogin" type="text" style="max-height:50px" class="form-control" />
-                <label for="uniLoginBox">uniLogin:</label>
+                <input id="uniLoginBox" asp-for="@Model.UNILogin" type="text" style="max-height:55px" class="form-control" />
+                <label for="uniLoginBox">ZBC Email initialer eller uniLogin:</label>
             </div>
             <div class="col-md-3 form-floating">
-                <input id="passwordBox" asp-for="@Model.Password" type="password" style="max-height:50px" class="form-control" />
+                <input id="passwordBox" asp-for="@Model.Password" type="password" style="max-height:55px" class="form-control" />
                 <label for="passwordBox">Kodeord:</label>
-                
+
             </div>
             <div class="col-md-3 form-floating">
                 <button class="btn btn-primary border-white vertical-center" type="submit">Log ind</button>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-6 alert-danger" id="loginError">
-                @if (httpContextAccessor.HttpContext.Session.GetString("loginError") != null && httpContextAccessor.HttpContext.Session.GetString("loginError") != "")
-                {
-                    <p>@httpContextAccessor.HttpContext.Session.GetString("loginError").ToString()</p>
-                }
+
+        @if (httpContextAccessor.HttpContext.Session.GetString("loginError") != null && httpContextAccessor.HttpContext.Session.GetString("loginError") != "")
+        {
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-6" style="align-content:center;" id="loginError">
+                    <p style="text-align:center; padding:5px; background-color:indianred; border-radius:8px; border-width:3px; border-style:solid; border-color:darkred;">@httpContextAccessor.HttpContext.Session.GetString("loginError").ToString()</p>
+                </div>
             </div>
-        </div>
-    </form>
+        }
+        </form>
     @*LOGIN FORM END*@
 </div>
