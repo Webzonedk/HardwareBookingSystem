@@ -21,35 +21,105 @@ namespace HUS_project.DAL
             connectionString = configuration.GetConnectionString("DBContext");
         }
 
-        internal List<CategoryModel> GetCategories(string dummy)
+        internal List<string> GetCategories()
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
+            SqlCommand cmd = new SqlCommand("SelectAllCategories", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.ExecuteNonQuery();
 
+
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            List<string> categories = new List<string>();
+            while (reader.Read())
+            {
+                CategoryModel category = new CategoryModel((string)reader["categoryName"]);
+                categories.Add(category.Category);
+            }
 
             con.Close();
-            return null;
+            return categories;
         }
 
-        internal List<ModelModel> GetModelNames(DeviceModel dummy)
+        internal List<string> GetModelNames()
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
+            SqlCommand cmd = new SqlCommand("GetAllModels", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.ExecuteNonQuery();
 
+            SqlDataReader reader = cmd.ExecuteReader();
+            List<string> modelNames = new List<string>();
+            while (reader.Read())
+            {
+                ModelModel modelName = new ModelModel((string)reader["modelName"], null, null);
+                modelNames.Add(modelName.ModelName);
+            }
 
             con.Close();
-            return null;
+            return modelNames;
         }
 
         internal List<BuildingModel> GetAllRooms(DeviceModel dummy)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
+            SqlCommand cmd = new SqlCommand("GetAllRooms", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+
+            con.Close();
+            return null;
+        }
+
+        internal int GetAvailableDeviceQuantities(DeviceModel dummy)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("GetModelDeviceQuantityAvailable", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            //set quantity from query
+            int quantity = (int)reader["QuantityOfAvailableDevices"];
+
+            con.Close();
+            return quantity;
+        }
+
+        internal BookingModel GetUserBookingsClosed(DeviceModel dummy)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("GetUserBookingsClosed", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+
+            con.Close();
+            return null;
+        }
+
+        internal BookingModel GetUserBookingsCurrent(DeviceModel dummy)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("GetUserBookingsCurrent", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+
+            con.Close();
+            return null;
+        }
+
+        internal BookingModel GetUserBookingsOpen(DeviceModel dummy)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("GetUserBookingsOpen", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
 
