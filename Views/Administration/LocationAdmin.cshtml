@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Http;
-@model List<HUS_project.Models.StorageLocationModel>
+@model HUS_project.Models.EditStorageLocationModel
 @inject IHttpContextAccessor httpContextAccessor;
 @{
     ViewData["Title"] = "Placerings Administration";
@@ -13,21 +13,26 @@
             </div>
             <div class="col-md">
                 <div class="form-floating">
-                    <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example">
+                    <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example" asp-for="@Model.StorageLocation.Location.Building">
                         <option selected>Open this select menu</option>
-                        @foreach (var item in Model)
+                        @foreach (var item in Model.Rooms)
                         {
-                            @*<option>@item.Model.location.building</option>*@
+                            <option>@item.Building</option>
                         }
                     </select>
                     <label for="floatingSelectGrid">Bygning</label>
                 </div>
             </div>
-            <div class="col-md-1">
-                <div class="col-md">
-                    <label class="text-white my-1">
-                        Lokale: <input list="roomNr" placeholder="Vælg" />
-                    </label>
+            <div class="col-md">
+                <div class="form-floating">
+                    <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example" asp-for="@Model.StorageLocation.Location.RoomNr">
+                        <option selected>Open this select menu</option>
+                        @foreach (var item in Model.Rooms)
+                        {
+                            <option>@item.Building</option>
+                        }
+                    </select>
+                    <label for="floatingSelectGrid">Bygning</label>
                 </div>
             </div>
             <div class="col-md-1">
