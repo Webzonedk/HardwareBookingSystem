@@ -81,7 +81,10 @@ namespace HUS_project.Controllers
             return View();
         }
 
+        //public IActionResult CreateQRCode()
+        //{
 
+        //}
 
 
     }

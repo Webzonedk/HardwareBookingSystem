@@ -3,26 +3,7 @@
     ViewData["Title"] = "Opret enhed";
 }
 
-<div class=" container-fluid blue-oyster-bar" > </div>
-
-@*<div style="padding-top: 100px">
-
-</div>*@
-
-@*<div class="row">
-    <div class="row blue-oyster-bar">
-
-    </div>
-    <div class="row">
-        <div class=" container containerHeader " style=" background-color:darkgrey;height:50px">
-
-            <div class="row">
-                <div class=" col-md-12">det her er en overskrift</div>
-            </div>
-
-        </div>
-    </div>
-</div>*@
+<div class=" container-fluid blue-oyster-bar"> </div>
 
 
 <div class=" container containerHeader " style=" background-color:darkgrey;height:50px">
@@ -56,16 +37,29 @@
 
 
             <div class="col m-md-3">
-                <div>
-                    <label>Kategori:</label>
-                    <input list="categories" placeholder="Vælg kategori" asp-for="@Model.Device.Model.Category.Category" />
+                @*<div class="form-floating">
+                        <input list="categories" asp-for="@Model.Device.Model.Category.Category"/>
+                        <datalist id="categories" class="form-select" >
+                            <option selected>vælg</option>
+                            @foreach (var item in Model.Categories)
+                            {
+                                <option>@item</option>
+                            }
+                        </datalist>
+                        <label for="categories">Kategori:</label>
+                    </div>*@
+
+                <div class="form-floating ">
+                    <input class="form-select" list="categories" id="exampleDataList" asp-for="@Model.Device.Model.Category.Category">
                     <datalist id="categories">
-                        <option selected></option>
+
                         @foreach (var item in Model.Categories)
                         {
                             <option>@item</option>
                         }
+
                     </datalist>
+                    <label for="exampleDataList">vælg kategori</label>
                 </div>
 
                 <br />

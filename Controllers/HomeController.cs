@@ -39,7 +39,7 @@ namespace HUS_project.Controllers
         }
 
         /// <summary>
-        /// Log out the user. Session is Cleared and user is sent back to login page.
+        /// Log out the user. Session data is blanked and user is sent back to login page.
         /// </summary>
         /// <returns></returns>
         public IActionResult Logout()
@@ -111,8 +111,6 @@ namespace HUS_project.Controllers
             {
                 HttpContext.Session.SetString("loginError", "Udfyld uniLogin og kodeord. UniLogin er din ZBC email uden \"@zbc.dk\".");
             }
-            
-
 
             return RelocateUser();
         }
