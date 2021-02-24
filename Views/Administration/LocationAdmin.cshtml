@@ -13,24 +13,24 @@
             </div>
             <div class="col-md">
                 <div class="form-floating">
-                    <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example" asp-for="@Model.StorageLocation.Location.Building">
+                    <datalist class="form-select" id="floatingSelectGrid" aria-label="Floating label select example" asp-for="@Model.Buildings">
                         <option selected>Open this select menu</option>
-                        @*@foreach (var item in Model.Rooms)
+                        @foreach (var item in Model.Buildings)
                         {
-                            <option>@item.Building</option>
-                        }*@
-                    </select>
+                            <option>@item</option>
+                        }
+                    </datalist>
                     <label for="floatingSelectGrid">Bygning</label>
                 </div>
             </div>
             <div class="col-md">
                 <div class="form-floating">
-                    <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example" asp-for="@Model.StorageLocation.Location.RoomNr">
+                    <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example" asp-for="@Model.RoomNumbers">
                         <option selected>Open this select menu</option>
-                        @*@foreach (var item in Model.Rooms)
+                        @foreach (var item in Model.RoomNumbers)
                         {
-                            <option>@item.Building</option>
-                        }*@
+                            <option>@item</option>
+                        }
                     </select>
                     <label for="floatingSelectGrid">Bygning</label>
                 </div>
