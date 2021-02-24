@@ -11,6 +11,10 @@ namespace HUS_project.Models
         private DeviceModel device;
         private List<string> modelNames;
         private List<string> categoryNames;
+        private List<BuildingModel> rooms;
+        private List<StorageLocationModel> locations;
+        private List<DeviceModel> logs;
+        private List<DeviceModel> locationLogs;
         #endregion
 
         #region Properties
@@ -35,7 +39,29 @@ namespace HUS_project.Models
             set { categoryNames = value; }
         }
 
+        public List<BuildingModel> Rooms
+        {
+            get { return rooms; }
+            set { rooms = value; }
+        }
 
+        public List<StorageLocationModel> Locations
+        {
+            get { return locations; }
+            set { locations = value; }
+        }
+
+        public List<DeviceModel> Logs
+        {
+            get { return logs; }
+            set { logs = value; }
+        }
+
+        public List<DeviceModel> LocationLogs
+        {
+            get { return locationLogs; }
+            set { locationLogs = value; }
+        }
 
         #endregion
 
@@ -45,13 +71,21 @@ namespace HUS_project.Models
             //initialize lists
             categoryNames = new List<string>();
             modelNames = new List<string>();
+            rooms = new List<BuildingModel>();
+            locations = new List<StorageLocationModel>();
+            logs = new List<DeviceModel>();
+            locationLogs = new List<DeviceModel>();
         }
 
-        public EditDeviceModel(DeviceModel device, List<string> modelNames, List<string> categories)
+        public EditDeviceModel(DeviceModel device, List<string> modelNames, List<string> categories, List<BuildingModel> rooms,List<StorageLocationModel> locations,List<DeviceModel> logs, List<DeviceModel> locationlogs)
         {
             this.device = device;
             this.modelNames = modelNames;
             this.categoryNames = categories;
+            this.rooms = rooms;
+            this.locations = locations;
+            this.logs = logs;
+            this.LocationLogs = locationlogs;
         }
         #endregion
     }

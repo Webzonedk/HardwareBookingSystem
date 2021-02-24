@@ -86,20 +86,23 @@ namespace HUS_project.DAL
             //execute query
             cmd.ExecuteNonQuery();
 
+            #region //model for data transfer
             SqlDataReader reader = cmd.ExecuteReader();
             DeviceModel device = new DeviceModel();
-            ModelModel m = new ModelModel();
-            CategoryModel c = new CategoryModel();
-            m.Category = c;
+            ModelModel model = new ModelModel();
+            CategoryModel category = new CategoryModel();
+            model.Category = category;
+            #endregion
+
             while (reader.Read())
             {
                 device.DeviceID = (int)reader["deviceID"];
-                m.Category.Category = (string)reader["categoryName"];
-                m.ModelName = (string)reader["modelName"];
-                m.ModelDescription = (string)reader["modelDescription"];
+                model.Category.Category = (string)reader["categoryName"];
+                model.ModelName = (string)reader["modelName"];
+                model.ModelDescription = (string)reader["modelDescription"];
             }
 
-            device.Model = m;
+            device.Model = model;
 
             con.Close();
             return device;
@@ -129,9 +132,10 @@ namespace HUS_project.DAL
                 device.DeviceID = (int)reader["deviceID"];
                 device.ChangedBy = (string)reader["changedBy"];
                 device.ChangeDate = (DateTime)reader["logDate"];
+                device.Notes = (string)reader["note"];
                 m.Category.Category = (string)reader["categoryName"];
                 m.ModelName = (string)reader["modelName"];
-                m.ModelDescription = (string)reader["modelDescription"];
+               
 
                 device.Model = m;
                 Logs.Add(device);

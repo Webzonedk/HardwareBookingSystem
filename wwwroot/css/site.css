@@ -47,12 +47,13 @@ Blue area below navigation bar
 
 .blue-oyster-bar {
     height: 100px;
-    position: absolute;
+    position: relative;
     left: 0;
     right: 0;
     background: rgb(64,81,255);
     background: radial-gradient(circle, rgba(64,81,255,1) 0%, rgba(30,38,111,1) 100%);
     border-bottom: 5px solid;
+   width:100%;
 }
 
 
@@ -193,6 +194,7 @@ Containers
 .containerHeader {
     margin: 10px 0 0 0;
     height: 15px;
+    position: relative;
     background-color: #353535;
     border-top-color: #353535;
     border-top-width: 2px;

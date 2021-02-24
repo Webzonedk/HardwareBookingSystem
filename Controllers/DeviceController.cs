@@ -39,25 +39,22 @@ namespace HUS_project.Controllers
         //get model name and category names before returning to view
         public IActionResult CreateDevice()
         {
-            EditDeviceModel deviceData = new EditDeviceModel();
+            //get data from database
+            DBManagerShared sharedDBManager = new DBManagerShared(configuration);
+            List<string> categories = sharedDBManager.GetCategories();
+            List<string> modelNames = sharedDBManager.GetModelNames();
+
+            //create view model
+            CreateDeviceModel deviceData = new CreateDeviceModel();
+            deviceData.Categories = categories;
+            deviceData.ModelNames = modelNames;
             deviceData.Device = new DeviceModel();
-
-            for (int i = 0; i < 5; i++)
-            {
-                string modelname = "modelxx_" + i;
-                string category = "category_" + i;
-                deviceData.ModelNames.Add(modelname);
-                deviceData.Categories.Add(category);
-            }
-
-
-
-
+            
             return View(deviceData);
         }
 
-        //  [HttpPost]
-        public IActionResult AddDeviceToDB(EditDeviceModel deviceData)
+        
+        public IActionResult AddDeviceToDB(CreateDeviceModel deviceData)
         {
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
             DeviceModel data = deviceData.Device;
@@ -67,7 +64,10 @@ namespace HUS_project.Controllers
             int deviceID = dbManager.CreateDevice(data);
             data = dbManager.GetDeviceInfo(deviceID);
             List<DeviceModel> logs = dbManager.GetDeviceLogs(deviceID);
-            return View("EditDevice", data);
+            EditDeviceModel editdata = new EditDeviceModel();
+
+
+            return View("EditDevice", editdata);
         }
 
         public IActionResult EditDevice(DeviceModel deviceData)
