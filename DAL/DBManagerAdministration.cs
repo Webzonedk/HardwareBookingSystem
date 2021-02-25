@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using HUS_project.Models;
+using HUS_project.Models.ViewModels;
 using System.Data.SqlClient;
 
 namespace HUS_project.DAL
