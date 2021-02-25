@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using HUS_project.Models;
 using HUS_project.Models.ViewModels;
+using HUS_project.Models;
 using HUS_project.DAL;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
@@ -32,7 +32,7 @@ namespace HUS_project.Controllers
 
 
             //send data to the manager
-
+            
 
             return View(infoList);
         }
