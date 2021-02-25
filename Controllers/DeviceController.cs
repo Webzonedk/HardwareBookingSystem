@@ -43,36 +43,62 @@ namespace HUS_project.Controllers
             DBManagerShared sharedDBManager = new DBManagerShared(configuration);
             List<string> categories = sharedDBManager.GetCategories();
             List<string> modelNames = sharedDBManager.GetModelNames();
-
+            
             //create view model
             CreateDeviceModel deviceData = new CreateDeviceModel();
             deviceData.Categories = categories;
             deviceData.ModelNames = modelNames;
             deviceData.Device = new DeviceModel();
-            
+         
             return View(deviceData);
         }
 
         
         public IActionResult AddDeviceToDB(CreateDeviceModel deviceData)
         {
+            //initializing DB managers
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            DBManagerShared dbsharedManager = new DBManagerShared(configuration);
+
+            //Add device to database
             DeviceModel data = deviceData.Device;
             data.ChangedBy = HttpContext.Session.GetString("uniLogin");
-            Debug.Write($"modelname: {deviceData.Device.Model.ModelName}/modelDescription: {deviceData.Device.Model.ModelDescription}/category: {deviceData.Device.Model.Category.Category}/changedBy {deviceData.Device.ChangedBy}/serialnumber: {deviceData.Device.SerialNumber} ");
-
             int deviceID = dbManager.CreateDevice(data);
+
+            //return device info to Edit view
             data = dbManager.GetDeviceInfo(deviceID);
             List<DeviceModel> logs = dbManager.GetDeviceLogs(deviceID);
+            List<string> categories = dbsharedManager.GetCategories();
+            List<string> modelNames = dbsharedManager.GetModelNames();
             EditDeviceModel editdata = new EditDeviceModel();
-
+            editdata.Device = data;
+            editdata.Logs = logs;
+            editdata.Categories = categories;
+            editdata.ModelNames = modelNames;
 
             return View("EditDevice", editdata);
         }
 
-        public IActionResult EditDevice(DeviceModel deviceData)
+        public IActionResult EditDevice(int deviceID)
         {
-            return View(deviceData);
+            //initializing DB managers
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            DBManagerShared dbsharedManager = new DBManagerShared(configuration);
+
+            //return device info to Edit view
+            int ID = 1026;
+            DeviceModel data = new DeviceModel();
+            data = dbManager.GetDeviceInfo(ID);
+            List<DeviceModel> logs = dbManager.GetDeviceLogs(ID);
+            List<string> categories = dbsharedManager.GetCategories();
+            List<string> modelNames = dbsharedManager.GetModelNames();
+            EditDeviceModel editdata = new EditDeviceModel();
+            editdata.Device = data;
+            editdata.Logs = logs;
+            editdata.Categories = categories;
+            editdata.ModelNames = modelNames;
+
+            return View(editdata);
         }
 
 

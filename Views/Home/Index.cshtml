@@ -11,7 +11,7 @@
 
 
 
-<div class="container bg-light">
+<div class="container loginBox">
     @*LOGIN FORM*@
     <form asp-action="Login" method="post" id="loginForm">
         <div class="row">
@@ -34,11 +34,11 @@
         {
             <div class="row">
                 <div class="col-md-2"></div>
-                <div class="col-md-6" style="align-content:center;" id="loginError">
+                <div class="col-md-6" style="align-content:center; margin-top:8px;" id="loginError">
                     <p style="text-align:center; padding:5px; background-color:indianred; border-radius:8px; border-width:3px; border-style:solid; border-color:darkred;">@httpContextAccessor.HttpContext.Session.GetString("loginError").ToString()</p>
                 </div>
             </div>
         }
-        </form>
+    </form>
     @*LOGIN FORM END*@
 </div>

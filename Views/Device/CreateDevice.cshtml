@@ -6,13 +6,7 @@
 <div class=" container-fluid blue-oyster-bar"> </div>
 
 
-<div class=" container containerHeader " style=" background-color:darkgrey;height:50px">
-
-    <div class="row">
-        <div class=" col-md-12">det her er en overskrift</div>
-    </div>
-
-</div>
+<div class=" container containerHeader " style=" background-color:darkgrey;height:50px"></div>
 
 <div class=" container " style="background-color: deepskyblue; height:300px">
 
@@ -20,14 +14,14 @@
         <h4>Opret enhed</h4>
         <form class="row" asp-action="AddDeviceToDB" method="post" autocomplete="off">
 
-            <div class="col m-md-3">
-                <div class=" row">
-                    <div class="col img-bg" style="height:150px">
-                        <img src="~/Graphic/billede-mangler.png" style="width:150px" />
+            <div class="col m-md-2">
+                <div class=" row ">
+                    <div class="img-bg" >
+                        <img src="~/Graphic/billede-mangler.png" height="180"/>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col text-center">
+                    <div class="text-center">
                         <button type="button" class=" btn-primary btn" asp-action="CreateQRCode">upload foto</button>
 
                     </div>
@@ -36,18 +30,7 @@
             </div>
 
 
-            <div class="col m-md-3">
-                @*<div class="form-floating">
-                        <input list="categories" asp-for="@Model.Device.Model.Category.Category"/>
-                        <datalist id="categories" class="form-select" >
-                            <option selected>vælg</option>
-                            @foreach (var item in Model.Categories)
-                            {
-                                <option>@item</option>
-                            }
-                        </datalist>
-                        <label for="categories">Kategori:</label>
-                    </div>*@
+            <div class="col m-md-5">
 
                 <div class="form-floating ">
                     <input class="form-select" list="categories" id="exampleDataList" asp-for="@Model.Device.Model.Category.Category">
@@ -64,15 +47,17 @@
 
                 <br />
 
-                <div>
-                    <label>Enhedsnavn:</label>
-                    <input list="models" placeholder="Indtast enhedsnavn" asp-for="@Model.Device.Model.ModelName" />
-                    <datalist id="models">
+                <div class="form-floating ">
+                    <input class="form-select" list="modelNames" id="exampleDataList" asp-for="@Model.Device.Model.ModelName">
+                    <datalist id="modelNames">
+
                         @foreach (var item in Model.ModelNames)
                         {
                             <option>@item</option>
                         }
+
                     </datalist>
+                    <label for="exampleDataList">Indtast enhedsnavn</label>
                 </div>
 
                 <br />
@@ -83,18 +68,23 @@
 
             </div>
 
-            <div class="col-md-3 ">
-                <div>
-                    <label>Serienummer:</label>
-                    <input placeholder="indtast serienr." asp-for="@Model.Device.SerialNumber" />
+            <div class="col m-md-2">
+                <div class="form-floating">
+                    <input class="form-control" id="inputSerial" placeholder="indtast serienr." asp-for="@Model.Device.SerialNumber" />
+                    <label for="inputSerial">Serienummer:</label>
 
                 </div>
+
+                <br />  
+
+                <div class="form-floating">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" asp-for="@Model.Device.Model.ModelDescription"></textarea>
+                    <label for="floatingTextarea2">beskrivelse</label>
+                </div>
+
             </div>
 
-            <div class="col-md-3 ">
-                <label>Beskrivelse</label>
-                <input placeholder="Tilføj beskrivelse" asp-for="@Model.Device.Model.ModelDescription" />
-            </div>
+           
 
 
 
