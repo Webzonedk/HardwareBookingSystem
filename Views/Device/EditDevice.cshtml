@@ -2,3 +2,88 @@
 @{
     ViewData["Title"] = "Rediger enhed";
 }
+
+<div class=" container-fluid blue-oyster-bar"> </div>
+
+<div class=" container containerHeader " style=" background-color:darkgrey;height:50px">
+       
+    <h4>Opret enhed</h4>
+
+</div>
+
+<div class=" container " style="background-color: deepskyblue; height:300px">
+
+    <div class="row ">
+        <form class="row" asp-action="AddDeviceToDB" method="post" autocomplete="off">
+
+
+            <div class="col m-md-2">
+
+
+                <input class="btn-blue" type="submit" value="Gem" />
+
+            </div>
+
+
+            <div class="col m-md-4">
+
+                <div class="form-floating ">
+                    <input class="form-select" list="categories" id="exampleDataList" asp-for="@Model.Device.Model.Category.Category">
+                    <datalist id="categories">
+
+                        @foreach (var item in Model.Categories)
+                        {
+                            <option>@item</option>
+                        }
+
+                    </datalist>
+                    <label for="exampleDataList">vælg kategori</label>
+                </div>
+
+                <br />
+
+                <div class="form-floating ">
+                    <input class="form-select" list="modelNames" id="exampleDataList" asp-for="@Model.Device.Model.ModelName">
+                    <datalist id="modelNames">
+
+                        @foreach (var item in Model.ModelNames)
+                        {
+                            <option>@item</option>
+                        }
+
+                    </datalist>
+                    <label for="exampleDataList">Indtast enhedsnavn</label>
+                </div>
+
+                <br />
+
+
+                <div class="form-floating">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" asp-for="@Model.Device.Model.ModelDescription"></textarea>
+                    <label for="floatingTextarea2">beskrivelse</label>
+                </div>
+
+
+
+            </div>
+
+            <div class="col m-md-4">
+
+
+
+            </div>
+
+
+            <div class="col m-md-2">
+
+
+
+            </div>
+
+
+        </form>
+    </div>
+
+</div>
+
+<div class=" containerFooter" style=" background-color:darkgrey;height:50px"></div>
