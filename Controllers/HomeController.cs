@@ -123,7 +123,7 @@ namespace HUS_project.Controllers
         {
             if (HttpContext.Session.GetInt32("accessLevel") > 1)
             {
-                return View("Task");
+                return View("Task", "TEST STRING YOLOLO");
             }
             else if(HttpContext.Session.GetInt32("accessLevel") == 1)
             {
