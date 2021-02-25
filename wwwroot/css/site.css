@@ -46,7 +46,9 @@ Blue area below navigation bar
 ----------------------------------------------------------------------*/
 
 .blue-oyster-bar {
-    height: 100px;
+    height: 125px;
+    margin-top: 0px;
+    width: 100%;
     position: relative;
     left: 0;
     right: 0;
