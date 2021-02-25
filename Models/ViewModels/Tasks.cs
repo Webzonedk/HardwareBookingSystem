@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HUS_project.ViewModels
+namespace HUS_project.Models.ViewModels
 {
     public class Tasks
     {
-        private List<Models.BookingModel> bookingsToBeDelivered;
-        private List<Models.BookingModel> bookingsToBeRetrieved;
+        private List<BookingModel> bookingsToBeDelivered;
+        private List<BookingModel> bookingsToBeRetrieved;
 
-        public List<Models.BookingModel> BookingsToBeDelivered
+        public List<BookingModel> BookingsToBeDelivered
         {
             get
             {
@@ -21,7 +21,7 @@ namespace HUS_project.ViewModels
                 this.bookingsToBeDelivered = value;
             }
         }
-        public List<Models.BookingModel> BookingsToBeRetrieved
+        public List<BookingModel> BookingsToBeRetrieved
         {
             get
             {

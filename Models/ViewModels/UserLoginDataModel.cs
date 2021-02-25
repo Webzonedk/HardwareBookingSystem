@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
-namespace HUS_project.Models
+namespace HUS_project.Models.ViewModels
 {
     public class UserLoginDataModel
     {
