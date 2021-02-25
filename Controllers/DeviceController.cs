@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using HUS_project.Models.ViewModels;
 using HUS_project.Models;
+using HUS_project.Models.ViewModels;
 using HUS_project.DAL;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
