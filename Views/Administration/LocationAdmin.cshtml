@@ -13,82 +13,97 @@
             </div>
             <div class="col-md">
                 <div class="form-floating">
-                    <datalist class="form-select" id="floatingSelectGrid" aria-label="Floating label select example" asp-for="@Model.Buildings">
-                        <option selected>Open this select menu</option>
+                    <input class="form-select" id="buildingDropDown" aria-label="Vælg Bygning" asp-for="@Model.StorageLocation.Location.Building">
+                    <datalist id="buildings">
                         @foreach (var item in Model.Buildings)
                         {
                             <option>@item</option>
                         }
                     </datalist>
-                    <label for="floatingSelectGrid">Bygning</label>
+                    <label for="floatingSelectGrid">Bygning:</label>
                 </div>
             </div>
             <div class="col-md">
                 <div class="form-floating">
-                    <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example" asp-for="@Model.RoomNumbers">
-                        <option selected>Open this select menu</option>
+                    <input class="form-select" id="roomNumberDropDown" aria-label="Vælg lokalenummer" asp-for="@Model.StorageLocation.Location.RoomNumber">
+                    <datalist id="roomNumbers">
                         @foreach (var item in Model.RoomNumbers)
                         {
                             <option>@item</option>
                         }
-                    </select>
-                    <label for="floatingSelectGrid">Bygning</label>
+                    </datalist>
+                    <label for="floatingSelectGrid">LokaleNummer:</label>
                 </div>
             </div>
-            <div class="col-md-1">
-                <div class="col-md">
-                    <label class="text-white my-1">
-                        Lokale: <input list="roomNr" placeholder="Vælg" />
-                    </label>
+            <div class="col-md">
+                <div class="form-floating">
+                    <input class="form-select" id="shelfNameDropDown" aria-label="Vælg ReolNavn" asp-for="@Model.StorageLocation.ShelfName">
+                    <datalist id="shelfNames">
+                        @foreach (var item in Model.ShelfNames)
+                        {
+                            <option>@item</option>
+                        }
+                    </datalist>
+                    <label for="floatingSelectGrid">Reol navn:</label>
                 </div>
             </div>
-            <div class="col-md-1">
-                <div class="col-md">
-                    <label class="text-white my-1">
-                        Lokale: <input list="roomNr" placeholder="Vælg" />
-                    </label>
+            <div class="col-md">
+                <div class="form-floating">
+                    <input class="form-select" id="shelfLevelDropDown" aria-label="Vælg Etage" asp-for="@Model.StorageLocation.ShelfLevel">
+                    <datalist id="shelfLevels">
+                        @foreach (var item in Model.ShelfLevels)
+                        {
+                            <option>@item</option>
+                        }
+                    </datalist>
+                    <label for="floatingSelectGrid">Reol Etage:</label>
                 </div>
             </div>
-            <div class="col-md-1">
-                <div class="col-md">
-                    <label class="text-white my-1">
-                        Lokale: <input list="roomNr" placeholder="Vælg" />
-                    </label>
+            <div class="col-md">
+                <div class="form-floating">
+                    <input class="form-select" id="shelfSpotDropDown" aria-label="Vælg Hyldeplads" asp-for="@Model.StorageLocation.ShelfSpot">
+                    <datalist id="shelfSpots">
+                        @foreach (var item in Model.ShelfSpots)
+                        {
+                            <option>@item</option>
+                        }
+                    </datalist>
+                    <label for="floatingSelectGrid">Hyldeplads:</label>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="col-md">
-                    <label class="text-white my-1">
-                        Lokale: <input list="roomNr" placeholder="Vælg" />
-                    </label>
-                </div>
+            @*<div class="col-md-3">*@
+            <div class="col-md">
+                <ul>
+                    <li>
+                        Alle felter kan oprettes enkeltvis
+                    </li>
+                    <li>
+                        Hvis Bygning og Lokale er udfyldt samtidigt vil der <br />
+                        oprettes et "Lokale" hvis ikke det eksisterer i forvejen
+                    </li>
+                    <li>
+                        Hvis alle felter er udfyldt, vil der oprettes en placering.
+                    </li>
+                </ul>
+                <p>Men kun hvis det ikke findes I forvejen</p>
             </div>
-            <div class="col-md-2">
-                <div class="col-md">
-                    <label class="text-white my-1">
-                        Lokale: <input list="roomNr" placeholder="Vælg" />
-                    </label>
-                </div>
+            @*</div>*@
+            <div class="col-md">
+                <input class="btn-blue" type="submit" value="Tilføj Placering" />
             </div>
-            <div class="col-md-1">
-                <div class="col-md">
-                    <label class="text-white ">
-                        Lokale: <input list="roomNr" placeholder="Vælg" />
-                    </label>
-                </div>
-            </div>
+
 
 
         </div>
     </div>
-    <div class="container-md rounded-top rounded-3 border border-3" >
+    <div class="container-md rounded-top rounded-3 border border-3">
         this is a test header
     </div>
     <div class="container-md border border-3">
-
+        This is a test body container
     </div>
     <div class="container-md rounded-bottom rounded-3 border border-3">
-
+        this is a test footer
     </div>
 
 </form>
