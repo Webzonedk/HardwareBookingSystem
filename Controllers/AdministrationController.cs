@@ -31,14 +31,21 @@ namespace HUS_project.Controllers
         public IActionResult LocationAdmin(string seachInputBuilding)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            List<EditStorageLocationModel> dropDowns = manager.GetDropDowns(seachInputBuilding);
-           
+            List<string> buildings = manager.GetBuildings();
+            List<byte> roomNumbers = manager.GetRoomNumbers();
+            List<string> shelfNames = manager.GetShelfName();
+            List<byte> shelfLevels = manager.GetShelfLevel();
+            List<byte> shelfspots = manager.GetShelfSpot();
 
 
+            EditStorageLocationModel dropDownData = new EditStorageLocationModel();
+            dropDownData.Buildings = buildings;
+            dropDownData.RoomNumbers = roomNumbers;
+            dropDownData.ShelfNames = shelfNames;
+            dropDownData.ShelfLevels = shelfLevels;
+            dropDownData.ShelfSpots = shelfspots;
 
-
-
-            return View(dropDowns);
+            return View(dropDownData);
         }
          
         public void CreateQRCode()

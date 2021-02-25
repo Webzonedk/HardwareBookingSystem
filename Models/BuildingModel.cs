@@ -11,7 +11,7 @@ namespace HUS_project.Models
         #region Fields
 
         private string building;
-        private byte roomNr;
+        private byte roomNumber;
 
         #endregion
 
@@ -25,10 +25,10 @@ namespace HUS_project.Models
         }
 
 
-        public byte RoomNr
+        public byte RoomNumber
         {
-            get { return roomNr; }
-            set { roomNr = value; }
+            get { return roomNumber; }
+            set { roomNumber = value; }
         }
 
         #endregion
@@ -41,10 +41,10 @@ namespace HUS_project.Models
 
         }
               
-        public BuildingModel(string building, byte roomNr)
+        public BuildingModel(string building, byte roomNumber)
         {
             this.building = building;
-            this.roomNr = roomNr;
+            this.roomNumber = roomNumber;
         }
 
         #endregion

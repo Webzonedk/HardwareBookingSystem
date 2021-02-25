@@ -23,30 +23,25 @@ namespace HUS_project.DAL
         }
 
 
-        internal List<EditStorageLocationModel> GetDropDowns(string seachInputBuilding)
+        internal List<string> GetBuildings()
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("SelectBuildingName ", con);
+            SqlCommand cmd = new SqlCommand("SelectBuildingName", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = seachInputBuilding;
-            //List<EditStorageLocationModel> dropDownData = new List<EditStorageLocationModel>();
-            
-            //Execute the input parametre query
             cmd.ExecuteNonQuery();
 
-                SqlDataReader reader = cmd.ExecuteReader();
-                List<EditStorageLocationModel> dropDownData = new List<EditStorageLocationModel>();
+            SqlDataReader reader = cmd.ExecuteReader();
+            List<string> buildings = new List<string>();
             try
             {
 
                 while (reader.Read())
                 {
-                    //EditStorageLocationModel output = new EditStorageLocationModel();
-                    EditStorageLocationModel building = new EditStorageLocationModel();
-                    building.StorageLocation.Location.Building = (string)reader["buildingName"];
 
-                    dropDownData.Add(building);
+                    BuildingModel building = new BuildingModel((string)reader["buildingName"], 0);
+
+                    buildings.Add(building.Building);
                 }
             }
             catch (Exception)
@@ -55,11 +50,146 @@ namespace HUS_project.DAL
                 throw;
             }
 
+            con.Close();
+            return buildings;
+        }
 
+
+
+
+        internal List<byte> GetRoomNumbers()
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("SelectRoomNr", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.ExecuteNonQuery();
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            List<byte> roomNumbers = new List<byte>();
+            try
+            {
+
+                while (reader.Read())
+                {
+                    //EditStorageLocationModel output = new EditStorageLocationModel();
+                    BuildingModel roomNumber = new BuildingModel(null, (byte)reader["roomNr"]);
+
+                    roomNumbers.Add(roomNumber.RoomNumber);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 
             con.Close();
-            return dropDownData;
+            return roomNumbers;
         }
+
+
+
+
+        internal List<string> GetShelfName()
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("SelectShelfName", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.ExecuteNonQuery();
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            List<string> shelfNames = new List<string>();
+            try
+            {
+
+                while (reader.Read())
+                {
+                    //EditStorageLocationModel output = new EditStorageLocationModel();
+                    StorageLocationModel shelfName = new StorageLocationModel((string)reader["shelfName"], 0, 0, null);
+
+                    shelfNames.Add(shelfName.ShelfName);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            con.Close();
+            return shelfNames;
+        }
+
+
+
+
+        internal List<byte> GetShelfLevel()
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("SelectRoomNr", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.ExecuteNonQuery();
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            List<byte> shelfLevels = new List<byte>();
+            try
+            {
+
+                while (reader.Read())
+                {
+                    //EditStorageLocationModel output = new EditStorageLocationModel();
+                    StorageLocationModel shelfLevel = new StorageLocationModel(null, (byte)reader["roomNr"], 0, null);
+
+                    shelfLevels.Add(shelfLevel.ShelfLevel);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            con.Close();
+            return shelfLevels;
+        }
+
+
+
+
+        internal List<byte> GetShelfSpot()
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("SelectRoomNr", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.ExecuteNonQuery();
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            List<byte> shelfLevels = new List<byte>();
+            try
+            {
+
+                while (reader.Read())
+                {
+                    //EditStorageLocationModel output = new EditStorageLocationModel();
+                    StorageLocationModel shelfLevel = new StorageLocationModel(null, (byte)reader["roomNr"], 0, null);
+
+                    shelfLevels.Add(shelfLevel.ShelfLevel);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            con.Close();
+            return shelfLevels;
+        }
+
 
 
 
@@ -74,7 +204,7 @@ namespace HUS_project.DAL
             con.Close();
             return null;
         }
-        
+
 
 
         internal StorageLocationModel DeleteLocation(StorageLocationModel dummy)
@@ -88,7 +218,7 @@ namespace HUS_project.DAL
             con.Close();
             return null;
         }
-           
+
 
 
         internal List<StorageLocationModel> DeleteLocation(List<StorageLocationModel> dummy)
@@ -115,7 +245,7 @@ namespace HUS_project.DAL
 
             con.Close();
         }
-        
+
 
 
         internal void DeleteCategory(string dummy)
@@ -128,7 +258,7 @@ namespace HUS_project.DAL
 
             con.Close();
         }
-           
+
 
 
         internal void EditCategory(string dummy)
