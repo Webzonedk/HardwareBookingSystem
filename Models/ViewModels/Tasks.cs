@@ -10,6 +10,7 @@ namespace HUS_project.Models.ViewModels
         private List<BookingModel> bookingsToBeDelivered;
         private List<BookingModel> bookingsToBeRetrieved;
 
+
         public List<BookingModel> BookingsToBeDelivered
         {
             get
@@ -33,5 +34,14 @@ namespace HUS_project.Models.ViewModels
             }
         }
 
+        public Tasks()
+        {
+
+        }
+        public Tasks(List<BookingModel> BookingsToBeDelivered, List<BookingModel> BookingsToBeRetrieved)
+        {
+            this.bookingsToBeDelivered = BookingsToBeDelivered;
+            this.bookingsToBeRetrieved = BookingsToBeRetrieved;
+        }
     }
 }
