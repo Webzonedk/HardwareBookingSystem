@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.DirectoryServices;
 using Microsoft.AspNetCore.Http;
-using HUS_project.Models;
+using HUS_project.Models.ViewModels;
 
 using System.Diagnostics;
 

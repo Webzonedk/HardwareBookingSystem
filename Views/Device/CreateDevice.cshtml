@@ -1,37 +1,96 @@
-﻿@model HUS_project.Models.DeviceModel
+﻿@model HUS_project.Models.ViewModels.CreateDeviceModel
 @{
     ViewData["Title"] = "Opret enhed";
 }
-<div class="container bg-dark rounded containerHeader">
-    <div class="row">
-        <h5 style="color: #064bfd;">Opret enhed</h5>
-        <div class="col-md-3">
-            <div class="row">
-                <img src="" alt="Upload foto" />
+
+<div class=" container-fluid blue-oyster-bar"> </div>
+
+
+<div class=" container containerHeader " style=" background-color:darkgrey;height:50px"></div>
+
+<div class=" container " style="background-color: deepskyblue; height:300px">
+
+    <div class="row ">
+        <h4>Opret enhed</h4>
+        <form class="row" asp-action="AddDeviceToDB" method="post" autocomplete="off">
+
+            <div class="col m-md-2">
+                <div class=" row ">
+                    <div class="img-bg" >
+                        <img src="~/Graphic/billede-mangler.png" height="180"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="text-center">
+                        <button type="button" class=" btn-primary btn" asp-action="CreateQRCode">upload foto</button>
+
+                    </div>
+                </div>
+
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="row">
-                <h6 class="text-light text-left">Kategori:</h6>
-                <select>
-                    <option value="none">Vælg kategori</option>
-                </select>
+
+
+            <div class="col m-md-5">
+
+                <div class="form-floating ">
+                    <input class="form-select" list="categories" id="exampleDataList" asp-for="@Model.Device.Model.Category.Category">
+                    <datalist id="categories">
+
+                        @foreach (var item in Model.Categories)
+                        {
+                            <option>@item</option>
+                        }
+
+                    </datalist>
+                    <label for="exampleDataList">vælg kategori</label>
+                </div>
+
+                <br />
+
+                <div class="form-floating ">
+                    <input class="form-select" list="modelNames" id="exampleDataList" asp-for="@Model.Device.Model.ModelName">
+                    <datalist id="modelNames">
+
+                        @foreach (var item in Model.ModelNames)
+                        {
+                            <option>@item</option>
+                        }
+
+                    </datalist>
+                    <label for="exampleDataList">Indtast enhedsnavn</label>
+                </div>
+
+                <br />
+
+                <input class="btn-blue" type="submit" value="Gem" />
+
+
+
             </div>
-            <div class="row">
-                <h6 class="text-light text-left font-weight-bold">Enhedsnavn:</h6>
-                <select>
-                    <option value="none">Indtast enhedsnavn</option>
-                </select>
+
+            <div class="col m-md-2">
+                <div class="form-floating">
+                    <input class="form-control" id="inputSerial" placeholder="indtast serienr." asp-for="@Model.Device.SerialNumber" />
+                    <label for="inputSerial">Serienummer:</label>
+
+                </div>
+
+                <br />  
+
+                <div class="form-floating">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" asp-for="@Model.Device.Model.ModelDescription"></textarea>
+                    <label for="floatingTextarea2">beskrivelse</label>
+                </div>
+
             </div>
-            <div class="row">
-                <button class="rounded text-white bg-success">Gem</button>
-            </div>
-        </div>
-        <div class="col-md-5">
-            <div class="row">
-                <h6 class="text-light text-left font-weight-bold">Beskrivelse:</h6>
-                <textarea style="width: 90%" placeholder="Tilføj beskrivelse..."></textarea>
-            </div>
-        </div>
+
+           
+
+
+
+        </form>
     </div>
+
 </div>
+
+<div class=" containerFooter" style=" background-color:darkgrey;height:50px"></div>

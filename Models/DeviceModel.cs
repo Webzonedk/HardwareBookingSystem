@@ -10,6 +10,7 @@ namespace HUS_project.Models
         #region Fields
 
         private int deviceID;
+        private string serialNumber;
         private ModelModel model;
         private byte status;
         private StorageLocationModel location;
@@ -29,6 +30,12 @@ namespace HUS_project.Models
         {
             get { return deviceID; }
             set { deviceID = value; }
+        }
+
+        public string SerialNumber
+        {
+            get { return serialNumber; }
+            set { serialNumber = value; }
         }
 
         public ModelModel Model
@@ -86,14 +93,19 @@ namespace HUS_project.Models
 
         public DeviceModel()
         {
+           
 
         }
-        
-        
-        public DeviceModel(int deviceID, ModelModel model, byte status, StorageLocationModel location, string notes,
+
+
+        public DeviceModel(int deviceID,string serialnr, ModelModel model, StorageLocationModel location, byte status, string notes,
             DateTime changeDate, string changedBy, string returnedBy, DateTime dateReturned)
         {
+           
+
+            //set  fields
             this.deviceID = deviceID;
+            this.serialNumber = serialnr;
             this.model = model;
             this.status = status;
             this.location = location;
@@ -105,5 +117,6 @@ namespace HUS_project.Models
         }
 
         #endregion
+        
     }
 }
