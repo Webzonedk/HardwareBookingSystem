@@ -13,17 +13,14 @@ namespace HUS_project.Models
         private string customer;
         private List<ItemLineModel> items;
         private List<DeviceModel> devices;
-        private List<DeviceModel> logs;
         private BuildingModel location;
-        private DateTime dateBorrowed;
+        private DateTime plannedBorrowDate;
+        private DateTime plannedReturnDate;
         private string deliveredBy;
-        private SearchTermsModel searchTerms;
         private int bookingStatus;
 
         #endregion
 
-
-      
 
 
         #region Properties
@@ -52,11 +49,6 @@ namespace HUS_project.Models
             set { devices = value; }
         }
 
-        public List<DeviceModel> Logs
-        {
-            get { return logs; }
-            set { logs = value; }
-        }
 
         public BuildingModel Location
         {
@@ -64,10 +56,16 @@ namespace HUS_project.Models
             set { location = value; }
         }
 
-        public DateTime DateBorrowed
+        public DateTime PlannedBorrowDate
         {
-            get { return dateBorrowed; }
-            set {  dateBorrowed = value; }
+            get { return this.plannedBorrowDate; }
+            set { this.plannedBorrowDate = value; }
+        }
+
+        public DateTime PlannedReturnDate
+        {
+            get { return this.plannedReturnDate; }
+            set { this.plannedReturnDate = value; }
         }
 
         public string DeliveredBy
@@ -76,11 +74,6 @@ namespace HUS_project.Models
             set{ deliveredBy = value;}
         }
 
-        public SearchTermsModel SearchTerms
-        {
-            get { return searchTerms; }
-            set { searchTerms = value; }
-        }
 
         public int BookingStatus
         {
@@ -99,18 +92,17 @@ namespace HUS_project.Models
 
         }
 
-        public BookingModel(int bookingID, string customer, List<ItemLineModel> items, List<DeviceModel> devices, List<DeviceModel> logs, BuildingModel location, DateTime dateBorrowed, string deliveredBy, SearchTermsModel searchTerms, int bookingStatus)
+        public BookingModel(int BookingID, string Customer, List<ItemLineModel> items, List<DeviceModel> devices, BuildingModel location, DateTime PlannedBorrowDate, DateTime PlannedReturnDate, int bookingStatus, string deliveredBy = null)
         {
-            this.bookingID = bookingID;
-            this.customer = customer;
+            this.bookingID = BookingID;
+            this.customer = Customer;
             this.items = items;
             this.devices = devices;
-            this.logs = logs;
             this.location = location;
-            this.dateBorrowed = dateBorrowed;
-            this.deliveredBy = deliveredBy;
-            this.searchTerms = searchTerms;
+            this.plannedBorrowDate = PlannedBorrowDate;
+            this.plannedReturnDate = PlannedReturnDate;
             this.bookingStatus = bookingStatus;
+            this.deliveredBy = deliveredBy;
         }
 
         #endregion

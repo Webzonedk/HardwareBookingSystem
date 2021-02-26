@@ -124,7 +124,29 @@ namespace HUS_project.Controllers
         {
             if (HttpContext.Session.GetInt32("accessLevel") > 1)
             {
-                return View("Task");
+                // The Task view: For the actions that the SKP Students in the hardware room needs to take today.
+                
+
+                List<List<BookingModel>> tasks = new List<List<BookingModel>>
+                    {
+                        // Index 0, the Bookings which are to be retrieved
+                        new List<BookingModel>
+                        {
+                            // ???
+                            //BookingRetrievalsToBeMade();
+                        },
+
+                        // Index 1, the Bookings which are to be delivered
+                        new List<BookingModel>
+                        {
+                            // ???
+                        }
+                    };
+
+
+
+
+                return View("Task", tasks);
             }
             else if(HttpContext.Session.GetInt32("accessLevel") == 1)
             {

@@ -4,16 +4,13 @@
 @{
     ViewData["Title"] = "Placerings Administration";
 }
-<form Asp-action="LocationAdmin" method="post">
-    <div class="container-fluid blue-oyster-bar">
-        <div class="row g-2">
-            <div class="col-md-1">
-                <div class="col-md">
-                </div>
-            </div>
+<div class="row blue-oyster-bar">
+    <form Asp-action="LocationAdmin" method="post" class="row gx-3 gy-3">
+   
+          
             <div class="col-md">
                 <div class="form-floating">
-                    <input class="form-select" id="buildingDropDown" aria-label="Vælg Bygning" asp-for="@Model.StorageLocation.Location.Building">
+                    <input class="form-select" id="buildingDropDown" list="buildings" aria-label="Vælg Bygning" asp-for="@Model.StorageLocation.Location.Building">
                     <datalist id="buildings">
                         @foreach (var item in Model.Buildings)
                         {
@@ -25,7 +22,7 @@
             </div>
             <div class="col-md">
                 <div class="form-floating">
-                    <input class="form-select" id="roomNumberDropDown" aria-label="Vælg lokalenummer" asp-for="@Model.StorageLocation.Location.RoomNumber">
+                    <input class="form-select" id="roomNumberDropDown" list="roomNumbers" aria-label="Vælg lokalenummer" asp-for="@Model.StorageLocation.Location.RoomNumber">
                     <datalist id="roomNumbers">
                         @foreach (var item in Model.RoomNumbers)
                         {
@@ -37,7 +34,7 @@
             </div>
             <div class="col-md">
                 <div class="form-floating">
-                    <input class="form-select" id="shelfNameDropDown" aria-label="Vælg ReolNavn" asp-for="@Model.StorageLocation.ShelfName">
+                    <input class="form-select" id="shelfNameDropDown" list="shelfNames" aria-label="Vælg ReolNavn" asp-for="@Model.StorageLocation.ShelfName">
                     <datalist id="shelfNames">
                         @foreach (var item in Model.ShelfNames)
                         {
@@ -49,7 +46,7 @@
             </div>
             <div class="col-md">
                 <div class="form-floating">
-                    <input class="form-select" id="shelfLevelDropDown" aria-label="Vælg Etage" asp-for="@Model.StorageLocation.ShelfLevel">
+                    <input class="form-select" id="shelfLevelDropDown" list="shelfLevels" aria-label="Vælg Etage" asp-for="@Model.StorageLocation.ShelfLevel">
                     <datalist id="shelfLevels">
                         @foreach (var item in Model.ShelfLevels)
                         {
@@ -61,7 +58,7 @@
             </div>
             <div class="col-md">
                 <div class="form-floating">
-                    <input class="form-select" id="shelfSpotDropDown" aria-label="Vælg Hyldeplads" asp-for="@Model.StorageLocation.ShelfSpot">
+                    <input class="form-select" id="shelfSpotDropDown" list="shelfSpots" aria-label="Vælg Hyldeplads" asp-for="@Model.StorageLocation.ShelfSpot">
                     <datalist id="shelfSpots">
                         @foreach (var item in Model.ShelfSpots)
                         {
@@ -88,23 +85,29 @@
                 <p>Men kun hvis det ikke findes I forvejen</p>
             </div>
             @*</div>*@
-            <div class="col-md">
-                <input class="btn-blue" type="submit" value="Tilføj Placering" />
-            </div>
-
-
-
+        <div class="col-md">
+            <button type="button" class="btn btn-primary btn-blue">Tilføj Placering</button>
         </div>
-    </div>
-    <div class="container-md rounded-top rounded-3 border border-3">
-        this is a test header
-    </div>
-    <div class="container-md border border-3">
-        This is a test body container
-    </div>
-    <div class="container-md rounded-bottom rounded-3 border border-3">
-        this is a test footer
-    </div>
 
-</form>
 
+
+
+    </form>
+
+
+</div>
+<div class="container-md rounded-top rounded-3 border border-3">
+    this is a test header
+</div>
+<div class="container-md border border-3">
+    This is a test body container
+    <div class="d-grid gap-2 d-md-block">
+        <button type="button" class="btn btn-primary btn-blue">QR-Kode</button>
+        <button type="button" class="btn btn-danger btn-red">Slet</button>
+    </div>
+</div>
+<div class="container-md rounded-bottom rounded-3 border border-3">
+    this is a test footer
+
+
+</div>
