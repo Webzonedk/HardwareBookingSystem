@@ -75,22 +75,24 @@ namespace HUS_project.DAL
         }
 
         //get device info from database before edit
-        internal DeviceModel GetDeviceInfo(int deviceID)
+        internal DeviceModel GetDeviceInfoWithLocation(int deviceID)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("GetDeviceInfo", con);
+            SqlCommand cmd = new SqlCommand("GetDeviceWithLocation", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceID;
 
             //execute query
             cmd.ExecuteNonQuery();
-
+            
             #region //model for data transfer
             SqlDataReader reader = cmd.ExecuteReader();
             DeviceModel device = new DeviceModel();
             ModelModel model = new ModelModel();
             CategoryModel category = new CategoryModel();
+            BuildingModel building = new BuildingModel();
+            StorageLocationModel location = new StorageLocationModel();
             model.Category = category;
             #endregion
 

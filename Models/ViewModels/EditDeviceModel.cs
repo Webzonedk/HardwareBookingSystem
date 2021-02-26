@@ -9,10 +9,12 @@ namespace HUS_project.Models.ViewModels
     {
         #region fields
         private DeviceModel device;
+        private string room;
+        private string shelf;
         private List<string> modelNames;
         private List<string> categoryNames;
-        private List<BuildingModel> rooms;
-        private List<StorageLocationModel> locations;
+        private List<string> rooms;
+        private List<string> locations;
         private List<DeviceModel> logs;
         private List<DeviceModel> locationLogs;
         #endregion
@@ -25,6 +27,17 @@ namespace HUS_project.Models.ViewModels
             set { device = value; }
         }
 
+        public string Room
+        {
+            get { return room; }
+            set { room = value; }
+        }
+
+        public string Shelf
+        {
+            get { return shelf; }
+            set { shelf = value; }
+        }
 
         public List<string> ModelNames
         {
@@ -39,13 +52,13 @@ namespace HUS_project.Models.ViewModels
             set { categoryNames = value; }
         }
 
-        public List<BuildingModel> Rooms
+        public List<string> Rooms
         {
             get { return rooms; }
             set { rooms = value; }
         }
 
-        public List<StorageLocationModel> Locations
+        public List<string> Locations
         {
             get { return locations; }
             set { locations = value; }
@@ -71,13 +84,13 @@ namespace HUS_project.Models.ViewModels
             //initialize lists
             categoryNames = new List<string>();
             modelNames = new List<string>();
-            rooms = new List<BuildingModel>();
-            locations = new List<StorageLocationModel>();
+            rooms = new List<string>();
+            locations = new List<string>();
             logs = new List<DeviceModel>();
             locationLogs = new List<DeviceModel>();
         }
 
-        public EditDeviceModel(DeviceModel device, List<string> modelNames, List<string> categories, List<BuildingModel> rooms,List<StorageLocationModel> locations,List<DeviceModel> logs, List<DeviceModel> locationlogs)
+        public EditDeviceModel(DeviceModel device, List<string> modelNames, List<string> categories, List<string> rooms,List<string> locations,List<DeviceModel> logs, List<DeviceModel> locationlogs)
         {
             this.device = device;
             this.modelNames = modelNames;
