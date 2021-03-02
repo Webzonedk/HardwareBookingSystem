@@ -24,3 +24,25 @@ Special assignments by ID
     margin:2px 0 2px 0;
     padding:5px 0 5px 0;
 }
+
+.col50{
+    width:50px !important;
+}
+.col100{
+    width:100px !important;
+}
+.col150 {
+    width: 150px !important;
+}
+.col200 {
+    width: 200px !important;
+}
+.col250 {
+    width: 250px !important;
+}
+.co300 {
+    width: 300px !important;
+}
+.col350 {
+    width: 350px !important;
+}

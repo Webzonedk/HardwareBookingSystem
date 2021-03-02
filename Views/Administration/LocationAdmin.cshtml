@@ -4,11 +4,13 @@
 @{
     ViewData["Title"] = "Placerings Administration";
 }
-<div class="row blue-oyster-bar">
-    <form Asp-action="LocationAdmin" method="post" class="row gx-3 gy-3">
-   
-          
-            <div class="col-md">
+<div class="row blue-oyster-bar center">
+    <form Asp-action="LocationAdmin" method="post">
+        <div class="row">
+
+            <div class="col-xl-1 gx-3 gy-3">
+            </div>
+            <div class="col-xl-2 col-sm-4 gx-3 gy-3">
                 <div class="form-floating">
                     <input class="form-select" id="buildingDropDown" list="buildings" aria-label="Vælg Bygning" asp-for="@Model.StorageLocation.Location.Building">
                     <datalist id="buildings">
@@ -20,7 +22,7 @@
                     <label for="floatingSelectGrid">Bygning:</label>
                 </div>
             </div>
-            <div class="col-md">
+            <div class="col-xl-2 col-sm-4 gx-3 gy-3">
                 <div class="form-floating">
                     <input class="form-select" id="roomNumberDropDown" list="roomNumbers" aria-label="Vælg lokalenummer" asp-for="@Model.StorageLocation.Location.RoomNumber">
                     <datalist id="roomNumbers">
@@ -29,10 +31,10 @@
                             <option>@item</option>
                         }
                     </datalist>
-                    <label for="floatingSelectGrid">LokaleNummer:</label>
+                    <label for="floatingSelectGrid">Lokale Nr:</label>
                 </div>
             </div>
-            <div class="col-md">
+            <div class="col-xl-2 col-sm-4 gx-3 gy-3">
                 <div class="form-floating">
                     <input class="form-select" id="shelfNameDropDown" list="shelfNames" aria-label="Vælg ReolNavn" asp-for="@Model.StorageLocation.ShelfName">
                     <datalist id="shelfNames">
@@ -44,7 +46,7 @@
                     <label for="floatingSelectGrid">Reol navn:</label>
                 </div>
             </div>
-            <div class="col-md">
+            <div class="col-xl-2 col-sm-6 gx-3 gy-3">
                 <div class="form-floating">
                     <input class="form-select" id="shelfLevelDropDown" list="shelfLevels" aria-label="Vælg Etage" asp-for="@Model.StorageLocation.ShelfLevel">
                     <datalist id="shelfLevels">
@@ -56,7 +58,7 @@
                     <label for="floatingSelectGrid">Reol Etage:</label>
                 </div>
             </div>
-            <div class="col-md">
+            <div class="col-xl-2 col-sm-6 gx-3 gy-3">
                 <div class="form-floating">
                     <input class="form-select" id="shelfSpotDropDown" list="shelfSpots" aria-label="Vælg Hyldeplads" asp-for="@Model.StorageLocation.ShelfSpot">
                     <datalist id="shelfSpots">
@@ -68,28 +70,21 @@
                     <label for="floatingSelectGrid">Hyldeplads:</label>
                 </div>
             </div>
-            @*<div class="col-md-3">*@
-            <div class="col-md">
-                <ul>
-                    <li>
-                        Alle felter kan oprettes enkeltvis
-                    </li>
-                    <li>
-                        Hvis Bygning og Lokale er udfyldt samtidigt vil der <br />
-                        oprettes et "Lokale" hvis ikke det eksisterer i forvejen
-                    </li>
-                    <li>
-                        Hvis alle felter er udfyldt, vil der oprettes en placering.
-                    </li>
-                </ul>
-                <p>Men kun hvis det ikke findes I forvejen</p>
+            <div class="col-xl-1">
             </div>
-            @*</div>*@
-        <div class="col-md">
-            <button type="button" class="btn btn-primary btn-blue">Tilføj Placering</button>
         </div>
+        <div class="row">
+            @{string toolTip = "Alle felter kan oprettes enkeltvis. \n\n" +
+                                                 "Hvis Bygning og Lokale er udfyldt samtidigt vil der \n" +
+                                                 "oprettes et Lokale hvis ikke det eksisterer i forvejen.\n\n " +
+                                                 "Hvis alle felter er udfyldt, vil der oprettes en placering.\n\n" +
+                                                 "Men kun hvis det ikke findes I forvejen."; }
 
+            <div class="col p-3">
+                <button type="button" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip">Tilføj Placering</button>
+            </div>
 
+        </div>
 
 
     </form>
