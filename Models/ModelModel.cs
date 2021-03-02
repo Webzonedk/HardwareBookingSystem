@@ -8,7 +8,7 @@ namespace HUS_project.Models
     public class ModelModel
     {
 
-    #region Fields
+        #region Fields
 
         private string modelName;
         private string modelDescription;

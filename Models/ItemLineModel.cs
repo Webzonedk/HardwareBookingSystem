@@ -9,7 +9,6 @@ namespace HUS_project.Models
     {
         #region Fields
 
-        private string category;
         private int quantity;
         private ModelModel model;
 
@@ -19,11 +18,6 @@ namespace HUS_project.Models
 
         #region Properties
 
-        public string Category
-        {
-            get { return category; }
-            set { category = value; }
-        }
 
         public int Quantity
         {
@@ -48,9 +42,8 @@ namespace HUS_project.Models
 
         }
 
-        public ItemLineModel(string category, int quantity, ModelModel model)
+        public ItemLineModel(int quantity, ModelModel model)
         {
-            this.category = category;
             this.quantity = quantity;
             this.model = model;
         }

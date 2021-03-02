@@ -24,18 +24,7 @@ namespace HUS_project.Controllers
 
 
 
-        public IActionResult Inventory(ModelInfoModel infoList)
-        {
-            //generate an instance of the database manager
-            DBManagerDevice DBDevice = new DBManagerDevice(configuration);
-            //get data from the manager
 
-
-            //send data to the manager
-            
-
-            return View(infoList);
-        }
 
         //get model name and category names before returning to view
         public IActionResult CreateDevice()
@@ -53,7 +42,6 @@ namespace HUS_project.Controllers
          
             return View(deviceData);
         }
-
         
         public IActionResult AddDeviceToDB(CreateDeviceModel deviceData)
         {
@@ -67,7 +55,7 @@ namespace HUS_project.Controllers
             int deviceID = dbManager.CreateDevice(data);
 
             //return device info to Edit view
-            data = dbManager.GetDeviceInfo(deviceID);
+            data = dbManager.GetDeviceInfoWithLocation(deviceID);
             List<DeviceModel> logs = dbManager.GetDeviceLogs(deviceID);
             List<string> categories = dbsharedManager.GetCategories();
             List<string> modelNames = dbsharedManager.GetModelNames();
@@ -89,7 +77,7 @@ namespace HUS_project.Controllers
             //return device info to Edit view
             int ID = 1026;
             DeviceModel data = new DeviceModel();
-            data = dbManager.GetDeviceInfo(ID);
+            data = dbManager.GetDeviceInfoWithLocation(ID);
             List<DeviceModel> logs = dbManager.GetDeviceLogs(ID);
             List<string> categories = dbsharedManager.GetCategories();
             List<string> modelNames = dbsharedManager.GetModelNames();
@@ -102,6 +90,18 @@ namespace HUS_project.Controllers
             return View(editdata);
         }
 
+        public IActionResult Inventory(ModelInfoModel infoList)
+        {
+            //generate an instance of the database manager
+            DBManagerDevice DBDevice = new DBManagerDevice(configuration);
+            //get data from the manager
+
+
+            //send data to the manager
+            
+
+            return View(infoList);
+        }
 
         public IActionResult MoveLocation()
         {
