@@ -14,7 +14,7 @@ namespace HUS_project.Models.ViewModels
         private List<string> modelNames;
         private List<string> categoryNames;
         private List<string> rooms;
-        private List<string> locations;
+        private List<string> shelfs;
         private List<DeviceModel> logs;
         private List<DeviceModel> locationLogs;
         #endregion
@@ -58,10 +58,10 @@ namespace HUS_project.Models.ViewModels
             set { rooms = value; }
         }
 
-        public List<string> Locations
+        public List<string> Shelfs
         {
-            get { return locations; }
-            set { locations = value; }
+            get { return shelfs; }
+            set { shelfs = value; }
         }
 
         public List<DeviceModel> Logs
@@ -85,7 +85,7 @@ namespace HUS_project.Models.ViewModels
             categoryNames = new List<string>();
             modelNames = new List<string>();
             rooms = new List<string>();
-            locations = new List<string>();
+            shelfs = new List<string>();
             logs = new List<DeviceModel>();
             locationLogs = new List<DeviceModel>();
         }
@@ -96,7 +96,7 @@ namespace HUS_project.Models.ViewModels
             this.modelNames = modelNames;
             this.categoryNames = categories;
             this.rooms = rooms;
-            this.locations = locations;
+            this.shelfs = locations;
             this.logs = logs;
             this.LocationLogs = locationlogs;
         }

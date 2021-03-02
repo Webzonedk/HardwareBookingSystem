@@ -81,13 +81,22 @@ namespace HUS_project.Controllers
             List<DeviceModel> logs = dbManager.GetDeviceLogs(ID);
             List<string> categories = dbsharedManager.GetCategories();
             List<string> modelNames = dbsharedManager.GetModelNames();
+            List<string> rooms = dbsharedManager.GetAllRooms();
             EditDeviceModel editdata = new EditDeviceModel();
             editdata.Device = data;
+            editdata.Room = new string($"{data.Location.Location.Building}.{data.Location.Location.RoomNumber.ToString()}");
             editdata.Logs = logs;
             editdata.Categories = categories;
             editdata.ModelNames = modelNames;
+            editdata.Rooms = rooms;
 
             return View(editdata);
+        }
+
+        // edits device location and returns to Edit view
+        public IActionResult EditPlacement (EditDeviceModel data)
+        {
+            return View("EditDevice", data);
         }
 
         public IActionResult Inventory(ModelInfoModel infoList)

@@ -22,7 +22,7 @@ namespace HUS_project.DAL
             connectionString = configuration.GetConnectionString("DBContext");
         }
 
-
+        
         internal int CreateDevice(DeviceModel deviceData)
         {
             Debug.WriteLine(connectionString);
@@ -94,6 +94,7 @@ namespace HUS_project.DAL
             BuildingModel building = new BuildingModel();
             StorageLocationModel location = new StorageLocationModel();
             model.Category = category;
+            location.Location = building;
             #endregion
 
             while (reader.Read())
@@ -102,9 +103,17 @@ namespace HUS_project.DAL
                 model.Category.Category = (string)reader["categoryName"];
                 model.ModelName = (string)reader["modelName"];
                 model.ModelDescription = (string)reader["modelDescription"];
+
+                location.Location.RoomNumber = (byte)reader["roomNr"];
+                location.Location.Building = (string)reader["shelfName"];
+                location.ShelfName = (string)reader["shelfName"]; ;
+                location.ShelfLevel = (byte)reader["shelfLevel"];
+                location.ShelfSpot = (byte)reader["shelfSpot"];
+
             }
 
             device.Model = model;
+            device.Location = location;
 
             con.Close();
             return device;

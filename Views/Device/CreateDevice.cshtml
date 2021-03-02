@@ -32,16 +32,15 @@
 
             <div class="col m-md-5">
 
-                <div class="form-floating ">
-                    <input class="form-select" list="categories" id="exampleDataList" asp-for="@Model.Device.Model.Category.Category">
-                    <datalist id="categories">
+                <div class="form-floating">
+                    <select class="form-select" id="categories" asp-for="@Model.Device.Model.Category.Category">
 
                         @foreach (var item in Model.Categories)
                         {
                             <option>@item</option>
                         }
 
-                    </datalist>
+                    </select>
                     <label for="exampleDataList">vælg kategori</label>
                 </div>
 

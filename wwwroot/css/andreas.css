@@ -1,2 +1,8 @@
-﻿body {
+﻿.alternating_rows_cols:nth-of-type(odd) 
+{
+    background-color: red;
+}
+
+.alternating_rows_cols:nth-of-type(even) {
+    background-color: blue;
 }

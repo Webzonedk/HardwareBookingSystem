@@ -63,16 +63,26 @@ namespace HUS_project.DAL
             return modelNames;
         }
 
-        internal List<BuildingModel> GetAllRooms(DeviceModel dummy)
+        internal List<string> GetAllRooms()
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("GetAllRooms", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.ExecuteNonQuery();
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            List<string> rooms = new List<string>();
+            while (reader.Read())
+            {
+                int roomNr = (byte)reader["roomNr"];
+                string room = (string)reader["buildingName"] + "." + roomNr.ToString();
+                rooms.Add(room);
+            }
 
 
             con.Close();
-            return null;
+            return rooms;
         }
 
         internal int GetAvailableDeviceQuantities(DeviceModel dummy)

@@ -6,26 +6,60 @@
 <div class=" container-fluid blue-oyster-bar"> </div>
 
 <div class=" container containerHeader " style=" background-color:darkgrey;height:50px">
-       
+
     <h4>Rediger enhed</h4>
 
 </div>
 
 
-<div class=" container " style="background-color: deepskyblue; height:300px">
+<div class=" container-md " style="background-color: deepskyblue;">
 
     <div class="row ">
         <form class="row" asp-action="AddDeviceToDB" method="post" autocomplete="off">
 
+            <!--Print & Save-->
+            <div class="col m-md-4">
+                <div class="row">
+                    <label class="col-sm-6 col-form-label" for="IDInput">Enheds ID:</label>
+                    <div class="col-sm-6">
+                        <input type="text" readonly class="form-control-plaintext" id="IDInput" asp-for="@Model.Device.DeviceID" />
 
-            <div class="col m-md-2">
+                    </div>
+                </div>
+
+                <div class=" row ">
+                    <div class="img-bg">
+                        <img src="~/Graphic/billede-mangler.png" height="180" />
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row">
+                    <div class="text-center">
+                        <button type="button" class=" btn-primary btn" asp-action="CreateQRCode">Print QRkode</button>
+
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row">
+
+                    <div class="text-center">
+                        <button type="submit" class=" btn-primary btn">Gem</button>
+
+                    </div>
+
+                </div>
 
 
-                <input class="btn-blue" type="submit" value="Gem" />
+
+
 
             </div>
 
-
+            <!--categories dropdown-->
             <div class="col m-md-4">
 
                 <div class="form-floating ">
@@ -42,7 +76,7 @@
                 </div>
 
                 <br />
-
+                <!--model names dropdown-->
                 <div class="form-floating ">
                     <input class="form-select" list="modelNames" id="exampleDataList" asp-for="@Model.Device.Model.ModelName">
                     <datalist id="modelNames">
@@ -58,7 +92,7 @@
 
                 <br />
 
-
+                <!--description field-->
                 <div class="form-floating">
                     <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" asp-for="@Model.Device.Model.ModelDescription"></textarea>
                     <label for="floatingTextarea2">beskrivelse</label>
@@ -68,14 +102,81 @@
 
             </div>
 
-            <div class="col m-md-4">
 
 
+            <!--Location dropdowns & scanning-->
+            <div class="col m-md-2">
+
+                <div class="form-floating ">
+
+                    <input class="form-select" list="locationsdropdown" id="locations" asp-for="@Model.Room">
+                    <datalist id="locationsdropdown">
+
+                        @foreach (var item in Model.Rooms)
+                        {
+                            <option>@item</option>
+                        }
+
+                    </datalist>
+                    <label for="locations">vælg Lokale</label>
+                </div>
+
+                <br />
+
+                <div class="form-floating ">
+                    <input class="form-select" list="shelvesdropdown" id="shelves" asp-for="@Model.Shelf">
+                    <datalist id="shelvesdropdown">
+
+                        @*@foreach (var item in Model.Shelf)
+                            {
+                                <option>@item</option>
+                            }*@
+
+                    </datalist>
+                    <label for="shelves">vælg Hylde</label>
+                </div>
+
+                <br />
+
+                <div class="row">
+                    <p>Indtast ny placering og tryk game placering, eller skan QR-Kode på placering:</p>
+                </div>
+
+                <div class="row">
+                    <div class="text-center">
+                        <button type="submit" class=" btn-primary btn" asp-action="EditPlacement">Gem placering</button>
+
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row">
+                    <div class="text-center">
+                        <button type="button" class=" btn-primary btn" asp-action="ScanQRCode">Skan placering</button>
+
+                    </div>
+                </div>
 
             </div>
 
 
+            <!--Delete Device-->
             <div class="col m-md-2">
+
+                <div class="row">
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Leave a comment here" id="deleteNote" style="height: 100px" asp-for="@Model.Device.Notes"></textarea>
+                        <label for="deleteNote">årsag</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="text-center">
+                        <button type="button" class=" btn-primary btn" asp-action="DeleteDevice">Slet enhed</button>
+
+                    </div>
+                </div>
 
 
 
@@ -88,3 +189,16 @@
 </div>
 
 <div class=" containerFooter" style=" background-color:darkgrey;height:50px"></div>
+
+<!--test alternating colors-->
+<div>
+
+
+    <div class="alternating_rows_cols">hello world</div>
+    <div class="alternating_rows_cols">hello world</div>
+    <div class="alternating_rows_cols">hello world</div>
+    <div class="alternating_rows_cols">hello world</div>
+    <div class="alternating_rows_cols">hello world</div>
+
+
+</div>
