@@ -9,20 +9,20 @@ using HUS_project.Models;
 using HUS_project.Models.ViewModels;
 using HUS_project.DAL;
 using Microsoft.AspNetCore.Http;
-
+using Microsoft.Extensions.Configuration;
 
 namespace HUS_project.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IConfiguration configuration;
+        // constructor of homecontroller
+        public HomeController(IConfiguration config)
         {
-            _logger = logger;
+            this.configuration = config;
         }
 
-      
+
         public IActionResult Index()
         {
             return View();
@@ -125,23 +125,15 @@ namespace HUS_project.Controllers
             if (HttpContext.Session.GetInt32("accessLevel") > 1)
             {
                 // The Task view: For the actions that the SKP Students in the hardware room needs to take today.
-                
+                DBManagerTask DBTasker = new DBManagerTask(configuration);
 
-                List<List<BookingModel>> tasks = new List<List<BookingModel>>
-                    {
-                        // Index 0, the Bookings which are to be retrieved
-                        new List<BookingModel>
-                        {
-                            // ???
-                            //BookingRetrievalsToBeMade();
-                        },
-
-                        // Index 1, the Bookings which are to be delivered
-                        new List<BookingModel>
-                        {
-                            // ???
-                        }
-                    };
+                TasksModel tasks = new TasksModel(
+                        // bookingsToBeRetrieved
+                        DBTasker.GetBookingRetrievalsToBeMade(),
+                        // bookingsToBeDelivered
+                        DBTasker.GetBookingDeliveriesToBeMade()
+                        
+                    );
 
 
 
