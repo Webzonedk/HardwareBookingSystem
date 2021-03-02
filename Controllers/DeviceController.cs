@@ -65,10 +65,10 @@ namespace HUS_project.Controllers
             editdata.Categories = categories;
             editdata.ModelNames = modelNames;
 
-            return View("EditDevice", editdata);
+            return View("EditView", editdata);
         }
 
-        public IActionResult EditDevice(int deviceID)
+        public IActionResult EditView(int deviceID)
         {
             //initializing DB managers
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
@@ -94,9 +94,12 @@ namespace HUS_project.Controllers
         }
 
         // edits device location and returns to Edit view
-        public IActionResult EditPlacement (EditDeviceModel data)
+        [HttpGet]
+        public IActionResult EditDevice(EditDeviceModel data)
         {
-            return View("EditDevice", data);
+            data.Shelf = "k.1.s.s";
+            Debug.WriteLine("this works");
+            return View("EditView", data);
         }
 
         public IActionResult Inventory(ModelInfoModel infoList)

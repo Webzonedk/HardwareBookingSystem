@@ -204,8 +204,8 @@ Containers
 
 .containerHeader {
     margin: 10px 0 0 0;
-    height: 15px;
-    position: relative;
+    /*height: 15px;*/
+  
     background-color: #353535;
     border-top-color: #353535;
     border-top-width: 2px;
@@ -220,7 +220,7 @@ Containers
 
 .containerBody {
     margin: 0 0 0 0;
-    background-color: #1861ac;
+    background-color: #c9e4ff;
     border-left-color: #eeeeee;
     border-left-width: 2px;
     border-right-color: #eeeeee;
@@ -229,7 +229,7 @@ Containers
 
 .containerFooter {
     margin: 0 0 10px 0;
-    height: 15px;
+  /*  height: 15px;*/
     background-color: #353535;
     border-bottom-color: #353535;
     border-bottom-width: 2px;
@@ -332,10 +332,11 @@ Overviews with lines in sides to avaoid double lines Friendly borrowed from HKS 
 ----------------------------------------------------------------------*/
 
 .img-bg {
-    background-color: #1c209a;
-    height: 100%;
-    text-align: center;
-    padding: 10px 10px 10px 10px;
+    /*background-color: #1c209a;*/
+    /*height: 100%;*/
+    /*width: 100%;*/
+   
+    /*padding: 10px 10px 10px 10px;*/
     border: solid;
     border-width: 2px;
     border-color: #1c209a;
