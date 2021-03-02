@@ -46,7 +46,7 @@ Blue area below navigation bar
 ----------------------------------------------------------------------*/
 
 .blue-oyster-bar {
-    height: 125px;
+    min-height: 150px;
     /*margin-top: 0px;*/
     /*width: 100%;*/
   /*  position: relative;
@@ -88,6 +88,10 @@ body {
     line-height: 60px; /* Vertically center the text there */
 }
 
+.center {
+ /*   width: 100%;*/
+    text-align: center;
+}
 
 
 
@@ -119,7 +123,7 @@ Buttons
 .btn-blue {
     color: #ffffff;
     background-color: #1b6ec2;
-    border-color: #1861ac;
+    border-color: #ffffff;
 }
 
 .btn-red {
@@ -128,7 +132,13 @@ Buttons
     border-color: #FF0000;
 }
 
+.black-tooltip + .tooltip > .tooltip-inner {
+    background-color: #f00;
+}
 
+.black-tooltip + .tooltip > .tooltip-arrow {
+    border-bottom-color: #f00;
+}
 /*----------------------------------------------------------------------
 Borders
 ----------------------------------------------------------------------*/
@@ -353,7 +363,7 @@ Alignment
 }
 
 
-.center {
+.horisontal-vertical-center {
     margin: 0;
     position: absolute;
     top: 50%;
@@ -387,4 +397,19 @@ Validation
 
 .form-control.is-valid, .was-validated .form-control:valid {
     background-image: none !important;
+}
+
+
+
+/*
+----------------------------------------------------------------------
+Row colors in lists
+----------------------------------------------------------------------
+*/
+.alternating_row:nth-of-type(2n+0) {
+    background-color: red;
+}
+
+.alternating_row:nth-of-type(2n+0) {
+    background-color: blue;
 }
