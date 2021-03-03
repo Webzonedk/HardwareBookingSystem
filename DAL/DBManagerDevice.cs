@@ -84,7 +84,7 @@ namespace HUS_project.DAL
             cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceID;
 
             //execute query
-            cmd.ExecuteNonQuery();
+         //   cmd.ExecuteNonQuery();
             
             #region //model for data transfer
             SqlDataReader reader = cmd.ExecuteReader();
@@ -129,7 +129,7 @@ namespace HUS_project.DAL
             cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceID;
 
             //execute query
-            cmd.ExecuteNonQuery();
+         //   cmd.ExecuteNonQuery();
 
             SqlDataReader reader = cmd.ExecuteReader();
             List<DeviceModel> Logs = new List<DeviceModel>();

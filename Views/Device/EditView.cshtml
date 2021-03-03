@@ -5,20 +5,24 @@
 
 <div class=" container-fluid blue-oyster-bar"> </div>
 
-<div class=" container containerHeader " style=" background-color:darkgrey;height:50px">
-
-    <h4>Rediger enhed</h4>
-
-</div>
 
 
-<div class=" container-md " style="background-color: deepskyblue;">
 
-    <div class="row ">
-        <form class="row" asp-action="AddDeviceToDB" method="post" autocomplete="off">
+<div class="container">
+
+    <!--header bar-->
+    <div class=" row containerHeader">
+
+        <h4 class="text-white">Rediger enhed</h4>
+
+    </div>
+
+
+    <div class="row containerBody center">
+        <form class="row" asp-action="EditDevice" method="post" autocomplete="off">
 
             <!--Print & Save-->
-            <div class="col m-md-4">
+            <div class="col-xl-3 col-md-12 gx-3 gy-3">
                 <div class="row">
                     <label class="col-sm-6 col-form-label" for="IDInput">Enheds ID:</label>
                     <div class="col-sm-6">
@@ -28,8 +32,8 @@
                 </div>
 
                 <div class=" row ">
-                    <div class="img-bg">
-                        <img src="~/Graphic/billede-mangler.png" height="180" />
+                    <div >
+                        <img class="img-bg" src="~/Graphic/billede-mangler.png" style="width: 100%" />
                     </div>
                 </div>
 
@@ -54,13 +58,10 @@
                 </div>
 
 
-
-
-
             </div>
 
             <!--categories dropdown-->
-            <div class="col m-md-4">
+            <div class="col-xl-3 col-md-6 gx-3 gy-3">
 
                 <div class="form-floating ">
                     <input class="form-select" list="categories" id="exampleDataList" asp-for="@Model.Device.Model.Category.Category">
@@ -105,7 +106,7 @@
 
 
             <!--Location dropdowns & scanning-->
-            <div class="col m-md-2">
+            <div class="col-xl-3 col-md-6 gx-3 gy-3">
 
                 <div class="form-floating ">
 
@@ -144,7 +145,7 @@
 
                 <div class="row">
                     <div class="text-center">
-                        <button type="submit" class=" btn-primary btn" asp-action="EditPlacement">Gem placering</button>
+                        <button type="submit" class=" btn-primary btn">Gem placering</button>
 
                     </div>
                 </div>
@@ -162,7 +163,7 @@
 
 
             <!--Delete Device-->
-            <div class="col m-md-2">
+            <div class="col-xl-3 col-md-6 gx-3 gy-3">
 
                 <div class="row">
                     <div class="form-floating">
@@ -186,9 +187,14 @@
         </form>
     </div>
 
+    <!--footer bar-->
+    <div class="row containerFooter">
+        <h4>&nbsp;</h4>
+    </div>
+
 </div>
 
-<div class=" containerFooter" style=" background-color:darkgrey;height:50px"></div>
+
 
 <!--test alternating colors-->
 <div>

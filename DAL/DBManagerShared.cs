@@ -49,7 +49,7 @@ namespace HUS_project.DAL
             con.Open();
             SqlCommand cmd = new SqlCommand("GetAllModels", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.ExecuteNonQuery();
+          //  cmd.ExecuteNonQuery();
 
             SqlDataReader reader = cmd.ExecuteReader();
             List<string> modelNames = new List<string>();
@@ -69,7 +69,7 @@ namespace HUS_project.DAL
             con.Open();
             SqlCommand cmd = new SqlCommand("GetAllRooms", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.ExecuteNonQuery();
+          //  cmd.ExecuteNonQuery();
 
             SqlDataReader reader = cmd.ExecuteReader();
             List<string> rooms = new List<string>();

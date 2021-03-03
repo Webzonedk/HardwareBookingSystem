@@ -3,93 +3,105 @@
     ViewData["Title"] = "Opret enhed";
 }
 
-<div class=" container-fluid blue-oyster-bar"> </div>
+<div class="row blue-oyster-bar"></div>
 
 
-<div class=" container containerHeader " style=" background-color:darkgrey;height:50px"></div>
+<div class="container">
+    <div class=" row containerHeader">
+        <h4 class="text-white">Opret enhed</h4>
 
-<div class=" container " style="background-color: deepskyblue; height:300px">
-
-    <div class="row ">
-        <h4>Opret enhed</h4>
-        <form class="row" asp-action="AddDeviceToDB" method="post" autocomplete="off">
-
-            <div class="col m-md-2">
-                <div class=" row ">
-                    <div class="img-bg" >
-                        <img src="~/Graphic/billede-mangler.png" height="180"/>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="text-center">
-                        <button type="button" class=" btn-primary btn" asp-action="CreateQRCode">upload foto</button>
-
-                    </div>
-                </div>
-
-            </div>
-
-
-            <div class="col m-md-5">
-
-                <div class="form-floating">
-                    <select class="form-select" id="categories" asp-for="@Model.Device.Model.Category.Category">
-
-                        @foreach (var item in Model.Categories)
-                        {
-                            <option>@item</option>
-                        }
-
-                    </select>
-                    <label for="exampleDataList">vælg kategori</label>
-                </div>
-
-                <br />
-
-                <div class="form-floating ">
-                    <input class="form-select" list="modelNames" id="exampleDataList" asp-for="@Model.Device.Model.ModelName">
-                    <datalist id="modelNames">
-
-                        @foreach (var item in Model.ModelNames)
-                        {
-                            <option>@item</option>
-                        }
-
-                    </datalist>
-                    <label for="exampleDataList">Indtast enhedsnavn</label>
-                </div>
-
-                <br />
-
-                <input class="btn-blue" type="submit" value="Gem" />
-
-
-
-            </div>
-
-            <div class="col m-md-2">
-                <div class="form-floating">
-                    <input class="form-control" id="inputSerial" placeholder="indtast serienr." asp-for="@Model.Device.SerialNumber" />
-                    <label for="inputSerial">Serienummer:</label>
-
-                </div>
-
-                <br />  
-
-                <div class="form-floating">
-                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" asp-for="@Model.Device.Model.ModelDescription"></textarea>
-                    <label for="floatingTextarea2">beskrivelse</label>
-                </div>
-
-            </div>
-
-           
-
-
-
-        </form>
     </div>
 
+
+
+    <form class="row containerBody center" asp-action="AddDeviceToDB" method="post" autocomplete="off">
+
+        <div class="col-xl-4 col-md-12 gx-3 gy-3">
+            <div class="row center">
+                <div>
+                    <img class="img-bg" src="~/Graphic/billede-mangler.png" style="width: 100%" />
+
+                </div>
+               
+            </div>
+            <div class="row center p-3">
+                <div>
+                    <button type="button" class=" btn-primary btn" asp-action="CreateQRCode">upload foto</button>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="col-xl-4 col-md-6 gx-3 gy-3">
+
+            <div class="form-floating">
+                <select class="form-select" id="categories" asp-for="@Model.Device.Model.Category.Category">
+
+                    @foreach (var item in Model.Categories)
+                    {
+                        <option>@item</option>
+                    }
+
+                </select>
+                <label for="exampleDataList">vælg kategori</label>
+            </div>
+
+            <br />
+
+            <div class="form-floating ">
+                <input class="form-select" list="modelNames" id="exampleDataList" asp-for="@Model.Device.Model.ModelName">
+                <datalist id="modelNames">
+
+                    @foreach (var item in Model.ModelNames)
+                    {
+                        <option>@item</option>
+                    }
+
+                </datalist>
+                <label for="exampleDataList">Indtast enhedsnavn</label>
+            </div>
+
+
+
+
+
+
+
+        </div>
+
+        <div class="col-xl-4 col-md-6 gx-3 gy-3">
+            <div class="form-floating">
+                <input class="form-control" id="inputSerial" placeholder="indtast serienr." asp-for="@Model.Device.SerialNumber" />
+                <label for="inputSerial">Serienummer:</label>
+
+            </div>
+
+            <br />
+
+            <div class="form-floating">
+                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" asp-for="@Model.Device.Model.ModelDescription"></textarea>
+                <label for="floatingTextarea2">beskrivelse</label>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col p-3">
+            <button class="btn btn-primary btn-blue" type="submit">Gem</button>
+
+            </div>
+        </div>
+
+
+
+    </form>
+
+
+    <div class="row containerFooter">
+        <h4>&nbsp;</h4>
+    </div>
 </div>
 
-<div class=" containerFooter" style=" background-color:darkgrey;height:50px"></div>
+
