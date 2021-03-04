@@ -33,16 +33,16 @@ namespace HUS_project.Controllers
             DBManagerShared sharedDBManager = new DBManagerShared(configuration);
             List<string> categories = sharedDBManager.GetCategories();
             List<string> modelNames = sharedDBManager.GetModelNames();
-            
+
             //create view model
             CreateDeviceModel deviceData = new CreateDeviceModel();
             deviceData.Categories = categories;
             deviceData.ModelNames = modelNames;
             deviceData.Device = new DeviceModel();
-         
+
             return View(deviceData);
         }
-        
+
         public IActionResult AddDeviceToDB(CreateDeviceModel deviceData)
         {
             //initializing DB managers
@@ -68,6 +68,7 @@ namespace HUS_project.Controllers
             return View("EditView", editdata);
         }
 
+        //getting data from database & return model to view
         public IActionResult EditView(int deviceID)
         {
             //initializing DB managers
@@ -81,25 +82,45 @@ namespace HUS_project.Controllers
             List<DeviceModel> logs = dbManager.GetDeviceLogs(ID);
             List<string> categories = dbsharedManager.GetCategories();
             List<string> modelNames = dbsharedManager.GetModelNames();
-            List<string> rooms = dbsharedManager.GetAllRooms();
+            EditDeviceModel storagelocation = dbManager.GetStorageLocations();
+          
+            
             EditDeviceModel editdata = new EditDeviceModel();
             editdata.Device = data;
             editdata.Room = new string($"{data.Location.Location.Building}.{data.Location.Location.RoomNumber.ToString()}");
+            editdata.Shelf = new string($"{data.Location.ShelfName}.{data.Location.ShelfLevel}.{data.Location.ShelfSpot}");
             editdata.Logs = logs;
             editdata.Categories = categories;
             editdata.ModelNames = modelNames;
-            editdata.Rooms = rooms;
+            editdata.Rooms = storagelocation.Rooms;
+            // editdata.Shelfs = new List<string>();
 
             return View(editdata);
         }
 
         // edits device location and returns to Edit view
-        [HttpGet]
+        [HttpPost]
         public IActionResult EditDevice(EditDeviceModel data)
         {
-            data.Shelf = "k.1.s.s";
+            //initializing DB managers
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+
+            //prep data for database
+            string[] splittedRoom = data.Room.Split('.');
+            foreach (var word in splittedRoom)
+            {
+                Debug.WriteLine(word);
+            }
+            //get storagelocations
+            EditDeviceModel locations = dbManager.GetStorageLocations();
+           
+            
+            
+            EditDeviceModel newdata = data;
+            newdata.Shelf = "k.1.s.s";
+            newdata.Shelfs = locations.Shelfs;
             Debug.WriteLine("this works");
-            return View("EditView", data);
+            return View("EditView", newdata);
         }
 
         public IActionResult Inventory(ModelInfoModel infoList)
@@ -110,7 +131,7 @@ namespace HUS_project.Controllers
 
 
             //send data to the manager
-            
+
 
             return View(infoList);
         }

@@ -6,7 +6,8 @@
 <div class=" container-fluid blue-oyster-bar"> </div>
 
 
-
+<!--java script to count remaining text in description-->
+<script src="~/js/site.js"></script>
 
 <div class="container">
 
@@ -19,7 +20,7 @@
 
 
     <div class="row containerBody center">
-        <form class="row" asp-action="EditDevice" method="post" autocomplete="off">
+        <form class="row was-validated" asp-action="EditDevice" method="post" autocomplete="off" id="EditForm">
 
             <!--Print & Save-->
             <div class="col-xl-3 col-md-12 gx-3 gy-3">
@@ -32,7 +33,7 @@
                 </div>
 
                 <div class=" row ">
-                    <div >
+                    <div>
                         <img class="img-bg" src="~/Graphic/billede-mangler.png" style="width: 100%" />
                     </div>
                 </div>
@@ -110,7 +111,7 @@
 
                 <div class="form-floating ">
 
-                    <input class="form-select" list="locationsdropdown" id="locations" asp-for="@Model.Room">
+                    <input class="form-select" list="locationsdropdown" id="locations" asp-for="@Model.Room" onchange="return SubmitValidation()" required>
                     <datalist id="locationsdropdown">
 
                         @foreach (var item in Model.Rooms)
@@ -128,10 +129,10 @@
                     <input class="form-select" list="shelvesdropdown" id="shelves" asp-for="@Model.Shelf">
                     <datalist id="shelvesdropdown">
 
-                        @*@foreach (var item in Model.Shelf)
-                            {
-                                <option>@item</option>
-                            }*@
+                        @foreach (var item in Model.Shelfs)
+                        {
+                            <option>@item</option>
+                        }
 
                     </datalist>
                     <label for="shelves">vælg Hylde</label>
@@ -145,7 +146,7 @@
 
                 <div class="row">
                     <div class="text-center">
-                        <button type="submit" class=" btn-primary btn">Gem placering</button>
+                        <button type="submit" class=" btn-primary btn" form="EditForm">Gem placering</button>
 
                     </div>
                 </div>
