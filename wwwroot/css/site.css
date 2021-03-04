@@ -49,7 +49,7 @@ Blue area below navigation bar
     min-height: 150px;
     /*margin-top: 0px;*/
     /*width: 100%;*/
-  /*  position: relative;
+    /*  position: relative;
     left: 0;
     right: 0;*/
     background: rgb(64,81,255);
@@ -81,7 +81,7 @@ body {
 }
 
 .footer {
-    position: absolute;
+    /*position: relative;*/
     bottom: 0;
     width: 100%;
     white-space: nowrap;
@@ -169,7 +169,8 @@ shadows
 ----------------------------------------------------------------------*/
 
 .box-shadow {
-    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .3rem .6rem .15rem rgba(0, 0, 0, 0.3), 0 .5rem .8rem .30rem rgba(0, 0, 0, 0.19);
+    /*box-shadow: 0 4px 8px 2px rgba(0, 0, 0, 0.3), 0 6px 16px 4px rgba(0, 0, 0, 0.19);*/
 }
 
 
@@ -202,37 +203,68 @@ text colors
 Containers
 ----------------------------------------------------------------------*/
 
+.containerMain {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: solid;
+    border-width: 0px;
+    border-color: #ffffff;
+    border-radius: 10px;
+    /*box-shadow: 0 4px 10px 2px rgba(0, 0, 0, 0.3), 0 8px 15px 3px rgba(0, 0, 0, 0.19);*/
+}
+
 .containerHeader {
-    margin: 10px 0 0 0;
-    /*height: 15px;*/
-  
+    color: rgba(0,126,255,1);
     background-color: #353535;
+    border: hidden;
     border-top-color: #353535;
-    border-top-width: 2px;
+    border-top-width: 0px;
+    border-left-color: #353535;
+    border-left-width: 0px;
+    border-right-color: #353535;
+    border-right-width: 0px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    font-weight: bold;
 }
 
     .containerHeader h1, h2, h3, h4, h5, h6 {
-        width: 100%;
         text-align: center;
     }
 
+
+
+.containerSubHeader {
+    color: #ffffff;
+    background-color: #353535;
+    font-weight: bold;
+    border: hidden;
+    border-left-color: #353535;
+    border-left-width: 0px;
+    border-right-color: #353535;
+    border-right-width: 0px;
+}
+
+
 .containerBody {
-    margin: 0 0 0 0;
     background-color: #c9e4ff;
-    border-left-color: #eeeeee;
-    border-left-width: 2px;
-    border-right-color: #eeeeee;
-    border-right-width: 2px;
+/*    background-color: #353535;*/
+    border: hidden;
+    border-left-color: #353535;
+    border-left-width: 0px;
+    border-right-color: #353535;
+    border-right-width: 0px;
 }
 
 .containerFooter {
-    margin: 0 0 10px 0;
-  /*  height: 15px;*/
     background-color: #353535;
+    border: hidden;
     border-bottom-color: #353535;
-    border-bottom-width: 2px;
+    border-bottom-width: 0px;
+    border-left-color: #353535;
+    border-left-width: 0px;
+    border-right-color: #353535;
+    border-right-width: 0px;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
 }
@@ -316,13 +348,13 @@ Overviews with lines in sides to avaoid double lines Friendly borrowed from HKS 
     background-color: #353535;
 }
 
-.shadow {
+/*.shadow {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
     border-radius: 10px;
     border: solid;
     border-width: 2px;
     border-color: #1c289a;
-}
+}*/
 
 
 
