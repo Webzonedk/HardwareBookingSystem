@@ -4,8 +4,8 @@
 @{
     ViewData["Title"] = "Placerings Administration";
 }
-<div class="row blue-oyster-bar center">
-    <form Asp-action="LocationAdmin" method="post">
+<form Asp-action="LocationAdmin" method="post">
+    <div class="row blue-oyster-bar center box-shadow">
         <div class="row">
 
             <div class="col-xl-1 gx-3 gy-3">
@@ -75,34 +75,82 @@
         </div>
         <div class="row">
             @{string toolTip = "Alle felter kan oprettes enkeltvis. \n\n" +
-                                                 "Hvis Bygning og Lokale er udfyldt samtidigt vil der \n" +
-                                                 "oprettes et Lokale hvis ikke det eksisterer i forvejen.\n\n " +
-                                                 "Hvis alle felter er udfyldt, vil der oprettes en placering.\n\n" +
-                                                 "Men kun hvis det ikke findes I forvejen."; }
+                                           "Hvis Bygning og Lokale er udfyldt samtidigt vil der \n" +
+                                           "oprettes et Lokale hvis ikke det eksisterer i forvejen.\n\n " +
+                                           "Hvis alle felter er udfyldt, vil der oprettes en placering.\n\n" +
+                                           "Men kun hvis det ikke findes I forvejen."; }
 
             <div class="col p-3">
                 <button type="button" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip">Tilføj Placering</button>
             </div>
 
         </div>
-
-
-    </form>
-
-
-</div>
-<div class="container-md rounded-top rounded-3 border border-3">
-    this is a test header
-</div>
-<div class="container-md border border-3">
-    This is a test body container
-    <div class="d-grid gap-2 d-md-block">
-        <button type="button" class="btn btn-primary btn-blue">QR-Kode</button>
-        <button type="button" class="btn btn-danger btn-red">Slet</button>
     </div>
-</div>
-<div class="container-md rounded-bottom rounded-3 border border-3">
-    this is a test footer
 
 
-</div>
+    @* The list of storagelocations maching the search terms *@
+    <div class="container containerMain box-shadow">
+        <div class="row containerHeader">
+            <h4 class="col">Placerings administration</h4>
+        </div>
+        <div class="row containerSubHeader">
+            <div class="col-1">Bygning</div>
+            <div class="col-1">Lokale</div>
+            <div class="col-1">Reol</div>
+            <div class="col-1">Etage</div>
+            <div class="col-1">Plads</div>
+            <div class="col-xl-4 col-sm"></div>
+            <div class="col-2 center"></div>
+            <div class="col-1 center"></div>
+        </div>
+        <div class="row containerBody p-1">
+            <div class="col-1 d-flex align-items-center"><p>Parameter</p></div>
+            <div class="col-1 d-flex align-items-center"><p>Parameter</p></div>
+            <div class="col-1 d-flex align-items-center"><p>Parameter</p></div>
+            <div class="col-1 d-flex align-items-center"><p>Parameter</p></div>
+            <div class="col-1 d-flex align-items-center"><p>Parameter</p></div>
+            <div class="col-xl-4 col-sm d-flex align-items-center"></div>
+            <div class="col-2 center d-flex align-items-center"><button type="button" class="btn btn-primary btn-blue">QR-Kode</button></div>
+            <div class="col-1 center d-flex align-items-center"><button type="button" class="btn btn-danger btn-red">Slet</button></div>
+        </div>
+        <div class="row containerFooter">
+            <h4>&nbsp;</h4>
+        </div>
+    </div>
+
+
+
+
+    @* The Mass destruction area *@
+    <div class="container containerMain box-shadow">
+        <div class="row containerHeader">
+            <h4 class="col">Masse udrydelse</h4>
+        </div>
+
+        <div class="row containerBody p-1">
+            <div class="row">
+                <div class="col-xl-4 col-sm-6 gx-3 gy-3">test</div>
+            </div>
+            <div class="col-1 d-flex align-items-center"><p>Parameter</p></div>
+            <div class="col-1 d-flex align-items-center"><p>Parameter</p></div>
+            <div class="col-1 d-flex align-items-center"><p>Parameter</p></div>
+            <div class="col-1 d-flex align-items-center"><p>Parameter</p></div>
+            <div class="col-1 d-flex align-items-center"><p>Parameter</p></div>
+            <div class="col-xl-4 col-sm d-flex align-items-center"></div>
+            <div class="col-2 center d-flex align-items-center"><button type="button" class="btn btn-primary btn-blue">QR-Kode</button></div>
+            <div class="col-1 center d-flex align-items-center"><button type="button" class="btn btn-danger btn-red">Slet</button></div>
+        </div>
+
+        <div class="row containerFooter">
+            <h4>&nbsp;</h4>
+        </div>
+    </div>
+
+
+</form>
+
+
+
+
+
+
