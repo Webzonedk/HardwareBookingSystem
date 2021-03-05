@@ -21,64 +21,61 @@ namespace HUS_project.DAL
             connectionString = configuration.GetConnectionString("DBContext");
         }
 
+        /// <summary>
+        /// Acquires all the bookings which have ended, but the Devices have not all been retrieved.
+        /// </summary>
+        /// <returns></returns>
         internal List<BookingModel> GetBookingRetrievalsToBeMade()
         {
             List<BookingModel> bookings = new List<BookingModel>();
-            bool ready = false;
+            SqlConnection con = new SqlConnection(connectionString);
 
-            if (ready)
+            // Acquire Bookings
+            SqlCommand cmd = new SqlCommand("GetBookingsToBeRetrieved", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            
+            con.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
             {
+                BookingModel booking = new BookingModel(
+                    (int)reader["bookingID"],
+                    (string)reader["orderedBy"],
+                    new List<ItemLineModel>(),
+                    new List<DeviceModel>(),
+                    new BuildingModel((string)reader["buildingName"], (byte)reader["roomNr"]),
+                    (DateTime)reader["rentDate"],
+                    (DateTime)reader["returnDate"],
+                    1,
+                    (string)reader["deliveredBy"]);
+                bookings.Add(booking);
+            }
+            con.Close();
 
 
+            // Acquire ItemLines for Bookings
+            cmd.CommandText = "GetBookingItemLines";
 
-                SqlConnection con = new SqlConnection(connectionString);
-                SqlCommand cmd = new SqlCommand("GetFinishedBookings", con);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-                // Acquire Bookings
+            foreach (BookingModel booking in bookings)
+            {
+                cmd.Parameters.AddWithValue("@bookingID", booking.BookingID);
                 con.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
+                reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-
-                    BookingModel booking = new BookingModel(
-                        (int)reader["b.bookingID"],
-                        (string)reader["b.orderedBy"],
-                        new List<ItemLineModel>(),
-                        new List<DeviceModel>(),
-                        new BuildingModel((string)reader["r.buildingName"], (byte)reader["r.roomNr"]),
-                        (DateTime)reader["rentDate"],
-                        (DateTime)reader["returnDate"],
-                        1,
-                        (string)reader["b.deliveredBy"]);
-                    bookings.Add(booking);
-                }
-
-                // Acquire ItemLines for Booking
-                cmd.CommandText = "GetBookingItemLines";
-
-                foreach (BookingModel booking in bookings)
-                {
-                    cmd.Parameters.AddWithValue("@bookingID", booking.BookingID);
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        booking.Items.Add(
-                            new ItemLineModel(
-                                (int)reader["ItemLine.Quantity"],
-                                new ModelModel(
-                                    (string)reader["Model.modelName"],
-                                    "N/A",
-                                    new CategoryModel((string)reader["Category.categoryName"])
-                                    )
+                    booking.Items.Add(
+                        new ItemLineModel(
+                            (int)reader["Quantity"],
+                            new ModelModel(
+                                (string)reader["modelName"],
+                                "N/A - Irrelevant to the context",
+                                new CategoryModel((string)reader["categoryName"])
                                 )
-                            );
-                    }
-                    cmd.Parameters.Clear();
+                            )
+                        );
                 }
-
                 con.Close();
-
+                cmd.Parameters.Clear();
             }
             return bookings;
         }
@@ -86,7 +83,55 @@ namespace HUS_project.DAL
         internal List<BookingModel> GetBookingDeliveriesToBeMade ()
         {
             List<BookingModel> bookings = new List<BookingModel>();
+            SqlConnection con = new SqlConnection(connectionString);
 
+            // Acquire Bookings
+            SqlCommand cmd = new SqlCommand("GetBookingsToBeDelivered", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+            con.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                BookingModel booking = new BookingModel(
+                    (int)reader["bookingID"],
+                    (string)reader["orderedBy"],
+                    new List<ItemLineModel>(),
+                    new List<DeviceModel>(),
+                    new BuildingModel((string)reader["buildingName"], (byte)reader["roomNr"]),
+                    (DateTime)reader["rentDate"],
+                    (DateTime)reader["returnDate"],
+                    1,
+                    "N/A");
+                bookings.Add(booking);
+            }
+            con.Close();
+
+
+            // Acquire ItemLines for Bookings
+            cmd.CommandText = "GetBookingItemLines";
+
+            foreach (BookingModel booking in bookings)
+            {
+                cmd.Parameters.AddWithValue("@bookingID", booking.BookingID);
+                con.Open();
+                reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    booking.Items.Add(
+                        new ItemLineModel(
+                            (int)reader["Quantity"],
+                            new ModelModel(
+                                (string)reader["modelName"],
+                                "N/A - Irrelevant to the context",
+                                new CategoryModel((string)reader["categoryName"])
+                                )
+                            )
+                        );
+                }
+                con.Close();
+                cmd.Parameters.Clear();
+            }
             return bookings;
         }
     }
