@@ -53,8 +53,8 @@ namespace HUS_project.DAL
             con.Close();
 
 
-            // Acquire ItemLines for Bookings
-            cmd.CommandText = "GetBookingItemLines";
+            // Acquire ItemLines for Bookings ... Except these ItemLines only reflect how many of each Model this booking currently has out.
+            cmd.CommandText = "GetCountUnreturnedModels";
 
             foreach (BookingModel booking in bookings)
             {
@@ -65,7 +65,7 @@ namespace HUS_project.DAL
                 {
                     booking.Items.Add(
                         new ItemLineModel(
-                            (int)reader["Quantity"],
+                            (int)reader["UnreturnedDeiceModelsCount"],
                             new ModelModel(
                                 (string)reader["modelName"],
                                 "N/A - Irrelevant to the context",
