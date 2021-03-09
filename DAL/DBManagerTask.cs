@@ -47,7 +47,8 @@ namespace HUS_project.DAL
                     (DateTime)reader["rentDate"],
                     (DateTime)reader["returnDate"],
                     1,
-                    (string)reader["deliveredBy"]);
+                    (string)reader["deliveredBy"],
+                    (string)reader["bookingNotes"]);
                 bookings.Add(booking);
             }
             con.Close();
@@ -68,7 +69,7 @@ namespace HUS_project.DAL
                             (int)reader["UnreturnedDeiceModelsCount"],
                             new ModelModel(
                                 (string)reader["modelName"],
-                                "N/A - Irrelevant to the context",
+                                "N/A - Irrelevant to purpose",
                                 new CategoryModel((string)reader["categoryName"])
                                 )
                             )
@@ -102,7 +103,8 @@ namespace HUS_project.DAL
                     (DateTime)reader["rentDate"],
                     (DateTime)reader["returnDate"],
                     1,
-                    "N/A");
+                    "N/A",
+                    (string)reader["bookingNotes"]);
                 bookings.Add(booking);
             }
             con.Close();
