@@ -30,23 +30,29 @@
     <div class="row containerBody">
         @foreach (BookingModel booking in Model.BookingsToBeRetrieved)
         {
-        <div class="row border-bottom border-white border-1">
-            <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.BookingID - @booking.Customer</p></div>
-            <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.Location.Building.@booking.Location.RoomNumber</p></div>
-            <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1"><p>@booking.Notes</p></div>
-            <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1 border-end border-white border-1">
-                @foreach (ItemLineModel item in booking.Items)
-                {
-                    <p>
-                        @item.Model.ModelName (@item.Model.Category.Category) x @item.Quantity
-                    </p>
-                }
+            <div class="row border-bottom border-white border-1">
+                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.BookingID - @booking.Customer</p></div>
+                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.Location.Building.@booking.Location.RoomNumber</p></div>
+                <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1"><p>@booking.Notes</p></div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1 border-end border-white border-1">
+                    @foreach (ItemLineModel item in booking.Items)
+                    {
+                        <p>
+                            @item.Model.ModelName (@item.Model.Category.Category) x @item.Quantity
+                        </p>
+                    }
+                </div>
+                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.PlannedBorrowDate.ToString("dd/MM-yy")</p></div>
+                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.PlannedReturnDate.ToString("dd/MM-yy")</p></div>
+                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.DeliveredBy</p></div>
+                <div class="col-lg-2 col-2 p-1 center">
+                    @using (Html.BeginForm("SeeBooking", "Order"))
+                    {
+                        <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">Se Ordre</button>
+                    }
+                    @* <input type="submit" name="bookingID" asp-controller="Order" asp-action="SeeBooking" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">*@
+                </div>
             </div>
-            <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.PlannedBorrowDate.ToString("dd/MM-yy")</p></div>
-            <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.PlannedReturnDate.ToString("dd/MM-yy")</p></div>
-            <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.DeliveredBy</p></div>
-            <div class="col-lg-2 col-2 p-1 center"><button type="button" class="btn btn-primary btn-sm btn-blue" style="width:100px">Se Ordre</button></div>
-        </div>
         }
     </div>
 
@@ -64,7 +70,7 @@
     </div>
 
     <div class="row containerSubHeader border-top border-bottom border-white border-1">
-        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Ordre ID - Hvem</div>
+        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Ordre ID - Bestiller</div>
         <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Hvor</div>
         <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">Noter</div>
         <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1 border-end border-white border-1">Hvad der er bestilt:</div>
@@ -84,7 +90,7 @@
                     @foreach (ItemLineModel item in booking.Items)
                     {
                         <p>
-                            @item.Model.ModelName (@item.Model.Category.Category) x @item.Quantity
+                            @item.Quantity x (@item.Model.Category.Category)@item.Model.ModelName
                         </p>
                     }
                 </div>

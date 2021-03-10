@@ -17,7 +17,14 @@ namespace HUS_project.Controllers
         {
             return View();
         }
-        
+
+        public IActionResult SeeBooking(string bookingID)
+        {
+            BookingModel booking = new BookingModel();
+            booking.BookingID = Convert.ToInt32(bookingID);
+            return View("ExecuteOrder", booking);
+        }
+
         public IActionResult ReturnDevices()
         {
             return View();
