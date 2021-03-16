@@ -206,23 +206,12 @@ Containers
 .containerMain {
     margin-top: 20px;
     margin-bottom: 20px;
-    border: solid;
-    border-width: 0px;
-    border-color: #ffffff;
     border-radius: 10px;
-    /*box-shadow: 0 4px 10px 2px rgba(0, 0, 0, 0.3), 0 8px 15px 3px rgba(0, 0, 0, 0.19);*/
 }
 
 .containerHeader {
     color: rgba(0,126,255,1);
     background-color: #353535;
-    border: hidden;
-    border-top-color: #353535;
-    border-top-width: 0px;
-    border-left-color: #353535;
-    border-left-width: 0px;
-    border-right-color: #353535;
-    border-right-width: 0px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     font-weight: bold;
@@ -238,33 +227,15 @@ Containers
     color: #ffffff;
     background-color: #353535;
     font-weight: bold;
-    border: hidden;
-    border-left-color: #353535;
-    border-left-width: 0px;
-    border-right-color: #353535;
-    border-right-width: 0px;
 }
 
 
 .containerBody {
     background-color: #c9e4ff;
-/*    background-color: #353535;*/
-    border: hidden;
-    border-left-color: #353535;
-    border-left-width: 0px;
-    border-right-color: #353535;
-    border-right-width: 0px;
 }
 
 .containerFooter {
     background-color: #353535;
-    border: hidden;
-    border-bottom-color: #353535;
-    border-bottom-width: 0px;
-    border-left-color: #353535;
-    border-left-width: 0px;
-    border-right-color: #353535;
-    border-right-width: 0px;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
 }
@@ -275,22 +246,17 @@ Containers
 Columns inside containers
 ----------------------------------------------------------------------*/
 .columnHeaderLeft {
-    padding: 2px;
-    background-color: #353535;
+    border-right-width: 1px;
+    border-right-color: #ffffff;
 }
 
 .columnHeader {
     padding: 2px;
-    background-color: #353535;
-    border-left: 1px;
-    border-right: 1px;
-    border-left-color: #ffffff;
-    border-right-color: #ffffff;
 }
 
 .columnHeaderRight {
-    padding: 2px;
-    background-color: #353535;
+    border-left-width: 1px;
+    border-left-color: #ffffff;
 }
 
 .columnContentLeft {
@@ -312,7 +278,6 @@ Columns inside containers
     background-color: #DBE7F2;
 }
 
-/*Changing background colors in rows will be set in the code */
 
 
 

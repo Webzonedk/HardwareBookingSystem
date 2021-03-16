@@ -21,13 +21,12 @@ namespace HUS_project.DAL
             connectionString = configuration.GetConnectionString("DBContext");
         }
 
-        internal List<DeviceModel> GetBooking(string dummy)
+        internal List<BookingModel> GetBooking(string dummy)
         {
             SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
             SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
+            con.Open();
 
             con.Close();
             return null;

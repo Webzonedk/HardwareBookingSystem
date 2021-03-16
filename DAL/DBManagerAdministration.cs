@@ -194,6 +194,11 @@ namespace HUS_project.DAL
 
 
 
+        internal List<>
+
+
+
+
         internal StorageLocationModel CreateLocation(StorageLocationModel dummy)
         {
             SqlConnection con = new SqlConnection(connectionString);
@@ -249,6 +254,21 @@ namespace HUS_project.DAL
 
 
 
+
+
+        internal List<CategoryModel> DeleteLocation(string dummy)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+
+            con.Close();
+            return null;
+        }
+
+
         internal void DeleteCategory(string dummy)
         {
             SqlConnection con = new SqlConnection(connectionString);
@@ -275,17 +295,6 @@ namespace HUS_project.DAL
 
 
 
-        internal List<CategoryModel> DeleteLocation(string dummy)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-
-            con.Close();
-            return null;
-        }
 
 
     }

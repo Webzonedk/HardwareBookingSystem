@@ -22,13 +22,17 @@ namespace HUS_project.Controllers
             this.configuration = config;
         }
 
-
         public IActionResult Index()
         {
             return View();
         }
 
         public IActionResult Main()
+        {
+            return View();
+        }
+
+        public IActionResult Task()
         {
             return View();
         }
