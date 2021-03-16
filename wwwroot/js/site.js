@@ -12,11 +12,11 @@ function SubmitValidation() {
 
 
     if (document.forms['EditForm'].locations.value == "") {
-        alert("emtpty")
+       
         return false;
     }
     else {
-        alert("imput")
+        
 
         document.getElementById("EditForm").submit();
 

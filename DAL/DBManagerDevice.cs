@@ -62,13 +62,19 @@ namespace HUS_project.DAL
             return null;
         }
 
-        internal DeviceModel EditDeviceLocation(string dummy)
+        //edit device location
+        internal DeviceModel EditDeviceLocation(EditDeviceModel deviceData)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
+            SqlCommand cmd = new SqlCommand("EditDeviceLocation", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
+            cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Location.Location.Building;
+            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Location.Location.RoomNumber;
+            cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Location.ShelfName;
+            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Location.ShelfLevel;
+            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Location.ShelfSpot;
+            cmd.Parameters.Add("@changedBy", System.Data.SqlDbType.VarChar).Value = deviceData.Device.ChangedBy;
 
 
             con.Close();
@@ -160,38 +166,69 @@ namespace HUS_project.DAL
         }
 
         //Get storagelocations from database when changing room
-        internal EditDeviceModel GetStorageLocations()
+        internal EditDeviceModel GetStorageLocations(EditDeviceModel editData)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("GetStorageLocation", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-        //    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = editData.Device.Location.Location.Building;
-        //    cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.Int).Value = (int)editData.Device.Location.Location.RoomNumber;
+            if (editData != null)
+            {
+                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = editData.Device.Location.Location.Building;
+                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.Int).Value = (int)editData.Device.Location.Location.RoomNumber;
+            }
+            else
+            {
+                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = null;
+                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.Int).Value = null;
+            }
+
 
             //get data
             SqlDataReader reader = cmd.ExecuteReader();
             List<string> storageLocations = new List<string>();
             List<string> Rooms = new List<string>();
-           
+
+            //get shelves & rooms
             while (reader.Read())
             {
                 string location = new string($"{(string)reader["shelfName"]}.{(byte)reader["shelfLevel"]}.{(byte)reader["shelfSpot"]}");
-                string room = new string($"{(string)reader["buildingName"]}.{(byte)reader["roomNr"]}");
                 storageLocations.Add(location);
-                Rooms.Add(room);
 
+                if (editData == null)
+                {
+
+                    //add rooms 
+                    string room = new string($"{(string)reader["buildingName"]}.{(byte)reader["roomNr"]}");
+                    if (Rooms.Count <= 0)
+                    {
+                        Rooms.Add(room);
+
+                    }
+                    //add room to list of not the same
+                    else
+                    {
+                        if(!string.Equals(room,Rooms[Rooms.Count-1]))
+                        {
+                            Rooms.Add(room);
+                        }
+                    }
+                }
 
             }
+
+            
 
             EditDeviceModel data = new EditDeviceModel();
             data.Rooms = Rooms;
             data.Shelfs = storageLocations;
-           
+
 
             con.Close();
             return data;
         }
+
+       
 
         internal List<DeviceModel> GetDeviceInventory(string dummy)
         {

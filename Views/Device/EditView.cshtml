@@ -9,7 +9,7 @@
 <!--java script to count remaining text in description-->
 <script src="~/js/site.js"></script>
 
-<div class="container">
+<div class="container center containerMain box-shadow">
 
     <!--header bar-->
     <div class=" row containerHeader">
@@ -20,7 +20,7 @@
 
 
     <div class="row containerBody center">
-        <form class="row was-validated" asp-action="EditDevice" method="post" autocomplete="off" id="EditForm">
+        <form class="row was-validated" asp-action="GetLocations" method="post" autocomplete="off" id="EditForm">
 
             <!--Print & Save-->
             <div class="col-xl-3 col-md-12 gx-3 gy-3">
@@ -42,7 +42,7 @@
 
                 <div class="row">
                     <div class="text-center">
-                        <button type="button" class=" btn-primary btn" asp-action="CreateQRCode">Print QRkode</button>
+                        <button type="button" class=" btn-primary btn" formaction="CreateQRCode">Print QRkode</button>
 
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                 <div class="row">
 
                     <div class="text-center">
-                        <button type="submit" class=" btn-primary btn">Gem</button>
+                        <button type="submit" class=" btn-primary btn" formaction="EditDevice">Gem</button>
 
                     </div>
 
@@ -104,7 +104,10 @@
 
             </div>
 
-
+            @if (ViewBag.Message != null)
+            {
+                //create popup to show location has been saved
+            }
 
             <!--Location dropdowns & scanning-->
             <div class="col-xl-3 col-md-6 gx-3 gy-3">
@@ -126,14 +129,14 @@
                 <br />
 
                 <div class="form-floating ">
-                    <input class="form-select" list="shelvesdropdown" id="shelves" asp-for="@Model.Shelf">
+                    <input class="form-select" list="shelvesdropdown" id="shelves" asp-for="@Model.Shelf" required>
                     <datalist id="shelvesdropdown">
 
                         @foreach (var item in Model.Shelfs)
                         {
                             <option>@item</option>
-                        }
 
+                        }
                     </datalist>
                     <label for="shelves">vælg Hylde</label>
                 </div>
@@ -141,12 +144,12 @@
                 <br />
 
                 <div class="row">
-                    <p>Indtast ny placering og tryk game placering, eller skan QR-Kode på placering:</p>
+                    <p>Indtast ny placering og tryk gem placering, eller skan QR-Kode på placering:</p>
                 </div>
 
                 <div class="row">
                     <div class="text-center">
-                        <button type="submit" class=" btn-primary btn" form="EditForm">Gem placering</button>
+                        <button type="submit" class=" btn-primary btn" formaction="EditLocation" formmethod="post">Gem placering</button>
 
                     </div>
                 </div>
@@ -175,7 +178,7 @@
 
                 <div class="row">
                     <div class="text-center">
-                        <button type="button" class=" btn-primary btn" asp-action="DeleteDevice">Slet enhed</button>
+                        <button type="button" class=" btn-primary btn" formaction="DeleteDevice">Slet enhed</button>
 
                     </div>
                 </div>
