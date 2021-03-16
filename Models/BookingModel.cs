@@ -11,6 +11,7 @@ namespace HUS_project.Models
 
         private int bookingID;
         private string customer;
+        private string notes;
         private List<ItemLineModel> items;
         private List<DeviceModel> devices;
         private BuildingModel location;
@@ -35,6 +36,12 @@ namespace HUS_project.Models
         {
             get { return customer; }
             set { customer = value; }
+        }
+
+        public string Notes
+        {
+            get { return this.notes; }
+            set { this.notes = value; }
         }
 
         public List<ItemLineModel> Items
@@ -92,17 +99,18 @@ namespace HUS_project.Models
 
         }
 
-        public BookingModel(int BookingID, string Customer, List<ItemLineModel> items, List<DeviceModel> devices, BuildingModel location, DateTime PlannedBorrowDate, DateTime PlannedReturnDate, int bookingStatus, string deliveredBy = null)
+        public BookingModel(int BookingID, string Customer, List<ItemLineModel> Items, List<DeviceModel> Devices, BuildingModel Location, DateTime PlannedBorrowDate, DateTime PlannedReturnDate, int BookingStatus, string DeliveredBy = null, string Notes = null)
         {
             this.bookingID = BookingID;
             this.customer = Customer;
-            this.items = items;
-            this.devices = devices;
-            this.location = location;
+            this.notes = Notes;
+            this.items = Items;
+            this.devices = Devices;
+            this.location = Location;
             this.plannedBorrowDate = PlannedBorrowDate;
             this.plannedReturnDate = PlannedReturnDate;
-            this.bookingStatus = bookingStatus;
-            this.deliveredBy = deliveredBy;
+            this.bookingStatus = BookingStatus;
+            this.deliveredBy = DeliveredBy;
         }
 
         #endregion

@@ -47,14 +47,15 @@ namespace HUS_project.DAL
                     (DateTime)reader["rentDate"],
                     (DateTime)reader["returnDate"],
                     1,
-                    (string)reader["deliveredBy"]);
+                    (string)reader["deliveredBy"],
+                    (string)reader["bookingNotes"]);
                 bookings.Add(booking);
             }
             con.Close();
 
 
-            // Acquire ItemLines for Bookings
-            cmd.CommandText = "GetBookingItemLines";
+            // Acquire ItemLines for Bookings ... Except these ItemLines only reflect how many of each Model this booking currently has out.
+            cmd.CommandText = "GetCountUnreturnedModels";
 
             foreach (BookingModel booking in bookings)
             {
@@ -65,10 +66,10 @@ namespace HUS_project.DAL
                 {
                     booking.Items.Add(
                         new ItemLineModel(
-                            (int)reader["Quantity"],
+                            (int)reader["UnreturnedDeiceModelsCount"],
                             new ModelModel(
                                 (string)reader["modelName"],
-                                "N/A - Irrelevant to the context",
+                                "N/A - Irrelevant to purpose",
                                 new CategoryModel((string)reader["categoryName"])
                                 )
                             )
@@ -102,7 +103,8 @@ namespace HUS_project.DAL
                     (DateTime)reader["rentDate"],
                     (DateTime)reader["returnDate"],
                     1,
-                    "N/A");
+                    "N/A",
+                    (string)reader["bookingNotes"]);
                 bookings.Add(booking);
             }
             con.Close();

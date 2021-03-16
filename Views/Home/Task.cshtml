@@ -9,37 +9,99 @@
         <h2>- Dagens Opgaver -</h2>
     </div>
 </div>
+
 <div class="container containerMain box-shadow">
+
     <div class="row containerHeader">
-        <h4>Ordre som skal afhentes:</h4>
+        <h4 class="col">Ordre som skal afhentes:</h4>
     </div>
+
+    <div class="row containerSubHeader border-top border-bottom border-white border-1">
+        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Ordre ID - Hvem</div>
+        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Hvor</div>
+        <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">Noter</div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1 border-end border-white border-1">Hvad mangler at blive hentet:</div>
+        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Første Dag</div>
+        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Sidste Dag</div>
+        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Afleveret af</div>
+        <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1"></div>
+    </div>
+
     <div class="row containerBody">
         @foreach (BookingModel booking in Model.BookingsToBeRetrieved)
         {
-            <div style="width:100%;">
-                @booking.BookingID
-            </div>
-            @foreach (ItemLineModel item in booking.Items)
-            {
-                <div>
-                    @item.Model.ModelName (@item.Model.Category.Category) - @item.Quantity
+            <div class="row border-bottom border-white border-1">
+                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.BookingID - @booking.Customer</p></div>
+                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.Location.Building.@booking.Location.RoomNumber</p></div>
+                <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1"><p>@booking.Notes</p></div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1 border-end border-white border-1">
+                    @foreach (ItemLineModel item in booking.Items)
+                    {
+                        <p>
+                            @item.Model.ModelName (@item.Model.Category.Category) x @item.Quantity
+                        </p>
+                    }
                 </div>
-            }
+                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.PlannedBorrowDate.ToString("dd/MM-yy")</p></div>
+                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.PlannedReturnDate.ToString("dd/MM-yy")</p></div>
+                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.DeliveredBy</p></div>
+                <div class="col-lg-2 col-2 p-1 center">
+                    @using (Html.BeginForm("SeeBooking", "Order"))
+                    {
+                        <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">Se Ordre</button>
+                    }
+                </div>
+            </div>
         }
     </div>
-    <div class="row containerFooter">
 
+    <div class="row containerFooter">
+        <h4>&nbsp;</h4>
     </div>
+
 </div>
+
+
 
 <div class="container containerMain box-shadow">
     <div class="row containerHeader">
-        <h4>Ordre som skal leveres:</h4>
+        <h4 class="col">Ordre som skal leveres:</h4>
     </div>
-    <div class="row containerBody">
 
+    <div class="row containerSubHeader border-top border-bottom border-white border-1">
+        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Ordre ID - Bestiller</div>
+        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Hvor</div>
+        <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">Noter</div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1 border-end border-white border-1">Hvad der er bestilt:</div>
+        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Første Dag</div>
+        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Sidste Dag</div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1"></div>
     </div>
-    <div class="row containerFooter"></div>
-</div>
+
+    <div class="row containerBody">
+        @foreach (BookingModel booking in Model.BookingsToBeDelivered)
+        {
+            <div class="row border-bottom border-white border-1">
+                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.BookingID - @booking.Customer</p></div>
+                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.Location.Building.@booking.Location.RoomNumber</p></div>
+                <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1"><p>@booking.Notes</p></div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1 border-end border-white border-1">
+                    @foreach (ItemLineModel item in booking.Items)
+                    {
+                        <p>
+                            @item.Quantity x (@item.Model.Category.Category)@item.Model.ModelName
+                        </p>
+                    }
+                </div>
+                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.PlannedBorrowDate.ToString("dd/MM-yy")</p></div>
+                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1"><p>@booking.PlannedReturnDate.ToString("dd/MM-yy")</p></div>
+                <div class="col-lg-3 col-3 p-1 center"><button type="button" class="btn btn-primary btn-sm btn-blue" style="width:100px">Se Ordre</button></div>
+            </div>
+        }
+    </div>
+
+    <div class="row containerFooter">
+        <h4>&nbsp;</h4>
+    </div>
 </div>
 
