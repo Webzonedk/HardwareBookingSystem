@@ -17,6 +17,11 @@ namespace HUS_project.Controllers
     {
         private readonly IConfiguration configuration;
 
+        // constructor of bookingcontroller
+        public BookingController(IConfiguration config)
+        {
+            this.configuration = config;
+        }
         public IActionResult CreateBooking()
         {
             return View();

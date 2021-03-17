@@ -39,6 +39,7 @@ namespace HUS_project.DAL
 
             SqlCommand cmd = new SqlCommand("GetBookingInfo", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@bookingID", bookingID);
 
             con.Open();
             SqlDataReader reader = cmd.ExecuteReader();
