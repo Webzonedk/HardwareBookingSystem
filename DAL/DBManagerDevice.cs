@@ -50,35 +50,42 @@ namespace HUS_project.DAL
         }
 
 
-        internal DeviceModel EditDevice(string dummy)
+        internal EditDeviceModel EditDevice(EditDeviceModel deviceData)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
+            SqlCommand cmd = new SqlCommand("EditDevice", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-
+            cmd.Parameters.Add("@modelName", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Model.ModelName;
+            cmd.Parameters.Add("@modelDescription", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Model.ModelDescription;
+            cmd.Parameters.Add("@categoryName", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Model.Category.Category;
+            cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceData.Device.DeviceID;
+            cmd.Parameters.Add("@status", System.Data.SqlDbType.TinyInt).Value = deviceData.Device.Status;
+            cmd.Parameters.Add("@note", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Notes;
+            cmd.Parameters.Add("@changedBy", System.Data.SqlDbType.VarChar).Value = deviceData.Device.ChangedBy;
+            cmd.ExecuteNonQuery();
             con.Close();
             return null;
         }
 
         //edit device location
-        internal DeviceModel EditDeviceLocation(EditDeviceModel deviceData)
+        internal EditDeviceModel EditDeviceLocation(EditDeviceModel deviceData)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("EditDeviceLocation", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Location.Location.Building;
-            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Location.Location.RoomNumber;
+            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = deviceData.Device.Location.Location.RoomNumber;
             cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Location.ShelfName;
-            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Location.ShelfLevel;
-            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Location.ShelfSpot;
+            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = deviceData.Device.Location.ShelfLevel;
+            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = deviceData.Device.Location.ShelfSpot;
             cmd.Parameters.Add("@changedBy", System.Data.SqlDbType.VarChar).Value = deviceData.Device.ChangedBy;
-
-
+            cmd.Parameters.Add("@note", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Notes;
+            cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceData.Device.DeviceID;
+            cmd.ExecuteNonQuery();
             con.Close();
-            return null;
+            return deviceData;
         }
 
         //get device info from database before edit

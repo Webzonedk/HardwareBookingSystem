@@ -3,7 +3,7 @@
     ViewData["Title"] = "Rediger enhed";
 }
 
-<div class=" container-fluid blue-oyster-bar"> </div>
+<div class=" container-fluid blue-oyster-bar"></div>
 
 
 <!--java script to count remaining text in description-->
@@ -56,21 +56,35 @@
 
                     </div>
 
+                    <div>
+                        @if (ViewBag.Message != null)
+                        {
+                            //create popup to show location has been saved
+                            <div class="text-green">@ViewBag.Message</div>
+                        }
+                        else
+                        {
+                            <div>&nbsp;</div>
+                        }
+                    </div>
+
                 </div>
 
 
             </div>
 
-            <!--categories dropdown-->
+            <!--categories dropdown & notes field-->
             <div class="col-xl-3 col-md-6 gx-3 gy-3">
 
                 <div class="form-floating ">
-                    <input class="form-select" list="categories" id="exampleDataList" asp-for="@Model.Device.Model.Category.Category">
+                    <input class="form-select" list="categories" id="exampleDataList" asp-for="@Model.Device.Model.Category.Category" required>
                     <datalist id="categories">
 
-                        @foreach (var item in Model.Categories)
+                        @for (int i = 0; i < Model.Categories.Count; i++)
                         {
-                            <option>@item</option>
+                            // lambda function that binds the model to a hidden inputfield that gets posted to controller
+                            @Html.HiddenFor(model => Model.Categories[i])
+                            <option>@Model.Categories[i]</option>
                         }
 
                     </datalist>
@@ -80,12 +94,14 @@
                 <br />
                 <!--model names dropdown-->
                 <div class="form-floating ">
-                    <input class="form-select" list="modelNames" id="exampleDataList" asp-for="@Model.Device.Model.ModelName">
+                    <input class="form-select" list="modelNames" id="exampleDataList" asp-for="@Model.Device.Model.ModelName" required>
                     <datalist id="modelNames">
 
-                        @foreach (var item in Model.ModelNames)
+                        @for (int i = 0; i < Model.ModelNames.Count; i++)
                         {
-                            <option>@item</option>
+                            // lambda function that binds the model to a hidden inputfield that gets posted to controller
+                            @Html.HiddenFor(model => Model.ModelNames[i])
+                            <option>@Model.ModelNames[i]</option>
                         }
 
                     </datalist>
@@ -107,6 +123,7 @@
             @if (ViewBag.Message != null)
             {
                 //create popup to show location has been saved
+
             }
 
             <!--Location dropdowns & scanning-->
@@ -148,18 +165,34 @@
                 </div>
 
                 <div class="row">
-                    <div class="text-center">
-                        <button type="submit" class=" btn-primary btn" formaction="EditLocation" formmethod="post">Gem placering</button>
+                    <div class="col">
+                        <div class="text-center">
+                            <button type="submit" class=" btn-primary btn" formaction="EditLocation" formmethod="post">Gem placering</button>
 
+                        </div>
+                    </div>
+
+                  
+
+                    <div class="col">
+                        <div class="text-center">
+                            <button type="button" class=" btn-primary btn" asp-action="ScanQRCode">Skan placering</button>
+
+                        </div>
                     </div>
                 </div>
 
-                <br />
-
                 <div class="row">
-                    <div class="text-center">
-                        <button type="button" class=" btn-primary btn" asp-action="ScanQRCode">Skan placering</button>
-
+                    <div>
+                        @if (ViewBag.Message != null)
+                        {
+                            //create popup to show location has been saved
+                            <div class="text-green">@ViewBag.Message</div>
+                        }
+                        else
+                        {
+                            <div>&nbsp;</div>
+                        }
                     </div>
                 </div>
 
@@ -195,6 +228,29 @@
     <div class="row containerFooter">
         <h4>&nbsp;</h4>
     </div>
+
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @ViewBag.Message;
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </div>
 

@@ -94,9 +94,14 @@ namespace HUS_project.Controllers
             editdata.Categories = categories;
             editdata.ModelNames = modelNames;
             editdata.Rooms = storagelocation.Rooms;
-           
 
-            return View(editdata);
+            //test to get all rooms and shelves
+            storagelocation = dbManager.GetStorageLocations(editdata);
+            editdata.Rooms = storagelocation.Rooms;
+            editdata.Shelfs = storagelocation.Shelfs;
+
+
+            return View( editdata);
         }
 
         // gets device location and returns to Edit view
@@ -151,7 +156,23 @@ namespace HUS_project.Controllers
         //saves new location on device to database
         public IActionResult EditLocation(EditDeviceModel data)
         {
-            ViewBag.Message = "location saved";
+            //initializing DB managers
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            data.Device.ChangedBy = HttpContext.Session.GetString("uniLogin");
+
+            //prep data for database
+            string[] splittedRoom = data.Room.Split('.');
+            string[] splittedShelf = data.Shelf.Split('.');
+
+            //set data models
+            BuildingModel building = new BuildingModel(splittedRoom[0], Convert.ToByte(splittedRoom[1]));
+            StorageLocationModel storageLocation = new StorageLocationModel(splittedShelf[0], Convert.ToByte(splittedShelf[1]), Convert.ToByte(splittedShelf[2]), building);
+            data.Device.Location = storageLocation;
+            data.Device.Notes = "Placering redigeret";
+
+            //send data to database
+            data = dbManager.EditDeviceLocation(data);
+            ViewBag.Message = "Placering Gemt";
 
             return View("EditView",data);
         }
@@ -160,6 +181,15 @@ namespace HUS_project.Controllers
         //saves all edits on device to database
         public IActionResult EditDevice(EditDeviceModel data)
         {
+            //initializing DB managers
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            data.Device.ChangedBy = HttpContext.Session.GetString("uniLogin");
+            data.Device.Notes = "Enhed redigeret";
+            
+            //send data to database
+            dbManager.EditDevice(data);
+
+            ViewBag.Message = "Enhed Gemt";
             return View("EditView", data);
         }
         public IActionResult Inventory(ModelInfoModel infoList)
