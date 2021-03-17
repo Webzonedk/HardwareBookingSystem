@@ -130,7 +130,7 @@ namespace HUS_project.DAL
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("SelectRoomNr", con);
+            SqlCommand cmd = new SqlCommand("SelectShelfLevel", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.ExecuteNonQuery();
             SqlDataReader reader = cmd.ExecuteReader();
@@ -142,7 +142,7 @@ namespace HUS_project.DAL
                 while (reader.Read())
                 {
                     //EditStorageLocationModel output = new EditStorageLocationModel();
-                    StorageLocationModel shelfLevel = new StorageLocationModel(null, (byte)reader["roomNr"], 0, null);
+                    StorageLocationModel shelfLevel = new StorageLocationModel(null, (byte)reader["shelfLevel"], 0, null);
 
                     shelfLevels.Add(shelfLevel.ShelfLevel);
                 }
@@ -164,21 +164,21 @@ namespace HUS_project.DAL
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("SelectRoomNr", con);
+            SqlCommand cmd = new SqlCommand("SelectShelfSpot", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.ExecuteNonQuery();
             SqlDataReader reader = cmd.ExecuteReader();
 
-            List<byte> shelfLevels = new List<byte>();
+            List<byte> shelfSpots = new List<byte>();
             try
             {
 
                 while (reader.Read())
                 {
                     //EditStorageLocationModel output = new EditStorageLocationModel();
-                    StorageLocationModel shelfLevel = new StorageLocationModel(null, (byte)reader["roomNr"], 0, null);
+                    StorageLocationModel shelfSpot = new StorageLocationModel(null, 0, (byte)reader["shelfSpot"], null);
 
-                    shelfLevels.Add(shelfLevel.ShelfLevel);
+                    shelfSpots.Add(shelfSpot.ShelfSpot);
                 }
             }
             catch (Exception)
@@ -188,13 +188,13 @@ namespace HUS_project.DAL
             }
 
             con.Close();
-            return shelfLevels;
+            return shelfSpots;
         }
 
 
 
 
-        internal List<string> ee;
+
 
 
 
