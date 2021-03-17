@@ -33,16 +33,16 @@ namespace HUS_project.Controllers
             DBManagerShared sharedDBManager = new DBManagerShared(configuration);
             List<string> categories = sharedDBManager.GetCategories();
             List<string> modelNames = sharedDBManager.GetModelNames();
-            
+
             //create view model
             CreateDeviceModel deviceData = new CreateDeviceModel();
             deviceData.Categories = categories;
             deviceData.ModelNames = modelNames;
             deviceData.Device = new DeviceModel();
-         
+
             return View(deviceData);
         }
-        
+
         public IActionResult AddDeviceToDB(CreateDeviceModel deviceData)
         {
             //initializing DB managers
@@ -68,6 +68,7 @@ namespace HUS_project.Controllers
             return View("EditView", editdata);
         }
 
+        //getting data from database & return model to view
         public IActionResult EditView(int deviceID)
         {
             //initializing DB managers
@@ -81,27 +82,86 @@ namespace HUS_project.Controllers
             List<DeviceModel> logs = dbManager.GetDeviceLogs(ID);
             List<string> categories = dbsharedManager.GetCategories();
             List<string> modelNames = dbsharedManager.GetModelNames();
-            List<string> rooms = dbsharedManager.GetAllRooms();
+            EditDeviceModel storagelocation = dbManager.GetStorageLocations(null);
+
+
             EditDeviceModel editdata = new EditDeviceModel();
             editdata.Device = data;
             editdata.Room = new string($"{data.Location.Location.Building}.{data.Location.Location.RoomNumber.ToString()}");
+            editdata.Shelf = new string($"{data.Location.ShelfName}.{data.Location.ShelfLevel}.{data.Location.ShelfSpot}");
+        
             editdata.Logs = logs;
             editdata.Categories = categories;
             editdata.ModelNames = modelNames;
-            editdata.Rooms = rooms;
+            editdata.Rooms = storagelocation.Rooms;
+           
 
             return View(editdata);
         }
 
-        // edits device location and returns to Edit view
-        [HttpGet]
-        public IActionResult EditDevice(EditDeviceModel data)
+        // gets device location and returns to Edit view
+        [HttpPost]
+        public IActionResult GetLocations(EditDeviceModel data)
         {
-            data.Shelf = "k.1.s.s";
-            Debug.WriteLine("this works");
-            return View("EditView", data);
+            //initializing DB managers
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            EditDeviceModel newdata = data;
+
+            //fetch storage locations if user has typed a valid room
+            if (data.Room != null)
+            {
+                //prep data for database
+                string[] splittedRoom = data.Room.Split('.');
+              
+                //prep data model
+                EditDeviceModel editData = new EditDeviceModel();
+                DeviceModel device = new DeviceModel();
+                BuildingModel building = new BuildingModel(splittedRoom[0], Convert.ToByte(splittedRoom[1]));
+                StorageLocationModel storageLocation = new StorageLocationModel();
+                storageLocation.Location = building;
+                device.Location = storageLocation;
+                editData.Device = device;
+               
+                //get storagelocations
+                EditDeviceModel locations = dbManager.GetStorageLocations(editData);
+                newdata.Shelfs = locations.Shelfs;
+                newdata.Shelf = null;
+            }
+            //return the same data without having selected anything
+            else
+            {
+                EditDeviceModel storagelocation = dbManager.GetStorageLocations(null);
+                newdata.Rooms = storagelocation.Rooms;
+                newdata.Shelf = null;
+            }
+
+
+
+          
+            // clear model
+            ModelState.Clear();
+
+
+
+            return View("EditView", newdata);
         }
 
+
+        [HttpPost]
+        //saves new location on device to database
+        public IActionResult EditLocation(EditDeviceModel data)
+        {
+            ViewBag.Message = "location saved";
+
+            return View("EditView",data);
+        }
+
+        [HttpPost]
+        //saves all edits on device to database
+        public IActionResult EditDevice(EditDeviceModel data)
+        {
+            return View("EditView", data);
+        }
         public IActionResult Inventory(ModelInfoModel infoList)
         {
             //generate an instance of the database manager
@@ -110,14 +170,9 @@ namespace HUS_project.Controllers
 
 
             //send data to the manager
-            
+
 
             return View(infoList);
-        }
-
-        public IActionResult MoveLocation()
-        {
-            return View();
         }
 
         //public IActionResult CreateQRCode()

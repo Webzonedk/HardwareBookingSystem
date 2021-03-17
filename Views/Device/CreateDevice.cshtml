@@ -3,10 +3,14 @@
     ViewData["Title"] = "Opret enhed";
 }
 
+
+
 <div class="row blue-oyster-bar"></div>
 
 
-<div class="container">
+<div class="container center containerMain box-shadow">
+
+    <!--Header text-->
     <div class=" row containerHeader">
         <h4 class="text-white">Opret enhed</h4>
 
@@ -14,15 +18,23 @@
 
 
 
-    <form class="row containerBody center" asp-action="AddDeviceToDB" method="post" autocomplete="off">
+    <form class="row containerBody center was-validated" asp-action="AddDeviceToDB" method="post" autocomplete="off">
 
+        <!--empty col-->
+        <div class="col-xl-2 col-md-6 gx-3 gy-3">
+
+
+        </div>
+
+
+        <!--image upload-->
         <div class="col-xl-4 col-md-12 gx-3 gy-3">
             <div class="row center">
                 <div>
                     <img class="img-bg" src="~/Graphic/billede-mangler.png" style="width: 100%" />
 
                 </div>
-               
+
             </div>
             <div class="row center p-3">
                 <div>
@@ -33,12 +45,13 @@
 
         </div>
 
-
+        <!--user input fields-->
         <div class="col-xl-4 col-md-6 gx-3 gy-3">
 
+            <!--categories dropdown-->
             <div class="form-floating">
-                <select class="form-select" id="categories" asp-for="@Model.Device.Model.Category.Category">
-
+                <select class="form-select" id="categories" asp-for="@Model.Device.Model.Category.Category" required>
+                    <option hidden></option>
                     @foreach (var item in Model.Categories)
                     {
                         <option>@item</option>
@@ -49,9 +62,9 @@
             </div>
 
             <br />
-
+            <!--modelnames dropdown-->
             <div class="form-floating ">
-                <input class="form-select" list="modelNames" id="exampleDataList" asp-for="@Model.Device.Model.ModelName">
+                <input class="form-select" list="modelNames" id="exampleDataList" asp-for="@Model.Device.Model.ModelName" required>
                 <datalist id="modelNames">
 
                     @foreach (var item in Model.ModelNames)
@@ -63,33 +76,37 @@
                 <label for="exampleDataList">Indtast enhedsnavn</label>
             </div>
 
+            <br />
 
-
-
-
-
-
-        </div>
-
-        <div class="col-xl-4 col-md-6 gx-3 gy-3">
+            <!--serial number field-->
             <div class="form-floating">
-                <input class="form-control" id="inputSerial" placeholder="indtast serienr." asp-for="@Model.Device.SerialNumber" />
+                <input class="form-control is-invalid" id="inputSerial" placeholder="indtast serienr." asp-for="@Model.Device.SerialNumber" required/>
                 <label for="inputSerial">Serienummer:</label>
 
             </div>
 
             <br />
 
+            <!--comments text field-->
             <div class="form-floating">
-                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" asp-for="@Model.Device.Model.ModelDescription"></textarea>
+                <textarea class="form-control is-invalid" placeholder="Leave a comment here" id="floatingTextarea2" rows="5" style="height:100%;"  asp-for="@Model.Device.Model.ModelDescription" required maxlength="2000"></textarea>
                 <label for="floatingTextarea2">beskrivelse</label>
+                <span id="remaining"></span>
+                <span id="limit">(Max 2000 tegn)</span>
             </div>
 
         </div>
 
+        <!--empty col-->
+        <div class="col-xl-2 col-md-6 gx-3 gy-3">
+
+
+        </div>
+
+        <!--submit button-->
         <div class="row">
             <div class="col p-3">
-            <button class="btn btn-primary btn-blue" type="submit">Gem</button>
+                <button class="btn btn-primary btn-blue" type="submit">Gem</button>
 
             </div>
         </div>
@@ -103,5 +120,8 @@
         <h4>&nbsp;</h4>
     </div>
 </div>
+
+<!--java script to count remaining text in description-->
+<script src="~/js/textCount.js"></script>
 
 

@@ -29,7 +29,7 @@ namespace HUS_project.Controllers
             return View();
         }
         
-        public IActionResult LocationAdmin(string seachInputBuilding)
+        public IActionResult LocationAdmin()
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
             List<string> buildings = manager.GetBuildings();
