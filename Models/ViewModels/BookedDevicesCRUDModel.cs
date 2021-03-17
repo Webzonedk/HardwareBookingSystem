@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace HUS_project.Models.ViewModels
 {
-    public class ExecuteOrderModel
+    public class BookedDevicesCRUDModel
     {
         #region Variables
             private BookingModel booking;
@@ -32,11 +32,11 @@ namespace HUS_project.Models.ViewModels
             }
         #endregion
         #region Constructors
-            public ExecuteOrderModel()
+            public BookedDevicesCRUDModel()
             {
 
             }
-            public ExecuteOrderModel(BookingModel Booking, List<ItemLineModel> ModelsInStorage, Dictionary<ItemLineModel, StorageLocationModel> StorageLocations)
+            public BookedDevicesCRUDModel(BookingModel Booking, List<ItemLineModel> ModelsInStorage, Dictionary<ItemLineModel, StorageLocationModel> StorageLocations)
             {
                 this.booking = Booking;
                 this.modelsInStorage = ModelsInStorage;
