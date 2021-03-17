@@ -4,6 +4,12 @@
 @{
     ViewData["Title"] = "Placerings Administration";
 }
+
+
+<!--java script to count remaining text in description-->
+<script src="~/js/site.js"></script>
+
+@*Blue Oister Bar with search fields*@
 <form Asp-action="LocationAdmin" method="post">
     <div class="row blue-oyster-bar center box-shadow">
         <div class="row">
@@ -12,7 +18,7 @@
             </div>
             <div class="col-xl-2 col-sm-4 gx-3 gy-3">
                 <div class="form-floating">
-                    <input class="form-select" id="buildingDropDown" list="buildings" aria-label="Vælg Bygning" asp-for="@Model.StorageLocation.Location.Building">
+                    <input class="form-select" id="buildingDropDown" list="buildings" aria-label="Vælg Bygning" asp-for="@Model.StorageLocation.Location.Building" onchange="return SubmitValidation()">
                     <datalist id="buildings">
                         @foreach (var item in Model.Buildings)
                         {
@@ -24,7 +30,7 @@
             </div>
             <div class="col-xl-2 col-sm-4 gx-3 gy-3">
                 <div class="form-floating">
-                    <input class="form-select" id="roomNumberDropDown" list="roomNumbers" aria-label="Vælg lokalenummer" asp-for="@Model.StorageLocation.Location.RoomNumber">
+                    <input class="form-select" id="roomNumberDropDown" list="roomNumbers" aria-label="Vælg lokalenummer" asp-for="@Model.StorageLocation.Location.RoomNumber" onchange="return SubmitValidation()">
                     <datalist id="roomNumbers">
                         @foreach (var item in Model.RoomNumbers)
                         {
@@ -36,7 +42,7 @@
             </div>
             <div class="col-xl-2 col-sm-4 gx-3 gy-3">
                 <div class="form-floating">
-                    <input class="form-select" id="shelfNameDropDown" list="shelfNames" aria-label="Vælg ReolNavn" asp-for="@Model.StorageLocation.ShelfName">
+                    <input class="form-select" id="shelfNameDropDown" list="shelfNames" aria-label="Vælg ReolNavn" asp-for="@Model.StorageLocation.ShelfName" onchange="return SubmitValidation()">
                     <datalist id="shelfNames">
                         @foreach (var item in Model.ShelfNames)
                         {
@@ -48,7 +54,7 @@
             </div>
             <div class="col-xl-2 col-sm-6 gx-3 gy-3">
                 <div class="form-floating">
-                    <input class="form-select" id="shelfLevelDropDown" list="shelfLevels" aria-label="Vælg Etage" asp-for="@Model.StorageLocation.ShelfLevel">
+                    <input class="form-select" id="shelfLevelDropDown" list="shelfLevels" aria-label="Vælg Etage" asp-for="@Model.StorageLocation.ShelfLevel" onchange="return SubmitValidation()">
                     <datalist id="shelfLevels">
                         @foreach (var item in Model.ShelfLevels)
                         {
@@ -60,7 +66,7 @@
             </div>
             <div class="col-xl-2 col-sm-6 gx-3 gy-3">
                 <div class="form-floating">
-                    <input class="form-select" id="shelfSpotDropDown" list="shelfSpots" aria-label="Vælg Hyldeplads" asp-for="@Model.StorageLocation.ShelfSpot">
+                    <input class="form-select" id="shelfSpotDropDown" list="shelfSpots" aria-label="Vælg Hyldeplads" asp-for="@Model.StorageLocation.ShelfSpot" onchange="return SubmitValidation()">
                     <datalist id="shelfSpots">
                         @foreach (var item in Model.ShelfSpots)
                         {
@@ -75,10 +81,10 @@
         </div>
         <div class="row">
             @{string toolTip = "Alle felter kan oprettes enkeltvis. \n\n" +
-                                           "Hvis Bygning og Lokale er udfyldt samtidigt vil der \n" +
-                                           "oprettes et Lokale hvis ikke det eksisterer i forvejen.\n\n " +
-                                           "Hvis alle felter er udfyldt, vil der oprettes en placering.\n\n" +
-                                           "Men kun hvis det ikke findes I forvejen."; }
+                                             "Hvis Bygning og Lokale er udfyldt samtidigt vil der \n" +
+                                             "oprettes et Lokale hvis ikke det eksisterer i forvejen.\n\n " +
+                                             "Hvis alle felter er udfyldt, vil der oprettes en placering.\n\n" +
+                                             "Men kun hvis det ikke findes I forvejen."; }
 
             <div class="col p-3">
                 <button type="button" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip">Tilføj Placering</button>

@@ -194,7 +194,35 @@ namespace HUS_project.DAL
 
 
 
+        internal List<StorageLocationModel> GetSelectedStorageLocations(StorageLocationModel dataFromView)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("SelectLocationIDBasedOnInputFields", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = dataFromView.Location.Building;
+            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = dataFromView.Location.RoomNumber;
+            cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = dataFromView.ShelfName;
+            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = dataFromView.ShelfLevel;
+            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = dataFromView.ShelfSpot;
 
+            List<StorageLocationModel> selectedStorageLocations = new List<StorageLocationModel>();
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                StorageLocationModel selectedStorageLocation = new StorageLocationModel();
+                selectedStorageLocation.Location.Building = (string)reader["buildingName"];
+                selectedStorageLocation.Location.RoomNumber = (byte)reader["roomNr"];
+                selectedStorageLocation.ShelfName = (string)reader["shelfName"]; ;
+                selectedStorageLocation.ShelfLevel = (byte)reader["shelfLevel"];
+                selectedStorageLocation.ShelfSpot = (byte)reader["shelfSpot"];
+
+                selectedStorageLocations.Add(selectedStorageLocation);
+            }
+            con.Close();
+            return selectedStorageLocations;
+        }
 
 
 
@@ -213,17 +241,7 @@ namespace HUS_project.DAL
 
 
 
-        internal StorageLocationModel DeleteLocation(StorageLocationModel dummy)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-
-            con.Close();
-            return null;
-        }
 
 
 

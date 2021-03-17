@@ -9,6 +9,7 @@ namespace HUS_project.Models.ViewModels
     {
         #region fields
         private StorageLocationModel storageLocation;
+        private List<StorageLocationModel> storageLocations;
         private List<string> buildings;
         private List<byte> roomNumbers;
         private List<string> shelfNames;
@@ -16,9 +17,9 @@ namespace HUS_project.Models.ViewModels
         private List<byte> shelfSpots;
         #endregion
 
-       
 
-    
+
+
 
 
 
@@ -28,6 +29,13 @@ namespace HUS_project.Models.ViewModels
         {
             get { return storageLocation; }
             set { storageLocation = value; }
+        }
+
+
+        public List<StorageLocationModel> StorageLocations
+        {
+            get { return storageLocations; }
+            set { storageLocations = value; }
         }
 
 
@@ -66,6 +74,7 @@ namespace HUS_project.Models.ViewModels
         #region Constructors
         public EditStorageLocationModel()
         {
+            storageLocations = new List<StorageLocationModel>();
             buildings = new List<string>();
             roomNumbers = new List<byte>();
             shelfNames = new List<string>();
@@ -73,9 +82,10 @@ namespace HUS_project.Models.ViewModels
             shelfSpots = new List<byte>();
         }
 
-        public EditStorageLocationModel(StorageLocationModel storageLocation, List<string> buildings, List<byte> roomNumbers, List<string> shelfNames, List<byte> shelfLevels, List<byte> shelfSpots)
+        public EditStorageLocationModel(StorageLocationModel storageLocation, List<StorageLocationModel> storageLocations, List<string> buildings, List<byte> roomNumbers, List<string> shelfNames, List<byte> shelfLevels, List<byte> shelfSpots)
         {
             this.storageLocation = storageLocation;
+            this.storageLocations = storageLocations;
             this.buildings = buildings;
             this.roomNumbers = roomNumbers;
             this.shelfNames = shelfNames;
