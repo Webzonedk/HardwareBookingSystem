@@ -50,7 +50,7 @@ namespace HUS_project.DAL
         }
 
 
-        internal EditDeviceModel EditDevice(EditDeviceModel deviceData)
+        internal int EditDevice(EditDeviceModel deviceData)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
@@ -63,9 +63,15 @@ namespace HUS_project.DAL
             cmd.Parameters.Add("@status", System.Data.SqlDbType.TinyInt).Value = deviceData.Device.Status;
             cmd.Parameters.Add("@note", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Notes;
             cmd.Parameters.Add("@changedBy", System.Data.SqlDbType.VarChar).Value = deviceData.Device.ChangedBy;
-            cmd.ExecuteNonQuery();
+            int success = cmd.ExecuteNonQuery();
+
+            if(success > 0)
+            {
+                success = 1;
+            }
+
             con.Close();
-            return null;
+            return success;
         }
 
         //edit device location
@@ -215,7 +221,7 @@ namespace HUS_project.DAL
                     //add room to list of not the same
                     else
                     {
-                        if(!string.Equals(room,Rooms[Rooms.Count-1]))
+                        if (!string.Equals(room, Rooms[Rooms.Count - 1]))
                         {
                             Rooms.Add(room);
                         }
@@ -224,7 +230,7 @@ namespace HUS_project.DAL
 
             }
 
-            
+
 
             EditDeviceModel data = new EditDeviceModel();
             data.Rooms = Rooms;
@@ -235,7 +241,7 @@ namespace HUS_project.DAL
             return data;
         }
 
-       
+
 
         internal List<DeviceModel> GetDeviceInventory(string dummy)
         {

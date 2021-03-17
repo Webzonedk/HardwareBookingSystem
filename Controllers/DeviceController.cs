@@ -89,7 +89,7 @@ namespace HUS_project.Controllers
             editdata.Device = data;
             editdata.Room = new string($"{data.Location.Location.Building}.{data.Location.Location.RoomNumber.ToString()}");
             editdata.Shelf = new string($"{data.Location.ShelfName}.{data.Location.ShelfLevel}.{data.Location.ShelfSpot}");
-        
+
             editdata.Logs = logs;
             editdata.Categories = categories;
             editdata.ModelNames = modelNames;
@@ -101,7 +101,7 @@ namespace HUS_project.Controllers
             editdata.Shelfs = storagelocation.Shelfs;
 
 
-            return View( editdata);
+            return View(editdata);
         }
 
         // gets device location and returns to Edit view
@@ -117,7 +117,7 @@ namespace HUS_project.Controllers
             {
                 //prep data for database
                 string[] splittedRoom = data.Room.Split('.');
-              
+
                 //prep data model
                 EditDeviceModel editData = new EditDeviceModel();
                 DeviceModel device = new DeviceModel();
@@ -126,7 +126,7 @@ namespace HUS_project.Controllers
                 storageLocation.Location = building;
                 device.Location = storageLocation;
                 editData.Device = device;
-               
+
                 //get storagelocations
                 EditDeviceModel locations = dbManager.GetStorageLocations(editData);
                 newdata.Shelfs = locations.Shelfs;
@@ -142,7 +142,7 @@ namespace HUS_project.Controllers
 
 
 
-          
+
             // clear model
             ModelState.Clear();
 
@@ -172,9 +172,9 @@ namespace HUS_project.Controllers
 
             //send data to database
             data = dbManager.EditDeviceLocation(data);
-            ViewBag.Message = "Placering Gemt";
+            ViewBag.Location = "Placering Gemt";
 
-            return View("EditView",data);
+            return View("EditView", data);
         }
 
         [HttpPost]
@@ -185,11 +185,41 @@ namespace HUS_project.Controllers
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
             data.Device.ChangedBy = HttpContext.Session.GetString("uniLogin");
             data.Device.Notes = "Enhed redigeret";
-            
-            //send data to database
-            dbManager.EditDevice(data);
 
-            ViewBag.Message = "Enhed Gemt";
+            //send data to database
+            int success = dbManager.EditDevice(data);
+            
+            //set message to be shown in view
+            if (success > 0)
+            {
+                ViewBag.edit = "Enhed Gemt";
+            }
+            else
+            {
+                ViewBag.edit = "Enhed ikke Gemt";
+            }
+
+            return View("EditView", data);
+        }
+
+        public IActionResult DeleteDevice(EditDeviceModel data)
+        {
+            //initializing DB managers
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            data.Device.ChangedBy = HttpContext.Session.GetString("uniLogin");
+            data.Device.Notes = "Enhed redigeret";
+            data.Device.Status = 0;
+            //change status of device to deactivated
+          int success =  dbManager.EditDevice(data);
+            if (success > 0)
+            {
+                ViewBag.Message = "Enhed slettet";
+            }
+            else
+            {
+                ViewBag.Message = "Enhed er i brug";
+            }
+           
             return View("EditView", data);
         }
         public IActionResult Inventory(ModelInfoModel infoList)
