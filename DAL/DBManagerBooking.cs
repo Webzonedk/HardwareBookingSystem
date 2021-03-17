@@ -24,85 +24,32 @@ namespace HUS_project.DAL
         internal void CreateBooking()
         {
             SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
             SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
+
+            con.Open();
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-
             con.Close();
 
         }
 
-        internal void EditBooking()
+        internal BookingModel GetBooking(int bookingID)
         {
+            BookingModel booking = new BookingModel();
             SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
+
+            SqlCommand cmd = new SqlCommand("GetBookingInfo", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-
-            con.Close();
-
-        }
-
-        internal DeviceModel GetStorageQuantity(string dummy)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                booking.BookingID = bookingID;
+                booking.Customer = reader["orderedBy"].ToString();
+            }
             con.Close();
-            return null;
-        }
 
-        internal List<DeviceModel> ViewDevices(string dummy)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-
-            con.Close();
-            return null;
-        }
-        
-        internal List<DeviceModel> GetPendingBookings(string dummy)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-
-            con.Close();
-            return null;
-        }
-        
-        internal List<DeviceModel> GetCurrentBookings(string dummy)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-
-            con.Close();
-            return null;
-        }
-        
-        internal List<DeviceModel> GetClosedBookings(string dummy)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-
-            con.Close();
-            return null;
+            return booking;
         }
 
     }

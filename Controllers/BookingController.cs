@@ -8,11 +8,15 @@ using HUS_project.Models;
 using HUS_project.Models.ViewModels;
 using HUS_project.DAL;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+
 
 namespace HUS_project.Controllers
 {
     public class BookingController : Controller
     {
+        private readonly IConfiguration configuration;
+
         public IActionResult CreateBooking()
         {
             return View();
@@ -50,7 +54,8 @@ namespace HUS_project.Controllers
 
         public IActionResult GoToBooking(string bookingID)
         {
-            BookingModel booking = new BookingModel();
+            DBManagerBooking dBManager = new DBManagerBooking(configuration);
+            BookingModel booking = dBManager.GetBooking(Convert.ToInt32(bookingID));
 
             return View("BookingRUD", booking);
         }
