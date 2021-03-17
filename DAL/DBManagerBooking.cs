@@ -57,7 +57,7 @@ namespace HUS_project.DAL
             return null;
         }
 
-         internal List<DeviceModel> ViewDevices(string dummy)
+        internal List<DeviceModel> ViewDevices(string dummy)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
@@ -69,7 +69,7 @@ namespace HUS_project.DAL
             return null;
         }
         
-         internal List<DeviceModel> GetPendingBookings(string dummy)
+        internal List<DeviceModel> GetPendingBookings(string dummy)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
@@ -81,7 +81,7 @@ namespace HUS_project.DAL
             return null;
         }
         
-         internal List<DeviceModel> GetCurrentBookings(string dummy)
+        internal List<DeviceModel> GetCurrentBookings(string dummy)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
@@ -93,7 +93,7 @@ namespace HUS_project.DAL
             return null;
         }
         
-         internal List<DeviceModel> GetClosedBookings(string dummy)
+        internal List<DeviceModel> GetClosedBookings(string dummy)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
