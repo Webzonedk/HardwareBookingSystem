@@ -138,10 +138,6 @@ namespace HUS_project.Controllers
                         DBTasker.GetBookingDeliveriesToBeMade()
                         
                     );
-
-
-
-
                 return View("Task", tasks);
             }
             else if(HttpContext.Session.GetInt32("accessLevel") == 1)
