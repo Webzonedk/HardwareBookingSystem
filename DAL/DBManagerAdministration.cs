@@ -197,7 +197,6 @@ namespace HUS_project.DAL
         internal List<StorageLocationModel> GetSelectedStorageLocations(StorageLocationModel dataFromView)
         {
             SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
             SqlCommand cmd = new SqlCommand("SelectLocationIDBasedOnInputFields", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = dataFromView.Location.Building;
@@ -208,6 +207,7 @@ namespace HUS_project.DAL
 
             List<StorageLocationModel> selectedStorageLocations = new List<StorageLocationModel>();
 
+            con.Open();
             SqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {

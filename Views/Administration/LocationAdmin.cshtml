@@ -18,10 +18,10 @@
             </div>
             <div class="col-xl-2 col-sm-4 gx-3 gy-3">
                 <div class="form-floating">
-                    <input class="form-select" id="buildingDropDown" list="buildings" aria-label="Vælg Bygning" asp-for="@Model.StorageLocation.Location.Building" onchange="return SubmitValidation()">
+                    <input class="form-select" id="buildingDropDown" list="buildings" aria-label="Vælg Bygning" asp-for="@Model.StorageLocation.Location.Building" onchange="submit()">
                     <datalist id="buildings">
                         @foreach (var item in Model.Buildings)
-                        {
+                        {                           
                             <option>@item</option>
                         }
                     </datalist>
@@ -30,7 +30,7 @@
             </div>
             <div class="col-xl-2 col-sm-4 gx-3 gy-3">
                 <div class="form-floating">
-                    <input class="form-select" id="roomNumberDropDown" list="roomNumbers" aria-label="Vælg lokalenummer" asp-for="@Model.StorageLocation.Location.RoomNumber" onchange="return SubmitValidation()">
+                    <input class="form-select" id="roomNumberDropDown" list="roomNumbers" aria-label="Vælg lokalenummer" asp-for="@Model.StorageLocation.Location.RoomNumber" onchange="submit()">
                     <datalist id="roomNumbers">
                         @foreach (var item in Model.RoomNumbers)
                         {

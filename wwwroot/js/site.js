@@ -23,3 +23,11 @@ function SubmitValidation() {
         this.document.Submit();
     }
 }
+
+
+//Submitting data from view
+function submit() {
+
+    this.document.Submit();
+
+}

@@ -28,8 +28,8 @@ namespace HUS_project.Controllers
         {
             return View();
         }
-        
-        public IActionResult LocationAdmin(EditStorageLocationModel dataFromView)
+
+        public IActionResult LocationAdmin()
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
             List<string> buildings = manager.GetBuildings();
@@ -46,12 +46,22 @@ namespace HUS_project.Controllers
             dropDownData.ShelfLevels = shelfLevels;
             dropDownData.ShelfSpots = shelfspots;
 
+            return View(dropDownData);
+        }
+
+
+
+        public IActionResult LocationAdminResult(EditStorageLocationModel dataFromView)
+        {
+            DBManagerAdministration manager = new DBManagerAdministration(configuration);
+           
+
             StorageLocationModel returnData = new StorageLocationModel();
 
             List<StorageLocationModel> storageLocations = manager.GetSelectedStorageLocations(returnData);
-            dropDownData.StorageLocations = storageLocations;
+          
 
-            return View("LocationAdmin", dropDownData);
+            return View("LocationAdmin");
         }
          
         public void CreateQRCode()
