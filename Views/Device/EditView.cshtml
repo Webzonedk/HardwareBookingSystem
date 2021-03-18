@@ -56,11 +56,12 @@
 
                     </div>
 
+                    <!--create message to show device has been saved-->
                     <div>
-                        @if (ViewBag.Message != null)
+                        @if (ViewBag.edit != null)
                         {
                             //create popup to show location has been saved
-                            <div class="text-green">@ViewBag.Message</div>
+                            <div class="text-green">@ViewBag.edit</div>
                         }
                         else
                         {
@@ -75,6 +76,12 @@
 
             <!--categories dropdown & notes field-->
             <div class="col-xl-3 col-md-6 gx-3 gy-3">
+
+                <div class="row">
+                    <div>&nbsp;</div>
+                </div>
+
+                <br />
 
                 <div class="form-floating ">
                     <input class="form-select" list="categories" id="exampleDataList" asp-for="@Model.Device.Model.Category.Category" required>
@@ -112,7 +119,7 @@
 
                 <!--description field-->
                 <div class="form-floating">
-                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" asp-for="@Model.Device.Model.ModelDescription"></textarea>
+                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 125px" asp-for="@Model.Device.Model.ModelDescription"></textarea>
                     <label for="floatingTextarea2">beskrivelse</label>
                 </div>
 
@@ -120,14 +127,15 @@
 
             </div>
 
-            @if (ViewBag.Message != null)
-            {
-                //create popup to show location has been saved
-
-            }
 
             <!--Location dropdowns & scanning-->
             <div class="col-xl-3 col-md-6 gx-3 gy-3">
+
+                <div class="row">
+                    <div>&nbsp;</div>
+                </div>
+
+                <br />
 
                 <div class="form-floating ">
 
@@ -172,7 +180,7 @@
                         </div>
                     </div>
 
-                  
+
 
                     <div class="col">
                         <div class="text-center">
@@ -182,12 +190,13 @@
                     </div>
                 </div>
 
+                <!--create message to show location has been saved-->
                 <div class="row">
                     <div>
-                        @if (ViewBag.Message != null)
+                        @if (ViewBag.Location != null)
                         {
-                            //create popup to show location has been saved
-                            <div class="text-green">@ViewBag.Message</div>
+
+                            <div class="text-green">@ViewBag.Location</div>
                         }
                         else
                         {
@@ -203,11 +212,19 @@
             <div class="col-xl-3 col-md-6 gx-3 gy-3">
 
                 <div class="row">
-                    <div class="form-floating">
-                        <textarea class="form-control" placeholder="Leave a comment here" id="deleteNote" style="height: 100px" asp-for="@Model.Device.Notes"></textarea>
-                        <label for="deleteNote">årsag</label>
-                    </div>
+                    <div>&nbsp;</div>
                 </div>
+
+                <br />
+
+
+                <div class="form-floating">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="deleteNote" style="height: 140px" asp-for="@Model.Device.Notes"></textarea>
+                    <label for="deleteNote">årsag</label>
+                </div>
+
+
+                <br />
 
                 <div class="row">
                     <div class="text-center">
