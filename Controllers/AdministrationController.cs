@@ -51,17 +51,15 @@ namespace HUS_project.Controllers
 
 
 
-        public IActionResult LocationAdminResult(EditStorageLocationModel dataFromView)
+        public IActionResult LocationAdminResult(StorageLocationModel dataFromView)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
            
 
-            StorageLocationModel returnData = new StorageLocationModel();
-
-            List<StorageLocationModel> storageLocations = manager.GetSelectedStorageLocations(returnData);
+            List<StorageLocationModel> storageLocations = manager.GetSelectedStorageLocations(dataFromView);
           
 
-            return View("LocationAdmin");
+            return View("LocationAdmin", storageLocations);
         }
          
         public void CreateQRCode()
