@@ -18,7 +18,7 @@ namespace HUS_project.Models
         private DateTime plannedBorrowDate;
         private DateTime plannedReturnDate;
         private string deliveredBy;
-        private int bookingStatus;
+        private byte bookingStatus;
 
         #endregion
 
@@ -82,7 +82,7 @@ namespace HUS_project.Models
         }
 
 
-        public int BookingStatus
+        public byte BookingStatus
         {
             get { return bookingStatus; }
             set { bookingStatus = value; }
@@ -99,7 +99,7 @@ namespace HUS_project.Models
 
         }
 
-        public BookingModel(int BookingID, string Customer, List<ItemLineModel> Items, List<DeviceModel> Devices, BuildingModel Location, DateTime PlannedBorrowDate, DateTime PlannedReturnDate, int BookingStatus, string DeliveredBy = null, string Notes = null)
+        public BookingModel(int BookingID, string Customer, List<ItemLineModel> Items, List<DeviceModel> Devices, BuildingModel Location, DateTime PlannedBorrowDate, DateTime PlannedReturnDate, byte BookingStatus, string DeliveredBy = null, string Notes = null)
         {
             this.bookingID = BookingID;
             this.customer = Customer;
