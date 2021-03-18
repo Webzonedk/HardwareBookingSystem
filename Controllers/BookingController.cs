@@ -47,13 +47,21 @@ namespace HUS_project.Controllers
         /// <returns></returns>
         public IActionResult GoToScanDevices(string bookingID)
         {
-            BookingModel booking = new BookingModel();
-            booking.BookingID = Convert.ToInt32(bookingID);
+            DBManagerBooking dBManager = new DBManagerBooking(configuration);
+
+            BookingModel booking = dBManager.GetBooking(Convert.ToInt32(bookingID));
+            List<ItemLineModel> orderedItems = dBManager.GetItemLines(booking.BookingID);
+            Dictionary<ItemLineModel, StorageLocationModel> storageLocations = new Dictionary<ItemLineModel, StorageLocationModel>();
+
+            foreach(ItemLineModel ilm in orderedItems)
+            {
+                storageLocations.Add(ilm, dBManager.GetModelLocation(ilm.Model.ModelName));
+            }
 
             BookedDevicesCRUModel bookedDevicesCRUModel = new BookedDevicesCRUModel(
                 booking,
-                new List<ItemLineModel>(),
-                new Dictionary<ItemLineModel, StorageLocationModel>()
+                orderedItems,
+                storageLocations
                 );
             return View("BookedDevicesCRU", bookedDevicesCRUModel);
         }

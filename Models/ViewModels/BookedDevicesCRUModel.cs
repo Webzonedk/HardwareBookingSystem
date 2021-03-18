@@ -8,8 +8,13 @@ namespace HUS_project.Models.ViewModels
     public class BookedDevicesCRUModel
     {
         #region Variables
+            // The Booking there are BookedModels to be added/removed from.
             private BookingModel booking;
+
+            // How many of the requested Models are currently in storage !!!!!!!!!!!!
             private List<ItemLineModel> modelsInStorage;
+
+            // The StorageLocation of the requested Model.
             private Dictionary<ItemLineModel, StorageLocationModel> storageLocations;
         #endregion
         #region GetsNSets
