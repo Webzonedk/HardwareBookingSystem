@@ -194,16 +194,62 @@ namespace HUS_project.DAL
 
 
 
-        internal List<StorageLocationModel> GetSelectedStorageLocations(StorageLocationModel dataFromView)
+        internal List<StorageLocationModel> GetSelectedStorageLocations(EditStorageLocationModel dataFromView)
         {
             SqlConnection con = new SqlConnection(connectionString);
             SqlCommand cmd = new SqlCommand("SelectLocationIDBasedOnInputFields", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = dataFromView.Location.Building;
-            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = dataFromView.Location.RoomNumber;
-            cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = dataFromView.ShelfName;
-            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = dataFromView.ShelfLevel;
-            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = dataFromView.ShelfSpot;
+
+
+            if (dataFromView.StorageLocation.Location.Building != null)
+            {
+                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = dataFromView.StorageLocation.Location.Building;
+            }
+            else
+            {
+                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = null;
+            }
+
+
+            if (dataFromView.StorageLocation.Location.RoomNumber > 0)
+            {
+                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = dataFromView.StorageLocation.Location.RoomNumber;
+            }
+            else
+            {
+            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = null;
+            }
+
+
+            if (dataFromView.StorageLocation.ShelfName != null)
+            {
+            cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = dataFromView.StorageLocation.ShelfName;
+            }
+            else
+            {
+            cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = null;
+            }
+
+
+            if (dataFromView.StorageLocation.ShelfLevel > 0)
+            {
+            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = dataFromView.StorageLocation.ShelfLevel;
+            }
+            else
+            {
+            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = null;
+            }
+
+
+            if (dataFromView.StorageLocation.ShelfSpot > 0)
+            {
+            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = dataFromView.StorageLocation.ShelfSpot;
+            }
+            else
+            {
+            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = null;
+            }
+
 
             List<StorageLocationModel> selectedStorageLocations = new List<StorageLocationModel>();
 
@@ -212,9 +258,11 @@ namespace HUS_project.DAL
             while (reader.Read())
             {
                 StorageLocationModel selectedStorageLocation = new StorageLocationModel();
-                selectedStorageLocation.Location.Building = (string)reader["buildingName"];
-                selectedStorageLocation.Location.RoomNumber = (byte)reader["roomNr"];
-                selectedStorageLocation.ShelfName = (string)reader["shelfName"]; ;
+                BuildingModel buildingModel = new BuildingModel();
+                buildingModel.Building = (string)reader["buildingName"];
+                buildingModel.RoomNumber = (byte)reader["roomNr"];
+                selectedStorageLocation.Location = buildingModel;
+                selectedStorageLocation.ShelfName = (string)reader["shelfName"];
                 selectedStorageLocation.ShelfLevel = (byte)reader["shelfLevel"];
                 selectedStorageLocation.ShelfSpot = (byte)reader["shelfSpot"];
 
