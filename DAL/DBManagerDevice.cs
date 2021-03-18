@@ -249,11 +249,11 @@ namespace HUS_project.DAL
             con.Open();
             SqlCommand cmd = new SqlCommand("SearchDevices", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@category", System.Data.SqlDbType.VarChar).Value = deviceID;
-            cmd.Parameters.Add("@filter", System.Data.SqlDbType.Int).Value = deviceID;
-            cmd.Parameters.Add("@searchName", System.Data.SqlDbType.VarChar).Value = deviceID;
-            cmd.Parameters.Add("@deviceStatus", System.Data.SqlDbType.Int).Value = deviceID;
-            cmd.Parameters.Add("@inStock", System.Data.SqlDbType.Bit).Value = deviceID;
+            cmd.Parameters.Add("@category", System.Data.SqlDbType.VarChar).Value = null;
+            cmd.Parameters.Add("@filter", System.Data.SqlDbType.Int).Value = null;
+            cmd.Parameters.Add("@searchName", System.Data.SqlDbType.VarChar).Value = null;
+            cmd.Parameters.Add("@deviceStatus", System.Data.SqlDbType.Int).Value = null;
+            cmd.Parameters.Add("@inStock", System.Data.SqlDbType.Bit).Value = null;
 
             con.Close();
             return null;
