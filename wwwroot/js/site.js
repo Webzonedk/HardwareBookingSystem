@@ -23,11 +23,3 @@ function SubmitValidation() {
         this.document.Submit();
     }
 }
-
-
-//Submitting data from view
-function submit() {
-
-    document.getelementById("listStorageLocations").submit();
-
-}
