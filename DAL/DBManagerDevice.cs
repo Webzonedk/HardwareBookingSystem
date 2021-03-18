@@ -247,7 +247,7 @@ namespace HUS_project.DAL
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("SearchInactiveDevices", con);
+            SqlCommand cmd = new SqlCommand("SearchDevices", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.Add("@category", System.Data.SqlDbType.VarChar).Value = deviceID;
             cmd.Parameters.Add("@filter", System.Data.SqlDbType.Int).Value = deviceID;

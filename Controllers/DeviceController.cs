@@ -225,9 +225,9 @@ namespace HUS_project.Controllers
         public IActionResult Inventory(ModelInfoModel infoList)
         {
             //generate an instance of the database manager
-            DBManagerDevice DBDevice = new DBManagerDevice(configuration);
+            DBManagerDevice DBDManager = new DBManagerDevice(configuration);
             //get data from the manager
-
+          //  DBDManager 
 
             //send data to the manager
 
