@@ -23,3 +23,9 @@ function SubmitValidation() {
         this.document.Submit();
     }
 }
+
+function submit() {
+
+    this.document.Submit();
+
+}
