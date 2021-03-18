@@ -22,6 +22,8 @@ namespace HUS_project.Controllers
         {
             this.configuration = config;
         }
+
+
         public IActionResult CreateBooking()
         {
             return View();
@@ -48,12 +50,12 @@ namespace HUS_project.Controllers
             BookingModel booking = new BookingModel();
             booking.BookingID = Convert.ToInt32(bookingID);
 
-            BookedDevicesCRUDModel bookedDevicesCRUDModel = new BookedDevicesCRUDModel(
+            BookedDevicesCRUModel bookedDevicesCRUModel = new BookedDevicesCRUModel(
                 booking,
                 new List<ItemLineModel>(),
                 new Dictionary<ItemLineModel, StorageLocationModel>()
                 );
-            return View("BookedDevicesCRUD", bookedDevicesCRUDModel);
+            return View("BookedDevicesCRU", bookedDevicesCRUModel);
         }
 
 

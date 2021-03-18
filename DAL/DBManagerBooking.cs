@@ -35,9 +35,12 @@ namespace HUS_project.DAL
         internal BookingModel GetBooking(int bookingID)
         {
             BookingModel booking = new BookingModel();
+            booking.BookingID = bookingID;
+            booking.Devices = new List<DeviceModel>();
+            booking.Items = new List<ItemLineModel>();
             SqlConnection con = new SqlConnection(connectionString);
 
-            SqlCommand cmd = new SqlCommand("GetBookingInfo", con);
+            SqlCommand cmd = new SqlCommand("GetBookingOnID", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
 
@@ -45,8 +48,16 @@ namespace HUS_project.DAL
             SqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                booking.BookingID = bookingID;
-                booking.Customer = reader["orderedBy"].ToString();
+                booking.Customer = (string)reader["orderedBy"];
+                booking.BookingStatus = (byte)reader["status"];
+                booking.DeliveredBy = (string)reader["deliveredBy"];
+                booking.Notes = (string)reader["bookingNotes"];
+                booking.PlannedBorrowDate = (DateTime)reader["rentDate"];
+                booking.PlannedReturnDate = (DateTime)reader["returnDate"];
+                booking.Location = new BuildingModel(
+                    (string)reader["buildingName"],
+                    (byte)reader["roomNr"]
+                    );
             }
             con.Close();
 
