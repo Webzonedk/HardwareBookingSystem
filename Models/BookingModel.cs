@@ -13,7 +13,7 @@ namespace HUS_project.Models
         private string customer;
         private string notes;
         private List<ItemLineModel> items;
-        private List<BookedDeviceModel> devices;
+        private List<DeviceModel> devices;
         private BuildingModel location;
         private DateTime plannedBorrowDate;
         private DateTime plannedReturnDate;
@@ -50,7 +50,7 @@ namespace HUS_project.Models
             set { items = value; }
         }
 
-        public List<BookedDeviceModel> Devices
+        public List<DeviceModel> Devices
         {
             get { return devices; }
             set { devices = value; }
@@ -99,7 +99,7 @@ namespace HUS_project.Models
 
         }
 
-        public BookingModel(int BookingID, string Customer, List<ItemLineModel> Items, List<BookedDeviceModel> Devices, BuildingModel Location, DateTime PlannedBorrowDate, DateTime PlannedReturnDate, byte BookingStatus, string DeliveredBy = null, string Notes = null)
+        public BookingModel(int BookingID, string Customer, List<ItemLineModel> Items, List<DeviceModel> Devices, BuildingModel Location, DateTime PlannedBorrowDate, DateTime PlannedReturnDate, byte BookingStatus, string DeliveredBy = null, string Notes = null)
         {
             this.bookingID = BookingID;
             this.customer = Customer;

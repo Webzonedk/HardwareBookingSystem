@@ -41,7 +41,7 @@ namespace HUS_project.DAL
         {
             BookingModel booking = new BookingModel();
             booking.BookingID = bookingID;
-            booking.Devices = new List<BookedDeviceModel>();
+            booking.Devices = new List<DeviceModel>();
             booking.Items = new List<ItemLineModel>();
             SqlConnection con = new SqlConnection(connectionString);
 
@@ -55,8 +55,9 @@ namespace HUS_project.DAL
             {
                 booking.Customer = (string)reader["orderedBy"];
                 booking.BookingStatus = (byte)reader["status"];
-                booking.DeliveredBy = (string)reader["deliveredBy"];
-                booking.Notes = (string)reader["bookingNotes"];
+                // Below solution did not work for Bookings which haven't been delivered yet.
+                booking.DeliveredBy = reader["deliveredBy"] == null ? "" : (string)reader["deliveredBy"];
+                booking.Notes = reader["bookingNotes"] == null ? "" : (string)reader["bookingNotes"];
                 booking.PlannedBorrowDate = (DateTime)reader["rentDate"];
                 booking.PlannedReturnDate = (DateTime)reader["returnDate"];
                 booking.Location = new BuildingModel(
@@ -109,9 +110,9 @@ namespace HUS_project.DAL
         /// </summary>
         /// <param name="bookingID"></param>
         /// <returns></returns>
-        internal List<BookedDeviceModel> GetBookedDevices(int bookingID)
+        internal List<DeviceModel> GetBookedDevices(int bookingID)
         {
-            List<BookedDeviceModel> bookedDevices = new List<BookedDeviceModel>();
+            List<DeviceModel> bookedDevices = new List<DeviceModel>();
 
             // SP: GetBookedDevicesForBooking
 
