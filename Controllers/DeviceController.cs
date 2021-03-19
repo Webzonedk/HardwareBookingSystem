@@ -188,7 +188,7 @@ namespace HUS_project.Controllers
 
             //send data to database
             int success = dbManager.EditDevice(data);
-            
+
             //set message to be shown in view
             if (success > 0)
             {
@@ -209,8 +209,9 @@ namespace HUS_project.Controllers
             data.Device.ChangedBy = HttpContext.Session.GetString("uniLogin");
             data.Device.Notes = "Enhed redigeret";
             data.Device.Status = 0;
+           
             //change status of device to deactivated
-          int success =  dbManager.EditDevice(data);
+            int success = dbManager.EditDevice(data);
             if (success > 0)
             {
                 ViewBag.Message = "Enhed slettet";
@@ -219,7 +220,7 @@ namespace HUS_project.Controllers
             {
                 ViewBag.Message = "Enhed er i brug";
             }
-           
+
             return View("EditView", data);
         }
         public IActionResult Inventory(ModelInfoModel infoList)
@@ -227,7 +228,7 @@ namespace HUS_project.Controllers
             //generate an instance of the database manager
             DBManagerDevice DBDManager = new DBManagerDevice(configuration);
             //get data from the manager
-          //  DBDManager 
+            infoList = DBDManager.GetDeviceInventory(infoList);
 
             //send data to the manager
 

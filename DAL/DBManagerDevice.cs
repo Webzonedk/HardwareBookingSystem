@@ -243,17 +243,17 @@ namespace HUS_project.DAL
 
 
         // get all devices based on search query
-        internal List<DeviceModel> GetDeviceInventory(string dummy)
+        internal ModelInfoModel GetDeviceInventory(ModelInfoModel SearchModel)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("SearchDevices", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@category", System.Data.SqlDbType.VarChar).Value = null;
-            cmd.Parameters.Add("@filter", System.Data.SqlDbType.Int).Value = null;
-            cmd.Parameters.Add("@searchName", System.Data.SqlDbType.VarChar).Value = null;
-            cmd.Parameters.Add("@deviceStatus", System.Data.SqlDbType.Int).Value = null;
-            cmd.Parameters.Add("@inStock", System.Data.SqlDbType.Bit).Value = null;
+            cmd.Parameters.Add("@category", System.Data.SqlDbType.VarChar).Value = SearchModel.Category;
+            cmd.Parameters.Add("@filter", System.Data.SqlDbType.Int).Value = SearchModel.Filter;
+            cmd.Parameters.Add("@searchName", System.Data.SqlDbType.VarChar).Value = SearchModel.SearchName;
+            cmd.Parameters.Add("@deviceStatus", System.Data.SqlDbType.Int).Value = SearchModel.DeviceStatus;
+            cmd.Parameters.Add("@inStock", System.Data.SqlDbType.Bit).Value = SearchModel.InStock;
 
             con.Close();
             return null;
