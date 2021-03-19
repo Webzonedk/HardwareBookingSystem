@@ -146,9 +146,9 @@ Buttons
 }
 
 .btn-red {
-    color: #fff;
+    color: #ffffff;
     background-color: #FF0000;
-    border-color: #FF0000;
+    border-color: #ffffff;
 }
 
 .black-tooltip + .tooltip > .tooltip-inner {
@@ -427,13 +427,11 @@ Row colors in lists
 ----------------------------------------------------------------------
 */
 .alternating_row:nth-of-type(2n+0) {
-    background-color: red;
-    
+    background-color: #c9e4ff;
 }
 
 .alternating_row:nth-of-type(2n+1) {
-    background-color: blue;
-   
+    background-color: #e9f4ff;
 }
 
 .dynamic-Font-Size-10 {
