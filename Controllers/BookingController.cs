@@ -54,6 +54,8 @@ namespace HUS_project.Controllers
 
             // Acquiring the models requested for the booking
             booking.Items = dBManager.GetItemLines(booking.BookingID);
+            // Acquiring the existing, if any, bookedDevices for the booking
+            booking.Devices = dBManager.GetBookedDevices(booking.BookingID);
 
             // List of models, and how many devices of it are available in storage.
             List<ItemLineModel> orderedModels = new List<ItemLineModel>();

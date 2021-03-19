@@ -83,7 +83,6 @@ namespace HUS_project.DAL
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
 
-            cmd.Parameters.AddWithValue("@bookingID", bookingID);
             con.Open();
             SqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -105,6 +104,11 @@ namespace HUS_project.DAL
             return itemLines;
         }
 
+        /// <summary>
+        /// Acquires all the bookedDevices for a booking.
+        /// </summary>
+        /// <param name="bookingID"></param>
+        /// <returns></returns>
         internal List<DeviceModel> GetBookedDevices(int bookingID)
         {
             List<DeviceModel> bookedDevices = new List<DeviceModel>();
