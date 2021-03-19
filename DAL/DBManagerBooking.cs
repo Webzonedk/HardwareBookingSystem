@@ -41,7 +41,7 @@ namespace HUS_project.DAL
         {
             BookingModel booking = new BookingModel();
             booking.BookingID = bookingID;
-            booking.Devices = new List<DeviceModel>();
+            booking.Devices = new List<BookedDeviceModel>();
             booking.Items = new List<ItemLineModel>();
             SqlConnection con = new SqlConnection(connectionString);
 
@@ -109,10 +109,11 @@ namespace HUS_project.DAL
         /// </summary>
         /// <param name="bookingID"></param>
         /// <returns></returns>
-        internal List<DeviceModel> GetBookedDevices(int bookingID)
+        internal List<BookedDeviceModel> GetBookedDevices(int bookingID)
         {
-            List<DeviceModel> bookedDevices = new List<DeviceModel>();
+            List<BookedDeviceModel> bookedDevices = new List<BookedDeviceModel>();
 
+            // SP: GetBookedDevicesForBooking
 
 
             return bookedDevices;
