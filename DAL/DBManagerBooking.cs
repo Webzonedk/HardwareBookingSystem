@@ -41,7 +41,7 @@ namespace HUS_project.DAL
         {
             BookingModel booking = new BookingModel();
             booking.BookingID = bookingID;
-            booking.Devices = new List<DeviceModel>();
+            booking.Devices = new List<BookedDeviceModel>();
             booking.Items = new List<ItemLineModel>();
             SqlConnection con = new SqlConnection(connectionString);
 
@@ -83,7 +83,6 @@ namespace HUS_project.DAL
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
 
-            cmd.Parameters.AddWithValue("@bookingID", bookingID);
             con.Open();
             SqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -105,13 +104,63 @@ namespace HUS_project.DAL
             return itemLines;
         }
 
-        internal List<DeviceModel> GetBookedDevices(int bookingID)
+        /// <summary>
+        /// Acquires all the bookedDevices for a booking.
+        /// </summary>
+        /// <param name="bookingID"></param>
+        /// <returns></returns>
+        internal List<BookedDeviceModel> GetBookedDevices(int bookingID)
         {
-            List<DeviceModel> bookedDevices = new List<DeviceModel>();
+            List<BookedDeviceModel> bookedDevices = new List<BookedDeviceModel>();
 
+            // SP: GetBookedDevicesForBooking
 
 
             return bookedDevices;
+        }
+
+        /// <summary>
+        /// Counts the current number of devices of ModelName type in storage.
+        /// </summary>
+        /// <param name="modelName"></param>
+        /// <returns></returns>
+        internal int GetCountDevicesOfModelInStorage(string modelName)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+
+            SqlCommand cmd = new SqlCommand("CountDevicesOfModelInStorage", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@modelName", modelName);
+
+            con.Open();
+            int result = (int)cmd.ExecuteScalar();
+            con.Close();
+
+            return result;
+        }
+
+        /// <summary>
+        /// Counts the maximum theoretical amount of models available in a timespace, for making future bookings.
+        /// </summary>
+        /// <param name="rentDate"></param>
+        /// <param name="returnDate"></param>
+        /// <param name="modelName"></param>
+        /// <returns></returns>
+        internal int GetModelQuantityAvailable(DateTime rentDate, DateTime returnDate, string modelName)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+
+            SqlCommand cmd = new SqlCommand("GetModelDeviceQuantityAvailable", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@rentDate", rentDate);
+            cmd.Parameters.AddWithValue("@returnDate", returnDate);
+            cmd.Parameters.AddWithValue("@modelName", modelName);
+
+            con.Open();
+            int result = (int)cmd.ExecuteScalar();
+            con.Close();
+
+            return result;
         }
 
         /// <summary>
