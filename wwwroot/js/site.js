@@ -5,24 +5,9 @@
 
 // Write your JavaScript code.
 
-function SubmitValidation() {
+function SubmitValidation(input) {
 
-
-    document.getElementById("EditForm").submit();
-
-
-    if (document.forms['EditForm'].locations.value == "") {
-       
-        return false;
-    }
-    else {
-        
-
-        document.getElementById("EditForm").submit();
-
-        this.document.Submit();
-    }
-
+    document.getElementById(input).submit();
 
 }
 

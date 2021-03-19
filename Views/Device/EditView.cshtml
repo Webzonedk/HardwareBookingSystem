@@ -20,7 +20,7 @@
 
 
     <div class="row containerBody center">
-        <form class="row was-validated" asp-action="GetLocations" method="post" autocomplete="off" id="EditForm">
+        <form class="row was-validated" asp-action="GetLocations" method="post" autocomplete="off" id="editForm">
 
             <!--Print & Save-->
             <div class="col-xl-3 col-md-12 gx-3 gy-3">
@@ -139,7 +139,7 @@
 
                 <div class="form-floating ">
 
-                    <input class="form-select" list="locationsdropdown" id="locations" asp-for="@Model.Room" onchange="return SubmitValidation()" required>
+                    <input class="form-select" list="locationsdropdown" id="locations" asp-for="@Model.Room" onchange="return SubmitValidation('editForm')" required>
                     <datalist id="locationsdropdown">
 
                         @foreach (var item in Model.Rooms)
