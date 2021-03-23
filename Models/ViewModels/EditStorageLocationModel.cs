@@ -15,6 +15,7 @@ namespace HUS_project.Models.ViewModels
         private List<string> shelfNames;
         private List<byte> shelfLevels;
         private List<byte> shelfSpots;
+        private byte filter;
         #endregion
 
 
@@ -64,11 +65,19 @@ namespace HUS_project.Models.ViewModels
             set { shelfLevels = value; }
         }
 
-         public List<byte> ShelfSpots
+        public List<byte> ShelfSpots
         {
             get { return shelfSpots; }
             set { shelfSpots = value; }
         }
+
+
+        public byte Filter
+        {
+            get { return filter; }
+            set { filter = value; }
+        }
+
 
 
         #region Constructors
@@ -82,7 +91,7 @@ namespace HUS_project.Models.ViewModels
             shelfSpots = new List<byte>();
         }
 
-        public EditStorageLocationModel(StorageLocationModel storageLocation, List<StorageLocationModel> storageLocations, List<string> buildings, List<byte> roomNumbers, List<string> shelfNames, List<byte> shelfLevels, List<byte> shelfSpots)
+        public EditStorageLocationModel(StorageLocationModel storageLocation, List<StorageLocationModel> storageLocations, List<string> buildings, List<byte> roomNumbers, List<string> shelfNames, List<byte> shelfLevels, List<byte> shelfSpots, byte filter)
         {
             this.storageLocation = storageLocation;
             this.storageLocations = storageLocations;
@@ -91,6 +100,7 @@ namespace HUS_project.Models.ViewModels
             this.shelfNames = shelfNames;
             this.shelfLevels = shelfLevels;
             this.shelfSpots = shelfSpots;
+            this.filter = filter;
         }
         #endregion
     }

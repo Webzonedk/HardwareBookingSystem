@@ -102,11 +102,11 @@
         </div>
 
         <div class="row containerSubHeader border-top border-bottom border-white border-1">
-            <div class="col-xl-1 col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">Bygning</div>
-            <div class="col-xl-1 col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">Lokale</div>
-            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">Reol</div>
-            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">Etage</div>
-            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">Plads</div>
+            <button class="col-xl-1 col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1 headerSortLink" id="sortBuilding" onclick="sorting('sortBuilding')">Bygning</button>
+            <div class="col-xl-1 col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1 headerSortLink">Lokale</div>
+            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">Reol</div>
+            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">Etage</div>
+            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">Plads</div>
         </div>
         @foreach (var item in Model.StorageLocations)
         {

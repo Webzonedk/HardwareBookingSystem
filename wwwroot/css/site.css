@@ -267,6 +267,15 @@ Containers
 /*----------------------------------------------------------------------
 Columns inside containers
 ----------------------------------------------------------------------*/
+
+.headerSortLink {
+    color: #ffffff;
+    text-align: left;
+    background-color: #353535;
+    font-weight: bold;
+    border:none;
+}
+
 .columnHeaderLeft {
     border-right-width: 1px;
     border-right-color: #ffffff;

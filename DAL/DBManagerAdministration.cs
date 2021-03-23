@@ -200,6 +200,20 @@ namespace HUS_project.DAL
             SqlCommand cmd = new SqlCommand("SelectLocationIDBasedOnInputFields", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
+            //if (dataFromView == null)
+            //{
+            //    //dataFromView = new EditStorageLocationModel();
+            //    //StorageLocationModel selectedStorageLocation = new StorageLocationModel();
+            //    //BuildingModel buildingModel = new BuildingModel();
+            //    //selectedStorageLocation.Location = buildingModel;
+            //    //dataFromView.StorageLocation = selectedStorageLocation;
+            //    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = null;
+            //    cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = null;
+            //    cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = null;
+            //    cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = null;
+            //    cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = null;
+            //}
+
 
             if (dataFromView.StorageLocation.Location.Building != null)
             {
@@ -217,37 +231,37 @@ namespace HUS_project.DAL
             }
             else
             {
-            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = null;
+                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = null;
             }
 
 
             if (dataFromView.StorageLocation.ShelfName != null)
             {
-            cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = dataFromView.StorageLocation.ShelfName;
+                cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = dataFromView.StorageLocation.ShelfName;
             }
             else
             {
-            cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = null;
+                cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = null;
             }
 
 
             if (dataFromView.StorageLocation.ShelfLevel > 0)
             {
-            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = dataFromView.StorageLocation.ShelfLevel;
+                cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = dataFromView.StorageLocation.ShelfLevel;
             }
             else
             {
-            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = null;
+                cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = null;
             }
 
 
             if (dataFromView.StorageLocation.ShelfSpot > 0)
             {
-            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = dataFromView.StorageLocation.ShelfSpot;
+                cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = dataFromView.StorageLocation.ShelfSpot;
             }
             else
             {
-            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = null;
+                cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = null;
             }
 
 
