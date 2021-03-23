@@ -136,7 +136,7 @@ namespace HUS_project.DAL
                             )),
                         new StorageLocationModel(),
                         1,
-                        "Device note: Irrelevant to purpose",
+                        "Device Note: Irrelevant to purpose",
                         DateTime.Now,
                         "Latest change to Device by: Irrelevant to purpose",
                         reader["returnedBy"] == DBNull.Value ? null : (string)reader["returnedBy"],
