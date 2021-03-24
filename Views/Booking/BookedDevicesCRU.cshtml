@@ -5,20 +5,37 @@
 <div class="row blue-oyster-bar center box-shadow">
     <div class="row g-2">
         <div class="row">
-            <h2 class="text-white align-items-center">Tilføj enheder til bestilling</h2>
+            @if (Model.Booking.PlannedReturnDate <= DateTime.Now && Model.Booking.DeliveredBy != null)
+            {
+                <h2 class="text-white align-items-center">
+                    Lever enheder til bestillingen
+                </h2>
+            }
+            else
+            {
+                <h2 class="text-white align-items-center">
+                    Returner enheder fra bestillingen
+                </h2>
+            }
         </div>
         <div class="row">
-            <div class="col-2">
+            <div class="col-1">
             </div>
-            <div class="col text-white">
+            <div class="col-5 text-white border-1 border-end border-white" style="margin-bottom:5px;">
                 <div class="row">
                     <p>Bestillingsnummer: <span class="fw-bold">@Model.Booking.BookingID</span> | Bestiller: <span class="fw-bold">@Model.Booking.Customer</span> | Lokale: <span class="fw-bold">@Model.Booking.Location.Building.@Model.Booking.Location.RoomNumber</span></p>
                 </div>
                 <div class="row">
-                    <p>Fra d. <span class="fw-bold">@Model.Booking.PlannedBorrowDate.ToString("dd/MM/yy")</span> til og med d. <span class="fw-bold">@Model.Booking.PlannedReturnDate.ToString("dd-MM/yy")</span></p>
+                    <p>Fra d. <span class="fw-bold">@Model.Booking.PlannedBorrowDate.ToString("dd-MM/yy")</span> til og med d. <span class="fw-bold">@Model.Booking.PlannedReturnDate.ToString("dd-MM/yy")</span></p>
                 </div>
+                @if(Model.Booking.DeliveredBy != null)
+                {
+                    <div class="row">
+                        <p>Leveret af: <span class="fw-bold">@Model.Booking.DeliveredBy</span></p>
+                    </div>
+                }
             </div>
-            <div class="col">
+            <div class="col-5">
                 <div class="row">
                     <h4 class="text-white">Skan QR kode / indtast enheds ID:</h4>
                 </div>
