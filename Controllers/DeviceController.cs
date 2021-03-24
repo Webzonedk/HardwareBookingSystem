@@ -69,7 +69,7 @@ namespace HUS_project.Controllers
         }
 
         //getting data from database & return model to view
-       [HttpPost]
+      
         public IActionResult EditView(EditDeviceModel input)
         {
             //initializing DB managers
