@@ -22,12 +22,6 @@ namespace HUS_project.Controllers
         {
             this.configuration = config;
         }
-
-
-        public IActionResult CreateBooking()
-        {
-            return View();
-        }
         
         public IActionResult BookingRUD()
         {
@@ -41,9 +35,9 @@ namespace HUS_project.Controllers
 
 
         /// <summary>
-        /// Takes you to the BookedDevicesCRUD of the booking you want to add/return BookedDevices to.
+        /// Takes you to the BookedDevicesCRU of the booking you want to add/return BookedDevices to.
         /// </summary>
-        /// <param name="bookingID">BookingID of the bookign you want to add/remove book</param>
+        /// <param name="bookingID">BookingID of the booking you want to add/return devices</param>
         /// <returns></returns>
         public IActionResult GoToScanDevices(string bookingID)
         {
@@ -69,11 +63,11 @@ namespace HUS_project.Controllers
                     );
             }
 
-            // StoredLocation for each requested device Model.
-            Dictionary<ItemLineModel, StorageLocationModel> storageLocations = new Dictionary<ItemLineModel, StorageLocationModel>();
+            // StoredLocation for each requested device modelName.
+            Dictionary<string, StorageLocationModel> storageLocations = new Dictionary<string, StorageLocationModel>();
             foreach(ItemLineModel ilm in orderedModels)
             {
-                storageLocations.Add(ilm, dBManager.GetModelLocation(ilm.Model.ModelName));
+                storageLocations.Add(ilm.Model.ModelName, dBManager.GetModelLocation(ilm.Model.ModelName));
             }
 
             // Creation and filling of ViewModel for BookedDevicesCreateReadUpdate

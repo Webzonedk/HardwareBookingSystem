@@ -55,9 +55,10 @@ namespace HUS_project.DAL
             {
                 booking.Customer = (string)reader["orderedBy"];
                 booking.BookingStatus = (byte)reader["status"];
-                // Below solution did not work for Bookings which haven't been delivered yet.
-                booking.DeliveredBy = reader["deliveredBy"] == null ? "" : (string)reader["deliveredBy"];
-                booking.Notes = reader["bookingNotes"] == null ? "" : (string)reader["bookingNotes"];
+                // DeliveredBy and Notes may be DBNull (Not the same as null for C#), which means pulling them out and converting to string
+                // - gives a critical error.
+                booking.DeliveredBy = reader["deliveredBy"] == DBNull.Value ? null : (string)reader["deliveredBy"];
+                booking.Notes = reader["bookingNotes"] == DBNull.Value ? "" : (string)reader["bookingNotes"];
                 booking.PlannedBorrowDate = (DateTime)reader["rentDate"];
                 booking.PlannedReturnDate = (DateTime)reader["returnDate"];
                 booking.Location = new BuildingModel(
@@ -112,10 +113,37 @@ namespace HUS_project.DAL
         /// <returns></returns>
         internal List<DeviceModel> GetBookedDevices(int bookingID)
         {
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("GetBookedDevicesForBooking", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@bookingID", bookingID);
+
             List<DeviceModel> bookedDevices = new List<DeviceModel>();
 
-            // SP: GetBookedDevicesForBooking
-
+            con.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                bookedDevices.Add(
+                    new DeviceModel(
+                        (int)reader["deviceID"],
+                        (string)reader["serialNumber"],
+                        new ModelModel(
+                            (string)reader["modelName"],
+                            "Model Description: Irrelevant to purpose",
+                            new CategoryModel(
+                                (string)reader["categoryName"]
+                            )),
+                        new StorageLocationModel(),
+                        1,
+                        "Device Note: Irrelevant to purpose",
+                        DateTime.Now,
+                        "Latest change to Device by: Irrelevant to purpose",
+                        reader["returnedBy"] == DBNull.Value ? null : (string)reader["returnedBy"],
+                        reader["returnedDate"] == DBNull.Value ? DateTime.Now : (DateTime)reader["returnedDate"]
+                        ));
+            }
+            con.Close();
 
             return bookedDevices;
         }
