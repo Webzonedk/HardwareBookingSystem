@@ -11,11 +11,12 @@ namespace HUS_project.Models.ViewModels
         private DeviceModel device;
         private List<DeviceModel> borrowedDevices;
         private List<string> categoryNames;
+        private List<string> inventoryStatuses;
         private string category;
-        private int filter;
+        private byte filter;
         private string searchName;
         private int deviceStatus;
-        private bool inStock;
+        private byte inStock;
         #endregion
 
 
@@ -48,7 +49,7 @@ namespace HUS_project.Models.ViewModels
             set { category = value; }
         }
 
-        public int Filter
+        public byte Filter
         {
             get { return filter; }
             set { filter = value; }
@@ -61,7 +62,7 @@ namespace HUS_project.Models.ViewModels
         }
 
 
-        public bool InStock
+        public byte InStock
         {
             get { return inStock; }
             set { inStock = value; }
@@ -71,6 +72,12 @@ namespace HUS_project.Models.ViewModels
         {
             get { return deviceStatus; }
             set { deviceStatus = value; }
+        }
+
+        public List<string> InventoryStatuses
+        {
+            get { return inventoryStatuses; }
+            set { inventoryStatuses = value; }
         }
 
         #endregion
@@ -83,9 +90,10 @@ namespace HUS_project.Models.ViewModels
             //initialize lists
             categoryNames = new List<string>();
             borrowedDevices = new List<DeviceModel>();
+            inventoryStatuses = new List<string>();
         }
 
-        public ModelInfoModel(DeviceModel device, List<DeviceModel> borrowedDevices, List<string> categoryNames, string category, int filter, string searchName, int deviceStatus, bool inStock)
+        public ModelInfoModel(DeviceModel device, List<DeviceModel> borrowedDevices, List<string> categoryNames, string category, byte filter, string searchName, int deviceStatus, byte inStock, List<string> inventoryStatuses)
         {
             this.device = device;
             this.borrowedDevices = borrowedDevices;
@@ -95,6 +103,7 @@ namespace HUS_project.Models.ViewModels
             this.searchName = searchName;
             this.deviceStatus = deviceStatus;
             this.inStock = inStock;
+            this.InventoryStatuses = inventoryStatuses;
         }
         #endregion
     }

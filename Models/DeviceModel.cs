@@ -18,7 +18,7 @@ namespace HUS_project.Models
         private DateTime changeDate;
         private string changedBy;
         private string returnedBy;
-        private DateTime dateReturned;
+        
     
         #endregion
 
@@ -80,11 +80,7 @@ namespace HUS_project.Models
             set { returnedBy = value; }
         }
 
-        public DateTime DateReturned
-        {
-            get { return dateReturned; }
-            set { dateReturned = value; }
-        }
+        
 
         #endregion
 
@@ -99,7 +95,7 @@ namespace HUS_project.Models
 
 
         public DeviceModel(int deviceID,string serialnr, ModelModel model, StorageLocationModel location, byte status, string notes,
-            DateTime changeDate, string changedBy, string returnedBy, DateTime dateReturned)
+            DateTime changeDate, string changedBy, string returnedBy)
         {
            
 
@@ -113,7 +109,7 @@ namespace HUS_project.Models
             this.changeDate = changeDate;
             this.changedBy = changedBy;
             this.returnedBy = returnedBy;
-            this.dateReturned = dateReturned;
+            
         }
 
         #endregion

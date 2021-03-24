@@ -27,7 +27,7 @@ namespace HUS_project.DAL
         internal int CreateDevice(DeviceModel deviceData)
         {
             Debug.WriteLine(connectionString);
-            Debug.WriteLine("Server=ANDREASPC; Database=HardwareUdlaanSystem; User Id=Husv1ld; Password=Wh3nY0uN33dSom3th1ng;");
+            //  Debug.WriteLine("Server=ANDREASPC; Database=HardwareUdlaanSystem; User Id=Husv1ld; Password=Wh3nY0uN33dSom3th1ng;");
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("CreateDevice", con);
@@ -65,7 +65,7 @@ namespace HUS_project.DAL
             cmd.Parameters.Add("@changedBy", System.Data.SqlDbType.VarChar).Value = deviceData.Device.ChangedBy;
             int success = cmd.ExecuteNonQuery();
 
-            if(success > 0)
+            if (success > 0)
             {
                 success = 1;
             }
@@ -249,14 +249,78 @@ namespace HUS_project.DAL
             con.Open();
             SqlCommand cmd = new SqlCommand("SearchDevices", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@category", System.Data.SqlDbType.VarChar).Value = SearchModel.Category;
-            cmd.Parameters.Add("@filter", System.Data.SqlDbType.Int).Value = SearchModel.Filter;
-            cmd.Parameters.Add("@searchName", System.Data.SqlDbType.VarChar).Value = SearchModel.SearchName;
-            cmd.Parameters.Add("@deviceStatus", System.Data.SqlDbType.Int).Value = SearchModel.DeviceStatus;
-            cmd.Parameters.Add("@inStock", System.Data.SqlDbType.Bit).Value = SearchModel.InStock;
+
+            if (SearchModel.Category != null)
+            {
+                cmd.Parameters.Add("@category", System.Data.SqlDbType.VarChar).Value = SearchModel.Category;
+
+            }
+            else
+            {
+                cmd.Parameters.Add("@category", System.Data.SqlDbType.VarChar).Value = null;
+            }
+
+            if (SearchModel.Filter > 0)
+            {
+                cmd.Parameters.Add("@filter", System.Data.SqlDbType.TinyInt).Value = SearchModel.Filter;
+
+            }
+            else
+            {
+                cmd.Parameters.Add("@filter", System.Data.SqlDbType.TinyInt).Value = null;
+            }
+
+            if (SearchModel.SearchName != null)
+            {
+                cmd.Parameters.Add("@searchName", System.Data.SqlDbType.VarChar).Value = SearchModel.SearchName;
+
+            }
+            else
+            {
+                cmd.Parameters.Add("@searchName", System.Data.SqlDbType.VarChar).Value = null;
+            }
+
+            if(SearchModel.InStock >0)
+            {
+            cmd.Parameters.Add("@inStock", System.Data.SqlDbType.TinyInt).Value = SearchModel.InStock;
+
+            }
+            else
+            {
+                cmd.Parameters.Add("@inStock", System.Data.SqlDbType.TinyInt).Value = null;
+            }
+
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                DeviceModel device = new DeviceModel();
+                ModelModel model = new ModelModel();
+                CategoryModel category = new CategoryModel();
+                StorageLocationModel location = new StorageLocationModel();
+                BuildingModel building = new BuildingModel();
+
+                device.DeviceID = (int)reader["deviceID"];
+                category.Category = (string)reader["categoryName"];
+                model.ModelName = (string)reader["modelName"];
+
+
+                building.RoomNumber = (byte)reader["roomNr"];
+                building.Building = (string)reader["buildingName"];
+                location.ShelfName = (string)reader["shelfName"]; ;
+                location.ShelfLevel = (byte)reader["shelfLevel"];
+                location.ShelfSpot = (byte)reader["shelfSpot"];
+
+                model.Category = category;
+                device.Model = model;
+                location.Location = building;
+                device.Location = location;
+                SearchModel.BorrowedDevices.Add(device);
+            }
+
 
             con.Close();
-            return null;
+            return SearchModel;
         }
     }
 }

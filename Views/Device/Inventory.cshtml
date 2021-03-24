@@ -50,13 +50,13 @@
 
     <div class="row">
         <form class="row" action="" method="post">
-           
+
             <div class="col">
                 <input />
 
             </div>
 
-           
+
         </form>
 
     </div>
@@ -64,6 +64,7 @@
 
 
 </div>
+
 
 <div class="container containerMain box-shadow">
 
@@ -80,17 +81,30 @@
         <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">Status</div>
     </div>
 
-    <div class="row containerBody alternating_row dynamic-Font-Size-10">
-        <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">Parameter</div>
-        <div class="col-xl-5 col-lg-3 col-md-2 col-2 p-1 border-end border-white border-1">Parameter</div>
-        <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">Parameter</div>
-        <div class="col-xl-1 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">Parameter</div>
-        <div class="col-xl-1 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">Nyoprettet.0.0</div>
-        <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">Parameter</div>
-      @*  <div class="col-xl-1 p-1"></div>*@
-        <div class="col-lg-2 col-12 p-1 center "><button type="button" class="btn btn-primary btn-sm btn-blue" style="width:100px">Rediger</button></div>
-        
-    </div>
+
+
+    @foreach (DeviceModel device in Model.BorrowedDevices)
+    {
+
+        <form asp-action="EditView" method="post" asp-controller="Device">
+
+            <div class="row containerBody alternating_row dynamic-Font-Size-10">
+                <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">@device.DeviceID</div>
+                <div class="col-xl-5 col-lg-3 col-md-2 col-2 p-1 border-end border-white border-1">@device.Model.ModelName</div>
+                <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">@device.Model.Category.Category</div>
+                <div class="col-xl-1 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">@(device.Location.Location.Building +"."+device.Location.Location.RoomNumber )</div>
+                <div class="col-xl-1 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">@(device.Location.ShelfName + "."+device.Location.ShelfLevel + "." + device.Location.ShelfSpot)</div>
+                <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">@device.Status</div>
+                @*  <div class="col-xl-1 p-1"></div>*@
+
+                <div class="col-lg-2 col-12 p-1 center ">
+                   <input class="btn btn-primary btn-sm btn-blue" type="submit" value="Rediger"/>
+                   @* <button type="submit" name="submit" value="@device.DeviceID" class="btn btn-primary btn-sm btn-blue" style="width:100px">Rediger</button>*@
+                </div>
+
+            </div>
+        </form>
+    }
 
     <div class="row containerFooter">
         <h4>&nbsp;</h4>

@@ -69,14 +69,15 @@ namespace HUS_project.Controllers
         }
 
         //getting data from database & return model to view
-        public IActionResult EditView(int deviceID)
+       [HttpPost]
+        public IActionResult EditView(EditDeviceModel input)
         {
             //initializing DB managers
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
             DBManagerShared dbsharedManager = new DBManagerShared(configuration);
 
             //return device info to Edit view
-            int ID = 1026;
+            int ID = input.Device.DeviceID;
             DeviceModel data = new DeviceModel();
             data = dbManager.GetDeviceInfoWithLocation(ID);
             List<DeviceModel> logs = dbManager.GetDeviceLogs(ID);
@@ -227,11 +228,23 @@ namespace HUS_project.Controllers
         {
             //generate an instance of the database manager
             DBManagerDevice DBDManager = new DBManagerDevice(configuration);
+
+            //set dummy data to database
+            infoList.SearchName = "L";
+           
+            infoList.Category = null;
+            infoList.InStock = 0;
+
             //get data from the manager
             infoList = DBDManager.GetDeviceInventory(infoList);
 
             //send data to the manager
 
+            //var combinedLists = infoList.BorrowedDevices.Zip(infoList.InventoryStatuses, (b, i) => new { device = b, status = i });
+            //foreach (var item in combinedLists)
+            //{
+            //    Debug.WriteLine("device ID: " +item.device.DeviceID + " status: " + item.status);
+            //}
 
             return View(infoList);
         }
