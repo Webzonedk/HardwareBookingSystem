@@ -16,6 +16,7 @@ namespace HUS_project.Models
         private StorageLocationModel location;
         private string notes;
         private DateTime changeDate;
+        private DateTime returnedDate;
         private string changedBy;
         private string returnedBy;
         
@@ -68,6 +69,12 @@ namespace HUS_project.Models
             set { changeDate = value; }
         }
 
+        public DateTime ReturnedDate
+        {
+            get { return returnedDate; }
+            set { returnedDate = value; }
+        }
+
         public string ChangedBy
         {
             get { return changedBy; }
@@ -94,10 +101,10 @@ namespace HUS_project.Models
         }
 
 
-        public DeviceModel(int deviceID,string serialnr, ModelModel model, StorageLocationModel location, byte status, string notes,
-            DateTime changeDate, string changedBy, string returnedBy)
+        public DeviceModel(int deviceID, string serialnr, ModelModel model, StorageLocationModel location, byte status, string notes,
+            DateTime changeDate, string changedBy, string returnedBy, DateTime returnedDate)
         {
-           
+
 
             //set  fields
             this.deviceID = deviceID;
@@ -109,10 +116,10 @@ namespace HUS_project.Models
             this.changeDate = changeDate;
             this.changedBy = changedBy;
             this.returnedBy = returnedBy;
-            
+            this.returnedDate = returnedDate;
         }
 
         #endregion
-        
+
     }
 }
