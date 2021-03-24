@@ -120,7 +120,13 @@
             <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">
                 <select class="headerSortLink" asp-for="@Model.Filter" onchange="submit('listStorageLocations')">
                     <option value="" selected disabled hidden>Reol</option>
-                    <option value="5">Sorter stigende</option>
+                    @if (Model.Filter==5)
+                    {
+
+                <option value="" selected disabled hidden>Reol</option>
+
+                    }
+            else {<option value="5">Sorter stigende</option> }
                     <option value="6">Sorter faldende</option>
                 </select>
             </div>
