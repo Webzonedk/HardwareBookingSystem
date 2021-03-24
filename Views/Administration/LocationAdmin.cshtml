@@ -18,7 +18,7 @@
             </div>
             <div class="col-xl-2 col-sm-4 gx-3 gy-3">
                 <div class="form-floating">
-                    <input class="form-select" id="buildingDropDown" list="buildings" aria-label="Vælg Bygning" asp-for="@Model.StorageLocation.Location.Building" onchange="submit()">
+                    <input class="form-select" id="buildingDropDown" list="buildings" aria-label="Vælg Bygning" asp-for="@Model.StorageLocation.Location.Building" onchange="submit('listStorageLocations')">
                     <datalist id="buildings">
                         @foreach (var item in Model.Buildings)
                         {
@@ -30,7 +30,7 @@
             </div>
             <div class="col-xl-2 col-sm-4 gx-3 gy-3">
                 <div class="form-floating">
-                    <input class="form-select" id="roomNumberDropDown" list="roomNumbers" aria-label="Vælg lokalenummer" asp-for="@Model.StorageLocation.Location.RoomNumber" onchange="submit()">
+                    <input class="form-select" id="roomNumberDropDown" list="roomNumbers" aria-label="Vælg lokalenummer" asp-for="@Model.StorageLocation.Location.RoomNumber" onchange="submit('listStorageLocations')">
                     <datalist id="roomNumbers">
                         @foreach (var item in Model.RoomNumbers)
                         {
@@ -42,7 +42,7 @@
             </div>
             <div class="col-xl-2 col-sm-4 gx-3 gy-3">
                 <div class="form-floating">
-                    <input class="form-select" id="shelfNameDropDown" list="shelfNames" aria-label="Vælg ReolNavn" asp-for="@Model.StorageLocation.ShelfName" onchange="return SubmitValidation()">
+                    <input class="form-select" id="shelfNameDropDown" list="shelfNames" aria-label="Vælg ReolNavn" asp-for="@Model.StorageLocation.ShelfName" onchange="submit('listStorageLocations')">
                     <datalist id="shelfNames">
                         @foreach (var item in Model.ShelfNames)
                         {
@@ -54,7 +54,7 @@
             </div>
             <div class="col-xl-2 col-sm-6 gx-3 gy-3">
                 <div class="form-floating">
-                    <input class="form-select" id="shelfLevelDropDown" list="shelfLevels" aria-label="Vælg Etage" asp-for="@Model.StorageLocation.ShelfLevel" onchange="return SubmitValidation()">
+                    <input class="form-select" id="shelfLevelDropDown" list="shelfLevels" aria-label="Vælg Etage" asp-for="@Model.StorageLocation.ShelfLevel" onchange="submit('listStorageLocations')">
                     <datalist id="shelfLevels">
                         @foreach (var item in Model.ShelfLevels)
                         {
@@ -66,7 +66,7 @@
             </div>
             <div class="col-xl-2 col-sm-6 gx-3 gy-3">
                 <div class="form-floating">
-                    <input class="form-select" id="shelfSpotDropDown" list="shelfSpots" aria-label="Vælg Hyldeplads" asp-for="@Model.StorageLocation.ShelfSpot" onchange="return SubmitValidation()">
+                    <input class="form-select" id="shelfSpotDropDown" list="shelfSpots" aria-label="Vælg Hyldeplads" asp-for="@Model.StorageLocation.ShelfSpot" onchange="submit('listStorageLocations')">
                     <datalist id="shelfSpots">
                         @foreach (var item in Model.ShelfSpots)
                         {
@@ -102,20 +102,51 @@
         </div>
 
         <div class="row containerSubHeader border-top border-bottom border-white border-1">
-            <div class="col-xl-1 col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">Bygning</div>
-            <div class="col-xl-1 col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">Lokale</div>
-            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">Reol</div>
-            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">Etage</div>
-            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1">Plads</div>
+           @*<div class="col-xl-1 col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1 headerSortLink" id="sortBuilding" onclick="sorting('sortBuilding')">Bygning</div>*@
+            <div class="col-xl-1 col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">
+                <select class="headerSortLink" name="buildings" id="buildings" asp-for="@Model.Filter" onchange="submit('listStorageLocations')">
+                    <option value="" selected disabled hidden>Bygning</option>
+                    <option value="1">Sorter stigende</option>
+                    <option value="2">Sorter faldende</option>
+                </select>
+            </div>
+            <div class="col-xl-1 col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1 headerSortLink">
+                <select class="headerSortLink" name="rooms" id="rooms" asp-for="@Model.Filter" onchange="submit('listStorageLocations')">
+                    <option value="" selected disabled hidden>Lokale</option>
+                    <option value="3">Sorter stigende</option>
+                    <option value="4">Sorter faldende</option>
+                </select>
+            </div>
+            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">
+                <select class="headerSortLink" name="shelfNames" id="shelfNames" asp-for="@Model.Filter" onchange="submit('listStorageLocations')">
+                    <option value="" selected disabled hidden>Reol</option>
+                    <option value="5">Sorter stigende</option>
+                    <option value="6">Sorter faldende</option>
+                </select>
+            </div>
+            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">
+                <select class="headerSortLink" name="shelfLevels" id="shelfLevels" asp-for="@Model.Filter" onchange="submit('listStorageLocations')">
+                    <option value="" selected disabled hidden>Etage</option>
+                    <option value="7">Sorter stigende</option>
+                    <option value="8">Sorter faldende</option>
+                </select>
+            </div>
+            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">
+                <select class="headerSortLink" name="shelfSpots" id="shelfSpots" asp-for="@Model.Filter" onchange="submit('listStorageLocations')">
+                    <option value="" selected disabled hidden>Bygning</option>
+                    <option value="9">Sorter stigende</option>
+                    <option value="10">Sorter faldende</option>
+                </select>
+            </div>
         </div>
         @foreach (var item in Model.StorageLocations)
         {
-            <div class="row containerBody alternating_row">
+            <div class="row containerBody border-bottom border-white border-1 alternating_row">
                 <div class="col-xl-1 col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">@item.Location.Building</div>
                 <div class="col-xl-1 col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">@item.Location.RoomNumber</div>
                 <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">@item.ShelfName</div>
                 <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">@item.ShelfLevel</div>
-                <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1">@item.ShelfSpot</div>
+                <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">@item.ShelfSpot</div>
                 <div class="col-lg-3 p-1"></div>
                 <div class="col-lg-2 col-6 p-1 center "><button type="button" class="btn btn-primary btn-sm btn-blue" style="width:100px">QR-Kode</button></div>
                 <div class="col-lg-2 col-6 p-1 center "><button type="button" class="btn btn-danger btn-sm btn-red" style="width:100px">Slet</button></div>

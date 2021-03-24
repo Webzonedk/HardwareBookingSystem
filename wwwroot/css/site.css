@@ -146,9 +146,9 @@ Buttons
 }
 
 .btn-red {
-    color: #fff;
+    color: #ffffff;
     background-color: #FF0000;
-    border-color: #FF0000;
+    border-color: #ffffff;
 }
 
 .black-tooltip + .tooltip > .tooltip-inner {
@@ -267,6 +267,16 @@ Containers
 /*----------------------------------------------------------------------
 Columns inside containers
 ----------------------------------------------------------------------*/
+
+.headerSortLink {
+    color: #ffffff;
+    text-align: left;
+    background-color: #353535;
+    font-weight: bold;
+    border:none;
+    max-width:95%;
+}
+
 .columnHeaderLeft {
     border-right-width: 1px;
     border-right-color: #ffffff;
@@ -427,13 +437,11 @@ Row colors in lists
 ----------------------------------------------------------------------
 */
 .alternating_row:nth-of-type(2n+0) {
-    background-color: red;
-    
+    background-color: #c9e4ff;
 }
 
 .alternating_row:nth-of-type(2n+1) {
-    background-color: blue;
-   
+    background-color: #e9f4ff;
 }
 
 .dynamic-Font-Size-10 {

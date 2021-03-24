@@ -22,12 +22,6 @@ namespace HUS_project.Controllers
         {
             this.configuration = config;
         }
-
-
-        public IActionResult CreateBooking()
-        {
-            return View();
-        }
         
         public IActionResult BookingRUD()
         {
@@ -41,26 +35,45 @@ namespace HUS_project.Controllers
 
 
         /// <summary>
-        /// Takes you to the BookedDevicesCRUD of the booking you want to add/return BookedDevices to.
+        /// Takes you to the BookedDevicesCRU of the booking you want to add/return BookedDevices to.
         /// </summary>
-        /// <param name="bookingID">BookingID of the bookign you want to add/remove book</param>
+        /// <param name="bookingID">BookingID of the booking you want to add/return devices</param>
         /// <returns></returns>
         public IActionResult GoToScanDevices(string bookingID)
         {
             DBManagerBooking dBManager = new DBManagerBooking(configuration);
 
+            // Acquiring the booking itself (Does not fill DeviceModel list or ItemLineModel list)
             BookingModel booking = dBManager.GetBooking(Convert.ToInt32(bookingID));
-            List<ItemLineModel> orderedItems = dBManager.GetItemLines(booking.BookingID);
-            Dictionary<ItemLineModel, StorageLocationModel> storageLocations = new Dictionary<ItemLineModel, StorageLocationModel>();
 
-            foreach(ItemLineModel ilm in orderedItems)
+            // Acquiring the models requested for the booking
+            booking.Items = dBManager.GetItemLines(booking.BookingID);
+            // Acquiring the existing, if any, bookedDevices for the booking
+            booking.Devices = dBManager.GetBookedDevices(booking.BookingID);
+
+            // List of models, and how many devices of it are available in storage.
+            List<ItemLineModel> orderedModels = new List<ItemLineModel>();
+            
+            // FIlling orderedModels
+            foreach(ItemLineModel ilm in booking.Items)
             {
-                storageLocations.Add(ilm, dBManager.GetModelLocation(ilm.Model.ModelName));
+                orderedModels.Add(new ItemLineModel(
+                    dBManager.GetCountDevicesOfModelInStorage(ilm.Model.ModelName),
+                    ilm.Model)
+                    );
             }
 
+            // StoredLocation for each requested device modelName.
+            Dictionary<string, StorageLocationModel> storageLocations = new Dictionary<string, StorageLocationModel>();
+            foreach(ItemLineModel ilm in orderedModels)
+            {
+                storageLocations.Add(ilm.Model.ModelName, dBManager.GetModelLocation(ilm.Model.ModelName));
+            }
+
+            // Creation and filling of ViewModel for BookedDevicesCreateReadUpdate
             BookedDevicesCRUModel bookedDevicesCRUModel = new BookedDevicesCRUModel(
                 booking,
-                orderedItems,
+                orderedModels,
                 storageLocations
                 );
             return View("BookedDevicesCRU", bookedDevicesCRUModel);

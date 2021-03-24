@@ -29,15 +29,27 @@ namespace HUS_project.Controllers
             return View();
         }
 
-        public IActionResult LocationAdmin()
+        public IActionResult LocationAdmin(EditStorageLocationModel dataFromView)
         {
+            EditStorageLocationModel dummy = new EditStorageLocationModel();
+            StorageLocationModel selectedStorageLocation = new StorageLocationModel();
+            BuildingModel buildingModel = new BuildingModel();
+            selectedStorageLocation.Location=buildingModel;
+            dummy.StorageLocation = selectedStorageLocation;
+            dummy.StorageLocation.Location.Building = null;
+            dummy.StorageLocation.Location.RoomNumber = 0;
+            dummy.StorageLocation.ShelfName=null;
+            dummy.StorageLocation.ShelfLevel=0;
+            dummy.StorageLocation.ShelfSpot = 0;
+            dummy.Filter = 1;
+
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
             List<string> buildings = manager.GetBuildings();
             List<byte> roomNumbers = manager.GetRoomNumbers();
             List<string> shelfNames = manager.GetShelfName();
             List<byte> shelfLevels = manager.GetShelfLevel();
             List<byte> shelfspots = manager.GetShelfSpot();
-
+            List<StorageLocationModel> storageLocations = manager.GetSelectedStorageLocations(dummy);
 
             EditStorageLocationModel dropDownData = new EditStorageLocationModel();
             dropDownData.Buildings = buildings;
@@ -45,6 +57,7 @@ namespace HUS_project.Controllers
             dropDownData.ShelfNames = shelfNames;
             dropDownData.ShelfLevels = shelfLevels;
             dropDownData.ShelfSpots = shelfspots;
+            dropDownData.StorageLocations = storageLocations;
 
             return View(dropDownData);
         }

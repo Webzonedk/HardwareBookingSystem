@@ -12,8 +12,15 @@ function SubmitValidation(input) {
 }
 
 //Submitting data from view
-function submit() {
+function submit(input) {
 
-    document.getelementById("listStorageLocations").submit();
+    document.getelementById(input).submit();
 
 }
+
+////Used to sort the columns in the views
+
+//    function sorting() {
+//        document.getElementById('ChosenProvider').value = '1';
+//        document.getElementById('loginForm').submit();
+//    }

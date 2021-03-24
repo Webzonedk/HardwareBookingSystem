@@ -11,11 +11,11 @@ namespace HUS_project.Models.ViewModels
             // The Booking there are BookedModels to be added/removed from.
             private BookingModel booking;
 
-            // How many of the requested Models are currently in storage !!!!!!!!!!!!
+            // How many of the requested Models are currently in storage
             private List<ItemLineModel> modelsInStorage;
 
-            // The StorageLocation of the requested Model.
-            private Dictionary<ItemLineModel, StorageLocationModel> storageLocations;
+            // The StorageLocation of the requested modelName
+            private Dictionary<string, StorageLocationModel> storageLocations;
         #endregion
         #region GetsNSets
             public BookingModel Booking
@@ -30,7 +30,7 @@ namespace HUS_project.Models.ViewModels
                 set { modelsInStorage = value; }
             }
 
-            public Dictionary<ItemLineModel, StorageLocationModel> StorageLocations
+            public Dictionary<string, StorageLocationModel> StorageLocations
             {
                 get { return storageLocations; }
                 set { this.storageLocations = value; }
@@ -41,7 +41,7 @@ namespace HUS_project.Models.ViewModels
             {
 
             }
-            public BookedDevicesCRUModel(BookingModel Booking, List<ItemLineModel> ModelsInStorage, Dictionary<ItemLineModel, StorageLocationModel> StorageLocations)
+            public BookedDevicesCRUModel(BookingModel Booking, List<ItemLineModel> ModelsInStorage, Dictionary<string, StorageLocationModel> StorageLocations)
             {
                 this.booking = Booking;
                 this.modelsInStorage = ModelsInStorage;
