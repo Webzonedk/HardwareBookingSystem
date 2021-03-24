@@ -18,9 +18,9 @@ function submit(input) {
 
 }
 
-//Used to sort the columns in the views
+////Used to sort the columns in the views
 
-    function sorting() {
-        document.getElementById('ChosenProvider').value = '1';
-        document.getElementById('loginForm').submit();
-    }
+//    function sorting() {
+//        document.getElementById('ChosenProvider').value = '1';
+//        document.getElementById('loginForm').submit();
+//    }
