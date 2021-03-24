@@ -39,9 +39,9 @@ namespace HUS_project.Controllers
             dummy.StorageLocation.Location.Building = null;
             dummy.StorageLocation.Location.RoomNumber = 0;
             dummy.StorageLocation.ShelfName=null;
-            dummy.StorageLocation.ShelfLevel=0;
+            dummy.StorageLocation.ShelfLevel = 0;
             dummy.StorageLocation.ShelfSpot = 0;
-            dummy.Filter = 1;
+            //dummy.Filter = 1;
 
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
             List<string> buildings = manager.GetBuildings();
@@ -67,7 +67,7 @@ namespace HUS_project.Controllers
         public IActionResult LocationAdminResult(EditStorageLocationModel dataFromView)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
-
+          
             List<StorageLocationModel> storageLocations = manager.GetSelectedStorageLocations(dataFromView);
 
             EditStorageLocationModel searchResult = new EditStorageLocationModel();
@@ -83,6 +83,8 @@ namespace HUS_project.Controllers
             searchResult.ShelfNames = shelfNames;
             searchResult.ShelfLevels = shelfLevels;
             searchResult.ShelfSpots = shelfspots;
+            searchResult.Filter = 0;
+        
 
 
             searchResult.StorageLocations = storageLocations;
