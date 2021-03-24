@@ -41,6 +41,7 @@ namespace HUS_project.Controllers
             dummy.StorageLocation.ShelfName=null;
             dummy.StorageLocation.ShelfLevel=0;
             dummy.StorageLocation.ShelfSpot = 0;
+            dummy.Filter = 1;
 
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
             List<string> buildings = manager.GetBuildings();

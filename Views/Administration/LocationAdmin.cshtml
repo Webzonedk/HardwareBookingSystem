@@ -102,11 +102,42 @@
         </div>
 
         <div class="row containerSubHeader border-top border-bottom border-white border-1">
-            <button class="col-xl-1 col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1 headerSortLink" id="sortBuilding" onclick="sorting('sortBuilding')">Bygning</button>
-            <div class="col-xl-1 col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1 headerSortLink">Lokale</div>
-            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">Reol</div>
-            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">Etage</div>
-            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">Plads</div>
+           @*<div class="col-xl-1 col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1 headerSortLink" id="sortBuilding" onclick="sorting('sortBuilding')">Bygning</div>*@
+            <div class="col-xl-1 col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">
+                <select class="headerSortLink" name="buildings" id="buildings" asp-for="@Model.Filter" onchange="submit('listStorageLocations')">
+                    <option value="" selected disabled hidden>Bygning</option>
+                    <option value="1">Sorter stigende</option>
+                    <option value="2">Sorter faldende</option>
+                </select>
+            </div>
+            <div class="col-xl-1 col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1 headerSortLink">
+                <select class="headerSortLink" name="rooms" id="rooms" asp-for="@Model.Filter" onchange="submit('listStorageLocations')">
+                    <option value="" selected disabled hidden>Lokale</option>
+                    <option value="3">Sorter stigende</option>
+                    <option value="4">Sorter faldende</option>
+                </select>
+            </div>
+            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">
+                <select class="headerSortLink" name="shelfNames" id="shelfNames" asp-for="@Model.Filter" onchange="submit('listStorageLocations')">
+                    <option value="" selected disabled hidden>Reol</option>
+                    <option value="5">Sorter stigende</option>
+                    <option value="6">Sorter faldende</option>
+                </select>
+            </div>
+            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">
+                <select class="headerSortLink" name="shelfLevels" id="shelfLevels" asp-for="@Model.Filter" onchange="submit('listStorageLocations')">
+                    <option value="" selected disabled hidden>Etage</option>
+                    <option value="7">Sorter stigende</option>
+                    <option value="8">Sorter faldende</option>
+                </select>
+            </div>
+            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">
+                <select class="headerSortLink" name="shelfSpots" id="shelfSpots" asp-for="@Model.Filter" onchange="submit('listStorageLocations')">
+                    <option value="" selected disabled hidden>Bygning</option>
+                    <option value="9">Sorter stigende</option>
+                    <option value="10">Sorter faldende</option>
+                </select>
+            </div>
         </div>
         @foreach (var item in Model.StorageLocations)
         {

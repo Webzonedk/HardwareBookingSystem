@@ -274,6 +274,7 @@ Columns inside containers
     background-color: #353535;
     font-weight: bold;
     border:none;
+    max-width:95%;
 }
 
 .columnHeaderLeft {

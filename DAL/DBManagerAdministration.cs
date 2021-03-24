@@ -200,19 +200,7 @@ namespace HUS_project.DAL
             SqlCommand cmd = new SqlCommand("SelectLocationIDBasedOnInputFields", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-            //if (dataFromView == null)
-            //{
-            //    //dataFromView = new EditStorageLocationModel();
-            //    //StorageLocationModel selectedStorageLocation = new StorageLocationModel();
-            //    //BuildingModel buildingModel = new BuildingModel();
-            //    //selectedStorageLocation.Location = buildingModel;
-            //    //dataFromView.StorageLocation = selectedStorageLocation;
-            //    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = null;
-            //    cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = null;
-            //    cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = null;
-            //    cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = null;
-            //    cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = null;
-            //}
+
 
 
             if (dataFromView.StorageLocation.Location.Building != null)
@@ -262,6 +250,16 @@ namespace HUS_project.DAL
             else
             {
                 cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = null;
+            }
+
+
+            if (dataFromView.Filter > 0)
+            {
+                cmd.Parameters.Add("@filter", System.Data.SqlDbType.TinyInt).Value = dataFromView.Filter;
+            }
+            else
+            {
+                cmd.Parameters.Add("@filter", System.Data.SqlDbType.TinyInt).Value = 1;
             }
 
 
