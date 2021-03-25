@@ -31,9 +31,11 @@ namespace HUS_project.Controllers
 
         public IActionResult LocationAdmin(EditStorageLocationModel dataFromView)
         {
+            //Add standard values to the model
             EditStorageLocationModel dummy = new EditStorageLocationModel();
             StorageLocationModel selectedStorageLocation = new StorageLocationModel();
             BuildingModel buildingModel = new BuildingModel();
+            //SortFilterModel sortFilterModel = new SortFilterModel();
             selectedStorageLocation.Location=buildingModel;
             dummy.StorageLocation = selectedStorageLocation;
             dummy.StorageLocation.Location.Building = null;
@@ -58,18 +60,17 @@ namespace HUS_project.Controllers
             dropDownData.ShelfLevels = shelfLevels;
             dropDownData.ShelfSpots = shelfspots;
             dropDownData.StorageLocations = storageLocations;
+            //dropDownData.SortFilters = sortFilters;
 
             return View(dropDownData);
         }
 
 
-
+        //Returns the serchresult when something has been choosen in the seacrh fields
         public IActionResult LocationAdminResult(EditStorageLocationModel dataFromView)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
-          
             List<StorageLocationModel> storageLocations = manager.GetSelectedStorageLocations(dataFromView);
-
             EditStorageLocationModel searchResult = new EditStorageLocationModel();
 
             List<string> buildings = manager.GetBuildings();
@@ -78,6 +79,17 @@ namespace HUS_project.Controllers
             List<byte> shelfLevels = manager.GetShelfLevel();
             List<byte> shelfspots = manager.GetShelfSpot();
 
+            List<SortFilterModel> sortFilter = new List<SortFilterModel>();
+                        
+            searchResult.SortFilters.Add(new SortFilterModel("Bygning &#8693;", 1));// arrow up and down
+            searchResult.SortFilters.Add(new SortFilterModel("Bygning &#748;", 1));//arrow down
+            searchResult.SortFilters.Add(new SortFilterModel("Bygning &#710;", 1));//arrow up
+            searchResult.SortFilters.Add(new SortFilterModel("Bygning", 1));
+            searchResult.SortFilters.Add(new SortFilterModel("Bygning", 1));
+            searchResult.SortFilters.Add(new SortFilterModel("Bygning", 1));
+            searchResult.SortFilters.Add(new SortFilterModel("Bygning", 1));
+            searchResult.SortFilters.Add(new SortFilterModel("Bygning", 1));
+            searchResult.SortFilters.Add(new SortFilterModel("Bygning", 1));
             searchResult.Buildings = buildings;
             searchResult.RoomNumbers = roomNumbers;
             searchResult.ShelfNames = shelfNames;

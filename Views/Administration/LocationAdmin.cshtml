@@ -81,10 +81,10 @@
         </div>
         <div class="row">
             @{string toolTip = "Alle felter kan oprettes enkeltvis. \n\n" +
-                                       "Hvis Bygning og Lokale er udfyldt samtidigt vil der \n" +
-                                       "oprettes et Lokale hvis ikke det eksisterer i forvejen.\n\n " +
-                                       "Hvis alle felter er udfyldt, vil der oprettes en placering.\n\n" +
-                                       "Men kun hvis det ikke findes I forvejen."; }
+                                         "Hvis Bygning og Lokale er udfyldt samtidigt vil der \n" +
+                                         "oprettes et Lokale hvis ikke det eksisterer i forvejen.\n\n " +
+                                         "Hvis alle felter er udfyldt, vil der oprettes en placering.\n\n" +
+                                         "Men kun hvis det ikke findes I forvejen."; }
 
             <div class="col p-3">
                 <button type="button" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip">Tilføj Placering</button>
@@ -120,13 +120,7 @@
             <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">
                 <select class="headerSortLink" asp-for="@Model.Filter" onchange="submit('listStorageLocations')">
                     <option value="" selected disabled hidden>Reol</option>
-                    @if (Model.Filter==5)
-                    {
-
-                <option value="" selected disabled hidden>Reol</option>
-
-                    }
-            else {<option value="5">Sorter stigende</option> }
+                    <option value="5">Sorter stigende</option>
                     <option value="6">Sorter faldende</option>
                 </select>
             </div>
