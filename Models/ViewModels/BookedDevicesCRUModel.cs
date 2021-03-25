@@ -8,7 +8,7 @@ namespace HUS_project.Models.ViewModels
     public class BookedDevicesCRUModel
     {
         #region Variables
-            // The Booking there are BookedModels to be added/removed from.
+            // The Booking there are DeviceModels to be added/removed from.
             private BookingModel booking;
 
             // How many of the requested Models are currently in storage
@@ -16,25 +16,28 @@ namespace HUS_project.Models.ViewModels
 
             // The StorageLocation of the requested modelName
             private Dictionary<string, StorageLocationModel> storageLocations;
+
         #endregion
         #region GetsNSets
             public BookingModel Booking
             {
-                get { return booking; }
-                set { booking = value; }
+                get { return this.booking; }
+                set { this.booking = value; }
             }
 
             public List<ItemLineModel> ModelsInStorage
             {
-                get { return modelsInStorage; }
-                set { modelsInStorage = value; }
+                get { return this.modelsInStorage; }
+                set { this.modelsInStorage = value; }
             }
 
             public Dictionary<string, StorageLocationModel> StorageLocations
             {
-                get { return storageLocations; }
+                get { return this.storageLocations; }
                 set { this.storageLocations = value; }
             }
+
+
         #endregion
         #region Constructors
             public BookedDevicesCRUModel()
