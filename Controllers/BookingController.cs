@@ -40,13 +40,14 @@ namespace HUS_project.Controllers
             if (int.TryParse(deviceID, out int deviceIDInteger))
             {
                 DBManagerBooking dBManager = new DBManagerBooking(configuration);
+                DBManagerDevice dBManagerDevice = new DBManagerDevice(configuration);
 
                 // Second, find out if the deviceID is a valid one (if it exists and isn't Disabled)
-                DeviceModel device = new DeviceModel();
+                DeviceModel device = dBManagerDevice.GetDeviceInfoWithLocation(deviceIDInteger);
                 BookingModel booking = dBManager.GetBooking(int.Parse(bookingID));
                 booking.Devices = dBManager.GetBookedDevices(int.Parse(bookingID));
 
-                if (device != null)
+                if (device.Model.ModelName != null)
                 {
                     // Find out if you're supposed to Create the bookedDevice (
                     if(booking.DeliveredBy == null)
