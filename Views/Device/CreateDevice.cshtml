@@ -27,18 +27,34 @@
         </div>
 
 
+
+
+
+
+
+
+
         <!--image upload-->
         <div class="col-xl-4 col-md-12 gx-3 gy-3">
             <div class="row center">
+
+               <!--test of camera capture-->
+
                 <div>
-                    <img class="img-bg" src="~/Graphic/billede-mangler.png" style="width: 100%" />
+                    @*<img class="img-bg" id="pictureFromCamera" src="~/Graphic/billede-mangler.png" style="width: 100%" />*@
+
+                    @*<input type="file" accept="image/*;capture=camera">*@
+
+                    <video id="video" width="480" height="480" autoplay poster="~/Graphic/billede-mangler.png"></video>
+                   
 
                 </div>
 
             </div>
             <div class="row center p-3">
                 <div>
-                    <button type="button" class=" btn-primary btn" asp-action="CreateQRCode">upload foto</button>
+                    <button id="snap">Tag billed</button>
+                    <button type="button" class=" btn-primary btn" onclick="EnableCam()">upload foto</button>
 
                 </div>
             </div>
@@ -80,7 +96,7 @@
 
             <!--serial number field-->
             <div class="form-floating">
-                <input class="form-control is-invalid" id="inputSerial" placeholder="indtast serienr." asp-for="@Model.Device.SerialNumber" required/>
+                <input class="form-control is-invalid" id="inputSerial" placeholder="indtast serienr." asp-for="@Model.Device.SerialNumber" required />
                 <label for="inputSerial">Serienummer:</label>
 
             </div>
@@ -89,7 +105,7 @@
 
             <!--comments text field-->
             <div class="form-floating">
-                <textarea class="form-control is-invalid" placeholder="Leave a comment here" id="floatingTextarea2" rows="5" style="height:100%;"  asp-for="@Model.Device.Model.ModelDescription" required maxlength="2000"></textarea>
+                <textarea class="form-control is-invalid" placeholder="Leave a comment here" id="floatingTextarea2" rows="5" style="height:100%;" asp-for="@Model.Device.Model.ModelDescription" required maxlength="2000"></textarea>
                 <label for="floatingTextarea2">beskrivelse</label>
                 <span id="remaining"></span>
                 <span id="limit">(Max 2000 tegn)</span>
@@ -124,4 +140,8 @@
 <!--java script to count remaining text in description-->
 <script src="~/js/textCount.js"></script>
 
+<!--javascript to enable web cam-->
+<script src="~/js/SaveCapture.js"></script>
+<script src ="~/js/Camera_simple.js"></script>
+<script src="~/js/SnapPicture.js"></script>
 
