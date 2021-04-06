@@ -112,6 +112,10 @@ namespace HUS_project.Controllers
         {
             //initializing DB managers
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
+
+            //get the logs back again
+            List<DeviceModel> logs = dbManager.GetDeviceLogs(data.Device.DeviceID);
+            data.Logs = logs;
             EditDeviceModel newdata = data;
 
             //fetch storage locations if user has typed a valid room
@@ -142,7 +146,7 @@ namespace HUS_project.Controllers
                 newdata.Shelf = null;
             }
 
-
+            
 
 
             // clear model
@@ -175,7 +179,8 @@ namespace HUS_project.Controllers
             //send data to database
             data = dbManager.EditDeviceLocation(data);
 
-
+            List<DeviceModel> logs = dbManager.GetDeviceLogs(data.Device.DeviceID);
+            data.Logs = logs;
 
             //save Device name & other important things
             //send data to database
@@ -217,6 +222,10 @@ namespace HUS_project.Controllers
             //send data to database
             data = dbManager.EditDeviceLocation(data);
             #endregion
+
+            //get the logs again
+            List<DeviceModel> logs = dbManager.GetDeviceLogs(data.Device.DeviceID);
+            data.Logs = logs;
 
             //send data to database
             int success = dbManager.EditDevice(data);

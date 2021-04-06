@@ -120,6 +120,8 @@ namespace HUS_project.DAL
             while (reader.Read())
             {
                 device.DeviceID = (int)reader["deviceID"];
+                device.SerialNumber = (string)reader["serialNumber"];
+                device.Status = (byte)reader["status"];
                 model.Category.Category = (string)reader["categoryName"];
                 model.ModelName = (string)reader["modelName"];
                 model.ModelDescription = (string)reader["modelDescription"];

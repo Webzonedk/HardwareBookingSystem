@@ -99,9 +99,17 @@
                 </div>
 
                 <br />
+
+                @{string toolTip = "Advarsel. \n\n" +
+                                            "Hvis der indtastes en model som ikke findes is systemet,\n oprettes en ny model som enheden knyttes til"; }
+
+                @*<div class="col p-3">
+            <button type="button" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip">Tilføj Placering</button>
+        </div>*@
+
                 <!--model names dropdown-->
                 <div class="form-floating ">
-                    <input class="form-select" list="modelNames" id="exampleDataList" asp-for="@Model.Device.Model.ModelName" required>
+                    <input class="form-select black-tooltip" data-toggle="tooltip" data-bs-placement="auto" title="@toolTip" list="modelNames" id="exampleDataList" asp-for="@Model.Device.Model.ModelName" required>
                     <datalist id="modelNames">
 
                         @for (int i = 0; i < Model.ModelNames.Count; i++)
@@ -114,6 +122,10 @@
                     </datalist>
                     <label for="exampleDataList">Indtast enhedsnavn</label>
                 </div>
+
+                @*<input  class="form-select black-tooltip" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom">*@
+                    
+                
 
                 <br />
 
@@ -137,76 +149,81 @@
 
                 <br />
 
-                <div class="form-floating ">
+                <div class="border_EditBox">
 
-                    <input class="form-select" list="locationsdropdown" id="locations" asp-for="@Model.Room" onchange="return SubmitValidation('editForm')" required>
-                    <datalist id="locationsdropdown">
 
-                        @foreach (var item in Model.Rooms)
-                        {
-                            <option>@item</option>
-                        }
 
-                    </datalist>
-                    <label for="locations">lager Lokale</label>
-                </div>
+                    <div class="form-floating ">
 
-                <br />
+                        <input class="form-select" list="locationsdropdown" id="locations" asp-for="@Model.Room" onchange="return SubmitValidation('editForm')" required>
+                        <datalist id="locationsdropdown">
 
-                <div class="form-floating ">
-                    <input class="form-select" list="shelvesdropdown" id="shelves" asp-for="@Model.Shelf" required>
-                    <datalist id="shelvesdropdown">
+                            @foreach (var item in Model.Rooms)
+                            {
+                                <option>@item</option>
+                            }
 
-                        @foreach (var item in Model.Shelfs)
-                        {
-                            <option>@item</option>
+                        </datalist>
+                        <label for="locations">lager Lokale</label>
+                    </div>
 
-                        }
-                    </datalist>
-                    <label for="shelves">vælg placering</label>
-                </div>
+                    <br />
 
-                <br />
+                    <div class="form-floating ">
+                        <input class="form-select" list="shelvesdropdown" id="shelves" asp-for="@Model.Shelf" required>
+                        <datalist id="shelvesdropdown">
 
-                <div class="row">
-                    <p>Indtast ny placering og tryk gem placering, eller skan QR-Kode på placering:</p>
-                </div>
+                            @foreach (var item in Model.Shelfs)
+                            {
+                                <option>@item</option>
 
-                <div class="row">
-                    <div class="col">
-                        <div class="text-center">
-                            <button type="submit" class=" btn-primary btn" formaction="EditLocation" formmethod="post">Gem placering</button>
+                            }
+                        </datalist>
+                        <label for="shelves">vælg placering</label>
+                    </div>
 
+                    <br />
+
+                    <div class="row">
+                        <p>Indtast ny placering og tryk gem placering, eller skan QR-Kode på placering:</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="text-center">
+                                <button type="submit" class=" btn-primary btn" formaction="EditLocation" formmethod="post">Gem placering</button>
+
+                            </div>
+                        </div>
+
+
+
+                        <div class="col">
+                            <div class="text-center">
+                                <button type="button" class=" btn-primary btn" asp-action="ScanQRCode">Skan placering</button>
+
+                            </div>
                         </div>
                     </div>
 
+                    <!--create message to show location has been saved-->
+                    <div class="row">
+                        <div>
+                            @if (ViewBag.Location != null)
+                            {
 
-
-                    <div class="col">
-                        <div class="text-center">
-                            <button type="button" class=" btn-primary btn" asp-action="ScanQRCode">Skan placering</button>
-
+                                <div class="text-green">@ViewBag.Location</div>
+                            }
+                            else
+                            {
+                                <div>&nbsp;</div>
+                            }
                         </div>
                     </div>
-                </div>
 
-                <!--create message to show location has been saved-->
-                <div class="row">
-                    <div>
-                        @if (ViewBag.Location != null)
-                        {
-
-                            <div class="text-green">@ViewBag.Location</div>
-                        }
-                        else
-                        {
-                            <div>&nbsp;</div>
-                        }
-                    </div>
                 </div>
 
             </div>
-
 
             <!--Delete Device-->
             <div class="col-xl-3 col-md-6 gx-3 gy-3">
@@ -217,23 +234,25 @@
 
                 <br />
 
-
-                <div class="form-floating">
-                    <textarea class="form-control" placeholder="Leave a comment here" id="deleteNote" style="height: 140px" asp-for="@Model.Device.Notes"></textarea>
-                    <label for="deleteNote">årsag</label>
-                </div>
+                <div class="border_EditBox">
 
 
-                <br />
-
-                <div class="row">
-                    <div class="text-center">
-                        <button type="button" class=" btn-primary btn" formaction="DeleteDevice">Slet enhed</button>
-
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Leave a comment here" id="deleteNote" style="height: 140px" asp-for="@Model.Device.Notes"></textarea>
+                        <label for="deleteNote">årsag</label>
                     </div>
+
+
+                    <br />
+
+                    <div class="row">
+                        <div class="text-center">
+                            <button type="button" class=" btn-primary btn" formaction="DeleteDevice">Slet enhed</button>
+
+                        </div>
+                    </div>
+
                 </div>
-
-
 
             </div>
 
@@ -279,19 +298,8 @@
 
 
     <div class="row containerHeader">
-        <h4 class="col">Log</h4>
+        <h4 class="col text-white">Log</h4>
     </div>
-
-    @*<div class="row containerSubHeader border-top border-bottom border-white border-1 dynamic-Font-Size-10">
-            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">ID</div>
-            <div class="col-xl-5 col-lg-3 col-md-2 col-2 p-1 border-end border-white border-1">Beskrivelse</div>
-            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">Kategori</div>
-            <div class="col-xl-1 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">Lokale</div>
-            <div class="col-xl-1 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">Hylde</div>
-            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">Status</div>
-        </div>*@
-
-
 
 
     @foreach (DeviceModel device in Model.Logs)
@@ -308,16 +316,18 @@
 
                 <div class="row">
                     <h4>Kategori:</h4>
-                    @device.Model.Category.Category
-
+                    <div class=" dynamic-Font-Size-14">
+                        @device.Model.Category.Category
+                    </div>
                 </div>
-                
+
                 <br />
 
                 <div class="row">
                     <h4>Enhedsnavn:</h4>
-                    @device.Model.ModelName
-
+                    <div class=" dynamic-Font-Size-14">
+                        @device.Model.ModelName
+                    </div>
                 </div>
 
 
@@ -326,21 +336,27 @@
             <div class="col-xl-4 col-lg-4 col-md-3 col-3 p-1">
                 <div class="row">
                     <h4>Beskrivelse:</h4>
-                    @device.Model.ModelDescription
-
+                    <div class=" dynamic-Font-Size-14">
+                        @device.Model.ModelDescription
+                    </div>
                 </div>
             </div>
 
             <div class="col-xl-2 col-lg-2 col-md-3 col-3 p-1">
                 <div class="row">
                     <h4>Ændret:</h4>
-                    @device.ChangeDate
+                    <div class=" dynamic-Font-Size-14">
+                        @device.ChangeDate
+                    </div>
+
 
                     <br />
 
                     <div class="row">
                         <h4>Af:</h4>
-                        @device.ChangedBy
+                        <div class=" dynamic-Font-Size-14">
+                            @device.ChangedBy
+                        </div>
 
                     </div>
 
