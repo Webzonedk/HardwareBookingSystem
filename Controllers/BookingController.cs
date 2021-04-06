@@ -60,10 +60,6 @@ namespace HUS_project.Controllers
                         //  or if you're supposed to Update the bookedDevice.. if it's in the booking????
                         // Update BookedDevice to be Returned
                     }
-
-
-
-
                 }
                 else
                 {
@@ -78,6 +74,7 @@ namespace HUS_project.Controllers
 
             return GoToScanDevices(bookingID);
         }
+
 
         /// <summary>
         /// Takes you to the BookedDevicesCRU of the booking you want to add/return BookedDevices to.
@@ -108,13 +105,6 @@ namespace HUS_project.Controllers
                     );
             }
 
-            // StoredLocation for each requested device modelName.
-            Dictionary<string, StorageLocationModel> storageLocations = new Dictionary<string, StorageLocationModel>();
-            foreach(ItemLineModel ilm in orderedModels)
-            {
-                storageLocations.Add(ilm.Model.ModelName, dBManager.GetModelLocation(ilm.Model.ModelName));
-            }
-
             // This is to ensure, that even BookedDevice models which haven't been ordered are represented.
             bool included;
             foreach (DeviceModel device in booking.Devices)
@@ -135,6 +125,13 @@ namespace HUS_project.Controllers
                     // If this Device's Model is not Included in the Booking's ItemLines, then it is added, with 0 as the requested quantity.
                     booking.Items.Add(new ItemLineModel(0, device.Model));
                 }
+            }
+
+            // StoredLocation for each requested device modelName.
+            Dictionary<string, StorageLocationModel> storageLocations = new Dictionary<string, StorageLocationModel>();
+            foreach (ItemLineModel ilm in orderedModels)
+            {
+                storageLocations.Add(ilm.Model.ModelName, dBManager.GetModelLocation(ilm.Model.ModelName));
             }
 
             // Creation and filling of ViewModel for BookedDevicesCreateReadUpdate
