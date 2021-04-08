@@ -447,6 +447,14 @@ Row colors in lists
     background-color: #e9f4ff;
 }
 
+.dynamic-Font-Size-14 {
+    font-size: 1.25em;
+}
+
+.dynamic-Font-Size-12 {
+    font-size: 1em;
+}
+
 .dynamic-Font-Size-10 {
     font-size: 0.875em;
 }

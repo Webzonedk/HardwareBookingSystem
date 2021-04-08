@@ -28,14 +28,14 @@ namespace HUS_project.Models
 
         public int BookingID
         {
-            get { return bookingID; }
-            set { bookingID = value; }
+            get { return this.bookingID; }
+            set { this.bookingID = value; }
         }
 
         public string Customer
         {
-            get { return customer; }
-            set { customer = value; }
+            get { return this.customer; }
+            set { this.customer = value; }
         }
 
         public string Notes
@@ -46,21 +46,21 @@ namespace HUS_project.Models
 
         public List<ItemLineModel> Items
         {
-            get { return items; }
-            set { items = value; }
+            get { return this.items; }
+            set { this.items = value; }
         }
 
         public List<DeviceModel> Devices
         {
-            get { return devices; }
-            set { devices = value; }
+            get { return this.devices; }
+            set { this.devices = value; }
         }
 
 
         public BuildingModel Location
         {
-            get { return location; }
-            set { location = value; }
+            get { return this.location; }
+            set { this.location = value; }
         }
 
         public DateTime PlannedBorrowDate
@@ -77,15 +77,15 @@ namespace HUS_project.Models
 
         public string DeliveredBy
         {
-            get{  return deliveredBy; }
-            set{ deliveredBy = value;}
+            get{  return this.deliveredBy; }
+            set{ this.deliveredBy = value;}
         }
 
 
         public byte BookingStatus
         {
-            get { return bookingStatus; }
-            set { bookingStatus = value; }
+            get { return this.bookingStatus; }
+            set { this.bookingStatus = value; }
         }
 
         #endregion

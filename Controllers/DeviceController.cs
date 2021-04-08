@@ -69,15 +69,16 @@ namespace HUS_project.Controllers
         }
 
         //getting data from database & return model to view
-      
-        public IActionResult EditView(EditDeviceModel input)
+
+        public IActionResult EditView(string submit)
         {
+
             //initializing DB managers
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
             DBManagerShared dbsharedManager = new DBManagerShared(configuration);
 
             //return device info to Edit view
-            int ID = input.Device.DeviceID;
+            int ID = int.Parse(submit);
             DeviceModel data = new DeviceModel();
             data = dbManager.GetDeviceInfoWithLocation(ID);
             List<DeviceModel> logs = dbManager.GetDeviceLogs(ID);
@@ -111,6 +112,10 @@ namespace HUS_project.Controllers
         {
             //initializing DB managers
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
+
+            //get the logs back again
+            List<DeviceModel> logs = dbManager.GetDeviceLogs(data.Device.DeviceID);
+            data.Logs = logs;
             EditDeviceModel newdata = data;
 
             //fetch storage locations if user has typed a valid room
@@ -141,7 +146,7 @@ namespace HUS_project.Controllers
                 newdata.Shelf = null;
             }
 
-
+            
 
 
             // clear model
@@ -173,7 +178,23 @@ namespace HUS_project.Controllers
 
             //send data to database
             data = dbManager.EditDeviceLocation(data);
-            ViewBag.Location = "Placering Gemt";
+
+            List<DeviceModel> logs = dbManager.GetDeviceLogs(data.Device.DeviceID);
+            data.Logs = logs;
+
+            //save Device name & other important things
+            //send data to database
+            int success = dbManager.EditDevice(data);
+
+            //set message to be shown in view
+            if (success > 0)
+            {
+                ViewBag.Location = "Placering Gemt";
+            }
+            else
+            {
+                ViewBag.Location = "Placering ikke Gemt";
+            }
 
             return View("EditView", data);
         }
@@ -186,6 +207,25 @@ namespace HUS_project.Controllers
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
             data.Device.ChangedBy = HttpContext.Session.GetString("uniLogin");
             data.Device.Notes = "Enhed redigeret";
+
+            #region saving new location
+            //prep data for database
+            string[] splittedRoom = data.Room.Split('.');
+            string[] splittedShelf = data.Shelf.Split('.');
+
+            //set data models
+            BuildingModel building = new BuildingModel(splittedRoom[0], Convert.ToByte(splittedRoom[1]));
+            StorageLocationModel storageLocation = new StorageLocationModel(splittedShelf[0], Convert.ToByte(splittedShelf[1]), Convert.ToByte(splittedShelf[2]), building);
+            data.Device.Location = storageLocation;
+            data.Device.Notes = "Placering redigeret";
+
+            //send data to database
+            data = dbManager.EditDeviceLocation(data);
+            #endregion
+
+            //get the logs again
+            List<DeviceModel> logs = dbManager.GetDeviceLogs(data.Device.DeviceID);
+            data.Logs = logs;
 
             //send data to database
             int success = dbManager.EditDevice(data);
@@ -210,7 +250,7 @@ namespace HUS_project.Controllers
             data.Device.ChangedBy = HttpContext.Session.GetString("uniLogin");
             data.Device.Notes = "Enhed redigeret";
             data.Device.Status = 0;
-           
+
             //change status of device to deactivated
             int success = dbManager.EditDevice(data);
             if (success > 0)
@@ -231,7 +271,7 @@ namespace HUS_project.Controllers
 
             //set dummy data to database
             infoList.SearchName = "L";
-           
+
             infoList.Category = null;
             infoList.InStock = 0;
 

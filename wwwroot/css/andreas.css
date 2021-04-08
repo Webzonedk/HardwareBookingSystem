@@ -1,1 +1,8 @@
-﻿
+﻿.border_EditBox {
+    border: solid;
+    border-width: 2px;
+    border-color: #1c209a;
+    border-radius: 10px;
+    
+    padding: 10px;
+}

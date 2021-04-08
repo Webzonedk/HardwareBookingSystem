@@ -5,16 +5,16 @@
 <div class="row blue-oyster-bar center box-shadow">
     <div class="row g-2">
         <div class="row">
-            @if (Model.Booking.PlannedReturnDate <= DateTime.Now && Model.Booking.DeliveredBy != null)
+            @if (Model.Booking.DeliveredBy != null)
             {
                 <h2 class="text-white align-items-center">
-                    Lever enheder til bestillingen
+                    Returner enheder fra bestillingen
                 </h2>
             }
             else
             {
                 <h2 class="text-white align-items-center">
-                    Returner enheder fra bestillingen
+                    Lever enheder til bestillingen
                 </h2>
             }
         </div>
@@ -26,7 +26,7 @@
                     <p>Bestillingsnummer: <span class="fw-bold">@Model.Booking.BookingID</span> | Bestiller: <span class="fw-bold">@Model.Booking.Customer</span> | Lokale: <span class="fw-bold">@Model.Booking.Location.Building.@Model.Booking.Location.RoomNumber</span></p>
                 </div>
                 <div class="row">
-                    <p>Fra d. <span class="fw-bold">@Model.Booking.PlannedBorrowDate.ToString("dd-MM/yy")</span> til og med d. <span class="fw-bold">@Model.Booking.PlannedReturnDate.ToString("dd-MM/yy")</span></p>
+                    <p>Fra d. <span class="fw-bold">@Model.Booking.PlannedBorrowDate.ToString("dd/MM-yy")</span> til og med d. <span class="fw-bold">@Model.Booking.PlannedReturnDate.ToString("dd/MM-yy")</span></p>
                 </div>
                 @if(Model.Booking.DeliveredBy != null)
                 {
@@ -36,16 +36,26 @@
                 }
             </div>
             <div class="col-5">
-                <div class="row">
-                    <h4 class="text-white">Skan QR kode / indtast enheds ID:</h4>
-                </div>
-                <div class="row">
-                    <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-0 col-sm-0 p-1"></div>
-                    <input class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-12 col-sm-12 p-1" type="text" />
-                </div>
-                <div>
-                    <button class="btn-blue">Submit</button>
-                </div>
+                @using (Html.BeginForm("ProcessDeviceForBooking", "Booking"))
+                {
+                    <div class="row">
+                        <h4 class="text-white">Skan QR kode / Indtast enheds ID:</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-0 col-sm-0 p-1"></div>
+                        <input class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-12 col-sm-12 p-1" name="deviceID" type="number" />
+                    </div>
+                    <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
+                        @if (Model.Booking.DeliveredBy != null)
+                        {
+                            <span>Returner Enhed</span>
+                        }
+                        else
+                        {
+                            <span>Tilføj Enhed</span>
+                        }
+                    </button>
+                }
             </div>
         </div>
         
@@ -55,15 +65,49 @@
 <div class="container containerMain box-shadow">
 
     <div class="row containerHeader">
-        <h4 class="col">Enheder sat på bestillingen:</h4>
+        <h4 class="col">Varelinjer</h4>
     </div>
 
     <div class="row containerSubHeader border-top border-bottom border-white border-1">
-        
+        <div class="row">
+            <div class="col-xl-4 col-lg-4 col-md-4 col-8 p-1 center border-end border-white border-1">Model</div>
+            <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 center border-end border-white border-1">Bestilt / Leveret</div>
+            <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 center">Lagerbeholdning / Lokation</div>
+        </div>
     </div>
 
     <div class="row containerBody">
-        <p>SUCC SUCC SUCC SUCC SUCC</p>
+        @foreach (ItemLineModel ilm in Model.Booking.Items)
+        {
+        <div class="row">
+            <div class="col-xl-4 col-lg-4 col-md-4 col-8 p-1 border-end border-white border-1">(@ilm.Model.Category.Category) @ilm.Model.ModelName</div>
+            @{
+                int count = 0;
+                foreach (DeviceModel device in Model.Booking.Devices)
+                {
+                    if (device.Model.ModelName == ilm.Model.ModelName)
+                    {
+                        count++;
+                    }
+                }
+                <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 border-end border-white border-1 center">
+                    @ilm.Quantity / @count
+                </div>
+                foreach (ItemLineModel item in Model.ModelsInStorage)
+                {
+                    if (item.Model.ModelName == ilm.Model.ModelName)
+                    {
+                        <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 center">
+                            @item.Quantity / @Model.StorageLocations[item.Model.ModelName].Location.Building.@Model.StorageLocations[item.Model.ModelName].Location.RoomNumber
+                            @Model.StorageLocations[item.Model.ModelName].ShelfName.@Model.StorageLocations[item.Model.ModelName].ShelfLevel.@Model.StorageLocations[item.Model.ModelName].ShelfSpot
+                        </div>
+                        break;
+                    }
+
+                }
+            }
+        </div>
+        }
 
     </div>
 
