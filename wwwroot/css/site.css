@@ -274,8 +274,9 @@ Columns inside containers
     color: #ffffff;
     text-align: left;
     background-color: #353535;
-    font-weight: bold;
-    border:none;
+    border-width:1px;
+    border-color: #ffffff;
+    border-radius: 3px;
     max-width:95%;
 }
 
