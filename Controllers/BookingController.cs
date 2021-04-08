@@ -42,28 +42,47 @@ namespace HUS_project.Controllers
                 DBManagerBooking dBManager = new DBManagerBooking(configuration);
                 DBManagerDevice dBManagerDevice = new DBManagerDevice(configuration);
 
-                // Second, find out if the deviceID is a valid one (if it exists and isn't Disabled)
+                // Second, find out if the deviceID is a valid one (if it exists and is Enabled (status = 1))
                 DeviceModel device = dBManagerDevice.GetDeviceInfoWithLocation(deviceIDInteger);
                 BookingModel booking = dBManager.GetBooking(int.Parse(bookingID));
                 booking.Devices = dBManager.GetBookedDevices(int.Parse(bookingID));
 
-                if (device.Model.ModelName != null)
+                if (device.Model.ModelName != null && device.Status == 1)
                 {
-                    // Find out if you're supposed to Create the bookedDevice (
-                    if(booking.DeliveredBy == null)
+                    // Find out if you're supposed to Create the bookedDevice, or undo the bookedDevice, or return the device
+                    bool deviceInBookingAlready = false;
+                    foreach(DeviceModel device1 in booking.Devices)
                     {
-                        // Check if the Device is still booked somewhere else
-                        // Create BookedDevice
+                        if(device1.DeviceID == device.DeviceID)
+                        {
+                            deviceInBookingAlready = true;
+                            break;
+                        }
+                    }
+
+
+                    if (deviceInBookingAlready)
+                    {
+                        if (booking.DeliveredBy == null)
+                        {
+                            // The delivery for this booking has not been made yet, ergo the bookedDevice may be Deleted. An Undo.
+                        }
+                        else
+                        {
+                            // Delivery has already been made. Update BookedDevice to be Returned.
+                        }
                     }
                     else
                     {
-                        //  or if you're supposed to Update the bookedDevice.. if it's in the booking????
-                        // Update BookedDevice to be Returned
+                        // THe device does not already exist for this booking, therefore it should be created.
+
+                        // Check if the Device is still booked somewhere else
+                        // Create BookedDevice
                     }
                 }
                 else
                 {
-                    // This device does not exist, or is disabled
+                    // This device does not exist or is Disabled
                 }
             }
             else
