@@ -33,9 +33,15 @@ namespace HUS_project.Controllers
             return View();
         }
 
-        
+        /// <summary>
+        /// Contextively processes what to do with this device id for this booking id. Be it create BookedDevice, return BookedDevice, or even delete.
+        /// </summary>
+        /// <param name="deviceID"></param>
+        /// <param name="bookingID"></param>
+        /// <returns></returns>
         public IActionResult ProcessDeviceForBooking(string deviceID, string bookingID)
         {
+            HttpContext.Session.SetString("bookedDeviceError", "");
             // FIrst, try and see if it's possible to convert and then do so.
             if (int.TryParse(deviceID, out int deviceIDInteger))
             {
@@ -47,47 +53,60 @@ namespace HUS_project.Controllers
                 BookingModel booking = dBManager.GetBooking(int.Parse(bookingID));
                 booking.Devices = dBManager.GetBookedDevices(int.Parse(bookingID));
 
-                if (device.Model.ModelName != null && device.Status == 1)
+                if (device.Model.ModelName != null && device.Status == 1 && booking.BookingStatus == 1)
                 {
-                    // Find out if you're supposed to Create the bookedDevice, or undo the bookedDevice, or return the device
+                    // Find out if you're supposed to Create the bookedDevice, or undo the bookedDevice or return the device
                     bool deviceInBookingAlready = false;
                     foreach(DeviceModel device1 in booking.Devices)
                     {
                         if(device1.DeviceID == device.DeviceID)
                         {
+                            if (booking.DeliveredBy == null)
+                            {
+                                // The delivery for this booking has not been made yet, ergo the bookedDevice may be Deleted. An Undo.
+                                // "DeleteBookedDevice"
+                                dBManager.DeleteBookedDevice(device.DeviceID, booking.BookingID);
+                            }
+                            else if(device1.ReturnedBy != null && device1.ReturnedBy != "")
+                            {
+                                // Delivery has already been made. Update BookedDevice to be Returned.
+                                // "ReturnBookedDevice"
+                                dBManager.ReturnBookedDevice(device.DeviceID, booking.BookingID, HttpContext.Session.GetString("uniLogin"));
+                            }
+                            else
+                            {
+                                // This device has already been returned
+                                HttpContext.Session.SetString("bookedDeviceError", "Denne Enhed er allerede blevet returneret.");
+
+                            }
                             deviceInBookingAlready = true;
                             break;
                         }
                     }
 
 
-                    if (deviceInBookingAlready)
+                    if (!deviceInBookingAlready)
                     {
-                        if (booking.DeliveredBy == null)
+                        // THe device does not already exist for this booking, therefore it should be created.. if the device is available.
+                        // CreateBookedDevice() will perform an availability check on its own.
+                        if(!dBManager.CreateBookedDevice(device.DeviceID, booking.BookingID))
                         {
-                            // The delivery for this booking has not been made yet, ergo the bookedDevice may be Deleted. An Undo.
+                            // The requested device is not available! Perhaps not returned from another Booking, or being repaired.
+                            HttpContext.Session.SetString("bookedDeviceError", "Denne enhed er allerede udlånt til en anden bestilling, eller er på værkstedet.");
                         }
-                        else
-                        {
-                            // Delivery has already been made. Update BookedDevice to be Returned.
-                        }
-                    }
-                    else
-                    {
-                        // THe device does not already exist for this booking, therefore it should be created.
-
-                        // Check if the Device is still booked somewhere else
-                        // Create BookedDevice
                     }
                 }
                 else
                 {
                     // This device does not exist or is Disabled
+                    HttpContext.Session.SetString("bookedDeviceError", "Denne enhed eksisterer ikke, eller er slået fra. Eller denne booking er deaktiveret.");
                 }
             }
             else
             {
                 // It is not possible to convert the input to an integer, therefore we can do nothing with it.
+                HttpContext.Session.SetString("bookedDeviceError", "Input kunne ikke konverteres til et helt tal.");
+
             }
 
 

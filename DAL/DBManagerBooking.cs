@@ -149,6 +149,73 @@ namespace HUS_project.DAL
         }
 
         /// <summary>
+        /// ONLY USE IF THE BOOKING HAS NOT BEEN DELIVERED. Does what it says on the tin.
+        /// </summary>
+        /// <param name="deviceID">DeviceID of the BookedDevice</param>
+        /// <param name="bookingID">BookingID of the BookedDevice</param>
+        internal void DeleteBookedDevice(int deviceID, int bookingID)
+        {
+            // The delivery for this booking has not been made yet, ergo the bookedDevice may be Deleted. An Undo.
+            // "DeleteBookedDevice"
+
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("DeleteBookedDevice", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@deviceID", deviceID);
+            cmd.Parameters.AddWithValue("@bookingID", bookingID);
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+
+        /// <summary>
+        /// Updates BookedDevice to be Returned
+        /// </summary>
+        /// <param name="deviceID">DeviceID of the BookedDevice</param>
+        /// <param name="bookingID">BookingID of the BookedDevice</param>
+        /// <param name="returnedBy">Who is logged in, marked this as returned</param>
+        internal void ReturnBookedDevice(int deviceID, int bookingID, string returnedBy)
+        {
+            // Delivery has already been made. Update BookedDevice to be Returned.
+            // "ReturnBookedDevice"
+
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("ReturnBookedDevice", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@deviceID", deviceID);
+            cmd.Parameters.AddWithValue("@bookingID", bookingID);
+            cmd.Parameters.AddWithValue("@returnedBy", returnedBy);
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+
+        /// <summary>
+        /// Creates BookedDevice, if the device is available.
+        /// </summary>
+        /// <param name="deviceID">DeviceID of the BookedDevice</param>
+        /// <param name="bookingID">BookingID of the BookedDevice</param>
+        /// <returns>True if Successful</returns>
+        internal bool CreateBookedDevice(int deviceID, int bookingID)
+        {
+            // Delivery has already been made. Update BookedDevice to be Returned.
+            // "ReturnBookedDevice"
+
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("CreateBookedDevice", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@deviceID", deviceID);
+            cmd.Parameters.AddWithValue("@bookingID", bookingID);
+
+            con.Open();
+            bool success = Convert.ToBoolean(cmd.ExecuteScalar());
+            con.Close();
+            return success;
+        }
+
+        /// <summary>
         /// Counts the current number of devices of ModelName type in storage.
         /// </summary>
         /// <param name="modelName"></param>
