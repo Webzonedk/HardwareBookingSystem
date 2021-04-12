@@ -23,7 +23,7 @@ namespace HUS_project.DAL
             connectionString = configuration.GetConnectionString("DBContext");
         }
 
-
+        //Getting Building names for the dropdown in Blue Oister bar
         internal List<string> GetBuildings()
         {
             SqlConnection con = new SqlConnection(connectionString);
@@ -57,7 +57,7 @@ namespace HUS_project.DAL
 
 
 
-
+        //Getting Room numbers (Not actual rooms) for the dropdown in Blue Oister bar
         internal List<byte> GetRoomNumbers()
         {
             SqlConnection con = new SqlConnection(connectionString);
@@ -91,7 +91,7 @@ namespace HUS_project.DAL
 
 
 
-
+        //Getting shelf names for the dropdown in Blue Oister bar
         internal List<string> GetShelfName()
         {
             SqlConnection con = new SqlConnection(connectionString);
@@ -125,7 +125,7 @@ namespace HUS_project.DAL
 
 
 
-
+        //Getting shelf levels for the dropdown in Blue Oister bar
         internal List<byte> GetShelfLevel()
         {
             SqlConnection con = new SqlConnection(connectionString);
@@ -159,7 +159,7 @@ namespace HUS_project.DAL
 
 
 
-
+        //Getting shelf spots for the dropdown in Blue Oister bar
         internal List<byte> GetShelfSpot()
         {
             SqlConnection con = new SqlConnection(connectionString);
@@ -193,14 +193,12 @@ namespace HUS_project.DAL
 
 
 
-
+        //Getting the list of storagelocations, based on the choices med in the Blue Oister bar.
         internal List<StorageLocationModel> GetSelectedStorageLocations(EditStorageLocationModel dataFromView)
         {
             SqlConnection con = new SqlConnection(connectionString);
             SqlCommand cmd = new SqlCommand("SelectLocationIDBasedOnInputFields", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-
 
 
             if (dataFromView.StorageLocation.Location.Building != null)
@@ -285,6 +283,50 @@ namespace HUS_project.DAL
         }
 
 
+        //Getting specific room, based on the choosen building and roomNr in the mass destruction.
+        internal List<StorageLocationModel> GetSpecificRoom(EditStorageLocationModel dataFromView)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("SelectRoomBasedOnBuildingNameAndRoomNr", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+            if (dataFromView.StorageLocation.Location.Building != null)
+            {
+                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = dataFromView.StorageLocation.Location.Building;
+            }
+            else
+            {
+                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = null;
+            }
+
+
+            if (dataFromView.StorageLocation.Location.RoomNumber > 0)
+            {
+                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = dataFromView.StorageLocation.Location.RoomNumber;
+            }
+            else
+            {
+                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = null;
+            }
+
+
+            List<StorageLocationModel> selectedRoom = new List<StorageLocationModel>();
+
+            con.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                StorageLocationModel selectedRooms = new StorageLocationModel();
+                BuildingModel buildingModel = new BuildingModel();
+                buildingModel.Building = (string)reader["buildingName"];
+                buildingModel.RoomNumber = (byte)reader["roomNr"];
+                selectedRooms.Location = buildingModel;
+
+                selectedRoom.Add(selectedRooms);
+            }
+            con.Close();
+            return selectedRoom;
+        }
 
 
         internal StorageLocationModel CreateLocation(StorageLocationModel dummy)

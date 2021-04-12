@@ -32,17 +32,17 @@ namespace HUS_project.Controllers
         public IActionResult LocationAdmin(EditStorageLocationModel dataFromView)
         {
             //Add standard values to the model
-            EditStorageLocationModel dummy = new EditStorageLocationModel();
+            EditStorageLocationModel initialData = new EditStorageLocationModel();
             StorageLocationModel selectedStorageLocation = new StorageLocationModel();
             BuildingModel buildingModel = new BuildingModel();
             //SortFilterModel sortFilterModel = new SortFilterModel();
             selectedStorageLocation.Location=buildingModel;
-            dummy.StorageLocation = selectedStorageLocation;
-            dummy.StorageLocation.Location.Building = null;
-            dummy.StorageLocation.Location.RoomNumber = 0;
-            dummy.StorageLocation.ShelfName=null;
-            dummy.StorageLocation.ShelfLevel = 0;
-            dummy.StorageLocation.ShelfSpot = 0;
+            initialData.StorageLocation = selectedStorageLocation;
+            initialData.StorageLocation.Location.Building = null;
+            initialData.StorageLocation.Location.RoomNumber = 0;
+            initialData.StorageLocation.ShelfName=null;
+            initialData.StorageLocation.ShelfLevel = 0;
+            initialData.StorageLocation.ShelfSpot = 0;
             //dummy.Filter = 1;
 
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
@@ -51,7 +51,7 @@ namespace HUS_project.Controllers
             List<string> shelfNames = manager.GetShelfName();
             List<byte> shelfLevels = manager.GetShelfLevel();
             List<byte> shelfspots = manager.GetShelfSpot();
-            List<StorageLocationModel> storageLocations = manager.GetSelectedStorageLocations(dummy);
+            List<StorageLocationModel> storageLocations = manager.GetSelectedStorageLocations(initialData);
 
             EditStorageLocationModel dropDownData = new EditStorageLocationModel();
             dropDownData.Buildings = buildings;
@@ -104,7 +104,7 @@ namespace HUS_project.Controllers
 
         public void CreateQRCode()
         {
-
+          
         }
 
         public void PrintQRCode()
