@@ -200,9 +200,6 @@ namespace HUS_project.DAL
         /// <returns>True if Successful</returns>
         internal bool CreateBookedDevice(int deviceID, int bookingID)
         {
-            // Delivery has already been made. Update BookedDevice to be Returned.
-            // "ReturnBookedDevice"
-
             SqlConnection con = new SqlConnection(connectionString);
             SqlCommand cmd = new SqlCommand("CreateBookedDevice", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -210,7 +207,8 @@ namespace HUS_project.DAL
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
 
             con.Open();
-            bool success = Convert.ToBoolean(cmd.ExecuteScalar());
+            int output = (Int32)cmd.ExecuteScalar();
+            bool success = Convert.ToBoolean(output);
             con.Close();
             return success;
         }

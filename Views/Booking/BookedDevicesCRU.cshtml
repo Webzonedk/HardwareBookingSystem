@@ -77,6 +77,7 @@
                     <p style="text-align:center; padding:5px; background-color:indianred; border-radius:8px; border-width:3px; border-style:solid; border-color:darkred;">@httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError").ToString()</p>
                 </div>
             </div>
+            httpContextAccessor.HttpContext.Session.SetString("bookedDeviceError", "");
         }
     </div>
 </div>
@@ -98,39 +99,49 @@
     <div class="row containerBody">
         @foreach (ItemLineModel ilm in Model.Booking.Items)
         {
-            <div class="row">
-                <div class="col-xl-4 col-lg-4 col-md-4 col-8 p-1 border-end border-white border-1">(@ilm.Model.Category.Category) @ilm.Model.ModelName</div>
-                @{
-                    int countOfBookedDevices = 0;
-                    int countOfReturnedBookedDevices = 0;
-                    foreach (DeviceModel device in Model.Booking.Devices)
+        <div class="row">
+            <div class="col-xl-4 col-lg-4 col-md-4 col-8 p-1 border-end border-white border-1">(@ilm.Model.Category.Category) @ilm.Model.ModelName</div>
+            @{
+                int countOfBookedDevices = 0;
+                int countOfReturnedBookedDevices = 0;
+                foreach (DeviceModel device in Model.Booking.Devices)
+                {
+                    if (device.Model.ModelName == ilm.Model.ModelName)
                     {
-                        if (device.Model.ModelName == ilm.Model.ModelName)
+                        countOfBookedDevices++;
+                        if (device.ReturnedBy != null && device.ReturnedBy != "")
                         {
-                            countOfBookedDevices++;
-                            if (device.ReturnedBy != null && device.ReturnedBy != "")
-                            {
-                                countOfReturnedBookedDevices++;
-                            }
+                            countOfReturnedBookedDevices++;
                         }
                     }
-                    <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 border-end border-white border-1 center">
-                        @ilm.Quantity / @countOfBookedDevices / @countOfReturnedBookedDevices
-                    </div>
-                    foreach (ItemLineModel item in Model.ModelsInStorage)
+                }
+                <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 border-end border-white border-1 center">
+                    @ilm.Quantity / @countOfBookedDevices / @countOfReturnedBookedDevices
+                </div>
+                foreach (ItemLineModel item in Model.ModelsInStorage)
+                {
+                    if (item.Model.ModelName == ilm.Model.ModelName)
                     {
-                        if (item.Model.ModelName == ilm.Model.ModelName)
+                        if (item.Quantity > 0)
                         {
                             <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 center">
                                 @item.Quantity / @Model.StorageLocations[item.Model.ModelName].Location.Building.@Model.StorageLocations[item.Model.ModelName].Location.RoomNumber
                                 @Model.StorageLocations[item.Model.ModelName].ShelfName.@Model.StorageLocations[item.Model.ModelName].ShelfLevel.@Model.StorageLocations[item.Model.ModelName].ShelfSpot
                             </div>
-                            break;
                         }
-
+                        else
+                        {
+                            // If there are none of this model in storage, storagelocation is Null!
+                            <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 center">
+                                @item.Quantity / -.- -.-.-
+                            </div>
+                        }
+                        break;
                     }
+
                 }
-            </div>
+            }
+        </div>
         }
 
     </div>

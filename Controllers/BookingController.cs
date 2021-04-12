@@ -67,7 +67,7 @@ namespace HUS_project.Controllers
                                 // "DeleteBookedDevice"
                                 dBManager.DeleteBookedDevice(device.DeviceID, booking.BookingID);
                             }
-                            else if(device1.ReturnedBy != null && device1.ReturnedBy != "")
+                            else if(device1.ReturnedBy == null || device1.ReturnedBy == "")
                             {
                                 // Delivery has already been made. Update BookedDevice to be Returned.
                                 // "ReturnBookedDevice"
@@ -131,18 +131,6 @@ namespace HUS_project.Controllers
             // Acquiring the existing, if any, bookedDevices for the booking
             booking.Devices = dBManager.GetBookedDevices(booking.BookingID);
 
-            // List of models, and how many devices of it are available in storage.
-            List<ItemLineModel> orderedModels = new List<ItemLineModel>();
-            
-            // FIlling orderedModels
-            foreach(ItemLineModel ilm in booking.Items)
-            {
-                orderedModels.Add(new ItemLineModel(
-                    dBManager.GetCountDevicesOfModelInStorage(ilm.Model.ModelName),
-                    ilm.Model)
-                    );
-            }
-
             // This is to ensure, that even BookedDevice models which haven't been ordered are represented.
             bool included;
             foreach (DeviceModel device in booking.Devices)
@@ -165,9 +153,20 @@ namespace HUS_project.Controllers
                 }
             }
 
+            // List of models, and how many devices of it are available in storage.
+            List<ItemLineModel> modelsInStorage = new List<ItemLineModel>();
+            foreach (ItemLineModel ilm in booking.Items)
+            {
+                modelsInStorage.Add(new ItemLineModel(
+                    dBManager.GetCountDevicesOfModelInStorage(ilm.Model.ModelName),
+                    ilm.Model)
+                    );
+            }
+
+
             // StoredLocation for each requested device modelName.
             Dictionary<string, StorageLocationModel> storageLocations = new Dictionary<string, StorageLocationModel>();
-            foreach (ItemLineModel ilm in orderedModels)
+            foreach (ItemLineModel ilm in booking.Items)
             {
                 storageLocations.Add(ilm.Model.ModelName, dBManager.GetModelLocation(ilm.Model.ModelName));
             }
@@ -175,7 +174,7 @@ namespace HUS_project.Controllers
             // Creation and filling of ViewModel for BookedDevicesCreateReadUpdate
             BookedDevicesCRUModel bookedDevicesCRUModel = new BookedDevicesCRUModel(
                 booking,
-                orderedModels,
+                modelsInStorage,
                 storageLocations
                 );
             return View("BookedDevicesCRU", bookedDevicesCRUModel);
