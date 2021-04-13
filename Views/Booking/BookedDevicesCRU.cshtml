@@ -10,13 +10,13 @@
             @if (Model.Booking.DeliveredBy != null)
             {
                 <h2 class="text-white align-items-center">
-                    Returner enheder fra bestillingen
+                    Returner enheder fra bestilling @Model.Booking.BookingID
                 </h2>
             }
             else
             {
                 <h2 class="text-white align-items-center">
-                    Lever enheder til bestillingen
+                    Lever enheder til bestilling @Model.Booking.BookingID
                 </h2>
             }
         </div>
@@ -25,17 +25,25 @@
             </div>
             <div class="col-5 text-white border-1 border-end border-white" style="margin-bottom:5px;">
                 <div class="row">
-                    <p>Bestillingsnummer: <span class="fw-bold">@Model.Booking.BookingID</span> | Bestiller: <span class="fw-bold">@Model.Booking.Customer</span> | Lokale: <span class="fw-bold">@Model.Booking.Location.Building.@Model.Booking.Location.RoomNumber</span></p>
+                    <p>
+                        Bestiller: <span class="fw-bold">@Model.Booking.Customer</span> | Lokale: <span class="fw-bold">@Model.Booking.Location.Building.@Model.Booking.Location.RoomNumber</span>
+                        @if (Model.Booking.DeliveredBy != null)
+                        {
+                            <span> | Leveret af: <span class="fw-bold">@Model.Booking.DeliveredBy</span></span>
+                        }
+                    </p>
                 </div>
                 <div class="row">
                     <p>Fra d. <span class="fw-bold">@Model.Booking.PlannedBorrowDate.ToString("dd/MM-yy")</span> til og med d. <span class="fw-bold">@Model.Booking.PlannedReturnDate.ToString("dd/MM-yy")</span></p>
                 </div>
-                @if (Model.Booking.DeliveredBy != null)
-                {
-                    <div class="row">
-                        <p>Leveret af: <span class="fw-bold">@Model.Booking.DeliveredBy</span></p>
-                    </div>
-                }
+                <div class="row">
+                    @using (Html.BeginForm("GoToBooking", "Booking"))
+                    {
+                        <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
+                            <span>Rediger Booking</span>
+                        </button>
+                    }
+                </div>
             </div>
             <div class="col-5">
                 @using (Html.BeginForm("ProcessDeviceForBooking", "Booking"))
@@ -139,6 +147,55 @@
                         break;
                     }
 
+                }
+            }
+        </div>
+        }
+
+    </div>
+
+    <div class="row containerFooter">
+        <h4>&nbsp;</h4>
+    </div>
+</div>
+
+<div class="container containerMain box-shadow">
+    <div class="row containerHeader">
+        <h4 class="col">Enheder</h4>
+    </div>
+
+    <div class="row containerBody">
+        @foreach (ItemLineModel ilm in Model.Booking.Items)
+        {
+        <div class="row">
+            <div class="row containerSubHeader border-top border-bottom border-white border-1">(@ilm.Model.Category.Category)@ilm.Model.ModelName</div>
+            @foreach (DeviceModel device in Model.Booking.Devices)
+            {
+                if (device.Model.ModelName == ilm.Model.ModelName)
+                {
+                    <div class="row col-6">
+                        
+                        @device.DeviceID (SNR @device.SerialNumber) - 
+                        @if(device.ReturnedBy != null && device.ReturnedBy != "")
+                        {
+                            <span>Returneret</span>
+                        }
+                        else if(Model.Booking.DeliveredBy == null || Model.Booking.DeliveredBy == "")
+                        {
+                            <span>Afventer Levering</span>
+                        }
+                        else
+                        {
+                            <span>Leveret</span>
+                        }
+                        
+                        @using (Html.BeginForm("EditView", "Device"))
+                        {
+                            <button type="submit" name="submit" value="@device.DeviceID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
+                                <span>Se Enhed</span>
+                            </button>
+                        }
+                    </div>
                 }
             }
         </div>
