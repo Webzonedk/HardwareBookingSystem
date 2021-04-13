@@ -65,6 +65,10 @@ namespace HUS_project
             {
                 endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            //set environment data to get root 
+            AppDomain.CurrentDomain.SetData("contentRootPath", env.ContentRootPath);
+            AppDomain.CurrentDomain.SetData("webRootPath", env.WebRootPath);
         }
     }
 }
