@@ -11,6 +11,7 @@ namespace HUS_project.Models.ViewModels
         private DeviceModel device;
         private string room;
         private string shelf;
+        private string imagePath;
         private List<string> modelNames;
         private List<string> categoryNames;
         private List<string> rooms;
@@ -31,6 +32,12 @@ namespace HUS_project.Models.ViewModels
         {
             get { return room; }
             set { room = value; }
+        }
+
+        public string ImagePath
+        {
+            get { return imagePath; }
+            set { imagePath = value; }
         }
 
         public string Shelf
@@ -90,7 +97,7 @@ namespace HUS_project.Models.ViewModels
             locationLogs = new List<DeviceModel>();
         }
 
-        public EditDeviceModel(DeviceModel device, List<string> modelNames, List<string> categories, List<string> rooms,List<string> locations,List<DeviceModel> logs, List<DeviceModel> locationlogs)
+        public EditDeviceModel(DeviceModel device, List<string> modelNames, List<string> categories, List<string> rooms,List<string> locations,List<DeviceModel> logs, List<DeviceModel> locationlogs,string _imagepath)
         {
             this.device = device;
             this.modelNames = modelNames;
@@ -99,6 +106,7 @@ namespace HUS_project.Models.ViewModels
             this.shelfs = locations;
             this.logs = logs;
             this.LocationLogs = locationlogs;
+            this.imagePath = _imagepath;
         }
         #endregion
     }

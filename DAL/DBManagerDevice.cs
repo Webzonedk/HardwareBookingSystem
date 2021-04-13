@@ -7,6 +7,7 @@ using HUS_project.Models.ViewModels;
 using HUS_project.Models;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 
 namespace HUS_project.DAL
 {
@@ -15,12 +16,13 @@ namespace HUS_project.DAL
         //private fields containting connectionstrings for databases
         private readonly IConfiguration configuration;
         private readonly string connectionString;
-
+       
         //constructor setting connectionstrings to databases
         public DBManagerDevice(IConfiguration _configuration)
         {
             this.configuration = _configuration;
             connectionString = configuration.GetConnectionString("DBContext");
+           
         }
 
 
@@ -41,10 +43,17 @@ namespace HUS_project.DAL
 
             //execute query
             cmd.ExecuteNonQuery();
-
+            
             //return output parameter
             int deviceID = Convert.ToInt32(cmd.Parameters["@deviceID"].Value);
             con.Close();
+           
+            //rename image - based on model ID
+            string root = (string)AppDomain.CurrentDomain.GetData("webRootPath");
+            string webroot = root + "\\DeviceContent";
+            string oldName = "\\Capture.png";
+            string newfilename = "\\Capture_" + deviceID +".png";
+            File.Move($"{webroot}{oldName}", $"{webroot}{newfilename}");
 
             return deviceID;
         }

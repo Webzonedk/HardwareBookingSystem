@@ -373,6 +373,8 @@ Overviews with lines in sides to avaoid double lines Friendly borrowed from HKS 
     border-width: 2px;
     border-color: #1c209a;
     border-radius: 10px;
+    max-width:100%;
+   /* max-height:100%;*/
 }
 
 /*----------------------------------------------------------------------

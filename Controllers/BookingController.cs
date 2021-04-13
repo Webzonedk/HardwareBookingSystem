@@ -33,42 +33,80 @@ namespace HUS_project.Controllers
             return View();
         }
 
-        
+        /// <summary>
+        /// Contextively processes what to do with this device id for this booking id. Be it create BookedDevice, return BookedDevice, or even delete.
+        /// </summary>
+        /// <param name="deviceID"></param>
+        /// <param name="bookingID"></param>
+        /// <returns></returns>
         public IActionResult ProcessDeviceForBooking(string deviceID, string bookingID)
         {
+            HttpContext.Session.SetString("bookedDeviceError", "");
             // FIrst, try and see if it's possible to convert and then do so.
             if (int.TryParse(deviceID, out int deviceIDInteger))
             {
                 DBManagerBooking dBManager = new DBManagerBooking(configuration);
                 DBManagerDevice dBManagerDevice = new DBManagerDevice(configuration);
 
-                // Second, find out if the deviceID is a valid one (if it exists and isn't Disabled)
+                // Second, find out if the deviceID is a valid one (if it exists and is Enabled (status = 1))
                 DeviceModel device = dBManagerDevice.GetDeviceInfoWithLocation(deviceIDInteger);
                 BookingModel booking = dBManager.GetBooking(int.Parse(bookingID));
                 booking.Devices = dBManager.GetBookedDevices(int.Parse(bookingID));
 
-                if (device.Model.ModelName != null)
+                if (device.Model.ModelName != null && device.Status == 1 && booking.BookingStatus == 1)
                 {
-                    // Find out if you're supposed to Create the bookedDevice (
-                    if(booking.DeliveredBy == null)
+                    // Find out if you're supposed to Create the bookedDevice, or undo the bookedDevice or return the device
+                    bool deviceInBookingAlready = false;
+                    foreach(DeviceModel device1 in booking.Devices)
                     {
-                        // Check if the Device is still booked somewhere else
-                        // Create BookedDevice
+                        if(device1.DeviceID == device.DeviceID)
+                        {
+                            if (booking.DeliveredBy == null)
+                            {
+                                // The delivery for this booking has not been made yet, ergo the bookedDevice may be Deleted. An Undo.
+                                // "DeleteBookedDevice"
+                                dBManager.DeleteBookedDevice(device.DeviceID, booking.BookingID);
+                            }
+                            else if(device1.ReturnedBy == null || device1.ReturnedBy == "")
+                            {
+                                // Delivery has already been made. Update BookedDevice to be Returned.
+                                // "ReturnBookedDevice"
+                                dBManager.ReturnBookedDevice(device.DeviceID, booking.BookingID, HttpContext.Session.GetString("uniLogin"));
+                            }
+                            else
+                            {
+                                // This device has already been returned
+                                HttpContext.Session.SetString("bookedDeviceError", "Denne Enhed er allerede blevet returneret.");
+
+                            }
+                            deviceInBookingAlready = true;
+                            break;
+                        }
                     }
-                    else
+
+
+                    if (!deviceInBookingAlready)
                     {
-                        //  or if you're supposed to Update the bookedDevice.. if it's in the booking????
-                        // Update BookedDevice to be Returned
+                        // THe device does not already exist for this booking, therefore it should be created.. if the device is available.
+                        // CreateBookedDevice() will perform an availability check on its own.
+                        if(!dBManager.CreateBookedDevice(device.DeviceID, booking.BookingID))
+                        {
+                            // The requested device is not available! Perhaps not returned from another Booking, or being repaired.
+                            HttpContext.Session.SetString("bookedDeviceError", "Denne enhed er allerede udlånt til en anden bestilling, eller er på værkstedet.");
+                        }
                     }
                 }
                 else
                 {
-                    // This device does not exist, or is disabled
+                    // This device does not exist or is Disabled
+                    HttpContext.Session.SetString("bookedDeviceError", "Denne enhed eksisterer ikke, eller er slået fra. Eller denne booking er deaktiveret.");
                 }
             }
             else
             {
                 // It is not possible to convert the input to an integer, therefore we can do nothing with it.
+                HttpContext.Session.SetString("bookedDeviceError", "Input kunne ikke konverteres til et helt tal.");
+
             }
 
 
@@ -93,18 +131,6 @@ namespace HUS_project.Controllers
             // Acquiring the existing, if any, bookedDevices for the booking
             booking.Devices = dBManager.GetBookedDevices(booking.BookingID);
 
-            // List of models, and how many devices of it are available in storage.
-            List<ItemLineModel> orderedModels = new List<ItemLineModel>();
-            
-            // FIlling orderedModels
-            foreach(ItemLineModel ilm in booking.Items)
-            {
-                orderedModels.Add(new ItemLineModel(
-                    dBManager.GetCountDevicesOfModelInStorage(ilm.Model.ModelName),
-                    ilm.Model)
-                    );
-            }
-
             // This is to ensure, that even BookedDevice models which haven't been ordered are represented.
             bool included;
             foreach (DeviceModel device in booking.Devices)
@@ -127,9 +153,20 @@ namespace HUS_project.Controllers
                 }
             }
 
+            // List of models, and how many devices of it are available in storage.
+            List<ItemLineModel> modelsInStorage = new List<ItemLineModel>();
+            foreach (ItemLineModel ilm in booking.Items)
+            {
+                modelsInStorage.Add(new ItemLineModel(
+                    dBManager.GetCountDevicesOfModelInStorage(ilm.Model.ModelName),
+                    ilm.Model)
+                    );
+            }
+
+
             // StoredLocation for each requested device modelName.
             Dictionary<string, StorageLocationModel> storageLocations = new Dictionary<string, StorageLocationModel>();
-            foreach (ItemLineModel ilm in orderedModels)
+            foreach (ItemLineModel ilm in booking.Items)
             {
                 storageLocations.Add(ilm.Model.ModelName, dBManager.GetModelLocation(ilm.Model.ModelName));
             }
@@ -137,7 +174,7 @@ namespace HUS_project.Controllers
             // Creation and filling of ViewModel for BookedDevicesCreateReadUpdate
             BookedDevicesCRUModel bookedDevicesCRUModel = new BookedDevicesCRUModel(
                 booking,
-                orderedModels,
+                modelsInStorage,
                 storageLocations
                 );
             return View("BookedDevicesCRU", bookedDevicesCRUModel);
