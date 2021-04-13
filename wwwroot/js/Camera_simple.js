@@ -1,4 +1,4 @@
-﻿const { hide } = require("@popperjs/core");
+﻿
 
 // Grab elements, create settings, etc.
 var video = document.getElementById('video');
@@ -10,6 +10,7 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
         //video.src = window.URL.createObjectURL(stream);
         video.srcObject = stream;
+
         video.play();
     });
     }
@@ -18,9 +19,12 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     hideElement();
 }
 
+//hide image element
 function hideElement() {
     var elem = document.getElementById("pictureFromCamera");
     elem.style.display = "none";
+    video.style.display = "block";
+
 }
 
 

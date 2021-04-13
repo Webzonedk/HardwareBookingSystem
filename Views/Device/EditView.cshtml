@@ -34,7 +34,14 @@
 
                 <div class=" row ">
                     <div>
-                        <img class="img-bg" src="~/Graphic/billede-mangler.png" style="width: 100%" />
+                        @if (Model.ImagePath != null)
+                        {
+                            <img class="img-bg" src="@Url.Content("~/DeviceContent/"+Model.ImagePath)" style="width: 100%" />
+                        }
+                        else
+                        {
+                            <img class="img-bg" src="~/Graphic/billede-mangler.png" style="width: 90%" />
+                        }
                     </div>
                 </div>
 
@@ -101,11 +108,11 @@
                 <br />
 
                 @{string toolTip = "Advarsel. \n\n" +
-                                            "Hvis der indtastes en model som ikke findes is systemet,\n oprettes en ny model som enheden knyttes til"; }
+                                                  "Hvis der indtastes en model som ikke findes is systemet,\n oprettes en ny model som enheden knyttes til"; }
 
                 @*<div class="col p-3">
-            <button type="button" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip">Tilføj Placering</button>
-        </div>*@
+                        <button type="button" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip">Tilføj Placering</button>
+                    </div>*@
 
                 <!--model names dropdown-->
                 <div class="form-floating ">
@@ -124,8 +131,8 @@
                 </div>
 
                 @*<input  class="form-select black-tooltip" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom">*@
-                    
-                
+
+
 
                 <br />
 
@@ -308,7 +315,15 @@
             <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1">
                 <div class=" row ">
                     <div>
-                        <img class="img-bg" src="~/Graphic/billede-mangler.png" style="width: 90%" />
+                       
+                        @if (Model.ImagePath != null)
+                        {
+                            <img class="img-bg" src="@Url.Content("~/DeviceContent/"+Model.ImagePath)" style="width: 100%" />
+                        }
+                        else
+                        {
+                            <img class="img-bg" src="~/Graphic/billede-mangler.png" style="width: 90%" />
+                        }
                     </div>
                 </div>
             </div>

@@ -131,10 +131,30 @@ namespace HUS_project.DAL
             con.Open();
             SqlCommand cmd = new SqlCommand("GetUserBookingsOpen", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
+            
 
             con.Close();
             return null;
+        }
+
+        internal int GetModelID(string modelName)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("GetModelName", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@modelName", System.Data.SqlDbType.VarChar).Value = modelName;
+            cmd.Parameters.Add("@modelID", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
+
+            //execute query
+            cmd.ExecuteNonQuery();
+           
+            //return output parameter
+            int modelID = Convert.ToInt32(cmd.Parameters["@modelID"].Value);
+
+           
+            con.Close();
+            return modelID;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace HUS_project.Models.ViewModels
         private DeviceModel device;
         private List<string> modelNames;
         private List<string> categoryNames;
+        private string image;
         #endregion
 
         #region Properties
@@ -35,7 +36,11 @@ namespace HUS_project.Models.ViewModels
             set { categoryNames = value; }
         }
 
-
+        public string Image
+        {
+            get { return image; }
+            set { image = value; }
+        }
 
         #endregion
 
@@ -47,11 +52,12 @@ namespace HUS_project.Models.ViewModels
             modelNames = new List<string>();
         }
 
-        public CreateDeviceModel(DeviceModel device, List<string> modelNames, List<string> categories)
+        public CreateDeviceModel(DeviceModel device, List<string> modelNames, List<string> categories,string _image)
         {
             this.device = device;
             this.modelNames = modelNames;
             this.categoryNames = categories;
+            this.image = _image;
         }
         #endregion
     }

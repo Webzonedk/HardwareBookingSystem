@@ -18,7 +18,7 @@
 
 
 
-    <form class="row containerBody center was-validated" asp-action="AddDeviceToDB" method="post" autocomplete="off">
+    <form class="row containerBody center was-validated" id="form" asp-action="AddDeviceToDB" method="post" autocomplete="off">
 
         <!--empty col-->
         <div class="col-xl-2 col-md-6 gx-3 gy-3">
@@ -38,22 +38,22 @@
         <div class="col-xl-4 col-md-12 gx-3 gy-3">
             <div class="row center">
 
-               <!--test of camera capture-->
+                <!--test of camera capture-->
 
-                <div>
-                    @*<img class="img-bg" id="pictureFromCamera" src="~/Graphic/billede-mangler.png" style="width: 100%" />*@
+                <div class="center">
 
-                    @*<input type="file" accept="image/*;capture=camera">*@
+                    <img class="img-bg centerVideo" id="pictureFromCamera" src="~/Graphic/billede-mangler_332_250.png" />
+                    <video class="img-bg centerVideo" id="video" width="336" height="254" autoplay></video>
 
-                    <video id="video" width="480" height="480" autoplay poster="~/Graphic/billede-mangler.png"></video>
-                   
+                    <input type="hidden" id="hiddenimage" asp-for="@Model.Image" value=""/>
 
                 </div>
 
             </div>
             <div class="row center p-3">
                 <div>
-                    <button id="snap">Tag billed</button>
+                   
+                    <button id="snap" type="button">Tag billed</button>
                     <button type="button" class=" btn-primary btn" onclick="EnableCam()">upload foto</button>
 
                 </div>
@@ -122,7 +122,7 @@
         <!--submit button-->
         <div class="row">
             <div class="col p-3">
-                <button class="btn btn-primary btn-blue" type="submit">Gem</button>
+                <button class="btn btn-primary btn-blue" type="submit" id="btn" onclick="submit_2()">Gem</button>
 
             </div>
         </div>
@@ -141,7 +141,8 @@
 <script src="~/js/textCount.js"></script>
 
 <!--javascript to enable web cam-->
-<script src="~/js/SaveCapture.js"></script>
-<script src ="~/js/Camera_simple.js"></script>
-<script src="~/js/SnapPicture.js"></script>
 
+<script src="~/js/Camera_simple.js"></script>
+<script src="~/js/SnapPicture.js"></script>
+<script src="~/js/HideElements.js"></script>
+<script src="~/js/PostImage.js"></script>

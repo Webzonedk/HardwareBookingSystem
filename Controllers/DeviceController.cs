@@ -9,12 +9,15 @@ using HUS_project.Models;
 using HUS_project.DAL;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
-
+using System.IO;
+using System.Drawing;
+using System.Drawing.Imaging;
 namespace HUS_project.Controllers
 {
     public class DeviceController : Controller
     {
         private readonly IConfiguration configuration;
+        
 
         // constructor of homecontroller
         public DeviceController(IConfiguration config)
@@ -34,17 +37,60 @@ namespace HUS_project.Controllers
             List<string> categories = sharedDBManager.GetCategories();
             List<string> modelNames = sharedDBManager.GetModelNames();
 
+            //get model ID from DB
+
             //create view model
             CreateDeviceModel deviceData = new CreateDeviceModel();
             deviceData.Categories = categories;
             deviceData.ModelNames = modelNames;
             deviceData.Device = new DeviceModel();
 
+            //check if image exists in folder, based on model ID
+
             return View(deviceData);
         }
 
+        [HttpPost]
         public IActionResult AddDeviceToDB(CreateDeviceModel deviceData)
         {
+
+            if (string.IsNullOrEmpty(deviceData.Image))
+            {
+                Debug.WriteLine("intet billed");
+            }
+
+            //convet image source to byte array
+            string sourceimage = deviceData.Image;
+            string base64 = sourceimage.Substring(sourceimage.IndexOf(',') + 1);
+            byte[] datastream = Convert.FromBase64String(base64);
+
+            //convert byte array to image file
+            using (MemoryStream m = new MemoryStream(datastream))
+            {
+                using (Image image = Image.FromStream(m))
+                {
+                    string root = (string)AppDomain.CurrentDomain.GetData("webRootPath");
+                    string webroot = root + "\\DeviceContent";
+                  
+                    string filename = "\\Capture.png";
+                    if (Directory.Exists(webroot))
+                    {
+                        // save image to directory
+                        image.Save(webroot + filename, ImageFormat.Png);
+                        m.Dispose();
+                        image.Dispose();
+                        datastream = null;
+
+                        //get filename
+                        deviceData.Image = filename;
+                    }
+
+                }
+
+            }
+            string path = "..\\DeviceContent\\Capture_51.png";
+            Debug.Write(path);
+
             //initializing DB managers
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
             DBManagerShared dbsharedManager = new DBManagerShared(configuration);
@@ -53,7 +99,7 @@ namespace HUS_project.Controllers
             DeviceModel data = deviceData.Device;
             data.ChangedBy = HttpContext.Session.GetString("uniLogin");
             int deviceID = dbManager.CreateDevice(data);
-
+            
             //return device info to Edit view
             data = dbManager.GetDeviceInfoWithLocation(deviceID);
             List<DeviceModel> logs = dbManager.GetDeviceLogs(deviceID);
@@ -64,7 +110,7 @@ namespace HUS_project.Controllers
             editdata.Logs = logs;
             editdata.Categories = categories;
             editdata.ModelNames = modelNames;
-
+            editdata.ImagePath = $"Capture_{data.DeviceID}.png";
             return View("EditView", editdata);
         }
 
@@ -86,11 +132,14 @@ namespace HUS_project.Controllers
             List<string> modelNames = dbsharedManager.GetModelNames();
             EditDeviceModel storagelocation = dbManager.GetStorageLocations(null);
 
-
             EditDeviceModel editdata = new EditDeviceModel();
             editdata.Device = data;
             editdata.Room = new string($"{data.Location.Location.Building}.{data.Location.Location.RoomNumber.ToString()}");
             editdata.Shelf = new string($"{data.Location.ShelfName}.{data.Location.ShelfLevel}.{data.Location.ShelfSpot}");
+
+            //check if 
+
+            editdata.ImagePath = $"Capture_{ID}.png";
 
             editdata.Logs = logs;
             editdata.Categories = categories;
@@ -146,7 +195,7 @@ namespace HUS_project.Controllers
                 newdata.Shelf = null;
             }
 
-            
+
 
 
             // clear model
