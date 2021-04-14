@@ -16,6 +16,12 @@ namespace HUS_project.Models.ViewModels
         private List<byte> shelfLevels;
         private List<byte> shelfSpots;
         private byte filter;
+        private List<string> deleteBuildings;
+        private List<byte> deleteRoomNumbers;
+        private string deleteRoom;
+        private List<string> deleteShelfNames;
+        private List<byte> deleteShelfLevels;
+        private List<byte> deleteShelfSpots;
         #endregion
 
 
@@ -70,17 +76,53 @@ namespace HUS_project.Models.ViewModels
             set { shelfSpots = value; }
         }
 
-
         public byte Filter
         {
             get { return filter; }
             set { filter = value; }
         }
 
+        public List<string> DeleteBuildings
+        {
+            get { return deleteBuildings; }
+            set { deleteBuildings = value; }
+        }
+
+        public List<byte> DeleteRoomNumbers
+        {
+            get { return deleteRoomNumbers; }
+            set { deleteRoomNumbers = value; }
+        }
+
+        public string DeleteRoom
+        {
+            get { return deleteRoom; }
+            set { deleteRoom = value; }
+        }
+
+        public List<string> DeleteShelfNames
+        {
+            get { return deleteShelfNames; }
+            set { deleteShelfNames = value; }
+        }
+
+        public List<byte> DeleteShelfLevels
+        {
+            get { return deleteShelfLevels; }
+            set { deleteShelfLevels = value; }
+        }
+
+        public List<byte> DeleteShelfSpots
+        {
+            get { return deleteShelfSpots; }
+            set { deleteShelfSpots = value; }
+        }
+
+
         #endregion
 
 
-        
+
 
 
 
@@ -93,9 +135,16 @@ namespace HUS_project.Models.ViewModels
             shelfNames = new List<string>();
             shelfLevels = new List<byte>();
             shelfSpots = new List<byte>();
+            deleteBuildings = new List<string>();
+            deleteRoomNumbers = new List<byte>();
+            deleteShelfNames = new List<string>();
+            deleteShelfLevels = new List<byte>();
+            deleteShelfSpots = new List<byte>();
         }
 
-        public EditStorageLocationModel(StorageLocationModel storageLocation, List<StorageLocationModel> storageLocations, List<string> buildings, List<byte> roomNumbers, List<string> shelfNames, List<byte> shelfLevels, List<byte> shelfSpots, byte filter)
+        public EditStorageLocationModel(StorageLocationModel storageLocation, List<StorageLocationModel> storageLocations, List<string> buildings, List<byte> roomNumbers,
+            List<string> shelfNames, List<byte> shelfLevels, List<byte> shelfSpots, byte filter,
+            List<string>deleteBuildings, List<byte> deleteRoomNumbers, string deleteRoom, List<string> deleteShelfNames, List<byte> deleteShelfLevels, List<byte> deleteShelfSpots)
         {
             this.storageLocation = storageLocation;
             this.storageLocations = storageLocations;
@@ -105,6 +154,12 @@ namespace HUS_project.Models.ViewModels
             this.shelfLevels = shelfLevels;
             this.shelfSpots = shelfSpots;
             this.filter = filter;
+            this.deleteBuildings = deleteBuildings;
+            this.deleteRoomNumbers = deleteRoomNumbers;
+            this.deleteRoom = deleteRoom;
+            this.deleteShelfNames = deleteShelfNames;
+            this.deleteShelfLevels = deleteShelfLevels;
+            this.deleteShelfSpots = deleteShelfSpots;
         }
         #endregion
     }
