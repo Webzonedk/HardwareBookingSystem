@@ -84,7 +84,6 @@ namespace HUS_project.Controllers
                         }
                     }
 
-
                     if (!deviceInBookingAlready)
                     {
                         // THe device does not already exist for this booking, therefore it should be created.. if the device is available.
@@ -106,9 +105,7 @@ namespace HUS_project.Controllers
             {
                 // It is not possible to convert the input to an integer, therefore we can do nothing with it.
                 HttpContext.Session.SetString("bookedDeviceError", "Input kunne ikke konverteres til et helt tal.");
-
             }
-
 
             return GoToScanDevices(bookingID);
         }
