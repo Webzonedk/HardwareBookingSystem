@@ -216,8 +216,8 @@
             <div class="row">
                 <div class="col-lg-5">
                     <div class="row">
-                        <div class="col-lg-4 align-content-center">
-                            <div class="row p-1">
+                        <div class="col-lg-4">
+                            <div class="row p-1 center">
                                 <div class="dynamic-Font-Size-12 p-1">Bygning:</div>
                                 <input class="form-select" id="buildingDropDown" list="buildings" aria-label="building" asp-for="@Model.StorageLocation.Location.Building">
                                 <datalist id="buildings">
@@ -227,7 +227,7 @@
                                     }
                                 </datalist>
                             </div>
-                            <div class="row p-1 align-content-center">
+                            <div class="row p-1">
                                 <div class="col-lg-2 col-6 ">
                                     <button type="button" class="btn btn-danger btn-sm btn-red center" style="width:100px" asp-action="DeleteBuilding">Slet</button>
                                 </div>
@@ -239,10 +239,10 @@
                         <div class="col-lg-4">
                             <div class="row p-1">
                                 <div class="dynamic-Font-Size-12 p-1 center">Valgt Rum:</div>
-                                <input readonly type="text" class="form-control" id="selectedRoom" aria-label="Vælg lokalenummer" asp-for="@Model.StorageLocation.Location.RoomNumber">
+                                <input readonly type="text" class="form-control background-white" id="selectedRoom" aria-label="Vælg lokalenummer" asp-for="@Model.StorageLocation.Location.RoomNumber">
                             </div>
                             <div class="row p-1">
-                                <div class="col-lg-2 col-6 p-1 center ">
+                                <div class="col-lg-2 col-6 p-1 col-centered">
                                     <button type="button" class="btn btn-danger btn-sm btn-red" style="width:100px" asp-action="DeleteRoom">Slet</button>
                                 </div>
                             </div>
