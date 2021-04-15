@@ -221,6 +221,16 @@ text colors
 }
 
 
+
+
+/*----------------------------------------------------------------------
+Background colors
+----------------------------------------------------------------------*/
+.background-white {
+    background-color: #ffffff;
+}
+
+
 /*----------------------------------------------------------------------
 Containers
 ----------------------------------------------------------------------*/
@@ -379,6 +389,11 @@ Overviews with lines in sides to avaoid double lines Friendly borrowed from HKS 
 Alignment
 ----------------------------------------------------------------------*/
 
+.col-centered {
+    float: none;
+    margin: 0 auto;
+}
+
 .vertical-center {
     margin: 0;
     position: absolute;
@@ -389,7 +404,7 @@ Alignment
 
 .horisontal-center {
     margin: 0;
-    position: absolute;
+    position: relative;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
