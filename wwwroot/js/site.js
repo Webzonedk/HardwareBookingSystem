@@ -18,9 +18,22 @@ function submit(input) {
 
 }
 
-////Used to sort the columns in the views
+function CheckInputField() {
 
-//    function sorting() {
-//        document.getElementById('ChosenProvider').value = '1';
-//        document.getElementById('loginForm').submit();
-//    }
+    var field = document.getElementById("deleteNote").value;
+    if (field == "") {
+
+       /* var AlertBox = confirm("For at slette enheden, skal årsag udfyldes");*/
+        document.getElementById("warning").innerText = "For at slette enheden, skal årsag udfyldes";
+        //if (AlertBox == true || AlertBox == false) {
+        //}
+            return false;
+    }
+    else {
+
+        document.getElementById("editForm").action = "DeleteDevice";
+        document.getElementById("warning").innerText ='';
+        console.info("delete");
+        form.submit();
+    }
+}

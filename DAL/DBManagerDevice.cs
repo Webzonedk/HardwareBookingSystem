@@ -16,13 +16,13 @@ namespace HUS_project.DAL
         //private fields containting connectionstrings for databases
         private readonly IConfiguration configuration;
         private readonly string connectionString;
-       
+
         //constructor setting connectionstrings to databases
         public DBManagerDevice(IConfiguration _configuration)
         {
             this.configuration = _configuration;
             connectionString = configuration.GetConnectionString("DBContext");
-           
+
         }
 
 
@@ -40,20 +40,41 @@ namespace HUS_project.DAL
             cmd.Parameters.Add("@changedBy", System.Data.SqlDbType.VarChar).Value = deviceData.ChangedBy;
             cmd.Parameters.Add("@serialNumber", System.Data.SqlDbType.VarChar).Value = deviceData.SerialNumber;
             cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
-
+            cmd.Parameters.Add("@modelID", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
             //execute query
             cmd.ExecuteNonQuery();
-            
+
             //return output parameter
             int deviceID = Convert.ToInt32(cmd.Parameters["@deviceID"].Value);
+            int modelID = Convert.ToInt32(cmd.Parameters["@modelID"].Value);
             con.Close();
-           
+
+
+
             //rename image - based on model ID
             string root = (string)AppDomain.CurrentDomain.GetData("webRootPath");
             string webroot = root + "\\DeviceContent";
             string oldName = "\\Capture.png";
-            string newfilename = "\\Capture_" + deviceID +".png";
-            File.Move($"{webroot}{oldName}", $"{webroot}{newfilename}");
+            string newfilename = "\\Capture_" + modelID + ".png";
+
+            //check if image path exist
+            if (File.Exists($"{webroot}{oldName}"))
+            {
+                //rename file
+                try
+                {
+                    File.Move($"{webroot}{oldName}", $"{webroot}{newfilename}");
+                }
+                catch (Exception)
+                {
+                    File.Delete($"{webroot}{newfilename}");
+                     File.Move($"{webroot}{oldName}", $"{webroot}{newfilename}");
+
+                    //throw;
+                }
+            }
+
+            
 
             return deviceID;
         }
@@ -291,9 +312,9 @@ namespace HUS_project.DAL
                 cmd.Parameters.Add("@searchName", System.Data.SqlDbType.VarChar).Value = null;
             }
 
-            if(SearchModel.InStock >0)
+            if (SearchModel.InStock > 0)
             {
-            cmd.Parameters.Add("@inStock", System.Data.SqlDbType.TinyInt).Value = SearchModel.InStock;
+                cmd.Parameters.Add("@inStock", System.Data.SqlDbType.TinyInt).Value = SearchModel.InStock;
 
             }
             else

@@ -141,7 +141,7 @@ namespace HUS_project.DAL
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("GetModelName", con);
+            SqlCommand cmd = new SqlCommand("GetModelID", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.Add("@modelName", System.Data.SqlDbType.VarChar).Value = modelName;
             cmd.Parameters.Add("@modelID", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;

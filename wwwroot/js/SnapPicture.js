@@ -1,12 +1,10 @@
-﻿// Elements for taking the snapshot
-
+﻿
+// Elements for taking the snapshot
 var video = document.getElementById('video');
 var img = document.getElementById("pictureFromCamera");
 
 // Trigger photo take
 document.getElementById("snap").addEventListener("click", function () {
-
-
 
     //create canvas
     var canvas = document.createElement("canvas");
@@ -23,8 +21,6 @@ document.getElementById("snap").addEventListener("click", function () {
     img.src = dataurl;
 
    
-
-
     //hide video & show image instead
     if (img.style.display == "none") {
         img.style.display = "block";
