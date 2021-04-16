@@ -177,11 +177,17 @@ namespace HUS_project.Controllers
             return View("BookedDevicesCRU", bookedDevicesCRUModel);
         }
 
-
+        /// <summary>
+        /// Go to the booking edit page.
+        /// </summary>
+        /// <param name="bookingID"></param>
+        /// <returns></returns>
         public IActionResult GoToBooking(string bookingID)
         {
             DBManagerBooking dBManager = new DBManagerBooking(configuration);
             BookingModel booking = dBManager.GetBooking(Convert.ToInt32(bookingID));
+            booking.Items = dBManager.GetItemLines(booking.BookingID);
+            booking.Devices = dBManager.GetBookedDevices(booking.BookingID);
 
             return View("BookingRUD", booking);
         }
