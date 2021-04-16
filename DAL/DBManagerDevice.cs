@@ -180,9 +180,6 @@ namespace HUS_project.DAL
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceID;
 
-            //execute query
-            //   cmd.ExecuteNonQuery();
-
             SqlDataReader reader = cmd.ExecuteReader();
             List<DeviceModel> Logs = new List<DeviceModel>();
             while (reader.Read())
@@ -192,7 +189,7 @@ namespace HUS_project.DAL
                 CategoryModel c = new CategoryModel();
                 m.Category = c;
 
-                device.DeviceID = (int)reader["deviceID"];
+            
                 device.ChangedBy = (string)reader["changedBy"];
                 device.ChangeDate = (DateTime)reader["logDate"];
                 device.Notes = (string)reader["note"];

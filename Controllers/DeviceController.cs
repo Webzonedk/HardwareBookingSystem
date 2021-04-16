@@ -95,7 +95,7 @@ namespace HUS_project.Controllers
                 }
             }
 
-           
+
             //Add device to database
             DeviceModel data = deviceData.Device;
             data.ChangedBy = HttpContext.Session.GetString("uniLogin");
@@ -235,11 +235,11 @@ namespace HUS_project.Controllers
 
                 //get storagelocations
                 EditDeviceModel locations = dbManager.GetStorageLocations(editData);
-                
+
                 newdata.Shelfs = locations.Shelfs;
                 newdata.Shelf = null;
 
-                
+
             }
             //return the same data without having selected anything
             else
@@ -290,7 +290,7 @@ namespace HUS_project.Controllers
             //send data to database
             int success = dbManager.EditDevice(data);
             int modelID = shared.GetModelID(data.Device.Model.ModelName);
-           
+
             //check if image exists
             string filename = $"Capture_{modelID}.png";
             string imagepath = (string)AppDomain.CurrentDomain.GetData("webRootPath") + "\\DeviceContent\\" + filename;
@@ -318,6 +318,48 @@ namespace HUS_project.Controllers
         {
             //initializing DB managers
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            EditDeviceModel storagelocation = dbManager.GetStorageLocations(null);
+
+            //check categories
+            bool Category_validated = checkUserInput(data.Categories, data.Device.Model.Category.Category);
+
+            //check modelNames
+            bool ModelName_validated = checkUserInput(data.ModelNames, data.Device.Model.ModelName);
+
+            //check BuildingNames
+            bool Building_validated = checkUserInput(storagelocation.Rooms, data.Room);
+
+            //check RoomNames
+            bool Room_validated = checkUserInput(storagelocation.Shelfs, data.Shelf);
+
+            if (Category_validated && ModelName_validated && Building_validated && Room_validated)
+            {
+                Debug.WriteLine("success");
+            }
+            else
+            {
+                //set view bags
+                if(!Category_validated)
+                {
+                    ViewBag.Error = "indtast en gyldig kategori";
+                }
+                else if(!ModelName_validated)
+                {
+                    ViewBag.Error = "indtast et gyldigt model navn";
+                }
+                else if (!Building_validated)
+                {
+                    ViewBag.LocationError = "indtast en gyldig lokation";
+                }
+                else if (!Room_validated)
+                {
+                    ViewBag.LocationError = "indtast en gyldig hylde";
+                }
+
+                return View("EditView", data);
+            }
+
+          
             data.Device.ChangedBy = HttpContext.Session.GetString("uniLogin");
             data.Device.Notes = "Enhed redigeret";
 
@@ -330,7 +372,7 @@ namespace HUS_project.Controllers
             BuildingModel building = new BuildingModel(splittedRoom[0], Convert.ToByte(splittedRoom[1]));
             StorageLocationModel storageLocation = new StorageLocationModel(splittedShelf[0], Convert.ToByte(splittedShelf[1]), Convert.ToByte(splittedShelf[2]), building);
             data.Device.Location = storageLocation;
-            data.Device.Notes = "Placering redigeret";
+            //data.Device.Notes = "Placering redigeret";
 
             //send data to database
             data = dbManager.EditDeviceLocation(data);
@@ -362,7 +404,7 @@ namespace HUS_project.Controllers
             //initializing DB managers
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
             data.Device.ChangedBy = HttpContext.Session.GetString("uniLogin");
-            //data.Device.Notes = "Enhed redigeret";
+
             data.Device.Status = 0;
 
             //change status of device to deactivated
@@ -376,7 +418,11 @@ namespace HUS_project.Controllers
                 ViewBag.Delete = "Enhed er i brug";
             }
 
+            //create blank model
             data = new EditDeviceModel();
+            DeviceModel device = new DeviceModel();
+            data.Device = device;
+
             // clear model
             ModelState.Clear();
 
@@ -412,6 +458,31 @@ namespace HUS_project.Controllers
 
         //}
 
+        private bool checkUserInput(List<string> dropdown, string userInput)
+        {
 
+            //check dropdown vs unserInput
+            bool inputValidated = false;
+            foreach (var element in dropdown)
+            {
+                if (element == userInput)
+                {
+                    inputValidated = true;
+                    break;
+                }
+
+            }
+
+
+
+            if (inputValidated)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
