@@ -3,18 +3,27 @@
     ViewData["Title"] = "Rediger Bestilling";
 }
 <div class="row blue-oyster-bar center box-shadow">
-    <div class="row text-white g-2">
-        <h2 style="margin-top:30px;">@Model.BookingID</h2>
+    <div class="row g-2">
+        <div class=" text-white align-items-center">
+            <h2 style="margin-top:30px;">Bestilling: @Model.BookingID af @Model.Customer</h2>
+        </div>
+        
     </div>
 </div>
 
 <div class="container containerMain box-shadow">
 
     <div class="row containerHeader">
-        <h4 class="col">Hvad der er bestilt:</h4>
+        <h4>Hvad der er bestilt:</h4>
     </div>
     <div class="row containerBody">
-
+        <div class="col-1"></div>
+        <div class="col-11 row">
+            @foreach (ItemLineModel ilm in Model.Items)
+            {
+                <div class="col-5 center">(@ilm.Model.Category.Category) @ilm.Model.ModelName - @ilm.Quantity</div>
+            }
+        </div>
     </div>
     <div class="row containerFooter">
         <h4>&nbsp;</h4>
