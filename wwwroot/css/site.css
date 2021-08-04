@@ -275,6 +275,10 @@ Containers
 }
 
 
+.container-fluid{
+
+}
+
 
 /*----------------------------------------------------------------------
 Columns inside containers
@@ -414,7 +418,7 @@ Alignment
 
 .horisontal-center {
     margin: 0;
-    position: relative;
+    position: absolute;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
