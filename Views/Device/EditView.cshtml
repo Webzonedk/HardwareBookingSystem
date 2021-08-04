@@ -3,14 +3,21 @@
     ViewData["Title"] = "Rediger enhed";
 }
 
-<div class=" container-fluid blue-oyster-bar"></div>
 
 
 <!--java script to count remaining text in description-->
 <script src="~/js/site.js"></script>
 
-<form class="row was-validated" asp-action="GetLocations" method="post" autocomplete="off" id="editForm">
+
+
+<form class="was-validated" asp-action="GetLocations" method="post" autocomplete="off" id="editForm">
+
+
+    <div class="row blue-oyster-bar center box-shadow"></div>
+
     <div class="container containerMain box-shadow">
+
+
 
         <!--header bar-->
         <div class=" row containerHeader">
@@ -22,105 +29,271 @@
 
         <div class="row containerBody">
 
-            <div class="row">
-                <div class="col-md-2">
-                    <label for="IDInput">Enheds ID:</label>
+            <div class="col-12">
+                <div class="row">
 
-                </div>
+                    <div class="col-md-12 center">
+                        <label for="IDInput">Enheds ID:</label>
+                        <input type="hidden" id="IDInput" asp-for="@Model.Device.DeviceID" />
+                        <label for="IDInput">@Model.Device.DeviceID</label>
+                    </div>
 
-                <div class="col-md-1">
-                    <input type="hidden" id="IDInput" asp-for="@Model.Device.DeviceID" />
-                    <label for="IDInput">@Model.Device.DeviceID</label>
-                </div>
-
-                <div class="col-md-9">
 
                 </div>
             </div>
 
-            <div class="row">
+            <div class="col-12">
 
                 <!--test new rows-->
-
-                <div class="row p-1">
+                <div class="row">
 
                     <!--Print & Save-->
-                    <div class="col-3 p-1 border_EditBox">
+                    <div class="col-md-3 border_EditBox">
+
+                        <div class="row center p-1">
+                            <div>
+                                @if (Model.ImagePath != null)
+                                {
+                                    <img class="img-bg" src="@Url.Content("~/DeviceContent/"+Model.ImagePath)" style="width: 90%" />
+                                }
+                                else
+                                {
+                                    <img class="img-bg" src="~/Graphic/billede-mangler.png" style="width: 90%" />
+                                }
+                            </div>
+                        </div>
+
+
+
+                        <div class="row p-1">
+                            <div class="text-center">
+                                <button type="submit" class=" btn-primary btn Button-Size" formaction="EditDevice">Gem</button>
+
+                            </div>
+                        </div>
+
+                        <!--create message to show device has been saved-->
+                        <div class="row">
+                            @if (ViewBag.edit != null)
+                            {
+                                //create popup to show location has been saved
+                                <div class="text-green">@ViewBag.edit</div>
+                            }
+                            else
+                            {
+                                <div>&nbsp;</div>
+                            }
+                        </div>
 
                     </div>
-
 
                     <!--categories dropdown & notes field-->
-                    <div class="col-3 p-1 border_EditBox">
+                    <div class="col-md-3 border_EditBox">
 
-                        <div class="row">
+                        <!--Categories list-->
+                        <div class="row p-1">
+
+                            <div class="form-floating ">
+                                <input class="form-select" list="categories" id="exampleDataList" asp-for="@Model.Device.Model.Category.Category" required>
+                                <datalist id="categories">
+
+                                    @for (int i = 0; i < Model.Categories.Count; i++)
+                                    {
+                                        // lambda function that binds the model to a hidden inputfield that gets posted to controller
+                                        @Html.HiddenFor(model => Model.Categories[i])
+                                        <option>@Model.Categories[i]</option>
+                                    }
+
+                                </datalist>
+                                <label for="exampleDataList">vælg kategori</label>
+                            </div>
+
+
+
 
                         </div>
 
-                        <div class="row">
+                        <!--models list-->
+                        <div class="row p-1">
+
+                            <div class="form-floating ">
+                                <input class="form-select" list="modelNames" id="exampleDataList" asp-for="@Model.Device.Model.ModelName" required>
+                                <datalist id="modelNames">
+
+                                    @for (int i = 0; i < Model.ModelNames.Count; i++)
+                                    {
+                                        // lambda function that binds the model to a hidden inputfield that gets posted to controller
+                                        @Html.HiddenFor(model => Model.ModelNames[i])
+                                        <option>@Model.ModelNames[i]</option>
+                                    }
+
+                                </datalist>
+                                <label for="exampleDataList">Indtast enhedsnavn</label>
+                            </div>
 
                         </div>
+                        <!--Description field-->
+                        <div class="row p-1">
+                            <div class="form-floating">
+                                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 125px" asp-for="@Model.Device.Model.ModelDescription"></textarea>
+                                <label for="floatingTextarea2">beskrivelse</label>
+                            </div>
+                        </div>
 
-                        <div class="row">
+                        <!--show error if input not correct-->
+                        @if (ViewBag.Error != null)
+                        {
 
+                            <div class="text-red">@ViewBag.Error&nbsp;</div>
+                        }
+                        else
+                        {
+
+                            <div>&nbsp;</div>
+                        }
+
+                        <!--Print QR code-->
+                        <div class="row p-1">
+                            <div class="text-center">
+                                <button type="button" class=" btn-primary btn Button-Size" formaction="CreateQRCode">Print QRkode</button>
+
+                            </div>
                         </div>
 
                     </div>
-
 
                     <!--Location dropdowns & scanning-->
-                    <div class="col-3 p-1 border_EditBox">
+                    <div class="col-md-3 border_EditBox">
 
-                        <div class="row">
+                        <div class="row p-1">
+
+                            <div class="form-floating ">
+
+                                <input class="form-select" list="locationsdropdown" id="locations" asp-for="@Model.Room" onchange="return SubmitValidation('editForm')" required>
+                                <datalist id="locationsdropdown">
+
+                                    @foreach (var item in Model.Rooms)
+                                    {
+                                        <option>@item</option>
+                                    }
+
+                                </datalist>
+                                <label for="locations">lager Lokale</label>
+                            </div>
+
+                        </div>
+
+                        <div class="row p-1">
+
+                            <div class="form-floating ">
+                                <input class="form-select" list="shelvesdropdown" id="shelves" asp-for="@Model.Shelf" required>
+                                <datalist id="shelvesdropdown">
+
+                                    @foreach (var item in Model.Shelfs)
+                                    {
+                                        <option>@item</option>
+
+                                    }
+                                </datalist>
+                                <label for="shelves">vælg placering</label>
+                            </div>
 
                         </div>
 
-                        <div class="row">
+
+                        <div class="row p-1">
+
+                            <p>Indtast ny placering og tryk gem placering, eller skan QR-Kode på placering:</p>
 
                         </div>
 
-                        <div class="row">
+                        <div class="row p-1">
+
+                            <div class="col">
+                                <div class="text-center">
+                                    <button type="submit" class=" btn-primary btn Button-Size" formaction="EditLocation" formmethod="post">Gem placering</button>
+
+                                </div>
+                            </div>
+
+
+
+                            <div class="col">
+                                <div class="text-center">
+                                    <button type="button" class=" btn-primary btn Button-Size" asp-action="ScanQRCode">Skan placering</button>
+
+                                </div>
+                            </div>
 
                         </div>
 
+                        <!--create message to show location has been saved-->
                         <div class="row">
+
+                            <div>
+                                @if (ViewBag.Location != null)
+                                {
+
+                                    <div class="text-green">@ViewBag.Location</div>
+                                }
+                                else if (ViewBag.LocationError != null)
+                                {
+                                    <div class="text-red">@ViewBag.LocationError</div>
+                                }
+                                else
+                                {
+                                    <div>&nbsp;</div>
+                                }
+                            </div>
 
                         </div>
 
-                        <div class="row">
-
-                        </div>
 
                     </div>
 
-
                     <!--Delete Device-->
-                    <div class="col-3 p-1 border_EditBox">
+                    <div class="col-md-3">
 
-                        <div class="row">
+                        <div class="row p-1" style="height:100%;">
+
+                            <div class="col-12 p-1">
+
+                                <div class="form-floating">
+                                    <textarea class="form-control" placeholder="Leave a comment here" id="deleteNote" style="height: 140px" asp-for="@Model.Device.Notes"></textarea>
+                                    <label for="deleteNote">årsag</label>
+                                </div>
+
+                            </div>
+
+                            <!--create message to show Device has been Deleted-->
+                            <div class="col-12 p-1">
+                                @if (ViewBag.Delete != null)
+                                {
+
+                                    <div class="text-green">@ViewBag.Delete&nbsp;</div>
+                                }
+                                else
+                                {
+
+                                    <div class="text-green" id="warning">&nbsp;</div>
+                                }
+                            </div>
+
+                            <div class="col-12 p-1 center align-self-end">
+                                <button type="submit" class=" btn-primary btn Button-Size" formmethod="post" onclick="return CheckInputField()">Slet enhed</button>
+
+                            </div>
 
                         </div>
 
-                        <div class="row">
 
-                        </div>
 
-                        <div class="row">
-
-                        </div>
 
                     </div>
 
                 </div>
 
-
-
-
-
-
-
             </div>
-
 
 
 
@@ -128,12 +301,20 @@
 
         <!--footer bar-->
         <div class="row containerFooter">
-            <h4>&nbsp;</h4>
+            <div class="col-12">
+                <h4>&nbsp;</h4>
+
+            </div>
         </div>
 
     </div>
 
+
+
+
 </form>
+
+
 
 
 <!--test alternating colors-->
@@ -189,7 +370,7 @@
                 <div class="row">
                     <h4>Beskrivelse:</h4>
                     <div class=" dynamic-Font-Size-14">
-                        @device.Model.ModelDescription
+                        @device.Notes
                     </div>
                 </div>
             </div>
@@ -226,252 +407,18 @@
 </div>
 
 
-<div class="container">
 
-    <!--Print & Save-->
-    <div class="col-xl-3 col-md-6 p-1">
 
 
-        <div class=" row ">
-            <div>
-                @if (Model.ImagePath != null)
-                {
-                    <img class="img-bg" src="@Url.Content("~/DeviceContent/"+Model.ImagePath)" style="width: 90%" />
-                }
-                else
-                {
-                    <img class="img-bg" src="~/Graphic/billede-mangler.png" style="width: 90%" />
-                }
-            </div>
-        </div>
 
-        <br />
 
-        <div class="row">
-            <div class="text-center">
-                <button type="button" class=" btn-primary btn" formaction="CreateQRCode">Print QRkode</button>
 
-            </div>
-        </div>
 
-        <br />
 
-        <div class="row">
 
-            <div class="text-center">
-                <button type="submit" class=" btn-primary btn" formaction="EditDevice">Gem</button>
 
-            </div>
 
-            <!--create message to show device has been saved-->
-            <div>
-                @if (ViewBag.edit != null)
-                {
-                    //create popup to show location has been saved
-                    <div class="text-green">@ViewBag.edit</div>
-                }
-                else
-                {
-                    <div>&nbsp;</div>
-                }
-            </div>
 
-        </div>
 
 
-    </div>
 
-    <!--categories dropdown & notes field-->
-    <div class="col-xl-3 col-md-6 p-1">
-
-        <div class="row">
-            <div class="form-floating ">
-                <input class="form-select" list="categories" id="exampleDataList" asp-for="@Model.Device.Model.Category.Category" required>
-                <datalist id="categories">
-
-                    @for (int i = 0; i < Model.Categories.Count; i++)
-                    {
-                        // lambda function that binds the model to a hidden inputfield that gets posted to controller
-                        @Html.HiddenFor(model => Model.Categories[i])
-                        <option>@Model.Categories[i]</option>
-                    }
-
-                </datalist>
-                <label for="exampleDataList">vælg kategori</label>
-            </div>
-        </div>
-
-
-
-        <br />
-
-        @{string toolTip = "Advarsel. \n\n" +
-                                                            "Hvis der indtastes en model som ikke findes is systemet,\n oprettes en ny model som enheden knyttes til"; }
-
-
-        <!--model names dropdown-->
-        <div class="row">
-            <div class="form-floating ">
-                <input class="form-select black-tooltip" data-toggle="tooltip" data-bs-placement="auto" title="@toolTip" list="modelNames" id="exampleDataList" asp-for="@Model.Device.Model.ModelName" required>
-                <datalist id="modelNames">
-
-                    @for (int i = 0; i < Model.ModelNames.Count; i++)
-                    {
-                        // lambda function that binds the model to a hidden inputfield that gets posted to controller
-                        @Html.HiddenFor(model => Model.ModelNames[i])
-                        <option>@Model.ModelNames[i]</option>
-                    }
-
-                </datalist>
-                <label for="exampleDataList">Indtast enhedsnavn</label>
-            </div>
-        </div>
-
-
-
-        <br />
-
-        <!--description field-->
-        <div class="row">
-            <div class="form-floating">
-                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 125px" asp-for="@Model.Device.Model.ModelDescription"></textarea>
-                <label for="floatingTextarea2">beskrivelse</label>
-            </div>
-        </div>
-
-
-
-
-    </div>
-
-
-    <!--Location dropdowns & scanning-->
-    <div class="col-xl-3 col-md-6 p-1">
-
-        <div class="border_EditBox height-100 p-1 row">
-
-            <div class="col-12">
-
-                <div class="row">
-                    <div class="form-floating ">
-
-                        <input class="form-select" list="locationsdropdown" id="locations" asp-for="@Model.Room" onchange="return SubmitValidation('editForm')" required>
-                        <datalist id="locationsdropdown">
-
-                            @foreach (var item in Model.Rooms)
-                            {
-                                <option>@item</option>
-                            }
-
-                        </datalist>
-                        <label for="locations">lager Lokale</label>
-                    </div>
-                </div>
-
-
-                <br />
-
-                <div class="row">
-                    <div class="form-floating ">
-                        <input class="form-select" list="shelvesdropdown" id="shelves" asp-for="@Model.Shelf" required>
-                        <datalist id="shelvesdropdown">
-
-                            @foreach (var item in Model.Shelfs)
-                            {
-                                <option>@item</option>
-
-                            }
-                        </datalist>
-                        <label for="shelves">vælg placering</label>
-                    </div>
-                </div>
-
-                <br />
-
-                <div class="row">
-                    <p>Indtast ny placering og tryk gem placering, eller skan QR-Kode på placering:</p>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <div class="text-center">
-                            <button type="submit" class=" btn-primary btn" formaction="EditLocation" formmethod="post">Gem placering</button>
-
-                        </div>
-                    </div>
-
-
-
-                    <div class="col">
-                        <div class="text-center">
-                            <button type="button" class=" btn-primary btn" asp-action="ScanQRCode">Skan placering</button>
-
-                        </div>
-                    </div>
-                </div>
-
-                <!--create message to show location has been saved-->
-                <div class="row">
-                    <div>
-                        @if (ViewBag.Location != null)
-                        {
-
-                            <div class="text-green">@ViewBag.Location</div>
-                        }
-                        else
-                        {
-                            <div>&nbsp;</div>
-                        }
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-
-    <!--Delete Device-->
-    <div class="col-xl-3 col-md-6 p-1">
-
-        <div class="border_EditBox row height-100 p-1">
-
-            <div class="col-12">
-                <div class="row">
-                    <div class="form-floating">
-                        <textarea class="form-control" placeholder="Leave a comment here" id="deleteNote" style="height: 140px" asp-for="@Model.Device.Notes"></textarea>
-                        <label for="deleteNote">årsag</label>
-                    </div>
-                </div>
-
-
-                <!--create message to show Device has been Deleted-->
-                <div class="row" style="height:30%">
-                    <div>
-                        @if (ViewBag.Delete != null)
-                        {
-
-                            <div class="text-green">@ViewBag.Delete</div>
-                        }
-                        else
-                        {
-                            @*<div>&nbsp;</div>*@
-                            <div class="text-green" id="warning"></div>
-                        }
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div>
-                        <button type="submit" class=" btn-primary btn" formmethod="post" onclick="return CheckInputField()">Slet enhed</button>
-
-                    </div>
-                </div>
-            </div>
-
-
-
-        </div>
-
-    </div>
-
-</div>
