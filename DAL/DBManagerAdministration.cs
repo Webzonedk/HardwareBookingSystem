@@ -329,6 +329,35 @@ namespace HUS_project.DAL
         }
 
 
+        //Basic method to get all locations based on the searchTerms//
+        internal EditStorageLocationModel GetLocations(EditStorageLocationModel dataFromView)
+        {
+            List<StorageLocationModel> storageLocations = GetSelectedStorageLocations(dataFromView);
+            EditStorageLocationModel searchResult = new EditStorageLocationModel();
+
+            List<string> buildings = GetBuildings();
+            List<byte> roomNumbers = GetRoomNumbers();
+            List<string> shelfNames = GetShelfName();
+            List<byte> shelfLevels = GetShelfLevel();
+            List<byte> shelfspots = GetShelfSpot();
+
+
+            searchResult.Buildings = buildings;
+            searchResult.RoomNumbers = roomNumbers;
+            searchResult.ShelfNames = shelfNames;
+            searchResult.ShelfLevels = shelfLevels;
+            searchResult.ShelfSpots = shelfspots;
+            searchResult.Filter = 0;
+
+
+
+            searchResult.StorageLocations = storageLocations;
+            searchResult.StorageLocation = dataFromView.StorageLocation;
+            return searchResult;
+        }
+
+
+
         internal StorageLocationModel CreateLocation(StorageLocationModel dummy)
         {
             SqlConnection con = new SqlConnection(connectionString);
@@ -343,11 +372,7 @@ namespace HUS_project.DAL
 
 
 
-
-
-
-
-        internal List<StorageLocationModel> DeleteLocation(List<StorageLocationModel> dummy)
+        internal StorageLocationModel DeleteLocation(string dummy)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
@@ -358,6 +383,24 @@ namespace HUS_project.DAL
             con.Close();
             return null;
         }
+
+
+
+
+
+
+
+        //internal List<StorageLocationModel> DeleteLocation(List<StorageLocationModel> dummy)
+        //{
+        //    SqlConnection con = new SqlConnection(connectionString);
+        //    con.Open();
+        //    SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
+        //    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+
+        //    con.Close();
+        //    return null;
+        //}
 
 
 
@@ -375,18 +418,6 @@ namespace HUS_project.DAL
 
 
 
-
-        internal List<CategoryModel> DeleteLocation(string dummy)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-
-            con.Close();
-            return null;
-        }
 
 
         internal void DeleteCategory(string dummy)
@@ -412,7 +443,6 @@ namespace HUS_project.DAL
 
             con.Close();
         }
-
 
 
 

@@ -70,32 +70,15 @@ namespace HUS_project.Controllers
         public IActionResult LocationAdminResult(EditStorageLocationModel dataFromView)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            List<StorageLocationModel> storageLocations = manager.GetSelectedStorageLocations(dataFromView);
-            EditStorageLocationModel searchResult = new EditStorageLocationModel();
-
-            List<string> buildings = manager.GetBuildings();
-            List<byte> roomNumbers = manager.GetRoomNumbers();
-            List<string> shelfNames = manager.GetShelfName();
-            List<byte> shelfLevels = manager.GetShelfLevel();
-            List<byte> shelfspots = manager.GetShelfSpot();
-
-           
-            searchResult.Buildings = buildings;
-            searchResult.RoomNumbers = roomNumbers;
-            searchResult.ShelfNames = shelfNames;
-            searchResult.ShelfLevels = shelfLevels;
-            searchResult.ShelfSpots = shelfspots;
-            searchResult.Filter = 0;
-        
-
-
-            searchResult.StorageLocations = storageLocations;
-            searchResult.StorageLocation = dataFromView.StorageLocation;
-
-            return View("LocationAdmin", searchResult);
+            return View("LocationAdmin", manager.GetLocations(dataFromView));
         }
 
-
+        public IActionResult DeleteSingleLocation(EditStorageLocationModel dataFromView)
+        {
+            DBManagerAdministration manager = new DBManagerAdministration(configuration);
+            manager.DeleteLocation(dataFromView.StorageLocation.LocationID);
+            return View("LocationAdmin");
+        }
 
 
 

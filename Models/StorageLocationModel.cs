@@ -9,6 +9,7 @@ namespace HUS_project.Models
     {
         #region Fields
 
+        private int locationID;
         private string shelfName;
         private byte shelfLevel;
         private byte shelfSpot;
@@ -19,6 +20,14 @@ namespace HUS_project.Models
 
 
         #region Properties
+
+
+
+        public int LocationID
+        {
+            get { return locationID; }
+            set { locationID = value; }
+        }
 
         public string ShelfName
         {
