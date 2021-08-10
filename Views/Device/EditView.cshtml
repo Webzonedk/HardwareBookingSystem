@@ -10,7 +10,7 @@
 
 
 
-<form class="was-validated" asp-action="GetLocations" method="post" autocomplete="off" id="editForm">
+<form class="was-validated" asp-action="GetLocations" asp-controller="" method="post" autocomplete="off" id="editForm">
 
 
     <div class="row blue-oyster-bar center box-shadow"></div>
@@ -220,7 +220,7 @@
 
                             <div class="col">
                                 <div class="text-center">
-                                    <button type="button" class=" btn-primary btn Button-Size" asp-action="ScanQRCode">Skan placering</button>
+                                    <button type="submit" class=" btn-primary btn Button-Size" formaction="ScanLocation" formmethod="post">Skan placering</button>
 
                                 </div>
                             </div>
@@ -314,9 +314,6 @@
 
 </form>
 
-
-
-
 <!--test alternating colors-->
 
 <div class="container containerMain box-shadow">
@@ -405,20 +402,3 @@
     </div>
 
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

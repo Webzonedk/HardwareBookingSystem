@@ -453,10 +453,18 @@ namespace HUS_project.Controllers
             return View(infoList);
         }
 
-        //public IActionResult CreateQRCode()
-        //{
+        //opens view for scanning of QR codes
+        public IActionResult ScanLocation(EditDeviceModel data)
+        {
+            return View(data);
+        }
 
-        //}
+        public IActionResult ReturnScanData(string data)
+        {
+            Console.WriteLine(data);
+            EditDeviceModel newdata = new EditDeviceModel();
+            return View("EditDevice", newdata);
+        }
 
         private bool checkUserInput(List<string> dropdown, string userInput)
         {
