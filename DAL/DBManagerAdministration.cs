@@ -372,7 +372,7 @@ namespace HUS_project.DAL
 
 
 
-        internal StorageLocationModel DeleteLocation(string dummy)
+        internal StorageLocationModel DeleteLocation(int locationID)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();

@@ -77,7 +77,7 @@ namespace HUS_project.Controllers
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
             manager.DeleteLocation(dataFromView.StorageLocation.LocationID);
-            return View("LocationAdmin");
+            return View("LocationAdmin", manager.GetLocations(dataFromView));
         }
 
 
