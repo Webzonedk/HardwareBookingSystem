@@ -1,29 +1,14 @@
-﻿$(document).ready(function () {
+﻿
+function SubmitQRCode() {
 
-    
+    let checkfield = document.getElementById("ItemIsScanned");
+    let id = document.getElementById("hiddenID");
+    let outputfield = document.getElementById("content");
+    if (checkfield.checked) {
 
-    //window.addEventListener('storage', function (e) {
+        var QRcode = sessionStorage.getItem(id.value);
+        outputfield.value = id.value + "-" + QRcode;
+        document.getElementById("ScanLocationForm").submit();
 
-    //    if (e.storageArea === sessionStorage) {
-    //        console.log(e.sessionStorage.newValue);
-            
-    //    }
-
-    //    if (e.storageArea === localStorage) {
-    //        console.log(e.newValue);
-    //    }
-
-    //});
-
-    window.addEventListener('storage', function (e) {
-        let temp = e.localStorage;
-        alert(temp);
-        if (e.storageArea === localStorage) {
-            alert('change');
-        }
-        // else, event is caused by an update to localStorage, ignore it
-    });
-
-    
-
-});
+    }
+}

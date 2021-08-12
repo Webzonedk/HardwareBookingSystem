@@ -9,9 +9,9 @@
         /*alert(content);*/
         label.value = content;
         if (label.value != null) {
-            localStorage.setItem(id.value, content);
+            sessionStorage.setItem(id.value, content);
             var checked = document.getElementById("ItemIsScanned");
-            checked.checked = true;
+            checked.click();
         }
     });
 

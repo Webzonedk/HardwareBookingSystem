@@ -11,12 +11,15 @@
 <script src="~/js/GetQRLocationForDevice.js"></script>
 
 <video id="preview" width="500" height="500"></video>
-<input id="hiddenID" type="hidden" value="@Model.Device.DeviceID"/>
-<input  id="ItemIsScanned" type="checkbox" />
-<form asp-action="ReturnToEdit" method="post" form>
-    @*<label id="content" onchange="ReturnToEdit()"></label>*@
-    <input id="content" type="text" onchange="ReturnToEdit(this.value)" value="_"/>
-    @*<label id="lbl">Scan:</label>*@
+
+<input id="hiddenID" type="hidden" value="@Model.Device.DeviceID" />
+<input id="ItemIsScanned" type="checkbox" onchange="SubmitQRCode();" hidden />
+
+<form id="ScanLocationForm" asp-action="ReturnScanData" method="post" form>
+
+    <input id="content" type="text" asp-for="@Model.Room" hidden/>
+
+
 </form>
 
 

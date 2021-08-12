@@ -103,7 +103,7 @@ namespace HUS_project.Controllers
 
             //return device info to Edit view
             data = dbManager.GetDeviceInfoWithLocation(deviceID);
-            List<DeviceModel> logs = dbManager.GetDeviceLogs(deviceID);
+            List<DeviceModel> logs = GetDeviceLogs(deviceID);
             List<string> categories = dbsharedManager.GetCategories();
             List<string> modelNames = dbsharedManager.GetModelNames();
             modelID = dbsharedManager.GetModelID(data.Model.ModelName);
@@ -162,7 +162,7 @@ namespace HUS_project.Controllers
             DeviceModel data = new DeviceModel();
 
             data = dbManager.GetDeviceInfoWithLocation(ID);
-            List<DeviceModel> logs = dbManager.GetDeviceLogs(ID);
+            List<DeviceModel> logs = GetDeviceLogs(ID);
             List<string> categories = dbsharedManager.GetCategories();
             List<string> modelNames = dbsharedManager.GetModelNames();
             EditDeviceModel storagelocation = dbManager.GetStorageLocations(null);
@@ -200,63 +200,7 @@ namespace HUS_project.Controllers
         [HttpPost]
         public IActionResult GetLocations(EditDeviceModel data)
         {
-            //initializing DB managers
-            DBManagerDevice dbManager = new DBManagerDevice(configuration);
-            DBManagerShared shared = new DBManagerShared(configuration);
-
-            //get the logs back again
-            List<DeviceModel> logs = dbManager.GetDeviceLogs(data.Device.DeviceID);
-            int modelID = shared.GetModelID(data.Device.Model.ModelName);
-            data.Logs = logs;
-            EditDeviceModel newdata = data;
-
-            //check if image exists
-            string filename = $"Capture_{modelID}.png";
-            string imagepath = (string)AppDomain.CurrentDomain.GetData("webRootPath") + "\\DeviceContent\\" + filename;
-            if (System.IO.File.Exists(imagepath))
-            {
-                newdata.ImagePath = filename;
-            }
-
-            //fetch storage locations if user has typed a valid room
-            if (data.Room != null)
-            {
-                //prep data for database
-                string[] splittedRoom = data.Room.Split('.');
-
-                //prep data model
-                EditDeviceModel editData = new EditDeviceModel();
-                DeviceModel device = new DeviceModel();
-                BuildingModel building = new BuildingModel(splittedRoom[0], Convert.ToByte(splittedRoom[1]));
-                StorageLocationModel storageLocation = new StorageLocationModel();
-                storageLocation.Location = building;
-                device.Location = storageLocation;
-                editData.Device = device;
-
-                //get storagelocations
-                EditDeviceModel locations = dbManager.GetStorageLocations(editData);
-
-                newdata.Shelfs = locations.Shelfs;
-                newdata.Shelf = null;
-
-
-            }
-            //return the same data without having selected anything
-            else
-            {
-                EditDeviceModel storagelocation = dbManager.GetStorageLocations(null);
-                newdata.Rooms = storagelocation.Rooms;
-                newdata.Shelf = null;
-            }
-
-
-
-
-            // clear model
-            ModelState.Clear();
-
-
-
+            EditDeviceModel newdata = GetNewLocation(data);
             return View("EditView", newdata);
         }
 
@@ -339,11 +283,11 @@ namespace HUS_project.Controllers
             else
             {
                 //set view bags
-                if(!Category_validated)
+                if (!Category_validated)
                 {
                     ViewBag.Error = "indtast en gyldig kategori";
                 }
-                else if(!ModelName_validated)
+                else if (!ModelName_validated)
                 {
                     ViewBag.Error = "indtast et gyldigt model navn";
                 }
@@ -359,7 +303,7 @@ namespace HUS_project.Controllers
                 return View("EditView", data);
             }
 
-          
+
             data.Device.ChangedBy = HttpContext.Session.GetString("uniLogin");
             data.Device.Notes = "Enhed redigeret";
 
@@ -459,13 +403,116 @@ namespace HUS_project.Controllers
             return View(data);
         }
 
-        public IActionResult ReturnScanData(string data)
+        //return new data to Editview
+        [HttpPost]
+        public IActionResult ReturnScanData(EditDeviceModel data)
         {
-            Console.WriteLine(data);
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+
+            string[] splittedData = data.Room.Split('-');
+
+            //create dummy data
+            splittedData[1] = "K.1.A.0.4";
+
+            //get data from splitted strings
+            int id = int.Parse(splittedData[0]);
+            string[] location = splittedData[1].Split('.');
+
+            //fill model with data
+            DeviceModel device = dbManager.GetDeviceInfoWithLocation(id);
             EditDeviceModel newdata = new EditDeviceModel();
-            return View("EditDevice", newdata);
+            newdata.Device = device;
+            newdata.Room = $"{location[0]}.{location[1]}";
+            newdata.Shelf = $"{location[2]}.{location[3]}.{location[4]}";
+            newdata = GetNewLocation(newdata);
+            
+
+            return View("EditView", newdata);
+
         }
 
+        #region Helper methods
+
+        //returns list of device logs
+        private List<DeviceModel> GetDeviceLogs(int id)
+        {
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            List<DeviceModel> data = dbManager.GetDeviceLogs(id);
+            return data;
+        }
+
+        //returns model with new location
+        private EditDeviceModel GetNewLocation(EditDeviceModel data)
+        {
+            //initializing DB managers
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            DBManagerShared shared = new DBManagerShared(configuration);
+
+            //get the logs back again
+            List<DeviceModel> logs = dbManager.GetDeviceLogs(data.Device.DeviceID);
+            int modelID = shared.GetModelID(data.Device.Model.ModelName);
+            data.Logs = logs;
+            EditDeviceModel newdata = data;
+
+            //check if image exists
+            string filename = $"Capture_{modelID}.png";
+            string imagepath = (string)AppDomain.CurrentDomain.GetData("webRootPath") + "\\DeviceContent\\" + filename;
+            if (System.IO.File.Exists(imagepath))
+            {
+                newdata.ImagePath = filename;
+            }
+
+            //fetch storage locations if user has typed a valid room
+            if (data.Room != null)
+            {
+                //prep data for database
+                string[] splittedRoom = data.Room.Split('.');
+
+                //prep data model
+                EditDeviceModel editData = new EditDeviceModel();
+                DeviceModel device = new DeviceModel();
+                BuildingModel building = new BuildingModel(splittedRoom[0], Convert.ToByte(splittedRoom[1]));
+                StorageLocationModel storageLocation = new StorageLocationModel();
+                storageLocation.Location = building;
+                device.Location = storageLocation;
+                editData.Device = device;
+
+                //get storagelocations
+                EditDeviceModel locations = dbManager.GetStorageLocations(editData);
+
+                newdata.Shelfs = locations.Shelfs;
+                
+                //fill out shelf data if present
+                if (data.Shelf != null)
+                {
+                    newdata.Shelf = data.Shelf;
+                }
+                else
+                {
+                    newdata.Shelf = null;
+                }
+                
+
+
+            }
+            //return the same data without having selected anything
+            else
+            {
+                EditDeviceModel storagelocation = dbManager.GetStorageLocations(null);
+                newdata.Rooms = storagelocation.Rooms;
+                newdata.Shelf = null;
+            }
+
+
+
+
+            // clear model
+            ModelState.Clear();
+
+            return newdata;
+        }
+
+        //check inputvalidation for dropdown
         private bool checkUserInput(List<string> dropdown, string userInput)
         {
 
@@ -492,5 +539,9 @@ namespace HUS_project.Controllers
                 return false;
             }
         }
+
+        #endregion
+
+
     }
 }
