@@ -48,4 +48,17 @@ function CheckInputField() {
     }
 }
 
+//call submit at scanDevice view
+function ReturnToEdit(val) {
+    //var location = $("#content").val();
+    //console.log(location);
+    //var id = 0;
+
+    //var output = location + '-' + id;
+    //console.log(output);
+
+    //submit();
+    console.log("test test test" + val);
+}
+
 
