@@ -272,6 +272,7 @@ namespace HUS_project.DAL
                 buildingModel.Building = (string)reader["buildingName"];
                 buildingModel.RoomNumber = (byte)reader["roomNr"];
                 selectedStorageLocation.Location = buildingModel;
+                selectedStorageLocation.LocationID = (int)reader["locationID"];
                 selectedStorageLocation.ShelfName = (string)reader["shelfName"];
                 selectedStorageLocation.ShelfLevel = (byte)reader["shelfLevel"];
                 selectedStorageLocation.ShelfSpot = (byte)reader["shelfSpot"];
@@ -358,6 +359,23 @@ namespace HUS_project.DAL
 
 
 
+
+        internal StorageLocationModel DeleteLocation(int locationID)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("DeleteStorageLocation", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@locationID", System.Data.SqlDbType.Int).Value = locationID;
+
+            con.Close();
+            return null;
+        }
+
+
+
+
+
         internal StorageLocationModel CreateLocation(StorageLocationModel dummy)
         {
             SqlConnection con = new SqlConnection(connectionString);
@@ -370,21 +388,7 @@ namespace HUS_project.DAL
             return null;
         }
 
-
-
-        internal StorageLocationModel DeleteLocation(int locationID)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-
-            con.Close();
-            return null;
-        }
-
-
+   
 
 
 

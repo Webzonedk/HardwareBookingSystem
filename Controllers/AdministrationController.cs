@@ -29,18 +29,54 @@ namespace HUS_project.Controllers
             return View();
         }
 
-        public IActionResult LocationAdmin(EditStorageLocationModel dataFromView)
+        public IActionResult LocationAdmin()
         {
-            //Add standard values to the model
+            return View(GetStorageLocations());
+        }
+
+
+        //Returns the searchresult when something has been choosen in the search fields
+        public IActionResult LocationAdminResult(EditStorageLocationModel dataFromView)
+        {
+            DBManagerAdministration manager = new DBManagerAdministration(configuration);
+            return View("LocationAdmin", manager.GetLocations(dataFromView));
+        }
+
+
+        [HttpPost]
+        public IActionResult DeleteSingleLocation(string deleteLocation)
+        {
+            DBManagerAdministration manager = new DBManagerAdministration(configuration);
+            manager.DeleteLocation(int.Parse(deleteLocation));
+            return View("LocationAdmin", GetStorageLocations());
+        }
+
+
+
+
+
+
+        public void CreateQRCode()
+        {
+          
+        }
+
+        public void PrintQRCode()
+        {
+
+        }
+        
+        private EditStorageLocationModel GetStorageLocations()
+        {
             EditStorageLocationModel initialData = new EditStorageLocationModel();
             StorageLocationModel selectedStorageLocation = new StorageLocationModel();
             BuildingModel buildingModel = new BuildingModel();
             //SortFilterModel sortFilterModel = new SortFilterModel();
-            selectedStorageLocation.Location=buildingModel;
+            selectedStorageLocation.Location = buildingModel;
             initialData.StorageLocation = selectedStorageLocation;
             initialData.StorageLocation.Location.Building = null;
             initialData.StorageLocation.Location.RoomNumber = 0;
-            initialData.StorageLocation.ShelfName=null;
+            initialData.StorageLocation.ShelfName = null;
             initialData.StorageLocation.ShelfLevel = 0;
             initialData.StorageLocation.ShelfSpot = 0;
             //dummy.Filter = 1;
@@ -62,37 +98,7 @@ namespace HUS_project.Controllers
             dropDownData.StorageLocations = storageLocations;
             //dropDownData.SortFilters = sortFilters;
 
-            return View(dropDownData);
-        }
-
-
-        //Returns the searchresult when something has been choosen in the search fields
-        public IActionResult LocationAdminResult(EditStorageLocationModel dataFromView)
-        {
-            DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            return View("LocationAdmin", manager.GetLocations(dataFromView));
-        }
-
-        public IActionResult DeleteSingleLocation(EditStorageLocationModel dataFromView)
-        {
-            DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            manager.DeleteLocation(dataFromView.StorageLocation.LocationID);
-            return View("LocationAdmin", manager.GetLocations(dataFromView));
-        }
-
-
-
-
-
-
-        public void CreateQRCode()
-        {
-          
-        }
-
-        public void PrintQRCode()
-        {
-
+            return dropDownData;
         }
 
     }
