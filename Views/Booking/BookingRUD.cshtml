@@ -5,49 +5,74 @@
     ViewData["Title"] = "Rediger Bestilling";
 }
 <div class="row blue-oyster-bar center box-shadow">
+
     <div class="row g-2">
-        <div class="col-3 text-white align-items-center">
-            <h3 style="margin-top:30px;">Bestilling: @Model.BookingID af @Model.Customer</h3>
-        </div>
-        <div class="col-1" id="bookingStartDateBox">
-            <p>Udlån Start:</p>
-            <!-- If start date isn't today or earlier, and you are the one who made the booking, the start date can be moved. -->
-            @if (httpContextAccessor.HttpContext.Session.GetString("uniLogin") == Model.Customer && Model.PlannedBorrowDate.Date > DateTime.Now.Date)
-            {
+        @using (Html.BeginForm("UpdateBooking", "Booking"))
+        {
+            <div class="col-10">
 
-            }
-            else
-            {
-                <!-- StartDate is today or has passed, or you are not the one who booked, thus it cannot be changed. -->
-                <label class="text-white">@Model.PlannedBorrowDate.Date.ToString("dd/MM-yy")</label>
-            }
-        </div>
-        <div class="col-1" id="bookingEndDateBox">
-            <p>Udlån Slut:</p>
-            <!-- If end date isn't today or earlier, and you are the one who made the booking, the end date can be moved. -->
-            @if (httpContextAccessor.HttpContext.Session.GetString("uniLogin") == Model.Customer && Model.PlannedReturnDate.Date > DateTime.Now.Date)
-            {
+                <div class="col-3 text-white align-items-center">
+                    <h3 style="margin-top:30px;">Bestilling: @Model.BookingID af @Model.Customer</h3>
+                </div>
 
-            }
-            else
-            {
-                <!-- EndDate is today or has passed, or you are not the one who booked, thus it cannot be changed. -->
-                <label class="text-white">@Model.PlannedReturnDate.Date.ToString("dd/MM-yy")</label>
-            }
-        </div>
-        <div class="col-2" id="bookingRoomBox">
-            <p>Leverings Sted:</p>
-            <!-- If end date isn't today or earlier, and you are the one who made the booking, the location can be changed. -->
-            @if (httpContextAccessor.HttpContext.Session.GetString("uniLogin") == Model.Customer && Model.PlannedReturnDate.Date >= DateTime.Now.Date)
-            {
+                <div class="col-1" id="bookingStartDateBox">
+                    <p>Udlån Start:</p>
+                    <!-- If start date isn't today or earlier, and you are the one who made the booking, the start date can be moved. -->
+                    @if (httpContextAccessor.HttpContext.Session.GetString("uniLogin") == Model.Customer && Model.PlannedBorrowDate.Date > DateTime.Now.Date)
+                    {
 
-            }
-            else
-            {
-                <!-- EndDate has passed, or you are not the one who booked, thus it cannot be changed. -->
-                <label class="text-white">@Model.Location.Building.@Model.Location.RoomNumber</label>
-            }
-        </div>
+                    }
+                    else
+                    {
+                        <!-- StartDate is today or has passed, or you are not the one who booked, thus it cannot be changed. -->
+                        <label class="text-white">@Model.PlannedBorrowDate.Date.ToString("dd/MM-yy")</label>
+
+                    }
+                </div>
+                <div class="col-1" id="bookingEndDateBox">
+                    <p>Udlån Slut:</p>
+                    <!-- If end date isn't today or earlier, and you are the one who made the booking, the end date can be moved. -->
+                    @if (httpContextAccessor.HttpContext.Session.GetString("uniLogin") == Model.Customer && Model.PlannedReturnDate.Date > DateTime.Now.Date)
+                    {
+
+                    }
+                    else
+                    {
+                        <!-- EndDate is today or has passed, or you are not the one who booked, thus it cannot be changed. -->
+                        <label class="text-white">@Model.PlannedReturnDate.Date.ToString("dd/MM-yy")</label>
+                    }
+                </div>
+                <div class="col-2" id="bookingRoomBox">
+                    <p>Leverings Sted:</p>
+                    <!-- If end date isn't today or earlier, and you are the one who made the booking, the location can be changed. -->
+                    @if (httpContextAccessor.HttpContext.Session.GetString("uniLogin") == Model.Customer && Model.PlannedReturnDate.Date >= DateTime.Now.Date)
+                    {
+
+                    }
+                    else
+                    {
+                        <!-- EndDate has passed, or you are not the one who booked, thus it cannot be changed. -->
+                        <label class="text-white">@Model.Location.Building.@Model.Location.RoomNumber</label>
+                    }
+                </div>
+                <div class="col-2">
+                    <!-- If return date has not passed, the updaet button will be available.-->
+                    @if (Model.PlannedReturnDate.Date > DateTime.Now.Date)
+                    {
+                        <button type="submit" name="bookingID" value="@Model.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
+                            <span>Gem Ændringer</span>
+                        </button>
+                    }
+                    else
+                    {
+                        <button disabled type="submit" name="bookingID" value="@Model.BookingID" class="btn btn-primary btn-sm btn-dark" style="width:100px">
+                            <span>Gem Ændringer</span>
+                        </button>
+                    }
+
+                </div>
+            </div>
+        } <!-- End of Update Booking Form -->
         <div class="col-2">
             @using (Html.BeginForm("DisableBooking", "Booking"))
             {
@@ -66,24 +91,7 @@
                 }
             }
         </div>
-        <div class="col-2">
-            @using (Html.BeginForm("UpdateBooking", "Booking"))
-            {
-                // If return date has not passed, the updaet button will be available.
-                @if (Model.PlannedReturnDate.Date > DateTime.Now.Date)
-                {
-                    <button type="submit" name="bookingID" value="@Model.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
-                        <span>Gem Ændringer Gyldig</span>
-                    </button>
-                }
-                else
-                {
-                    <button disabled type="submit" name="bookingID" value="@Model.BookingID" class="btn btn-primary btn-sm btn-dark" style="width:100px">
-                        <span>Gem Ændringer</span>
-                    </button>
-                }
-            }
-        </div>
+
     </div>
 </div>
 
