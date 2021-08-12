@@ -191,5 +191,23 @@ namespace HUS_project.Controllers
 
             return View("BookingRUD", booking);
         }
+
+
+        public IActionResult DisableBooking(string bookingID)
+        {
+            return GoToBooking(bookingID);
+        }
+
+
+        public IActionResult UpdateBooking(string bookingID)
+        {
+            // First we check to see if anything needs changing with the booking itself
+
+
+            // Second we check to see if anything from the ItemLines has changed.
+
+
+            return GoToBooking(bookingID);
+        }
     }
 }
