@@ -330,6 +330,8 @@ namespace HUS_project.DAL
         }
 
 
+
+
         //Basic method to get all locations based on the searchTerms//
         internal EditStorageLocationModel GetLocations(EditStorageLocationModel dataFromView)
         {
@@ -367,7 +369,7 @@ namespace HUS_project.DAL
             SqlCommand cmd = new SqlCommand("DeleteStorageLocation", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.Add("@locationID", System.Data.SqlDbType.Int).Value = locationID;
-
+            cmd.ExecuteNonQuery();
             con.Close();
             return null;
         }
@@ -376,12 +378,13 @@ namespace HUS_project.DAL
 
 
 
-        internal StorageLocationModel CreateLocation(StorageLocationModel dummy)
+        internal StorageLocationModel CreateLocation(EditStorageLocationModel storagelocation)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = storagelocation.;
 
 
             con.Close();
