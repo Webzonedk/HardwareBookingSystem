@@ -384,7 +384,7 @@ namespace HUS_project.DAL
             con.Open();
             SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = storagelocation.;
+            cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = storagelocation.StorageLocation.Location.Building;
 
 
             con.Close();
