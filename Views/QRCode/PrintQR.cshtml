@@ -1,0 +1,25 @@
+﻿@model HUS_project.Models.ViewModels.QRModel
+@{
+    ViewData["Title"] = "Print QR";
+}
+
+<div class=" center">
+
+
+    <h4 class="text-white ignorePDF">QR viewer</h4>
+
+    @for (int i = 0; i < Model.QRCode.Count; i++)
+    {
+       
+
+
+        <img src="@string.Format("data:image/png;base64,{0}",Convert.ToBase64String(Model.QRCode[i].ImageData))" width="200" />
+        <label>@Model.QRCode[i].LabelName</label>
+    }
+
+
+    <div class="ignorePDF">
+        <button onclick="window.print()">Print QR koder</button>
+    </div>
+
+</div>
