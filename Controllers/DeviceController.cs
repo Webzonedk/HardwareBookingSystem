@@ -425,10 +425,30 @@ namespace HUS_project.Controllers
             newdata.Room = $"{location[0]}.{location[1]}";
             newdata.Shelf = $"{location[2]}.{location[3]}.{location[4]}";
             newdata = GetNewLocation(newdata);
-            
+
 
             return View("EditView", newdata);
 
+        }
+
+        //send data to QR controller
+        [HttpPost]
+        public IActionResult SendToQRController(string input)
+        {
+            //save data into temp data dictionary
+            List<string> data = new List<string>();
+            
+            //debugging test of multiple strings
+            for (int i = 0; i < 10; i++)
+            {
+                string testdata = $"test.{input}.{i}";
+                data.Add(testdata);
+            }
+               
+            data.Add(input);
+            TempData["QRData"] = data.ToArray();
+
+            return RedirectToAction("PrintQR", "QRCode");
         }
 
         #region Helper methods
@@ -481,7 +501,7 @@ namespace HUS_project.Controllers
                 EditDeviceModel locations = dbManager.GetStorageLocations(editData);
 
                 newdata.Shelfs = locations.Shelfs;
-                
+
                 //fill out shelf data if present
                 if (data.Shelf != null)
                 {
@@ -491,7 +511,7 @@ namespace HUS_project.Controllers
                 {
                     newdata.Shelf = null;
                 }
-                
+
 
 
             }
