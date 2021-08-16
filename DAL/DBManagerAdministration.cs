@@ -352,8 +352,6 @@ namespace HUS_project.DAL
             searchResult.ShelfSpots = shelfspots;
             searchResult.Filter = 0;
 
-
-
             searchResult.StorageLocations = storageLocations;
             searchResult.StorageLocation = dataFromView.StorageLocation;
             return searchResult;
@@ -361,7 +359,7 @@ namespace HUS_project.DAL
 
 
 
-
+        //Method to Delete a single location based on locationID
         internal StorageLocationModel DeleteLocation(int locationID)
         {
             SqlConnection con = new SqlConnection(connectionString);
@@ -377,37 +375,25 @@ namespace HUS_project.DAL
 
 
 
-
+        //Method to create a location based on the input fields in the Blue Oister Bar
         internal StorageLocationModel CreateLocation(EditStorageLocationModel storagelocation)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
+            SqlCommand cmd = new SqlCommand("CreateOrActivateInactivateStorageLocationAndRooms", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = storagelocation.StorageLocation.Location.Building;
-
-
+            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = storagelocation.StorageLocation.Location.RoomNumber;
+            cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = storagelocation.StorageLocation.ShelfName;
+            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = storagelocation.StorageLocation.ShelfLevel;
+            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = storagelocation.StorageLocation.ShelfSpot;
+            cmd.ExecuteNonQuery();
             con.Close();
             return null;
         }
 
    
 
-
-
-
-
-        //internal List<StorageLocationModel> DeleteLocation(List<StorageLocationModel> dummy)
-        //{
-        //    SqlConnection con = new SqlConnection(connectionString);
-        //    con.Open();
-        //    SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
-        //    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-
-        //    con.Close();
-        //    return null;
-        //}
 
 
 

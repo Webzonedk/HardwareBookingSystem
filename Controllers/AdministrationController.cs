@@ -79,16 +79,9 @@ namespace HUS_project.Controllers
             EditStorageLocationModel dropDownData = new EditStorageLocationModel();
             StorageLocationModel selectedStorageLocation = new StorageLocationModel();
             BuildingModel buildingModel = new BuildingModel();
-            //SortFilterModel sortFilterModel = new SortFilterModel();
             selectedStorageLocation.Location = buildingModel;
             dropDownData.StorageLocation = selectedStorageLocation;
-            //dropDownData.StorageLocation.Location.Building = null;
-            //dropDownData.StorageLocation.Location.RoomNumber = 0;
-            //dropDownData.StorageLocation.ShelfName = null;
-            //dropDownData.StorageLocation.ShelfLevel = 0;
-            //dropDownData.StorageLocation.ShelfSpot = 0;
-            //dummy.Filter = 1;
-
+           
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
             List<string> buildings = manager.GetBuildings();
             List<byte> roomNumbers = manager.GetRoomNumbers();
@@ -97,14 +90,12 @@ namespace HUS_project.Controllers
             List<byte> shelfspots = manager.GetShelfSpot();
             List<StorageLocationModel> storageLocations = manager.GetSelectedStorageLocations(dropDownData);
 
-            //EditStorageLocationModel dropDownData = new EditStorageLocationModel();
             dropDownData.Buildings = buildings;
             dropDownData.RoomNumbers = roomNumbers;
             dropDownData.ShelfNames = shelfNames;
             dropDownData.ShelfLevels = shelfLevels;
             dropDownData.ShelfSpots = shelfspots;
             dropDownData.StorageLocations = storageLocations;
-            //dropDownData.SortFilters = sortFilters;
 
             return dropDownData;
         }

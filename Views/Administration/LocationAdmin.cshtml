@@ -81,105 +81,103 @@
         </div>
         <div class="row">
             @{string toolTip = "Alle felter kan oprettes enkeltvis. \n\n" +
-                                                                                           "Hvis Bygning og Lokale er udfyldt samtidigt vil der \n" +
-                                                                                           "oprettes et Lokale hvis ikke det eksisterer i forvejen.\n\n " +
-                                                                                           "Hvis alle felter er udfyldt, vil der oprettes en placering.\n\n" +
-                                                                                           "Men kun hvis det ikke findes I forvejen."; }
+                                                                                             "Hvis Bygning og Lokale er udfyldt samtidigt vil der \n" +
+                                                                                             "oprettes et Lokale hvis ikke det eksisterer i forvejen.\n\n " +
+                                                                                             "Hvis alle felter er udfyldt, vil der oprettes en placering.\n\n" +
+                                                                                             "Men kun hvis det ikke findes I forvejen."; }
             <div class="col p-3">
                 <button type="submit" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip" asp-action="CreateLocation">Tilføj Placering</button>
             </div>
         </div>
     </div>
-</form>
-
-
-@*<form asp-action="CreateLocation" method="post">
-    </form>*@
 
 
 
 
-@* The list of storagelocations matching the search terms *@
-<div class="container containerMain box-shadow">
-    @*Header of the overview*@
-    <div class="row containerHeader">
-        <div class="col-lg-2 col-md-3 p-2">
-            <select class="headerSortLink" asp-for="@Model.Filter" onchange="submit('listStorageLocations')">
-                <option value="0" selected>Sorter</option>
-                <option value="1">Bygning &#709;</option>
-                <option value="2">Bygning &#708;</option>
-                <option value="3">Lokale &#709;</option>
-                <option value="4">Lokale &#708;</option>
-                <option value="5">Reol &#709;</option>
-                <option value="6">Reol &#708;</option>
-                <option value="7">Etage &#709;</option>
-                <option value="8">Etage &#708;</option>
-                <option value="9">Placering &#709;</option>
-                <option value="10">Placering &#708;</option>
-            </select>
-        </div>
-
-        <h4 class="col-lg-8 col-md-6 col-12">Placerings administration</h4>
-
-        <div class="col-lg-2 col-md-3 p-2">
-        </div>
-    </div>
 
 
-    @*SubHeader of the overview*@
-    <div class="row containerSubHeader border-top border-bottom border-white border-1">
-        <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">
-            <div class="headerSortLink">
-                Bygning
+    @* The list of storagelocations matching the search terms *@
+    <div class="container containerMain box-shadow">
+        @*Header of the overview*@
+        <div class="row containerHeader">
+            <div class="col-lg-2 col-md-3 p-2">
+                <select class="headerSortLink" asp-for="@Model.Filter" onchange="submit('listStorageLocations')">
+                    <option value="0" selected>Sorter</option>
+                    <option value="1">Bygning &#709;</option>
+                    <option value="2">Bygning &#708;</option>
+                    <option value="3">Lokale &#709;</option>
+                    <option value="4">Lokale &#708;</option>
+                    <option value="5">Reol &#709;</option>
+                    <option value="6">Reol &#708;</option>
+                    <option value="7">Etage &#709;</option>
+                    <option value="8">Etage &#708;</option>
+                    <option value="9">Placering &#709;</option>
+                    <option value="10">Placering &#708;</option>
+                </select>
+            </div>
+
+            <h4 class="col-lg-8 col-md-6 col-12">Placerings administration</h4>
+
+            <div class="col-lg-2 col-md-3 p-2">
             </div>
         </div>
-        <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1 headerSortLink">
-            <div class="headerSortLink">
-                Lokale
-            </div>
-        </div>
-        <div class="col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">
-            <div class="headerSortLink">
-                Reol
-            </div>
-        </div>
-        <div class="col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">
-            <div class="headerSortLink">
-                Etage
-            </div>
-        </div>
-        <div class="col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">
-            <div class="headerSortLink">
-                Placering
-            </div>
-        </div>
-    </div>
 
-    @*Body of the overview*@
 
-    @for (int i = 0; i < Model.StorageLocations.Count; i++)
-    {
-        <form asp-action="DeleteSingleLocation" method="post">
-            <div class="row containerBody border-bottom border-white border-1 alternating_row">
-                <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">@Model.StorageLocations[i].Location.Building</div>
-                <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">@Model.StorageLocations[i].Location.RoomNumber</div>
-                <div class="col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">@Model.StorageLocations[i].ShelfName</div>
-                <div class="col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">@Model.StorageLocations[i].ShelfLevel</div>
-                <div class="col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">@Model.StorageLocations[i].ShelfSpot</div>
-                <div class="col-lg-3 p-1"></div>
-                <div class="col-lg-2 col-6 p-1 center "><button type="button" class="btn btn-primary btn-sm btn-blue" style="width:100px">QR-Kode</button></div>
-                <div class="col-lg-2 col-6 p-1 center ">
-                    @*Remember that the name needs to be the same as the variable that is sent to the controller*@
-                    <button type="submit" name="deleteLocation" class="btn btn-danger btn-sm btn-red" value="@Model.StorageLocations[i].LocationID" style="width:100px">Slet</button>
+        @*SubHeader of the overview*@
+        <div class="row containerSubHeader border-top border-bottom border-white border-1">
+            <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">
+                <div class="headerSortLink">
+                    Bygning
                 </div>
             </div>
-        </form>
-    }
+            <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1 headerSortLink">
+                <div class="headerSortLink">
+                    Lokale
+                </div>
+            </div>
+            <div class="col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">
+                <div class="headerSortLink">
+                    Reol
+                </div>
+            </div>
+            <div class="col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">
+                <div class="headerSortLink">
+                    Etage
+                </div>
+            </div>
+            <div class="col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">
+                <div class="headerSortLink">
+                    Placering
+                </div>
+            </div>
+        </div>
+</form>
+
+@*Body of the overview*@
+
+@for (int i = 0; i < Model.StorageLocations.Count; i++)
+{
+    <form asp-action="DeleteSingleLocation" method="post">
+        <div class="row containerBody border-bottom border-white border-1 alternating_row">
+            <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">@Model.StorageLocations[i].Location.Building</div>
+            <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">@Model.StorageLocations[i].Location.RoomNumber</div>
+            <div class="col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">@Model.StorageLocations[i].ShelfName</div>
+            <div class="col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">@Model.StorageLocations[i].ShelfLevel</div>
+            <div class="col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">@Model.StorageLocations[i].ShelfSpot</div>
+            <div class="col-lg-3 p-1"></div>
+            <div class="col-lg-2 col-6 p-1 center "><button type="button" class="btn btn-primary btn-sm btn-blue" style="width:100px">QR-Kode</button></div>
+            <div class="col-lg-2 col-6 p-1 center ">
+                @*Remember that the name needs to be the same as the variable that is sent to the controller*@
+                <button type="submit" name="deleteLocation" class="btn btn-danger btn-sm btn-red" value="@Model.StorageLocations[i].LocationID" style="width:100px">Slet</button>
+            </div>
+        </div>
+    </form>
+}
 
 
-    <div class="row containerFooter">
-        <h4>&nbsp;</h4>
-    </div>
+<div class="row containerFooter">
+    <h4>&nbsp;</h4>
+</div>
 
 </div>
 
