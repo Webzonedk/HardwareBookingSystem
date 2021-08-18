@@ -47,7 +47,11 @@ namespace HUS_project.Controllers
         public IActionResult DeleteSingleLocation(string deleteLocation)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            manager.DeleteLocation(int.Parse(deleteLocation));
+            string alert = manager.DeleteLocation(int.Parse(deleteLocation));
+            if (alert == "occupied")
+            {
+                ViewBag.alert = "occupied";
+            }
             return View("LocationAdmin", GetStorageLocations());
         }
 
@@ -66,14 +70,14 @@ namespace HUS_project.Controllers
 
         public void CreateQRCode()
         {
-          
+
         }
 
         public void PrintQRCode()
         {
 
         }
-        
+
         private EditStorageLocationModel GetStorageLocations()
         {
             EditStorageLocationModel dropDownData = new EditStorageLocationModel();
@@ -81,7 +85,7 @@ namespace HUS_project.Controllers
             BuildingModel buildingModel = new BuildingModel();
             selectedStorageLocation.Location = buildingModel;
             dropDownData.StorageLocation = selectedStorageLocation;
-           
+
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
             List<string> buildings = manager.GetBuildings();
             List<byte> roomNumbers = manager.GetRoomNumbers();

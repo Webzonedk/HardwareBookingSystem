@@ -9,6 +9,10 @@
 <!--java script to count remaining text in description-->
 <script src="~/js/site.js"></script>
 
+
+@{string tempData = ViewBag.alert;}
+<script> alertFunction('@tempData')</script>
+
 @*Blue Oister Bar with search fields*@
 <form asp-action="LocationAdminResult" method="post" id="listStorageLocations">
     <div class="row blue-oyster-bar center box-shadow">
@@ -151,13 +155,12 @@
                 </div>
             </div>
         </div>
-</form>
+    </div>
 
-@*Body of the overview*@
+    @*Body of the overview Listing all the selected locations*@
 
-@for (int i = 0; i < Model.StorageLocations.Count; i++)
-{
-    <form asp-action="DeleteSingleLocation" method="post">
+    @for (int i = 0; i < Model.StorageLocations.Count; i++)
+    {
         <div class="row containerBody border-bottom border-white border-1 alternating_row">
             <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">@Model.StorageLocations[i].Location.Building</div>
             <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">@Model.StorageLocations[i].Location.RoomNumber</div>
@@ -168,17 +171,15 @@
             <div class="col-lg-2 col-6 p-1 center "><button type="button" class="btn btn-primary btn-sm btn-blue" style="width:100px">QR-Kode</button></div>
             <div class="col-lg-2 col-6 p-1 center ">
                 @*Remember that the name needs to be the same as the variable that is sent to the controller*@
-                <button type="submit" name="deleteLocation" class="btn btn-danger btn-sm btn-red" value="@Model.StorageLocations[i].LocationID" style="width:100px">Slet</button>
+                <button type="submit" name="deleteLocation" class="btn btn-danger btn-sm btn-red" value="@Model.StorageLocations[i].LocationID" style="width:100px" asp-action="DeleteSingleLocation">Slet</button>
             </div>
         </div>
-    </form>
-}
+    }
 
+</form>
 
 <div class="row containerFooter">
     <h4>&nbsp;</h4>
-</div>
-
 </div>
 
 
@@ -190,7 +191,7 @@
 
     @*Header of the Massdestruction area*@
     <div class="row containerHeader">
-        <h4 class="col">Masseudrydelse</h4>
+        <h4 class="col">Masseudryddelse</h4>
     </div>
 
 

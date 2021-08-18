@@ -360,16 +360,29 @@ namespace HUS_project.DAL
 
 
         //Method to Delete a single location based on locationID
-        internal StorageLocationModel DeleteLocation(int locationID)
+        internal string DeleteLocation(int locationID)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("DeleteStorageLocation", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.Add("@locationID", System.Data.SqlDbType.Int).Value = locationID;
+            cmd.Parameters.Add("@alert", System.Data.SqlDbType.VarChar,10).Direction = System.Data.ParameterDirection.Output;
             cmd.ExecuteNonQuery();
+            string alert= "empty";
+            if (cmd.Parameters["@alert"].Value != System.DBNull.Value)
+            {
+            alert = (string)cmd.Parameters["@alert"].Value;
+            }
+            else
+            {
+                alert = "empty";
+            }
+
+
+       
             con.Close();
-            return null;
+            return alert;
         }
 
 
