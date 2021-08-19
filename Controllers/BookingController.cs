@@ -199,15 +199,42 @@ namespace HUS_project.Controllers
         }
 
 
-        public IActionResult UpdateBooking(string bookingID)
+        public IActionResult UpdateBooking(string bookingID, string plannedStartDate, string plannedReturnDate, string location)
         {
             // First we check to see if anything needs changing with the booking itself
 
+            DBManagerBooking dBManager = new DBManagerBooking(configuration);
+            BookingModel originalBooking = dBManager.GetBooking(Convert.ToInt32(bookingID));
 
-            // Second we check to see if anything from the ItemLines has changed.
+            DateTime newStartDate = DateTime.Parse(plannedStartDate);
+            DateTime newEndDate = DateTime.Parse(plannedReturnDate);
+            BuildingModel newRoom = new BuildingModel(location.Split('.')[0], (Byte)Convert.ToInt32(location.Split('.')[1]));
+
+            // <!-- If end date isn't today or earlier, and you are the one who made the booking, the location & end date can be changed. -->
+            
+
+
+            if (HttpContext.Session.GetString("uniLogin") == originalBooking.Customer && originalBooking.PlannedReturnDate.Date > DateTime.Now.Date)
+            {
+                // If new endDate is not the same as the existing end date, and it is later than or equal to now and later than start date, it is valid.
+                if(newEndDate.Date != originalBooking.PlannedReturnDate.Date && newEndDate.Date > DateTime.Now.Date && newEndDate.Date > originalBooking.PlannedBorrowDate.Date && newEndDate.Date > newStartDate.Date)
+                {
+                    
+                }
+                // // <!-- If start date isn't today or earlier, and you are the one who made the booking, the start date can be moved. -->
+                if (newStartDate.Date != originalBooking.PlannedBorrowDate.Date && MayChangeStartDate(originalBooking, newStartDate))
+                {
+
+                }
+            }
 
 
             return GoToBooking(bookingID);
+        }
+
+        private bool MayChangeStartDate(BookingModel currentBooking, DateTime newStartDate)
+        {
+            return currentBooking.PlannedBorrowDate.Date > DateTime.Now.Date && newStartDate.Date > DateTime.Now.Date;
         }
     }
 }
