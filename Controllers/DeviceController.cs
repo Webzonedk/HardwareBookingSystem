@@ -56,15 +56,27 @@ namespace HUS_project.Controllers
             //initializing DB managers
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
             DBManagerShared dbsharedManager = new DBManagerShared(configuration);
-            int modelID = dbsharedManager.GetModelID(deviceData.Device.Model.ModelName);
 
-            //check if image exists
-            //  string filename = $"Capture_{modelID}.png";
+            //Add device to database
+            DeviceModel data = deviceData.Device;
+            data.ChangedBy = HttpContext.Session.GetString("uniLogin");
+            int deviceID = dbManager.CreateDevice(data);
+            int modelID = dbsharedManager.GetModelID(data.Model.ModelName);
+
+            //return device info to Edit view
+            data = dbManager.GetDeviceInfoWithLocation(deviceID);
+            List<DeviceModel> logs = GetDeviceLogs(deviceID);
+            List<string> categories = dbsharedManager.GetCategories();
+            List<string> modelNames = dbsharedManager.GetModelNames();
+
+            //set image path
             string imagepath = deviceData.Image;
             string _webroot = (string)AppDomain.CurrentDomain.GetData("webRootPath");
-            if (!imagepath.Contains(_webroot))
+
+            //check if image string is base64
+            if (TryGetFromBase64String(deviceData.Image))
             {
-                //convet image source to byte array
+                //convert image source to byte array
                 string sourceimage = deviceData.Image;
                 string base64 = sourceimage.Substring(sourceimage.IndexOf(',') + 1);
                 byte[] datastream = Convert.FromBase64String(base64);
@@ -75,9 +87,9 @@ namespace HUS_project.Controllers
                     using (Image image = Image.FromStream(m))
                     {
                         string root = (string)AppDomain.CurrentDomain.GetData("webRootPath");
-                        string webroot = root + "\\DeviceContent";
+                        string webroot = root + "\\DeviceContent\\";
 
-                        string filename = "\\Capture.png";
+                        string filename = $"Capture_{modelID}.png";
                         if (Directory.Exists(webroot))
                         {
                             // save image to directory
@@ -88,26 +100,29 @@ namespace HUS_project.Controllers
 
                             //get filename
                             deviceData.Image = filename;
+                            Debug.WriteLine("image saved");
                         }
 
                     }
 
                 }
             }
+            else
+            {
+                //check if image exists
+                if (!CheckExistingModelNames(deviceData.Image))
+                {
+                    string filepath = "missing_image.png";
+                    deviceData.Image = filepath;
+                }
+
+                
+            }
 
 
-            //Add device to database
-            DeviceModel data = deviceData.Device;
-            data.ChangedBy = HttpContext.Session.GetString("uniLogin");
-            int deviceID = dbManager.CreateDevice(data);
 
-            //return device info to Edit view
-            data = dbManager.GetDeviceInfoWithLocation(deviceID);
-            List<DeviceModel> logs = GetDeviceLogs(deviceID);
-            List<string> categories = dbsharedManager.GetCategories();
-            List<string> modelNames = dbsharedManager.GetModelNames();
-            modelID = dbsharedManager.GetModelID(data.Model.ModelName);
 
+            //set return data
             EditDeviceModel editdata = new EditDeviceModel();
             editdata.Device = data;
             editdata.Logs = logs;
@@ -115,7 +130,16 @@ namespace HUS_project.Controllers
             editdata.ModelNames = modelNames;
             editdata.Room = new string($"{data.Location.Location.Building}.{data.Location.Location.RoomNumber.ToString()}");
             editdata.Shelf = new string($"{data.Location.ShelfName}.{data.Location.ShelfLevel}.{data.Location.ShelfSpot}");
-            editdata.ImagePath = $"Capture_{modelID}.png";
+
+            //set image path if using camera data
+            //if (TryGetFromBase64String(deviceData.Image))
+            //{
+            //    editdata.ImagePath = $"Capture_{modelID}.png";
+            //}
+            //else
+            //{
+            //    editdata.ImagePath = $"missing_image.png";
+            //}
 
             return View("EditView", editdata);
         }
@@ -132,16 +156,31 @@ namespace HUS_project.Controllers
             //check if image exists, if modelName is supplied
             if (deviceData.Device.Model.ModelName != null)
             {
-                int modelID = dbsharedManager.GetModelID(deviceData.Device.Model.ModelName);
-
+                bool match = false;
+                for (int i = 0; i < deviceData.ModelNames.Count; i++)
+                {
+                    if (deviceData.ModelNames[i] == deviceData.Device.Model.ModelName)
+                    {
+                        match = true;
+                        break;
+                    }
+                }
 
                 //check if image path exists
-                string filename = $"Capture_{modelID}.png";
-                string imagepath = (string)AppDomain.CurrentDomain.GetData("webRootPath") + "\\DeviceContent\\" + filename;
-                if (System.IO.File.Exists(imagepath))
+                if (match)
                 {
-                    deviceData.Image = filename;
+
+                    int modelID = dbsharedManager.GetModelID(deviceData.Device.Model.ModelName);
+
+                    string filename = $"Capture_{modelID}.png";
+                    string imagepath = (string)AppDomain.CurrentDomain.GetData("webRootPath") + "\\DeviceContent\\" + filename;
+                    if (System.IO.File.Exists(imagepath))
+                    {
+                        deviceData.Image = filename;
+                    }
                 }
+
+
 
             }
 
@@ -400,6 +439,7 @@ namespace HUS_project.Controllers
         //opens view for scanning of QR codes
         public IActionResult ScanLocation(EditDeviceModel data)
         {
+            data.Room = "";
             return View(data);
         }
 
@@ -431,21 +471,37 @@ namespace HUS_project.Controllers
 
         }
 
+        //gather data to be sent to QR Generator
+        [HttpPost]
+        public IActionResult PrepForQR(EditDeviceModel input)
+        {
+            //add single string to list
+            List<string> output = new List<string>();
+            string data = $"Dev-{input.Device.DeviceID}-{input.Device.SerialNumber}";
+            output.Add(data);
+            output.Add(data);
+            output.Add(data);
+            output.Add(data);
+            output.Add(data);
+            output.Add(data);
+            //redirect to method
+            return SendToQRController(output);
+        }
+
         //send data to QR controller
         [HttpPost]
-        public IActionResult SendToQRController(string input)
+        public IActionResult SendToQRController(List<string> data)
         {
-            //save data into temp data dictionary
-            List<string> data = new List<string>();
-            
+
+
             //debugging test of multiple strings
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < data.Count; i++)
             {
-                string testdata = $"test.{input}.{i}";
-                data.Add(testdata);
+                string testdata = $"{data[i]}";
+                data[i] = testdata;
             }
-               
-            data.Add(input);
+
+
             TempData["QRData"] = data.ToArray();
 
             return RedirectToAction("PrintQR", "QRCode");
@@ -558,6 +614,37 @@ namespace HUS_project.Controllers
             {
                 return false;
             }
+        }
+
+        //checks if string is base64
+        private bool TryGetFromBase64String(string input)
+        {
+            string base64 = input.Substring(input.IndexOf(',') + 1);
+
+            try
+            {
+                byte[] output = Convert.FromBase64String(base64);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool CheckExistingModelNames(string image)
+        {
+            string[] paths = Directory.GetFiles(AppDomain.CurrentDomain.GetData("webRootPath") + "\\DeviceContent\\");
+            // int numimages = (string)AppDomain.CurrentDomain.GetData("webRootPath") + "\\DeviceContent\\"
+            for (int i = 0; i < paths.Length; i++)
+            {
+                Debug.WriteLine(paths[i]);
+                if (image == paths[i])
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         #endregion
