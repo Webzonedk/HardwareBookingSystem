@@ -156,11 +156,11 @@ namespace HUS_project.DAL
                 model.ModelName = (string)reader["modelName"];
                 model.ModelDescription = (string)reader["modelDescription"];
 
-                location.Location.RoomNumber = (byte)reader["roomNr"];
+                location.Location.RoomNumber = (string)reader["roomNr"];
                 location.Location.Building = (string)reader["buildingName"];
                 location.ShelfName = (string)reader["shelfName"]; ;
-                location.ShelfLevel = (byte)reader["shelfLevel"];
-                location.ShelfSpot = (byte)reader["shelfSpot"];
+                location.ShelfLevel = (string)reader["shelfLevel"];
+                location.ShelfSpot = (string)reader["shelfSpot"];
 
             }
 
@@ -217,7 +217,7 @@ namespace HUS_project.DAL
             if (editData != null)
             {
                 cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = editData.Device.Location.Location.Building;
-                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.Int).Value = (int)editData.Device.Location.Location.RoomNumber;
+                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.Int).Value = (string)editData.Device.Location.Location.RoomNumber;
             }
             else
             {
@@ -334,11 +334,11 @@ namespace HUS_project.DAL
                 model.ModelName = (string)reader["modelName"];
 
 
-                building.RoomNumber = (byte)reader["roomNr"];
+                building.RoomNumber = (string)reader["roomNr"];
                 building.Building = (string)reader["buildingName"];
                 location.ShelfName = (string)reader["shelfName"]; ;
-                location.ShelfLevel = (byte)reader["shelfLevel"];
-                location.ShelfSpot = (byte)reader["shelfSpot"];
+                location.ShelfLevel = (string)reader["shelfLevel"];
+                location.ShelfSpot = (string)reader["shelfSpot"];
 
                 model.Category = category;
                 device.Model = model;
