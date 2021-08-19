@@ -10,7 +10,7 @@
 
 
 
-<form class="was-validated" asp-action="GetLocations" asp-controller="Device" method="post" autocomplete="off" id="editForm">
+<form class="was-validated" asp-action="GetLocations" method="post" autocomplete="off" id="editForm">
 
 
     <div class="row blue-oyster-bar center box-shadow"></div>
@@ -47,24 +47,37 @@
                 <!--test new rows-->
                 <div class="row">
 
-                    <!--Print & Save-->
+                    <!--Picture & Save-->
                     <div class="col-md-3 border_EditBox">
-
+                      
+                        <!--Row for serial number-->
                         <div class="row center p-1">
-                            <div>
-                                @if (Model.ImagePath != null)
-                                {
-                                    <img class="img-bg" src="@Url.Content("~/DeviceContent/"+Model.ImagePath)" style="width: 90%" />
-                                }
-                                else
-                                {
-                                    <img class="img-bg" src="~/Graphic/billede-mangler.png" style="width: 90%" />
-                                }
+
+                            <div class="form-floating ">
+                                <input class="form-control" id="serial" type="text" asp-for="@Model.Device.SerialNumber" readonly />
+                                <label for="serial">Serienummer</label>
                             </div>
+
+                            <!--Row for image-->
+                            <div class="row center p-1">
+
+                                <div>
+                                    @if (Model.ImagePath != null)
+                                    {
+                                        <img class="img-bg" src="@Url.Content("~/DeviceContent/"+Model.ImagePath)" style="width: 90%" />
+                                    }
+                                    else
+                                    {
+                                        <img class="img-bg" src="@Url.Content("~/DeviceContent/"+Model.ImagePath)" style="width: 90%" />
+                                    }
+                                </div>
+                            </div>
+
+
                         </div>
 
 
-
+                        <!--Row for button-->
                         <div class="row p-1">
                             <div class="text-center">
                                 <button type="submit" class=" btn-primary btn Button-Size" formaction="EditDevice">Gem</button>
@@ -155,7 +168,7 @@
                         <!--Print QR code-->
                         <div class="row p-1">
                             <div class="text-center">
-                                <button type="submit" name="input" class=" btn-primary btn Button-Size" value="@Model.Device.DeviceID" formaction="SendToQRController">Print QRkode</button>
+                                <button type="submit" class=" btn-primary btn Button-Size" asp-action="PrepForQR">Print QRkode</button>
 
                             </div>
                         </div>
