@@ -276,7 +276,7 @@ namespace HUS_project.DAL
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("SearchDevices", con);
+            SqlCommand cmd = new SqlCommand("GetAllDevices", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
             if (SearchModel.Category != null)

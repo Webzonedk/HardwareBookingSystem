@@ -272,6 +272,7 @@ namespace HUS_project.DAL
                 buildingModel.Building = (string)reader["buildingName"];
                 buildingModel.RoomNumber = (byte)reader["roomNr"];
                 selectedStorageLocation.Location = buildingModel;
+                selectedStorageLocation.LocationID = (int)reader["locationID"];
                 selectedStorageLocation.ShelfName = (string)reader["shelfName"];
                 selectedStorageLocation.ShelfLevel = (byte)reader["shelfLevel"];
                 selectedStorageLocation.ShelfSpot = (byte)reader["shelfSpot"];
@@ -329,14 +330,46 @@ namespace HUS_project.DAL
         }
 
 
-        internal StorageLocationModel CreateLocation(StorageLocationModel dummy)
+
+
+        //Basic method to get all locations based on the searchTerms//
+        internal EditStorageLocationModel GetLocations(EditStorageLocationModel dataFromView)
+        {
+            List<StorageLocationModel> storageLocations = GetSelectedStorageLocations(dataFromView);
+            EditStorageLocationModel searchResult = new EditStorageLocationModel();
+
+            List<string> buildings = GetBuildings();
+            List<byte> roomNumbers = GetRoomNumbers();
+            List<string> shelfNames = GetShelfName();
+            List<byte> shelfLevels = GetShelfLevel();
+            List<byte> shelfspots = GetShelfSpot();
+
+
+            searchResult.Buildings = buildings;
+            searchResult.RoomNumbers = roomNumbers;
+            searchResult.ShelfNames = shelfNames;
+            searchResult.ShelfLevels = shelfLevels;
+            searchResult.ShelfSpots = shelfspots;
+            searchResult.Filter = 0;
+
+
+
+            searchResult.StorageLocations = storageLocations;
+            searchResult.StorageLocation = dataFromView.StorageLocation;
+            return searchResult;
+        }
+
+
+
+
+        internal StorageLocationModel DeleteLocation(int locationID)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
+            SqlCommand cmd = new SqlCommand("DeleteStorageLocation", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-
+            cmd.Parameters.Add("@locationID", System.Data.SqlDbType.Int).Value = locationID;
+            cmd.ExecuteNonQuery();
             con.Close();
             return null;
         }
@@ -345,19 +378,36 @@ namespace HUS_project.DAL
 
 
 
-
-
-        internal List<StorageLocationModel> DeleteLocation(List<StorageLocationModel> dummy)
+        internal StorageLocationModel CreateLocation(EditStorageLocationModel storagelocation)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = storagelocation.StorageLocation.Location.Building;
 
 
             con.Close();
             return null;
         }
+
+   
+
+
+
+
+
+        //internal List<StorageLocationModel> DeleteLocation(List<StorageLocationModel> dummy)
+        //{
+        //    SqlConnection con = new SqlConnection(connectionString);
+        //    con.Open();
+        //    SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
+        //    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+
+        //    con.Close();
+        //    return null;
+        //}
 
 
 
@@ -375,18 +425,6 @@ namespace HUS_project.DAL
 
 
 
-
-        internal List<CategoryModel> DeleteLocation(string dummy)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-
-            con.Close();
-            return null;
-        }
 
 
         internal void DeleteCategory(string dummy)
@@ -412,7 +450,6 @@ namespace HUS_project.DAL
 
             con.Close();
         }
-
 
 
 

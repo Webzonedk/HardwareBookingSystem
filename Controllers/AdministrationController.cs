@@ -29,40 +29,9 @@ namespace HUS_project.Controllers
             return View();
         }
 
-        public IActionResult LocationAdmin(EditStorageLocationModel dataFromView)
+        public IActionResult LocationAdmin()
         {
-            //Add standard values to the model
-            EditStorageLocationModel initialData = new EditStorageLocationModel();
-            StorageLocationModel selectedStorageLocation = new StorageLocationModel();
-            BuildingModel buildingModel = new BuildingModel();
-            //SortFilterModel sortFilterModel = new SortFilterModel();
-            selectedStorageLocation.Location=buildingModel;
-            initialData.StorageLocation = selectedStorageLocation;
-            initialData.StorageLocation.Location.Building = null;
-            initialData.StorageLocation.Location.RoomNumber = 0;
-            initialData.StorageLocation.ShelfName=null;
-            initialData.StorageLocation.ShelfLevel = 0;
-            initialData.StorageLocation.ShelfSpot = 0;
-            //dummy.Filter = 1;
-
-            DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            List<string> buildings = manager.GetBuildings();
-            List<byte> roomNumbers = manager.GetRoomNumbers();
-            List<string> shelfNames = manager.GetShelfName();
-            List<byte> shelfLevels = manager.GetShelfLevel();
-            List<byte> shelfspots = manager.GetShelfSpot();
-            List<StorageLocationModel> storageLocations = manager.GetSelectedStorageLocations(initialData);
-
-            EditStorageLocationModel dropDownData = new EditStorageLocationModel();
-            dropDownData.Buildings = buildings;
-            dropDownData.RoomNumbers = roomNumbers;
-            dropDownData.ShelfNames = shelfNames;
-            dropDownData.ShelfLevels = shelfLevels;
-            dropDownData.ShelfSpots = shelfspots;
-            dropDownData.StorageLocations = storageLocations;
-            //dropDownData.SortFilters = sortFilters;
-
-            return View(dropDownData);
+            return View(GetStorageLocations());
         }
 
 
@@ -70,32 +39,25 @@ namespace HUS_project.Controllers
         public IActionResult LocationAdminResult(EditStorageLocationModel dataFromView)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            List<StorageLocationModel> storageLocations = manager.GetSelectedStorageLocations(dataFromView);
-            EditStorageLocationModel searchResult = new EditStorageLocationModel();
-
-            List<string> buildings = manager.GetBuildings();
-            List<byte> roomNumbers = manager.GetRoomNumbers();
-            List<string> shelfNames = manager.GetShelfName();
-            List<byte> shelfLevels = manager.GetShelfLevel();
-            List<byte> shelfspots = manager.GetShelfSpot();
-
-           
-            searchResult.Buildings = buildings;
-            searchResult.RoomNumbers = roomNumbers;
-            searchResult.ShelfNames = shelfNames;
-            searchResult.ShelfLevels = shelfLevels;
-            searchResult.ShelfSpots = shelfspots;
-            searchResult.Filter = 0;
-        
-
-
-            searchResult.StorageLocations = storageLocations;
-            searchResult.StorageLocation = dataFromView.StorageLocation;
-
-            return View("LocationAdmin", searchResult);
+            return View("LocationAdmin", manager.GetLocations(dataFromView));
         }
 
 
+        [HttpPost]
+        public IActionResult DeleteSingleLocation(string deleteLocation)
+        {
+            DBManagerAdministration manager = new DBManagerAdministration(configuration);
+            manager.DeleteLocation(int.Parse(deleteLocation));
+            return View("LocationAdmin", GetStorageLocations());
+        }
+
+        [HttpPost]
+        public IActionResult CreateLocation(EditStorageLocationModel dataFromView)
+        {
+            DBManagerAdministration manager = new DBManagerAdministration(configuration);
+            manager.CreateLocation(dataFromView);
+            return View("LocationAdmin", GetStorageLocations());
+        }
 
 
 
@@ -110,6 +72,41 @@ namespace HUS_project.Controllers
         public void PrintQRCode()
         {
 
+        }
+        
+        private EditStorageLocationModel GetStorageLocations()
+        {
+            EditStorageLocationModel dropDownData = new EditStorageLocationModel();
+            StorageLocationModel selectedStorageLocation = new StorageLocationModel();
+            BuildingModel buildingModel = new BuildingModel();
+            //SortFilterModel sortFilterModel = new SortFilterModel();
+            selectedStorageLocation.Location = buildingModel;
+            dropDownData.StorageLocation = selectedStorageLocation;
+            //dropDownData.StorageLocation.Location.Building = null;
+            //dropDownData.StorageLocation.Location.RoomNumber = 0;
+            //dropDownData.StorageLocation.ShelfName = null;
+            //dropDownData.StorageLocation.ShelfLevel = 0;
+            //dropDownData.StorageLocation.ShelfSpot = 0;
+            //dummy.Filter = 1;
+
+            DBManagerAdministration manager = new DBManagerAdministration(configuration);
+            List<string> buildings = manager.GetBuildings();
+            List<byte> roomNumbers = manager.GetRoomNumbers();
+            List<string> shelfNames = manager.GetShelfName();
+            List<byte> shelfLevels = manager.GetShelfLevel();
+            List<byte> shelfspots = manager.GetShelfSpot();
+            List<StorageLocationModel> storageLocations = manager.GetSelectedStorageLocations(dropDownData);
+
+            //EditStorageLocationModel dropDownData = new EditStorageLocationModel();
+            dropDownData.Buildings = buildings;
+            dropDownData.RoomNumbers = roomNumbers;
+            dropDownData.ShelfNames = shelfNames;
+            dropDownData.ShelfLevels = shelfLevels;
+            dropDownData.ShelfSpots = shelfspots;
+            dropDownData.StorageLocations = storageLocations;
+            //dropDownData.SortFilters = sortFilters;
+
+            return dropDownData;
         }
 
     }

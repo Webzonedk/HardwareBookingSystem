@@ -1,7 +1,7 @@
 ﻿
 
 //set attribute on hidden inputfield & submit
-function submit_2() {
+function submitDevice() {
 
     var imagesource = document.getElementById("pictureFromCamera").src;
     document.getElementById("hiddenimage").setAttribute('value', imagesource);
