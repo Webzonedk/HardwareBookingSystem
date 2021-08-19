@@ -257,7 +257,7 @@ namespace HUS_project.DAL
             }
             else
             {
-                cmd.Parameters.Add("@filter", System.Data.SqlDbType.TinyInt).Value = 1;
+                cmd.Parameters.Add("@filter", System.Data.SqlDbType.TinyInt).Value = 0;
             }
 
 
@@ -367,12 +367,12 @@ namespace HUS_project.DAL
             SqlCommand cmd = new SqlCommand("DeleteStorageLocation", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.Add("@locationID", System.Data.SqlDbType.Int).Value = locationID;
-            cmd.Parameters.Add("@alert", System.Data.SqlDbType.VarChar,10).Direction = System.Data.ParameterDirection.Output;
+            cmd.Parameters.Add("@alert", System.Data.SqlDbType.VarChar, 10).Direction = System.Data.ParameterDirection.Output;
             cmd.ExecuteNonQuery();
-            string alert= "empty";
+            string alert = "empty";
             if (cmd.Parameters["@alert"].Value != System.DBNull.Value)
             {
-            alert = (string)cmd.Parameters["@alert"].Value;
+                alert = (string)cmd.Parameters["@alert"].Value;
             }
             else
             {
@@ -380,7 +380,7 @@ namespace HUS_project.DAL
             }
 
 
-       
+
             con.Close();
             return alert;
         }
@@ -389,23 +389,44 @@ namespace HUS_project.DAL
 
 
         //Method to create a location based on the input fields in the Blue Oister Bar
-        internal StorageLocationModel CreateLocation(EditStorageLocationModel storagelocation)
+        internal EditStorageLocationModel CreateLocation(EditStorageLocationModel storagelocation)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("CreateOrActivateInactivateStorageLocationAndRooms", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = storagelocation.StorageLocation.Location.Building;
+
+            if (storagelocation.StorageLocation.Location.Building != null)
+            {
+                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = storagelocation.StorageLocation.Location.Building;
+            }
+
+
             cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = storagelocation.StorageLocation.Location.RoomNumber;
-            cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = storagelocation.StorageLocation.ShelfName;
+
+            if (storagelocation.StorageLocation.ShelfName != null)
+            {
+                cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = storagelocation.StorageLocation.ShelfName;
+            }
+
+
             cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = storagelocation.StorageLocation.ShelfLevel;
+
             cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = storagelocation.StorageLocation.ShelfSpot;
+            try
+            {
             cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception)
+            {
+            }
+
             con.Close();
-            return null;
+            return storagelocation;
         }
 
-   
+
 
 
 
