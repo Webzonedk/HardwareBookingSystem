@@ -301,7 +301,7 @@ namespace HUS_project.DAL
             }
 
 
-            if (dataFromView.StorageLocation.Location.RoomNumber > 0)
+            if (dataFromView.StorageLocation.Location.RoomNumber != null)
             {
                 cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = dataFromView.StorageLocation.Location.RoomNumber;
             }
@@ -320,7 +320,7 @@ namespace HUS_project.DAL
                 StorageLocationModel selectedRooms = new StorageLocationModel();
                 BuildingModel buildingModel = new BuildingModel();
                 buildingModel.Building = (string)reader["buildingName"];
-                buildingModel.RoomNumber = (byte)reader["roomNr"];
+                buildingModel.RoomNumber = (string)reader["roomNr"];
                 selectedRooms.Location = buildingModel;
 
                 selectedRoom.Add(selectedRooms);
