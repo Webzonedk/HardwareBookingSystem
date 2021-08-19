@@ -116,7 +116,7 @@ namespace HUS_project.Controllers
                     deviceData.Image = filepath;
                 }
 
-                
+
             }
 
 
@@ -258,8 +258,8 @@ namespace HUS_project.Controllers
             string[] splittedShelf = data.Shelf.Split('.');
 
             //set data models
-            BuildingModel building = new BuildingModel(splittedRoom[0], Convert.ToByte(splittedRoom[1]));
-            StorageLocationModel storageLocation = new StorageLocationModel(splittedShelf[0], Convert.ToByte(splittedShelf[1]), Convert.ToByte(splittedShelf[2]), building);
+            BuildingModel building = new BuildingModel(splittedRoom[0], splittedRoom[1]);
+            StorageLocationModel storageLocation = new StorageLocationModel(splittedShelf[0], splittedShelf[1], splittedShelf[2], building);
             data.Device.Location = storageLocation;
             data.Device.Notes = "Placering redigeret";
 
@@ -352,8 +352,8 @@ namespace HUS_project.Controllers
             string[] splittedShelf = data.Shelf.Split('.');
 
             //set data models
-            BuildingModel building = new BuildingModel(splittedRoom[0], Convert.ToByte(splittedRoom[1]));
-            StorageLocationModel storageLocation = new StorageLocationModel(splittedShelf[0], Convert.ToByte(splittedShelf[1]), Convert.ToByte(splittedShelf[2]), building);
+            BuildingModel building = new BuildingModel(splittedRoom[0], splittedRoom[1]);
+            StorageLocationModel storageLocation = new StorageLocationModel(splittedShelf[0], splittedShelf[1], splittedShelf[2], building);
             data.Device.Location = storageLocation;
             //data.Device.Notes = "Placering redigeret";
 
@@ -547,7 +547,7 @@ namespace HUS_project.Controllers
                 //prep data model
                 EditDeviceModel editData = new EditDeviceModel();
                 DeviceModel device = new DeviceModel();
-                BuildingModel building = new BuildingModel(splittedRoom[0], Convert.ToByte(splittedRoom[1]));
+                BuildingModel building = new BuildingModel(splittedRoom[0], splittedRoom[1]);
                 StorageLocationModel storageLocation = new StorageLocationModel();
                 storageLocation.Location = building;
                 device.Location = storageLocation;
