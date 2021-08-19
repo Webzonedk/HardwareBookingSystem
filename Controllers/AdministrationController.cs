@@ -47,7 +47,11 @@ namespace HUS_project.Controllers
         public IActionResult DeleteSingleLocation(string deleteLocation)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            manager.DeleteLocation(int.Parse(deleteLocation));
+            string alert = manager.DeleteLocation(int.Parse(deleteLocation));
+            if (alert == "occupied")
+            {
+                ViewBag.alert = "occupied";
+            }
             return View("LocationAdmin", GetStorageLocations());
         }
 
@@ -66,45 +70,36 @@ namespace HUS_project.Controllers
 
         public void CreateQRCode()
         {
-          
+
         }
 
         public void PrintQRCode()
         {
 
         }
-        
+
         private EditStorageLocationModel GetStorageLocations()
         {
             EditStorageLocationModel dropDownData = new EditStorageLocationModel();
             StorageLocationModel selectedStorageLocation = new StorageLocationModel();
             BuildingModel buildingModel = new BuildingModel();
-            //SortFilterModel sortFilterModel = new SortFilterModel();
             selectedStorageLocation.Location = buildingModel;
             dropDownData.StorageLocation = selectedStorageLocation;
-            //dropDownData.StorageLocation.Location.Building = null;
-            //dropDownData.StorageLocation.Location.RoomNumber = 0;
-            //dropDownData.StorageLocation.ShelfName = null;
-            //dropDownData.StorageLocation.ShelfLevel = 0;
-            //dropDownData.StorageLocation.ShelfSpot = 0;
-            //dummy.Filter = 1;
 
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
             List<string> buildings = manager.GetBuildings();
-            List<byte> roomNumbers = manager.GetRoomNumbers();
+            List<string> roomNumbers = manager.GetRoomNumbers();
             List<string> shelfNames = manager.GetShelfName();
-            List<byte> shelfLevels = manager.GetShelfLevel();
-            List<byte> shelfspots = manager.GetShelfSpot();
+            List<string> shelfLevels = manager.GetShelfLevel();
+            List<string> shelfspots = manager.GetShelfSpot();
             List<StorageLocationModel> storageLocations = manager.GetSelectedStorageLocations(dropDownData);
 
-            //EditStorageLocationModel dropDownData = new EditStorageLocationModel();
             dropDownData.Buildings = buildings;
             dropDownData.RoomNumbers = roomNumbers;
             dropDownData.ShelfNames = shelfNames;
             dropDownData.ShelfLevels = shelfLevels;
             dropDownData.ShelfSpots = shelfspots;
             dropDownData.StorageLocations = storageLocations;
-            //dropDownData.SortFilters = sortFilters;
 
             return dropDownData;
         }

@@ -11,17 +11,17 @@ namespace HUS_project.Models.ViewModels
         private StorageLocationModel storageLocation;
         private List<StorageLocationModel> storageLocations;
         private List<string> buildings;
-        private List<byte> roomNumbers;
+        private List<string> roomNumbers;
         private List<string> shelfNames;
-        private List<byte> shelfLevels;
-        private List<byte> shelfSpots;
+        private List<string> shelfLevels;
+        private List<string> shelfSpots;
         private byte filter;
         private List<string> deleteBuildings;
-        private List<byte> deleteRoomNumbers;
+        private List<string> deleteRoomNumbers;
         private string deleteRoom;
         private List<string> deleteShelfNames;
-        private List<byte> deleteShelfLevels;
-        private List<byte> deleteShelfSpots;
+        private List<string> deleteShelfLevels;
+        private List<string> deleteShelfSpots;
         #endregion
 
 
@@ -52,7 +52,7 @@ namespace HUS_project.Models.ViewModels
             set { buildings = value; }
         }
 
-        public List<byte> RoomNumbers
+        public List<string> RoomNumbers
         {
             get { return roomNumbers; }
             set { roomNumbers = value; }
@@ -64,13 +64,13 @@ namespace HUS_project.Models.ViewModels
             set { shelfNames = value; }
         }
 
-        public List<byte> ShelfLevels
+        public List<string> ShelfLevels
         {
             get { return shelfLevels; }
             set { shelfLevels = value; }
         }
 
-        public List<byte> ShelfSpots
+        public List<string> ShelfSpots
         {
             get { return shelfSpots; }
             set { shelfSpots = value; }
@@ -88,7 +88,7 @@ namespace HUS_project.Models.ViewModels
             set { deleteBuildings = value; }
         }
 
-        public List<byte> DeleteRoomNumbers
+        public List<string> DeleteRoomNumbers
         {
             get { return deleteRoomNumbers; }
             set { deleteRoomNumbers = value; }
@@ -106,13 +106,13 @@ namespace HUS_project.Models.ViewModels
             set { deleteShelfNames = value; }
         }
 
-        public List<byte> DeleteShelfLevels
+        public List<string> DeleteShelfLevels
         {
             get { return deleteShelfLevels; }
             set { deleteShelfLevels = value; }
         }
 
-        public List<byte> DeleteShelfSpots
+        public List<string> DeleteShelfSpots
         {
             get { return deleteShelfSpots; }
             set { deleteShelfSpots = value; }
@@ -131,20 +131,20 @@ namespace HUS_project.Models.ViewModels
         {
             storageLocations = new List<StorageLocationModel>();
             buildings = new List<string>();
-            roomNumbers = new List<byte>();
+            roomNumbers = new List<string>();
             shelfNames = new List<string>();
-            shelfLevels = new List<byte>();
-            shelfSpots = new List<byte>();
+            shelfLevels = new List<string>();
+            shelfSpots = new List<string>();
             deleteBuildings = new List<string>();
-            deleteRoomNumbers = new List<byte>();
+            deleteRoomNumbers = new List<string>();
             deleteShelfNames = new List<string>();
-            deleteShelfLevels = new List<byte>();
-            deleteShelfSpots = new List<byte>();
+            deleteShelfLevels = new List<string>();
+            deleteShelfSpots = new List<string>();
         }
 
-        public EditStorageLocationModel(StorageLocationModel storageLocation, List<StorageLocationModel> storageLocations, List<string> buildings, List<byte> roomNumbers,
-            List<string> shelfNames, List<byte> shelfLevels, List<byte> shelfSpots, byte filter,
-            List<string>deleteBuildings, List<byte> deleteRoomNumbers, string deleteRoom, List<string> deleteShelfNames, List<byte> deleteShelfLevels, List<byte> deleteShelfSpots)
+        public EditStorageLocationModel(StorageLocationModel storageLocation, List<StorageLocationModel> storageLocations, List<string> buildings, List<string> roomNumbers,
+            List<string> shelfNames, List<string> shelfLevels, List<string> shelfSpots, byte filter,
+            List<string>deleteBuildings, List<string> deleteRoomNumbers, string deleteRoom, List<string> deleteShelfNames, List<string> deleteShelfLevels, List<string> deleteShelfSpots)
         {
             this.storageLocation = storageLocation;
             this.storageLocations = storageLocations;

@@ -61,4 +61,14 @@ function ReturnToEdit(val) {
     console.log("test test test" + val);
 }
 
+function alertFunction(tempData) {
+    console.log("tester tester 1");
+    console.log(tempData);
+    if (tempData == "occupied") {
+    console.log("tester tester 2");
+        let message = "Lokationen kan ikke slettes da der findes enheder på denne lokation.\n Flyt venligst enhederne væk fra lokationen inden du forsøger at slette en lokation";
+        alert(message);
+    }
+}
+
 

@@ -40,7 +40,7 @@ namespace HUS_project.DAL
                 while (reader.Read())
                 {
 
-                    BuildingModel building = new BuildingModel((string)reader["buildingName"], 0);
+                    BuildingModel building = new BuildingModel((string)reader["buildingName"], "0");
 
                     buildings.Add(building.Building);
                 }
@@ -58,7 +58,7 @@ namespace HUS_project.DAL
 
 
         //Getting Room numbers (Not actual rooms) for the dropdown in Blue Oister bar
-        internal List<byte> GetRoomNumbers()
+        internal List<string> GetRoomNumbers()
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
@@ -67,14 +67,14 @@ namespace HUS_project.DAL
             cmd.ExecuteNonQuery();
             SqlDataReader reader = cmd.ExecuteReader();
 
-            List<byte> roomNumbers = new List<byte>();
+            List<string> roomNumbers = new List<string>();
             try
             {
 
                 while (reader.Read())
                 {
                     //EditStorageLocationModel output = new EditStorageLocationModel();
-                    BuildingModel roomNumber = new BuildingModel(null, (byte)reader["roomNr"]);
+                    BuildingModel roomNumber = new BuildingModel(null, (string)reader["roomNr"]);
 
                     roomNumbers.Add(roomNumber.RoomNumber);
                 }
@@ -108,7 +108,7 @@ namespace HUS_project.DAL
                 while (reader.Read())
                 {
                     //EditStorageLocationModel output = new EditStorageLocationModel();
-                    StorageLocationModel shelfName = new StorageLocationModel((string)reader["shelfName"], 0, 0, null);
+                    StorageLocationModel shelfName = new StorageLocationModel((string)reader["shelfName"], "0", "0", null);
 
                     shelfNames.Add(shelfName.ShelfName);
                 }
@@ -126,7 +126,7 @@ namespace HUS_project.DAL
 
 
         //Getting shelf levels for the dropdown in Blue Oister bar
-        internal List<byte> GetShelfLevel()
+        internal List<string> GetShelfLevel()
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
@@ -135,14 +135,14 @@ namespace HUS_project.DAL
             cmd.ExecuteNonQuery();
             SqlDataReader reader = cmd.ExecuteReader();
 
-            List<byte> shelfLevels = new List<byte>();
+            List<string> shelfLevels = new List<string>();
             try
             {
 
                 while (reader.Read())
                 {
                     //EditStorageLocationModel output = new EditStorageLocationModel();
-                    StorageLocationModel shelfLevel = new StorageLocationModel(null, (byte)reader["shelfLevel"], 0, null);
+                    StorageLocationModel shelfLevel = new StorageLocationModel(null, (string)reader["shelfLevel"], "0", null);
 
                     shelfLevels.Add(shelfLevel.ShelfLevel);
                 }
@@ -160,7 +160,7 @@ namespace HUS_project.DAL
 
 
         //Getting shelf spots for the dropdown in Blue Oister bar
-        internal List<byte> GetShelfSpot()
+        internal List<string> GetShelfSpot()
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
@@ -169,14 +169,14 @@ namespace HUS_project.DAL
             cmd.ExecuteNonQuery();
             SqlDataReader reader = cmd.ExecuteReader();
 
-            List<byte> shelfSpots = new List<byte>();
+            List<string> shelfSpots = new List<string>();
             try
             {
 
                 while (reader.Read())
                 {
                     //EditStorageLocationModel output = new EditStorageLocationModel();
-                    StorageLocationModel shelfSpot = new StorageLocationModel(null, 0, (byte)reader["shelfSpot"], null);
+                    StorageLocationModel shelfSpot = new StorageLocationModel(null, "0", (string)reader["shelfSpot"], null);
 
                     shelfSpots.Add(shelfSpot.ShelfSpot);
                 }
@@ -211,7 +211,7 @@ namespace HUS_project.DAL
             }
 
 
-            if (dataFromView.StorageLocation.Location.RoomNumber > 0)
+            if (dataFromView.StorageLocation.Location.RoomNumber != null)
             {
                 cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = dataFromView.StorageLocation.Location.RoomNumber;
             }
@@ -231,7 +231,7 @@ namespace HUS_project.DAL
             }
 
 
-            if (dataFromView.StorageLocation.ShelfLevel > 0)
+            if (dataFromView.StorageLocation.ShelfLevel != null)
             {
                 cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = dataFromView.StorageLocation.ShelfLevel;
             }
@@ -241,7 +241,7 @@ namespace HUS_project.DAL
             }
 
 
-            if (dataFromView.StorageLocation.ShelfSpot > 0)
+            if (dataFromView.StorageLocation.ShelfSpot != null)
             {
                 cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = dataFromView.StorageLocation.ShelfSpot;
             }
@@ -257,7 +257,7 @@ namespace HUS_project.DAL
             }
             else
             {
-                cmd.Parameters.Add("@filter", System.Data.SqlDbType.TinyInt).Value = 1;
+                cmd.Parameters.Add("@filter", System.Data.SqlDbType.TinyInt).Value = 0;
             }
 
 
@@ -270,12 +270,12 @@ namespace HUS_project.DAL
                 StorageLocationModel selectedStorageLocation = new StorageLocationModel();
                 BuildingModel buildingModel = new BuildingModel();
                 buildingModel.Building = (string)reader["buildingName"];
-                buildingModel.RoomNumber = (byte)reader["roomNr"];
+                buildingModel.RoomNumber = (string)reader["roomNr"];
                 selectedStorageLocation.Location = buildingModel;
                 selectedStorageLocation.LocationID = (int)reader["locationID"];
                 selectedStorageLocation.ShelfName = (string)reader["shelfName"];
-                selectedStorageLocation.ShelfLevel = (byte)reader["shelfLevel"];
-                selectedStorageLocation.ShelfSpot = (byte)reader["shelfSpot"];
+                selectedStorageLocation.ShelfLevel = (string)reader["shelfLevel"];
+                selectedStorageLocation.ShelfSpot = (string)reader["shelfSpot"];
 
                 selectedStorageLocations.Add(selectedStorageLocation);
             }
@@ -339,10 +339,10 @@ namespace HUS_project.DAL
             EditStorageLocationModel searchResult = new EditStorageLocationModel();
 
             List<string> buildings = GetBuildings();
-            List<byte> roomNumbers = GetRoomNumbers();
+            List<string> roomNumbers = GetRoomNumbers();
             List<string> shelfNames = GetShelfName();
-            List<byte> shelfLevels = GetShelfLevel();
-            List<byte> shelfspots = GetShelfSpot();
+            List<string> shelfLevels = GetShelfLevel();
+            List<string> shelfspots = GetShelfSpot();
 
 
             searchResult.Buildings = buildings;
@@ -352,8 +352,6 @@ namespace HUS_project.DAL
             searchResult.ShelfSpots = shelfspots;
             searchResult.Filter = 0;
 
-
-
             searchResult.StorageLocations = storageLocations;
             searchResult.StorageLocation = dataFromView.StorageLocation;
             return searchResult;
@@ -361,53 +359,75 @@ namespace HUS_project.DAL
 
 
 
-
-        internal StorageLocationModel DeleteLocation(int locationID)
+        //Method to Delete a single location based on locationID
+        internal string DeleteLocation(int locationID)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("DeleteStorageLocation", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.Add("@locationID", System.Data.SqlDbType.Int).Value = locationID;
+            cmd.Parameters.Add("@alert", System.Data.SqlDbType.VarChar, 10).Direction = System.Data.ParameterDirection.Output;
             cmd.ExecuteNonQuery();
+            string alert = "empty";
+            if (cmd.Parameters["@alert"].Value != System.DBNull.Value)
+            {
+                alert = (string)cmd.Parameters["@alert"].Value;
+            }
+            else
+            {
+                alert = "empty";
+            }
+
+
+
             con.Close();
-            return null;
+            return alert;
         }
 
 
 
 
-
-        internal StorageLocationModel CreateLocation(EditStorageLocationModel storagelocation)
+        //Method to create a location based on the input fields in the Blue Oister Bar
+        internal EditStorageLocationModel CreateLocation(EditStorageLocationModel storagelocation)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
+            SqlCommand cmd = new SqlCommand("CreateOrActivateInactivateStorageLocationAndRooms", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = storagelocation.StorageLocation.Location.Building;
 
+            if (storagelocation.StorageLocation.Location.Building != null)
+            {
+                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = storagelocation.StorageLocation.Location.Building;
+            }
+
+
+            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = storagelocation.StorageLocation.Location.RoomNumber;
+
+            if (storagelocation.StorageLocation.ShelfName != null)
+            {
+                cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = storagelocation.StorageLocation.ShelfName;
+            }
+
+
+            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = storagelocation.StorageLocation.ShelfLevel;
+
+            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = storagelocation.StorageLocation.ShelfSpot;
+            try
+            {
+            cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception)
+            {
+            }
 
             con.Close();
-            return null;
+            return storagelocation;
         }
 
-   
 
 
-
-
-
-        //internal List<StorageLocationModel> DeleteLocation(List<StorageLocationModel> dummy)
-        //{
-        //    SqlConnection con = new SqlConnection(connectionString);
-        //    con.Open();
-        //    SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
-        //    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-
-        //    con.Close();
-        //    return null;
-        //}
 
 
 
