@@ -208,7 +208,7 @@ namespace HUS_project.Controllers
 
             DateTime newStartDate = DateTime.Parse(plannedStartDate);
             DateTime newEndDate = DateTime.Parse(plannedReturnDate);
-            BuildingModel newRoom = new BuildingModel(location.Split('.')[0], (Byte)Convert.ToInt32(location.Split('.')[1]));
+            BuildingModel newRoom = new BuildingModel(location.Split('.')[0], location.Split('.')[1]);
 
             // <!-- If end date isn't today or earlier, and you are the one who made the booking, the location & end date can be changed. -->
             

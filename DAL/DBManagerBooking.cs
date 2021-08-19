@@ -63,7 +63,7 @@ namespace HUS_project.DAL
                 booking.PlannedReturnDate = (DateTime)reader["returnDate"];
                 booking.Location = new BuildingModel(
                     (string)reader["buildingName"],
-                    (byte)reader["roomNr"]
+                    (string)reader["roomNr"]
                     );
             }
             con.Close();
@@ -276,11 +276,11 @@ namespace HUS_project.DAL
             while (reader.Read())
             {
                 location.ShelfName = (string)reader["shelfName"];
-                location.ShelfLevel = (byte)reader["shelfLevel"];
-                location.ShelfSpot = (byte)reader["shelfSpot"];
+                location.ShelfLevel = (string)reader["shelfLevel"];
+                location.ShelfSpot = (string)reader["shelfSpot"];
                 location.Location = new BuildingModel(
                         (string)reader["buildingName"],
-                        (byte)reader["roomNr"]
+                        (string)reader["roomNr"]
                     );
             }
             con.Close();
