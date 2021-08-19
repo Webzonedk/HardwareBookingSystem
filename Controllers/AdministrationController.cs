@@ -88,10 +88,10 @@ namespace HUS_project.Controllers
 
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
             List<string> buildings = manager.GetBuildings();
-            List<byte> roomNumbers = manager.GetRoomNumbers();
+            List<string> roomNumbers = manager.GetRoomNumbers();
             List<string> shelfNames = manager.GetShelfName();
-            List<byte> shelfLevels = manager.GetShelfLevel();
-            List<byte> shelfspots = manager.GetShelfSpot();
+            List<string> shelfLevels = manager.GetShelfLevel();
+            List<string> shelfspots = manager.GetShelfSpot();
             List<StorageLocationModel> storageLocations = manager.GetSelectedStorageLocations(dropDownData);
 
             dropDownData.Buildings = buildings;

@@ -11,8 +11,8 @@ namespace HUS_project.Models
 
         private int locationID;
         private string shelfName;
-        private byte shelfLevel;
-        private byte shelfSpot;
+        private string shelfLevel;
+        private string shelfSpot;
         private BuildingModel location;
 
         #endregion
@@ -36,14 +36,14 @@ namespace HUS_project.Models
         }
 
 
-        public byte ShelfLevel
+        public string ShelfLevel
         {
             get { return shelfLevel; }
             set { shelfLevel = value; }
         }
 
 
-        public byte ShelfSpot
+        public string ShelfSpot
         {
             get { return shelfSpot; }
             set { shelfSpot = value; }
@@ -67,7 +67,7 @@ namespace HUS_project.Models
 
         }
         
-        public StorageLocationModel(string shelfName, byte shelfLevel, byte shelfSpot, BuildingModel location)
+        public StorageLocationModel(string shelfName, string shelfLevel, string shelfSpot, BuildingModel location)
         {
             this.shelfName = shelfName;
             this.shelfLevel = shelfLevel;
