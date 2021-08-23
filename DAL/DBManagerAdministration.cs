@@ -203,51 +203,51 @@ namespace HUS_project.DAL
 
             if (dataFromView.StorageLocation.Location.Building != null)
             {
-                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = dataFromView.StorageLocation.Location.Building;
+                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = dataFromView.StorageLocation.Location.Building;
             }
             else
             {
-                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = null;
+                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = null;
             }
 
 
             if (dataFromView.StorageLocation.Location.RoomNumber != null)
             {
-                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = dataFromView.StorageLocation.Location.RoomNumber;
+                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.Location.RoomNumber;
             }
             else
             {
-                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = null;
+                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar, 10).Value = null;
             }
 
 
             if (dataFromView.StorageLocation.ShelfName != null)
             {
-                cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = dataFromView.StorageLocation.ShelfName;
+                cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.ShelfName;
             }
             else
             {
-                cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = null;
+                cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar, 10).Value = null;
             }
 
 
             if (dataFromView.StorageLocation.ShelfLevel != null)
             {
-                cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = dataFromView.StorageLocation.ShelfLevel;
+                cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.ShelfLevel;
             }
             else
             {
-                cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = null;
+                cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar, 10).Value = null;
             }
 
 
             if (dataFromView.StorageLocation.ShelfSpot != null)
             {
-                cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = dataFromView.StorageLocation.ShelfSpot;
+                cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.ShelfSpot;
             }
             else
             {
-                cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = null;
+                cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar, 10).Value = null;
             }
 
 
@@ -293,21 +293,21 @@ namespace HUS_project.DAL
 
             if (dataFromView.StorageLocation.Location.Building != null)
             {
-                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = dataFromView.StorageLocation.Location.Building;
+                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.Location.Building;
             }
             else
             {
-                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = null;
+                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 10).Value = null;
             }
 
 
             if (dataFromView.StorageLocation.Location.RoomNumber != null)
             {
-                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = dataFromView.StorageLocation.Location.RoomNumber;
+                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.Location.RoomNumber;
             }
             else
             {
-                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = null;
+                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar, 10).Value = null;
             }
 
 
@@ -378,9 +378,6 @@ namespace HUS_project.DAL
             {
                 alert = "empty";
             }
-
-
-
             con.Close();
             return alert;
         }
@@ -398,25 +395,27 @@ namespace HUS_project.DAL
 
             if (storagelocation.StorageLocation.Location.Building != null)
             {
-                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = storagelocation.StorageLocation.Location.Building;
+                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = storagelocation.StorageLocation.Location.Building;
             }
-
-
-            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = storagelocation.StorageLocation.Location.RoomNumber;
-
+            if (storagelocation.StorageLocation.Location.RoomNumber != null)
+            {
+                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.RoomNumber;
+            }
             if (storagelocation.StorageLocation.ShelfName != null)
             {
-                cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = storagelocation.StorageLocation.ShelfName;
+                cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfName;
             }
-
-
-            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = storagelocation.StorageLocation.ShelfLevel;
-
-            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = storagelocation.StorageLocation.ShelfSpot;
+            if (storagelocation.StorageLocation.ShelfLevel != null)
+            {
+                cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfLevel;
+            }
+            if (storagelocation.StorageLocation.ShelfSpot != null)
+            {
+                cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfSpot;
+            }
             try
             {
-            cmd.ExecuteNonQuery();
-
+                cmd.ExecuteNonQuery();
             }
             catch (Exception)
             {
@@ -472,6 +471,27 @@ namespace HUS_project.DAL
         }
 
 
+
+        /// <summary>
+        /// Returns True if the Room exists.
+        /// </summary>
+        /// <param name="bM">Building Model, containing RoomNumber and BuildingName</param>
+        /// <returns>Returns True if the Room exists.</returns>
+        internal bool DoesRoomExist(BuildingModel bM)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+
+            SqlCommand cmd = new SqlCommand("DoesRoomExist", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@roomNumber", bM.RoomNumber);
+            cmd.Parameters.AddWithValue("@buildingName", bM.Building);
+
+            con.Open();
+            bool result = (int)cmd.ExecuteScalar() == 1;
+            con.Close();
+
+            return result;
+        }
 
 
     }

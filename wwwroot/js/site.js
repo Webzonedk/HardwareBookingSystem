@@ -62,13 +62,23 @@ function ReturnToEdit(val) {
 }
 
 function alertFunction(tempData) {
-    console.log("tester tester 1");
-    console.log(tempData);
     if (tempData == "occupied") {
-    console.log("tester tester 2");
         let message = "Lokationen kan ikke slettes da der findes enheder på denne lokation.\n Flyt venligst enhederne væk fra lokationen inden du forsøger at slette en lokation";
         alert(message);
     }
 }
 
+function fadeOut(input) {
+    $("#" + input).slideUp();  
+}
 
+function checkInputFields() {
+    let a = document.getElementById("buildingDropDown").value;
+    let b = document.getElementById("roomNumberDropDown").value;
+    let c = document.getElementById("shelfNameDropDown").value;
+    let d = document.getElementById("shelfLevelDropDown").value;
+    let e = document.getElementById("shelfSpotDropDown").value;
+    if (a == null || a == "", b == null || b == "", c == null || c == "", d == null || d == "", e == null || e == "", ) {
+        alert("Lokationen blev IKKE oprettet! \n Alle felter skal være udfyldt.");
+    }
+}
