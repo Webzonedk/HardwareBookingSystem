@@ -258,6 +258,31 @@ namespace HUS_project.DAL
         }
 
         /// <summary>
+        /// Counts the maximum theoretical amount of models available in a timespace, for making future bookings.
+        /// </summary>
+        /// <param name="rentDate"></param>
+        /// <param name="returnDate"></param>
+        /// <param name="modelName"></param>
+        /// <returns></returns>
+        internal int GetModelQuantityAvailableExcludingBooking(DateTime rentDate, DateTime returnDate, string modelName, int bookingID)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+
+            SqlCommand cmd = new SqlCommand("GetModelDeviceQuantityAvailableExcludingBooking", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@rentDate", rentDate);
+            cmd.Parameters.AddWithValue("@returnDate", returnDate);
+            cmd.Parameters.AddWithValue("@modelName", modelName);
+            cmd.Parameters.AddWithValue("@bookingID", bookingID);
+
+            con.Open();
+            int result = (int)cmd.ExecuteScalar();
+            con.Close();
+
+            return result;
+        }
+
+        /// <summary>
         /// Acquires the location of a random Device of the modelName which is currently in storage.
         /// </summary>
         /// <param name="modelName"></param>
