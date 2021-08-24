@@ -384,6 +384,31 @@ namespace HUS_project.DAL
 
 
 
+        //Method to Delete a building or roomNumber or Room, based on the input fields in massdestruction area
+        internal string DeleteBuildingOrRoom(string buildingNameToDelete, string RoomNumberToDelete)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("DeleteRoomsAndBuildingsMassDestruction", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@buildingNameToDelete", System.Data.SqlDbType.Int).Value = buildingNameToDelete;
+            cmd.Parameters.Add("@RoomNumberToDelete", System.Data.SqlDbType.Int).Value = RoomNumberToDelete;
+            cmd.Parameters.Add("@RoomToDelete", System.Data.SqlDbType.VarChar, 10).Direction = System.Data.ParameterDirection.Output;
+            cmd.ExecuteNonQuery();
+            string alert = "empty";
+            if (cmd.Parameters["@alert"].Value != System.DBNull.Value)
+            {
+                alert = (string)cmd.Parameters["@alert"].Value;
+            }
+            else
+            {
+                alert = "empty";
+            }
+            con.Close();
+            return alert;
+        }
+
+
 
         //Method to create a location based on the input fields in the Blue Oister Bar
         internal EditStorageLocationModel CreateLocation(EditStorageLocationModel storagelocation)

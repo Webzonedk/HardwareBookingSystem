@@ -69,10 +69,10 @@ namespace HUS_project.Controllers
         //This one is not finish
         //Delete a single location from the overview
         [HttpPost]
-        public IActionResult MassDestruction(string deleteData)
+        public IActionResult MassDestructionDeleteBuildingOrRoom(string deleteData)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            string alert = manager.DeleteLocation(int.Parse(deleteData));
+            string alert = manager.DeleteBuildingOrRoom(int.Parse(deleteData));
             if (alert == "occupied")
             {
                 ViewBag.alert = "occupied";
