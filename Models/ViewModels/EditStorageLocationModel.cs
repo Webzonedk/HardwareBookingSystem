@@ -16,6 +16,11 @@ namespace HUS_project.Models.ViewModels
         private List<string> shelfLevels;
         private List<string> shelfSpots;
         private byte filter;
+        private List<string> deleteBuildings;
+        private List<string> deleteRoomNumbers;
+        private List<string> deleteShelfNames;
+        private List<string> deleteShelfLevels;
+        private List<string> deleteShelfSpots;
         private string deleteBuilding;
         private string deleteRoomNumber;
         private string deleteRoom;
@@ -82,6 +87,41 @@ namespace HUS_project.Models.ViewModels
             set { filter = value; }
         }
 
+        public List<string> DeleteBuildings
+        {
+            get { return deleteBuildings; }
+            set { deleteBuildings = value; }
+        }
+
+
+        public List<string> DeleteRoomNumbers
+        {
+            get { return deleteRoomNumbers; }
+            set { deleteRoomNumbers = value; }
+        }
+
+
+        public List<string> DeleteShelfNames
+        {
+            get { return deleteShelfNames; }
+            set { deleteShelfNames = value; }
+        }
+
+
+        public List<string> DeleteShelfLevels
+        {
+            get { return deleteShelfLevels; }
+            set { deleteShelfLevels = value; }
+        }
+
+
+        public List<string> DeleteShelfSpots
+        {
+            get { return deleteShelfSpots; }
+            set { deleteShelfSpots = value; }
+        }
+
+
         public string DeleteBuilding
         {
             get { return deleteBuilding; }
@@ -112,7 +152,7 @@ namespace HUS_project.Models.ViewModels
             set { deleteShelfLevel = value; }
         }
 
-        public string DeleteShelfSpots
+        public string DeleteShelfSpot
         {
             get { return deleteShelfSpot; }
             set { deleteShelfSpot = value; }
@@ -135,6 +175,11 @@ namespace HUS_project.Models.ViewModels
             shelfNames = new List<string>();
             shelfLevels = new List<string>();
             shelfSpots = new List<string>();
+            deleteBuildings = new List<string>();
+            deleteRoomNumbers = new List<string>();
+            deleteShelfNames = new List<string>();
+            deleteShelfLevels = new List<string>();
+            deleteShelfSpots = new List<string>();
         }
 
         public EditStorageLocationModel(StorageLocationModel storageLocation, List<StorageLocationModel> storageLocations, List<string> buildings, List<string> roomNumbers,

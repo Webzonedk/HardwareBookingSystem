@@ -66,13 +66,16 @@ namespace HUS_project.Controllers
             return View("LocationAdmin", GetStorageLocations());
         }
 
+
+        //------------------------------------
         //This one is not finish
+        //------------------------------------
         //Delete a single location from the overview
         [HttpPost]
-        public IActionResult MassDestructionDeleteBuildingOrRoom(string deleteData)
+        public IActionResult MassDestructionDeleteBuildingOrRoom(string buildingName, string roomNumber)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            string alert = manager.DeleteBuildingOrRoom(int.Parse(deleteData));
+            string alert = manager.DeleteBuildingOrRoom(buildingName, roomNumber);
             if (alert == "occupied")
             {
                 ViewBag.alert = "occupied";

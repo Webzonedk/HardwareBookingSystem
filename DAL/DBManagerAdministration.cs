@@ -369,7 +369,7 @@ namespace HUS_project.DAL
             cmd.Parameters.Add("@locationID", System.Data.SqlDbType.Int).Value = locationID;
             cmd.Parameters.Add("@alert", System.Data.SqlDbType.VarChar, 10).Direction = System.Data.ParameterDirection.Output;
             cmd.ExecuteNonQuery();
-            string alert = "empty";
+            string alert;
             if (cmd.Parameters["@alert"].Value != System.DBNull.Value)
             {
                 alert = (string)cmd.Parameters["@alert"].Value;
@@ -385,27 +385,29 @@ namespace HUS_project.DAL
 
 
         //Method to Delete a building or roomNumber or Room, based on the input fields in massdestruction area
-        internal string DeleteBuildingOrRoom(string buildingNameToDelete, string RoomNumberToDelete)
+        internal string DeleteBuildingOrRoom(string buildingNameToDelete, string roomNumberToDelete)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("DeleteRoomsAndBuildingsMassDestruction", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.Add("@buildingNameToDelete", System.Data.SqlDbType.Int).Value = buildingNameToDelete;
-            cmd.Parameters.Add("@RoomNumberToDelete", System.Data.SqlDbType.Int).Value = RoomNumberToDelete;
+            cmd.Parameters.Add("@RoomNumberToDelete", System.Data.SqlDbType.Int).Value = roomNumberToDelete;
+            cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 100).Direction = System.Data.ParameterDirection.Output;
+            //Check if RoomToDelete is nessesary depending on the input from the view
             cmd.Parameters.Add("@RoomToDelete", System.Data.SqlDbType.VarChar, 10).Direction = System.Data.ParameterDirection.Output;
             cmd.ExecuteNonQuery();
-            string alert = "empty";
+            string feedBack;
             if (cmd.Parameters["@alert"].Value != System.DBNull.Value)
             {
-                alert = (string)cmd.Parameters["@alert"].Value;
+                feedBack = (string)cmd.Parameters["@alert"].Value;
             }
             else
             {
-                alert = "empty";
+                feedBack = "Nothing was deleted";
             }
             con.Close();
-            return alert;
+            return feedBack;
         }
 
 
