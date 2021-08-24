@@ -199,26 +199,26 @@ namespace HUS_project.Controllers
         }
 
 
-        public IActionResult UpdateBooking(string bookingID, string plannedStartDate, string plannedReturnDate, string location)
+        public IActionResult UpdateBooking(BookingModel bookingModel, string location)
         {
             // First we check to see if anything needs changing with the booking itself
 
             DBManagerBooking dBManager = new DBManagerBooking(configuration);
-            BookingModel originalBooking = dBManager.GetBooking(Convert.ToInt32(bookingID));
+            BookingModel originalBooking = dBManager.GetBooking(bookingModel.BookingID);
             string errorMessages = "Fejl:";
             
 
             if (HttpContext.Session.GetString("uniLogin") == originalBooking.Customer && originalBooking.PlannedReturnDate.Date > DateTime.Now.Date)
             {
                 // Input Data checks, to see if the data inputted has valid shapes.
-                DateTime newStartDate = DateTime.Now;
-                bool validNewStartDate = plannedStartDate != null && DateTime.TryParse(plannedStartDate, out newStartDate);
-                DateTime newReturnDate = DateTime.Now;
-                bool validNewReturnDate = plannedReturnDate != null && DateTime.TryParse(plannedReturnDate, out newReturnDate);
+                DateTime newStartDate = bookingModel.PlannedBorrowDate;
+                bool validNewStartDate = bookingModel.PlannedBorrowDate != null && bookingModel.PlannedBorrowDate != originalBooking.PlannedBorrowDate;
+                DateTime newReturnDate = bookingModel.PlannedReturnDate;
+                bool validNewReturnDate = bookingModel.PlannedReturnDate != null && bookingModel.PlannedReturnDate != originalBooking.PlannedReturnDate;
 
                 BuildingModel newRoom = new BuildingModel();
                 bool validNewLocation = false;
-                if (location != null)
+                if (location != null || location != "")
                 {
                     try
                     {
@@ -234,19 +234,25 @@ namespace HUS_project.Controllers
                 // Logic check, if the dates make somewhat basic sense.
 
                 // If new Start date is valid so far, is earlier than new potential/existing return date, and isn't today or prior, it can still be changed.
-                if (!(validNewStartDate && (validNewReturnDate ? newStartDate.Date <= newReturnDate.Date : newStartDate.Date <= originalBooking.PlannedReturnDate.Date) && 
-                    newStartDate.Date > DateTime.Now.Date))
+                if (validNewStartDate && ((validNewReturnDate ? newStartDate.Date > newReturnDate.Date : newStartDate.Date > originalBooking.PlannedReturnDate.Date) || 
+                    newStartDate.Date <= DateTime.Now.Date))
                 {
                     errorMessages += "\nStart Dato blev ikke ændret: start dato er efter slut dato, eller er i dag eller før.";
                     validNewStartDate = false;
                 }
 
                 // If new return date is valid so far, is later than new potential/existing start date, and is later than Today, it can still be changed.
-                if (!(validNewReturnDate && (validNewStartDate ? newReturnDate.Date >= newStartDate.Date : newReturnDate.Date >= originalBooking.PlannedBorrowDate.Date) &&
-                    newReturnDate.Date > DateTime.Now.Date))
+                if (validNewReturnDate && ((validNewStartDate ? newReturnDate.Date < newStartDate.Date : newReturnDate.Date < originalBooking.PlannedBorrowDate.Date) ||
+                    newReturnDate.Date <= DateTime.Now.Date))
                 {
                     errorMessages += "\nSlut Dato blev ikke ændret: slut dato er før start dato, eller er i dag eller før.";
                     validNewReturnDate = false;
+
+                    // As validNewReturnDate suddenly turned false, newValidStartDate needs to check against existing ReturnDate.
+                    if(validNewStartDate && newStartDate.Date > originalBooking.PlannedReturnDate.Date)
+                    {
+                        validNewStartDate = false;
+                    }
                 }
 
                 // Database Check
@@ -254,11 +260,11 @@ namespace HUS_project.Controllers
                 // Date Database Check:
                 if (validNewStartDate || validNewReturnDate)
                 {
-                    originalBooking.Items = dBManager.GetItemLines(Convert.ToInt32(bookingID));
+                    originalBooking.Items = dBManager.GetItemLines(bookingModel.BookingID);
                     foreach (ItemLineModel ilm in originalBooking.Items)
                     {
                         // If the amount requested is greater than the amount available in that period, the dates cannot be changed.
-                        int quantityAvailable = dBManager.GetModelQuantityAvailableExcludingBooking(validNewStartDate ? newStartDate : originalBooking.PlannedBorrowDate, validNewReturnDate ? newReturnDate : originalBooking.PlannedReturnDate, ilm.Model.ModelName, Convert.ToInt32(bookingID));
+                        int quantityAvailable = dBManager.GetModelQuantityAvailableExcludingBooking(validNewStartDate ? newStartDate : originalBooking.PlannedBorrowDate, validNewReturnDate ? newReturnDate : originalBooking.PlannedReturnDate, ilm.Model.ModelName, bookingModel.BookingID);
                         if (ilm.Quantity > quantityAvailable)
                         {
                             validNewStartDate = false;
@@ -278,6 +284,9 @@ namespace HUS_project.Controllers
                     }
                 }
 
+
+                // Creating Item
+
             }
             else
             {
@@ -290,7 +299,7 @@ namespace HUS_project.Controllers
                 HttpContext.Session.SetString("bookingEditError", errorMessages);
             }
 
-            return GoToBooking(bookingID);
+            return GoToBooking(bookingModel.BookingID.ToString());
         }
     }
 }

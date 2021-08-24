@@ -4,10 +4,11 @@
 @{
     ViewData["Title"] = "Rediger Bestilling";
 }
-<div class="row blue-oyster-bar center box-shadow">
+<form asp-action="UpdateBooking" method="post" id="updateBookingForm">
+    <div class="row blue-oyster-bar center box-shadow">
 
-    <div class="row">
-        <form asp-action="UpdateBooking" method="post" id="updateBookingForm">
+        <div class="row">
+
             <div class="col-3 text-white align-items-center">
                 <h3 style="margin-top:30px;">Bestilling: @Model.BookingID af @Model.Customer</h3>
             </div>
@@ -42,7 +43,8 @@
             </div>
             <div class="col-2">
                 <p>Leverings Lokale:</p>
-                <!-- If end date isn't today or earlier, and you are the one who made the booking, the location can be changed. -->
+                <!-- If end date isn't today or earlier, and you are the one who made the booking, the location can be changed.
+                          !!!!!! Page 22, storage location       !!!!!!!!!!!!!!!!!      -->
                 @if (httpContextAccessor.HttpContext.Session.GetString("uniLogin") == Model.Customer && Model.PlannedReturnDate.Date >= DateTime.Now.Date)
                 {
                     <input type="text" id="location" asp-for="Location" name="location" value='@Model.Location.Building.@Model.Location.RoomNumber' />
@@ -70,56 +72,59 @@
                 }
 
             </div>
-        </form> <!-- End of Update Booking Form -->
-        <div class="col-2">
-            @using (Html.BeginForm("DisableBooking", "Booking"))
-            {
-                // If the planned borrow date has not yet come to pass, and it is the owner of the booking who logged in, then the booking may be disabled by the user.
-                @if (Model.Customer == httpContextAccessor.HttpContext.Session.GetString("uniLogin") && Model.PlannedBorrowDate.Date > DateTime.Now.Date)
+
+            <!--
+            <div class="col-2">
+                @using (Html.BeginForm("DisableBooking", "Booking"))
                 {
-                    <button type="submit" name="bookingID" value="@Model.BookingID" class="btn btn-primary btn-sm btn-red alert" style="width:100px">
-                        <span>Slet Ordre</span>
-                    </button>
+                    // If the planned borrow date has not yet come to pass, and it is the owner of the booking who logged in, then the booking may be disabled by the user.
+                    @if (Model.Customer == httpContextAccessor.HttpContext.Session.GetString("uniLogin") && Model.PlannedBorrowDate.Date > DateTime.Now.Date)
+                    {
+                        <button type="submit" name="bookingID" value="@Model.BookingID" class="btn btn-primary btn-sm btn-red alert" style="width:100px">
+                            <span>Slet Ordre</span>
+                        </button>
+                    }
+                    else
+                    {
+                        <button disabled type="submit" name="bookingID" value="@Model.BookingID" class="btn btn-primary btn-sm btn-dark" style="width:100px">
+                            <span>Slet Ordre</span>
+                        </button>
+                    }
                 }
-                else
-                {
-                    <button disabled type="submit" name="bookingID" value="@Model.BookingID" class="btn btn-primary btn-sm btn-dark" style="width:100px">
-                        <span>Slet Ordre</span>
-                    </button>
-                }
-            }
-        </div>
-        @if (httpContextAccessor.HttpContext.Session.GetString("bookingEditError") != null || httpContextAccessor.HttpContext.Session.GetString("bookingEditError") != "")
-        {
-            <div class="row">
-                <div class="col-2"></div>
-                <div class="col-8">
-                    <h4 class="alert text-red">
-                        @httpContextAccessor.HttpContext.Session.GetString("bookingEditError")
-                    </h4>
-                </div>
             </div>
-            httpContextAccessor.HttpContext.Session.SetString("bookingEditError", "");
-        }
-
-    </div>
-</div>
-
-<div class="container containerMain box-shadow">
-
-    <div class="row containerHeader">
-        <h4>Hvad der er bestilt:</h4>
-    </div>
-    <div class="row containerBody">
-        <div class="col-1"></div>
-        <div class="col-11 row">
-            @foreach (ItemLineModel ilm in Model.Items)
+            -->
+            @if (httpContextAccessor.HttpContext.Session.GetString("bookingEditError") != null || httpContextAccessor.HttpContext.Session.GetString("bookingEditError") != "")
             {
-                <div class="col-5 center">(@ilm.Model.Category.Category) @ilm.Model.ModelName - @ilm.Quantity</div>
+                <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col-8">
+                        <h4 class="alert text-red">
+                            @httpContextAccessor.HttpContext.Session.GetString("bookingEditError")
+                        </h4>
+                    </div>
+                </div>
+                httpContextAccessor.HttpContext.Session.SetString("bookingEditError", "");
             }
+
         </div>
     </div>
-    <div class="row containerFooter">
-        <h4>&nbsp;</h4>
+
+    <div class="container containerMain box-shadow">
+
+        <div class="row containerHeader">
+            <h4>Hvad der er bestilt:</h4>
+        </div>
+        <div class="row containerBody">
+            <div class="col-1"></div>
+            <div class="col-11 row">
+                @for (int i = 0; i < Model.Items.Count; i++)
+                {
+                    <div class="col-5 center">(@Model.Items[i].Model.Category.Category) @Model.Items[i].Model.ModelName <input type="number" asp-for="@Model.Items[i].Quantity" /> Stk.</div>
+                }
+            </div>
+        </div>
+        <div class="row containerFooter">
+            <h4>&nbsp;</h4>
+        </div>
     </div>
-</div>
+</form> <!-- End of Update Booking Form -->

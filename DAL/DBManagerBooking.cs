@@ -29,7 +29,6 @@ namespace HUS_project.DAL
             con.Open();
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             con.Close();
-
         }
         
         /// <summary>
@@ -258,7 +257,7 @@ namespace HUS_project.DAL
         }
 
         /// <summary>
-        /// Counts the maximum theoretical amount of models available in a timespace, for making future bookings.
+        /// Counts how many devices Should be available in a period, based on how many devices of the Model that are available minus how many has been booked by the various bookings, excluding this.
         /// </summary>
         /// <param name="rentDate"></param>
         /// <param name="returnDate"></param>
