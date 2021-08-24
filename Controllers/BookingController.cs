@@ -205,36 +205,92 @@ namespace HUS_project.Controllers
 
             DBManagerBooking dBManager = new DBManagerBooking(configuration);
             BookingModel originalBooking = dBManager.GetBooking(Convert.ToInt32(bookingID));
-
-            DateTime newStartDate = DateTime.Parse(plannedStartDate);
-            DateTime newEndDate = DateTime.Parse(plannedReturnDate);
-            BuildingModel newRoom = new BuildingModel(location.Split('.')[0], location.Split('.')[1]);
-
-            // <!-- If end date isn't today or earlier, and you are the one who made the booking, the location & end date can be changed. -->
+            string errorMessages = "Fejl:";
             
-
 
             if (HttpContext.Session.GetString("uniLogin") == originalBooking.Customer && originalBooking.PlannedReturnDate.Date > DateTime.Now.Date)
             {
-                // If new endDate is not the same as the existing end date, and it is later than or equal to now and later than start date, it is valid.
-                if(newEndDate.Date != originalBooking.PlannedReturnDate.Date && newEndDate.Date > DateTime.Now.Date && newEndDate.Date > originalBooking.PlannedBorrowDate.Date && newEndDate.Date > newStartDate.Date)
-                {
-                    
-                }
-                // // <!-- If start date isn't today or earlier, and you are the one who made the booking, the start date can be moved. -->
-                if (newStartDate.Date != originalBooking.PlannedBorrowDate.Date && MayChangeStartDate(originalBooking, newStartDate))
-                {
+                // Input Data checks, to see if the data inputted has valid shapes.
+                DateTime newStartDate = DateTime.Now;
+                bool validNewStartDate = plannedStartDate != null && DateTime.TryParse(plannedStartDate, out newStartDate);
+                DateTime newReturnDate = DateTime.Now;
+                bool validNewReturnDate = plannedReturnDate != null && DateTime.TryParse(plannedReturnDate, out newReturnDate);
 
+                BuildingModel newRoom = new BuildingModel();
+                bool validNewLocation = false;
+                if (location != null)
+                {
+                    try
+                    {
+                        newRoom = new BuildingModel(location.Split('.')[0], location.Split('.')[1]);
+                        validNewLocation = newRoom.Building != originalBooking.Location.Building || newRoom.RoomNumber != originalBooking.Location.RoomNumber;
+                    }
+                    catch
+                    {
+                        errorMessages += ("\nLokale blev ikke ændret: Havde ikke en valid struktur. F.eks.: \"D.32\"");
+                    }
                 }
+
+                // Logic check, if the dates make somewhat basic sense.
+
+                // If new Start date is valid so far, is earlier than new potential/existing return date, and isn't today or prior, it can still be changed.
+                if (!(validNewStartDate && (validNewReturnDate ? newStartDate.Date <= newReturnDate.Date : newStartDate.Date <= originalBooking.PlannedReturnDate.Date) && 
+                    newStartDate.Date > DateTime.Now.Date))
+                {
+                    errorMessages += "\nStart Dato blev ikke ændret: start dato er efter slut dato, eller er i dag eller før.";
+                    validNewStartDate = false;
+                }
+
+                // If new return date is valid so far, is later than new potential/existing start date, and is later than Today, it can still be changed.
+                if (!(validNewReturnDate && (validNewStartDate ? newReturnDate.Date >= newStartDate.Date : newReturnDate.Date >= originalBooking.PlannedBorrowDate.Date) &&
+                    newReturnDate.Date > DateTime.Now.Date))
+                {
+                    errorMessages += "\nSlut Dato blev ikke ændret: slut dato er før start dato, eller er i dag eller før.";
+                    validNewReturnDate = false;
+                }
+
+                // Database Check
+
+                // Date Database Check:
+                if (validNewStartDate || validNewReturnDate)
+                {
+                    originalBooking.Items = dBManager.GetItemLines(Convert.ToInt32(bookingID));
+                    foreach (ItemLineModel ilm in originalBooking.Items)
+                    {
+                        // If the amount requested is greater than the amount available in that period, the dates cannot be changed.
+                        int quantityAvailable = dBManager.GetModelQuantityAvailableExcludingBooking(validNewStartDate ? newStartDate : originalBooking.PlannedBorrowDate, validNewReturnDate ? newReturnDate : originalBooking.PlannedReturnDate, ilm.Model.ModelName, Convert.ToInt32(bookingID));
+                        if (ilm.Quantity > quantityAvailable)
+                        {
+                            validNewStartDate = false;
+                            validNewReturnDate = false;
+                            errorMessages += "\n" + ilm.Model.ModelName + " er ikke tilgængeligt i den mængde i den periode.";
+                            break;
+                        }
+                    }
+                }
+                // Room Database Check:
+                if (validNewLocation) 
+                {
+                    DBManagerAdministration dBMAdmin = new DBManagerAdministration(configuration);
+                    if (!dBMAdmin.DoesRoomExist(newRoom))
+                    {
+                        validNewLocation = false;
+                    }
+                }
+
+            }
+            else
+            {
+                // You are not authorized to make these changes and/or the booking has expired.
+                errorMessages += "\nDu har ikke rettigheder til at lave nogen ændringer, eller ordren er udløbet.";
             }
 
+            if(errorMessages.Length > 6)
+            {
+                HttpContext.Session.SetString("bookingEditError", errorMessages);
+            }
 
             return GoToBooking(bookingID);
-        }
-
-        private bool MayChangeStartDate(BookingModel currentBooking, DateTime newStartDate)
-        {
-            return currentBooking.PlannedBorrowDate.Date > DateTime.Now.Date && newStartDate.Date > DateTime.Now.Date;
         }
     }
 }
