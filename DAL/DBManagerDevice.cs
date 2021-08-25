@@ -79,6 +79,30 @@ namespace HUS_project.DAL
             return deviceID;
         }
 
+        internal int UploadImage(ImageModel fileData)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("UploadImage", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@modelID", System.Data.SqlDbType.Int).Value = fileData.ModelID;
+            cmd.Parameters.Add("@fileData", System.Data.SqlDbType.Image).Value = fileData.ImageData;
+            cmd.Parameters.Add("@fileName", System.Data.SqlDbType.VarChar).Value = fileData.FileName;
+            cmd.Parameters.Add("@success", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
+            cmd.ExecuteNonQuery();
+
+            int success = Convert.ToInt32(cmd.Parameters["@success"].Value);
+
+            if (success > 0)
+            {
+                success = 1;
+            }
+
+            con.Close();
+            return success;
+        }
+
+      
 
         internal int EditDevice(EditDeviceModel deviceData)
         {
@@ -234,14 +258,14 @@ namespace HUS_project.DAL
             //get shelves & rooms
             while (reader.Read())
             {
-                string location = new string($"{(string)reader["shelfName"]}.{(byte)reader["shelfLevel"]}.{(byte)reader["shelfSpot"]}");
+                string location = new string($"{(string)reader["shelfName"]}.{(string)reader["shelfLevel"]}.{(string)reader["shelfSpot"]}");
                 storageLocations.Add(location);
 
                 if (editData == null)
                 {
 
                     //add rooms 
-                    string room = new string($"{(string)reader["buildingName"]}.{(byte)reader["roomNr"]}");
+                    string room = new string($"{(string)reader["buildingName"]}.{(string)reader["roomNr"]}");
                     if (Rooms.Count <= 0)
                     {
                         Rooms.Add(room);

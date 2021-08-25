@@ -156,5 +156,26 @@ namespace HUS_project.DAL
             con.Close();
             return modelID;
         }
+
+        internal ImageModel DownloadImage(int modelID)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("DownloadImage", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@modelID", System.Data.SqlDbType.Int).Value = modelID;
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            ImageModel im = new ImageModel();
+
+            while (reader.Read())
+            {
+                im.ImageData = (byte[])reader["img"];
+                im.FileName = (string)reader["fileName"];
+            }
+
+            return im;
+
+        }
     }
 }

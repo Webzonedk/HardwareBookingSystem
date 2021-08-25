@@ -64,11 +64,11 @@
                                 <div>
                                     @if (Model.ImagePath != null)
                                     {
-                                        <img class="img-bg" src="@Url.Content("~/DeviceContent/"+Model.ImagePath)" style="width: 90%" />
+                                        <img class="img-bg" src="@Url.Content(Model.ImagePath)" style="width: 90%" />
                                     }
                                     else
                                     {
-                                        <img class="img-bg" src="@Url.Content("~/DeviceContent/"+Model.ImagePath)" style="width: 90%" />
+                                        <img class="img-bg" src="@Url.Content("~/Graphic/"+"missing_image.png")" style="width: 90%" />
                                     }
                                 </div>
                             </div>
@@ -346,11 +346,11 @@
 
                         @if (Model.ImagePath != null)
                         {
-                            <img class="img-bg" src="@Url.Content("~/DeviceContent/"+Model.ImagePath)" style="width: 100%" />
+                            <img class="img-bg" src="@Url.Content(Model.ImagePath)" style="width: 100%" />
                         }
                         else
                         {
-                            <img class="img-bg" src="~/Graphic/billede-mangler.png" style="width: 90%" />
+                            <img class="img-bg" src="~/Graphic/missing_image.png" style="width: 90%" />
                         }
                     </div>
                 </div>
