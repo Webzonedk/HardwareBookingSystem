@@ -218,7 +218,7 @@ namespace HUS_project.Controllers
 
                 BuildingModel newRoom = new BuildingModel();
                 bool validNewLocation = false;
-                if (location != null || location != "")
+                if (location != null && location != "")
                 {
                     try
                     {
@@ -227,11 +227,11 @@ namespace HUS_project.Controllers
                     }
                     catch
                     {
-                        errorMessages += ("\nLokale blev ikke ændret: Havde ikke en valid struktur. F.eks.: \"D.32\"");
+                        errorMessages += ("\nLokale blev ikke ændret, da det ikke havde en valid struktur, så som: \"D.32\"");
                     }
                 }
 
-                // Logic check, if the dates make somewhat basic sense.
+                // Logic check, if the dates make somewhat basic sense in relation to now and each other (We don't approve of no time-travellers or non-euclideans).
 
                 // If new Start date is valid so far, is earlier than new potential/existing return date, and isn't today or prior, it can still be changed.
                 if (validNewStartDate && ((validNewReturnDate ? newStartDate.Date > newReturnDate.Date : newStartDate.Date > originalBooking.PlannedReturnDate.Date) || 
@@ -255,13 +255,36 @@ namespace HUS_project.Controllers
                     }
                 }
 
+                // Determining if ItemLines changed.
+                bool itemLinesChanged = false;
+                foreach (ItemLineModel ilm in bookingModel.Items)
+                {
+                    foreach(ItemLineModel ilmO in originalBooking.Items)
+                    {
+                        if(ilm.Model.ModelName == ilmO.Model.ModelName)
+                        {
+                            if(ilm.Quantity != ilmO.Quantity)
+                            {
+                                // CHange Detected!
+                                itemLinesChanged = true;
+                            }
+                            break;
+                        }
+                    }
+                    if (itemLinesChanged)
+                    {
+                        break;
+                    }
+                }
+
+
                 // Database Check
 
-                // Date Database Check:
-                if (validNewStartDate || validNewReturnDate)
+                // Date & ItemLine.Quantity Database Check:
+                if (validNewStartDate || validNewReturnDate || itemLinesChanged)
                 {
                     originalBooking.Items = dBManager.GetItemLines(bookingModel.BookingID);
-                    foreach (ItemLineModel ilm in originalBooking.Items)
+                    foreach (ItemLineModel ilm in itemLinesChanged ? bookingModel.Items : originalBooking.Items)
                     {
                         // If the amount requested is greater than the amount available in that period, the dates cannot be changed.
                         int quantityAvailable = dBManager.GetModelQuantityAvailableExcludingBooking(validNewStartDate ? newStartDate : originalBooking.PlannedBorrowDate, validNewReturnDate ? newReturnDate : originalBooking.PlannedReturnDate, ilm.Model.ModelName, bookingModel.BookingID);
@@ -269,7 +292,8 @@ namespace HUS_project.Controllers
                         {
                             validNewStartDate = false;
                             validNewReturnDate = false;
-                            errorMessages += "\n" + ilm.Model.ModelName + " er ikke tilgængeligt i den mængde i den periode.";
+                            
+                            errorMessages += "\n" + ilm.Model.ModelName + " er der kun " + quantityAvailable + " stk. ledige i den periode (Inklusiv dem allerede bestilt).";
                             break;
                         }
                     }
@@ -284,8 +308,7 @@ namespace HUS_project.Controllers
                     }
                 }
 
-
-                // Creating Item
+                // Apply Update as Appropriate
 
             }
             else
