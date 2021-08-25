@@ -119,7 +119,7 @@
             <div class="col-11 row">
                 @for (int i = 0; i < Model.Items.Count; i++)
                 {
-                    <div class="col-5 center">(@Model.Items[i].Model.Category.Category) @Model.Items[i].Model.ModelName <input type="number" asp-for="@Model.Items[i].Quantity" /> Stk.</div>
+                    <div class="col-5 center">(@Model.Items[i].Model.Category.Category) @Model.Items[i].Model.ModelName <input type="hidden" asp-for="@Model.Items[i].Model.ModelName" /> <input type="number" asp-for="@Model.Items[i].Quantity" /> Stk.</div>
                 }
             </div>
         </div>
