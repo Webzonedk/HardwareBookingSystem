@@ -85,10 +85,10 @@
         </div>
         <div class="row">
             @{string toolTip = "Alle felter kan oprettes enkeltvis. \n\n" +
-                                                                                                 "Hvis Bygning og Lokale er udfyldt samtidigt vil der \n" +
-                                                                                                 "oprettes et Lokale hvis ikke det eksisterer i forvejen.\n\n " +
-                                                                                                 "Hvis alle felter er udfyldt, vil der oprettes en placering.\n\n" +
-                                                                                                 "Men kun hvis det ikke findes I forvejen."; }
+                                                                                                   "Hvis Bygning og Lokale er udfyldt samtidigt vil der \n" +
+                                                                                                   "oprettes et Lokale hvis ikke det eksisterer i forvejen.\n\n " +
+                                                                                                   "Hvis alle felter er udfyldt, vil der oprettes en placering.\n\n" +
+                                                                                                   "Men kun hvis det ikke findes I forvejen."; }
             <div class="col p-3">
                 <button type="submit" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip" asp-action="CreateLocation" onclick="checkInputFields()">Tilføj Placering</button>
             </div>
