@@ -385,14 +385,14 @@ namespace HUS_project.DAL
 
 
         //Method to Delete a building or roomNumber or Room, based on the input fields in massdestruction area
-        internal string DeleteBuildingOrRoom(string buildingNameToDelete, string roomNumberToDelete)
+        internal string DeleteBuildingOrRoom(EditStorageLocationModel dataFromView)
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("DeleteRoomsAndBuildingsMassDestruction", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@buildingNameToDelete", System.Data.SqlDbType.Int).Value = buildingNameToDelete;
-            cmd.Parameters.Add("@RoomNumberToDelete", System.Data.SqlDbType.Int).Value = roomNumberToDelete;
+            cmd.Parameters.Add("@buildingNameToDelete", System.Data.SqlDbType.Int).Value = dataFromView.DeleteBuilding;
+            cmd.Parameters.Add("@RoomNumberToDelete", System.Data.SqlDbType.Int).Value = dataFromView.DeleteRoomNumber;
             cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 100).Direction = System.Data.ParameterDirection.Output;
             //Check if RoomToDelete is nessesary depending on the input from the view
            // cmd.Parameters.Add("@RoomToDelete", System.Data.SqlDbType.VarChar, 10).Direction = System.Data.ParameterDirection.Output;

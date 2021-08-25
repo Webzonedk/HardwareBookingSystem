@@ -11,22 +11,7 @@ function SubmitValidation(input) {
 
 }
 
-//Submitting data from view
-function submit(input) {
 
-    document.getelementById(input).submit();
-
-}
-
-function showRoom() {
-    var building = document.getElementById("buldinginput");
-    var roomNr = document.getElementById("romNrInput");
-    var chosenRoom = document.getElementById("chosenRoom");
-
-    if (building.value != "" && roomNr.value != "") {
-        chosenRoom.value = building.value + "." + roomNr.value
-    }
-}
 
 function CheckInputField() {
 
@@ -48,6 +33,9 @@ function CheckInputField() {
     }
 }
 
+
+
+
 //call submit at scanDevice view
 function ReturnToEdit(val) {
     //var location = $("#content").val();
@@ -61,24 +49,4 @@ function ReturnToEdit(val) {
     console.log("test test test" + val);
 }
 
-function alertFunction(tempData) {
-    if (tempData == "occupied") {
-        let message = "Lokationen kan ikke slettes da der findes enheder på denne lokation.\n Flyt venligst enhederne væk fra lokationen inden du forsøger at slette en lokation";
-        alert(message);
-    }
-}
 
-function fadeOut(input) {
-    $("#" + input).slideUp();  
-}
-
-function checkInputFields() {
-    let a = document.getElementById("buildingDropDown").value;
-    let b = document.getElementById("roomNumberDropDown").value;
-    let c = document.getElementById("shelfNameDropDown").value;
-    let d = document.getElementById("shelfLevelDropDown").value;
-    let e = document.getElementById("shelfSpotDropDown").value;
-    if (a == null || a == "", b == null || b == "", c == null || c == "", d == null || d == "", e == null || e == "", ) {
-        alert("Lokationen blev IKKE oprettet! \n Alle felter skal være udfyldt.");
-    }
-}

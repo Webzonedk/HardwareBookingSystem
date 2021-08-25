@@ -67,21 +67,26 @@ namespace HUS_project.Controllers
         }
 
 
+
+
         //------------------------------------
         //This one is not finish
         //------------------------------------
-        //Delete a single location from the overview
+        //Delete building, RoomNumber or specifik room in the massdestruction area.
         [HttpPost]
-        public IActionResult MassDestructionDeleteBuildingOrRoom(string buildingName, string roomNumber)
+        public IActionResult MassDestructionDeleteBuildingOrRoom(EditStorageLocationModel dataFromMassDestructionView)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            string alert = manager.DeleteBuildingOrRoom(buildingName, roomNumber);
-            if (alert == "occupied")
+            string deleteMessage = manager.DeleteBuildingOrRoom(dataFromMassDestructionView);
+            if (deleteMessage != null)
             {
-                ViewBag.alert = "occupied";
+                ViewBag.deleteMessage = deleteMessage;
             }
             return View("LocationAdmin", GetStorageLocations());
         }
+
+
+
 
         //Getting the locations from DB and listing dropdowns in Blue oister bar, and also listing the selected Storagelocation.
         private EditStorageLocationModel GetStorageLocations()
