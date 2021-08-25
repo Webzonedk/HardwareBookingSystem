@@ -395,19 +395,19 @@ namespace HUS_project.DAL
             cmd.Parameters.Add("@RoomNumberToDelete", System.Data.SqlDbType.Int).Value = roomNumberToDelete;
             cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 100).Direction = System.Data.ParameterDirection.Output;
             //Check if RoomToDelete is nessesary depending on the input from the view
-            cmd.Parameters.Add("@RoomToDelete", System.Data.SqlDbType.VarChar, 10).Direction = System.Data.ParameterDirection.Output;
+           // cmd.Parameters.Add("@RoomToDelete", System.Data.SqlDbType.VarChar, 10).Direction = System.Data.ParameterDirection.Output;
             cmd.ExecuteNonQuery();
-            string feedBack;
-            if (cmd.Parameters["@alert"].Value != System.DBNull.Value)
+            string deleteFeedback;
+            if (cmd.Parameters["@deleteFeedback"].Value != System.DBNull.Value)
             {
-                feedBack = (string)cmd.Parameters["@alert"].Value;
+                deleteFeedback = (string)cmd.Parameters["@deleteFeedback"].Value;
             }
             else
             {
-                feedBack = "Nothing was deleted";
+                deleteFeedback = "Nothing was deleted";
             }
             con.Close();
-            return feedBack;
+            return deleteFeedback;
         }
 
 
