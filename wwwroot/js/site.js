@@ -11,22 +11,7 @@ function SubmitValidation(input) {
 
 }
 
-//Submitting data from view
-function submit(input) {
 
-    document.getelementById(input).submit();
-
-}
-
-function showRoom() {
-    var building = document.getElementById("buldinginput");
-    var roomNr = document.getElementById("romNrInput");
-    var chosenRoom = document.getElementById("chosenRoom");
-
-    if (building.value != "" && roomNr.value != "") {
-        chosenRoom.value = building.value + "." + roomNr.value
-    }
-}
 
 function CheckInputField() {
 
@@ -48,6 +33,9 @@ function CheckInputField() {
     }
 }
 
+
+
+
 //call submit at scanDevice view
 function ReturnToEdit(val) {
     //var location = $("#content").val();
@@ -59,16 +47,6 @@ function ReturnToEdit(val) {
 
     //submit();
     console.log("test test test" + val);
-}
-
-function alertFunction(tempData) {
-    console.log("tester tester 1");
-    console.log(tempData);
-    if (tempData == "occupied") {
-    console.log("tester tester 2");
-        let message = "Lokationen kan ikke slettes da der findes enheder på denne lokation.\n Flyt venligst enhederne væk fra lokationen inden du forsøger at slette en lokation";
-        alert(message);
-    }
 }
 
 

@@ -18,10 +18,15 @@ namespace HUS_project.Models.ViewModels
         private byte filter;
         private List<string> deleteBuildings;
         private List<string> deleteRoomNumbers;
-        private string deleteRoom;
         private List<string> deleteShelfNames;
         private List<string> deleteShelfLevels;
         private List<string> deleteShelfSpots;
+        private string deleteBuilding;
+        private string deleteRoomNumber;
+        private string deleteRoom;
+        private string deleteShelfName;
+        private string deleteShelfLevel;
+        private string deleteShelfSpot;
         #endregion
 
 
@@ -88,10 +93,45 @@ namespace HUS_project.Models.ViewModels
             set { deleteBuildings = value; }
         }
 
+
         public List<string> DeleteRoomNumbers
         {
             get { return deleteRoomNumbers; }
             set { deleteRoomNumbers = value; }
+        }
+
+
+        public List<string> DeleteShelfNames
+        {
+            get { return deleteShelfNames; }
+            set { deleteShelfNames = value; }
+        }
+
+
+        public List<string> DeleteShelfLevels
+        {
+            get { return deleteShelfLevels; }
+            set { deleteShelfLevels = value; }
+        }
+
+
+        public List<string> DeleteShelfSpots
+        {
+            get { return deleteShelfSpots; }
+            set { deleteShelfSpots = value; }
+        }
+
+
+        public string DeleteBuilding
+        {
+            get { return deleteBuilding; }
+            set { deleteBuilding = value; }
+        }
+
+        public string DeleteRoomNumber
+        {
+            get { return deleteRoomNumber; }
+            set { deleteRoomNumber = value; }
         }
 
         public string DeleteRoom
@@ -100,22 +140,22 @@ namespace HUS_project.Models.ViewModels
             set { deleteRoom = value; }
         }
 
-        public List<string> DeleteShelfNames
+        public string DeleteShelfName
         {
-            get { return deleteShelfNames; }
-            set { deleteShelfNames = value; }
+            get { return deleteShelfName; }
+            set { deleteShelfName = value; }
         }
 
-        public List<string> DeleteShelfLevels
+        public string DeleteShelfLevel
         {
-            get { return deleteShelfLevels; }
-            set { deleteShelfLevels = value; }
+            get { return deleteShelfLevel; }
+            set { deleteShelfLevel = value; }
         }
 
-        public List<string> DeleteShelfSpots
+        public string DeleteShelfSpot
         {
-            get { return deleteShelfSpots; }
-            set { deleteShelfSpots = value; }
+            get { return deleteShelfSpot; }
+            set { deleteShelfSpot = value; }
         }
 
 
@@ -144,7 +184,7 @@ namespace HUS_project.Models.ViewModels
 
         public EditStorageLocationModel(StorageLocationModel storageLocation, List<StorageLocationModel> storageLocations, List<string> buildings, List<string> roomNumbers,
             List<string> shelfNames, List<string> shelfLevels, List<string> shelfSpots, byte filter,
-            List<string>deleteBuildings, List<string> deleteRoomNumbers, string deleteRoom, List<string> deleteShelfNames, List<string> deleteShelfLevels, List<string> deleteShelfSpots)
+            string deleteBuilding, string deleteRoomNumber, string deleteRoom, string deleteShelfName, string deleteShelfLevel, string deleteShelfSpot)
         {
             this.storageLocation = storageLocation;
             this.storageLocations = storageLocations;
@@ -154,12 +194,12 @@ namespace HUS_project.Models.ViewModels
             this.shelfLevels = shelfLevels;
             this.shelfSpots = shelfSpots;
             this.filter = filter;
-            this.deleteBuildings = deleteBuildings;
-            this.deleteRoomNumbers = deleteRoomNumbers;
+            this.deleteBuilding = deleteBuilding;
+            this.deleteRoomNumber = deleteRoomNumber;
             this.deleteRoom = deleteRoom;
-            this.deleteShelfNames = deleteShelfNames;
-            this.deleteShelfLevels = deleteShelfLevels;
-            this.deleteShelfSpots = deleteShelfSpots;
+            this.deleteShelfName = deleteShelfName;
+            this.deleteShelfLevel = deleteShelfLevel;
+            this.deleteShelfSpot = deleteShelfSpot;
         }
         #endregion
     }

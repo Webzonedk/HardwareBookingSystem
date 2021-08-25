@@ -29,7 +29,6 @@ namespace HUS_project.DAL
             con.Open();
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             con.Close();
-
         }
         
         /// <summary>
@@ -249,6 +248,31 @@ namespace HUS_project.DAL
             cmd.Parameters.AddWithValue("@rentDate", rentDate);
             cmd.Parameters.AddWithValue("@returnDate", returnDate);
             cmd.Parameters.AddWithValue("@modelName", modelName);
+
+            con.Open();
+            int result = (int)cmd.ExecuteScalar();
+            con.Close();
+
+            return result;
+        }
+
+        /// <summary>
+        /// Counts how many devices Should be available in a period, based on how many devices of the Model that are available minus how many has been booked by the various bookings, excluding this.
+        /// </summary>
+        /// <param name="rentDate"></param>
+        /// <param name="returnDate"></param>
+        /// <param name="modelName"></param>
+        /// <returns></returns>
+        internal int GetModelQuantityAvailableExcludingBooking(DateTime rentDate, DateTime returnDate, string modelName, int bookingID)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+
+            SqlCommand cmd = new SqlCommand("GetModelDeviceQuantityAvailableExcludingBooking", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@rentDate", rentDate);
+            cmd.Parameters.AddWithValue("@returnDate", returnDate);
+            cmd.Parameters.AddWithValue("@modelName", modelName);
+            cmd.Parameters.AddWithValue("@bookingID", bookingID);
 
             con.Open();
             int result = (int)cmd.ExecuteScalar();

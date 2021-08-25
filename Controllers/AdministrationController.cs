@@ -43,6 +43,7 @@ namespace HUS_project.Controllers
         }
 
 
+        //Delete a single location from the overview
         [HttpPost]
         public IActionResult DeleteSingleLocation(string deleteLocation)
         {
@@ -55,6 +56,8 @@ namespace HUS_project.Controllers
             return View("LocationAdmin", GetStorageLocations());
         }
 
+
+        //Creating a new location if not exist, based on input fields in Blue oister bar
         [HttpPost]
         public IActionResult CreateLocation(EditStorageLocationModel dataFromView)
         {
@@ -66,18 +69,26 @@ namespace HUS_project.Controllers
 
 
 
-
-
-        public void CreateQRCode()
+        //------------------------------------
+        //This one is not finish
+        //------------------------------------
+        //Delete building, RoomNumber or specifik room in the massdestruction area.
+        [HttpPost]
+        public IActionResult MassDestructionDeleteBuildingOrRoom(EditStorageLocationModel dataFromMassDestructionView)
         {
-
+            DBManagerAdministration manager = new DBManagerAdministration(configuration);
+            string deleteMessage = manager.DeleteBuildingOrRoom(dataFromMassDestructionView);
+            if (deleteMessage != null)
+            {
+                ViewBag.deleteMessage = deleteMessage;
+            }
+            return View("LocationAdmin", GetStorageLocations());
         }
 
-        public void PrintQRCode()
-        {
 
-        }
 
+
+        //Getting the locations from DB and listing dropdowns in Blue oister bar, and also listing the selected Storagelocation.
         private EditStorageLocationModel GetStorageLocations()
         {
             EditStorageLocationModel dropDownData = new EditStorageLocationModel();
@@ -103,6 +114,22 @@ namespace HUS_project.Controllers
 
             return dropDownData;
         }
+
+
+
+
+
+        //QR code generation
+        public void CreateQRCode()
+        {
+
+        }
+
+        public void PrintQRCode()
+        {
+
+        }
+
 
     }
 }
