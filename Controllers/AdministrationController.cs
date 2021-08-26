@@ -74,10 +74,52 @@ namespace HUS_project.Controllers
         //------------------------------------
         //Delete building, RoomNumber or specifik room in the massdestruction area.
         [HttpPost]
-        public IActionResult MassDestructionDeleteBuildingOrRoom(EditStorageLocationModel dataFromMassDestructionView)
+        public IActionResult DeleteBuilding(string deleteBuildingData)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            string deleteMessage = manager.DeleteBuildingOrRoom(dataFromMassDestructionView);
+            string deleteMessage = manager.DeleteBuilding(deleteBuildingData);
+            if (deleteMessage != null)
+            {
+                ViewBag.deleteMessage = deleteMessage;
+            }
+            else
+            {
+                ViewBag.deleteMessage = "";
+            }
+            return View("LocationAdmin", GetStorageLocations());
+        }
+
+
+
+
+        //------------------------------------
+        //This one is not finish
+        //------------------------------------
+        //Delete building, RoomNumber or specifik room in the massdestruction area.
+        [HttpPost]
+        public IActionResult DeleteRoomNumber(string deleteRoomNumberData)
+        {
+            DBManagerAdministration manager = new DBManagerAdministration(configuration);
+            string deleteMessage = manager.DeleteRoomNumber(deleteRoomNumberData);
+            if (deleteMessage != null)
+            {
+                ViewBag.deleteMessage = deleteMessage;
+            }
+            return View("LocationAdmin", GetStorageLocations());
+        }
+
+
+
+
+        //------------------------------------
+        //This one is not finish
+        //------------------------------------
+        //Delete building, RoomNumber or specifik room in the massdestruction area.
+        [HttpPost]
+        public IActionResult DeleteRoom(string deleteRoomData)
+        {
+            DBManagerAdministration manager = new DBManagerAdministration(configuration);
+            string deleteMessage = manager.DeleteRoom(deleteRoomData);
             if (deleteMessage != null)
             {
                 ViewBag.deleteMessage = deleteMessage;

@@ -13,6 +13,9 @@
 @{string tempData = ViewBag.alert;}
 <script> alertFunction('@tempData')</script>
 
+@{ string deleteFeeback = ViewBag.deleteMessage;}
+
+
 @*Blue Oister Bar with search fields*@
 <form asp-action="LocationAdminResult" method="post" id="listStorageLocations">
     <div class="row blue-oyster-bar center box-shadow">
@@ -85,12 +88,12 @@
         </div>
         <div class="row">
             @{string toolTip = "Alle felter kan oprettes enkeltvis. \n\n" +
-                                                                                                       "Hvis Bygning og Lokale er udfyldt samtidigt vil der \n" +
-                                                                                                       "oprettes et Lokale hvis ikke det eksisterer i forvejen.\n\n " +
-                                                                                                       "Hvis alle felter er udfyldt, vil der oprettes en placering.\n\n" +
-                                                                                                       "Men kun hvis det ikke findes I forvejen."; }
+                                                                                                             "Hvis Bygning og Lokale er udfyldt samtidigt vil der \n" +
+                                                                                                             "oprettes et Lokale hvis ikke det eksisterer i forvejen.\n\n " +
+                                                                                                             "Hvis alle felter er udfyldt, vil der oprettes en placering.\n\n" +
+                                                                                                             "Men kun hvis det ikke findes I forvejen."; }
             <div class="col p-3">
-                <button type="submit" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip" asp-action="CreateLocation" onclick="checkInputFields()">Tilføj Placering</button>
+                <button type="submit" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip" asp-action="CreateLocation" onclick="checkInputFields1()">Tilføj Placering</button>
             </div>
         </div>
     </div>
@@ -187,8 +190,8 @@
             <h4>&nbsp;</h4>
         </div>
     </div>
-
 </form>
+
 
 
 
@@ -202,154 +205,170 @@
 @* The Mass destruction area *@
 @*-------------------------------------------------------------------*@
 @*-------------------------------------------------------------------*@
-<div class="container containerMain box-shadow">
+<form asp-action="LocationAdminResult" method="post" id="insertData">
+    <div class="container containerMain box-shadow">
 
 
-    @*Header of the Massdestruction area*@
-    <div class="row containerHeader">
-        <h4 class="col">Masseudryddelse</h4>
-    </div>
-
-
-
-    @*Body of the Massdestruction area*@
-    <div class="row containerBody">
-        <div class="col-12">
-            <div class="row p-1">
-                <div class="col-lg-4 p-1"></div>
-
-
-                <div class="col-lg-4 col-sm-12 p-1 text-red center">(Hvis du ikke kender konsekvensen, så lad hellere være)</div>
-
-
-                <div class="col-lg-4 p-1"></div>
-            </div>
+        @*Header of the Massdestruction area*@
+        <div class="row containerHeader">
+            <h4 class="col">Masseudryddelse</h4>
+        </div>
 
 
 
+        @*Body of the Massdestruction area*@
+        <div class="row containerBody">
+            <div class="col-12">
+                <div class="row p-1">
+                    <div class="col-lg-4 p-1"></div>
 
-            <div class="row p-1">
-                <div class="col-lg-5 p-1">Hvis både bygning og lokale nr. er udfyldt, og rummmet ikke er i brug, så kan det slettes​</div>
+
+                    <div class="col-lg-4 col-sm-12 p-1 text-red center">(Hvis du ikke kender konsekvensen, så lad hellere være)</div>
 
 
-                <div class="col-lg-2 col-sm-12 p-1"></div>
-
-
-                <div class="col-lg-5 p-1">
-                    Reol navn, etage nr. Og plads nummer kan kun slettes såfremt at der ikke er nogle
-                    placeringer hvor de indgår i. Du bør derfor sikre dig at ingen af dem indgår i en placering først
+                    <div class="col-lg-4 p-1"></div>
                 </div>
-            </div>
 
 
-            <div class="row">
 
 
-                <div class="col-lg-5">
-
-                    <div class="row">
-
-                        <div class="col-lg-4">
-                            <div class="row">
-
-                                <div class="col-12 dynamic-Font-Size-12 p-1 center">
-                                    <label>
-                                        Bygning:
-                                    </label>
-                                </div>
-
-                                <div class="col-12 p-1">
-                                    <input class=" form-select" id="buldingInput" list="buildings" aria-label="building" asp-for="@Model.DeleteBuilding" onkeyup="showRoom()">
-                                    <datalist id="buildings">
-                                        @foreach (var item in Model.Buildings)
-                                        {
-                                            <option>@item</option>
-                                        }
-                                    </datalist>
-                                </div>
-
-                                <div class="col-12 p-1 center">
-                                    <button type="button" class="btn btn-danger btn-sm btn-red" style="width:100px" asp-action="MassDestructionDeleteBuildingOrRoom">Slet</button>
-                                </div>
-
-                            </div>
-
-                        </div>
+                <div class="row p-1">
+                    <div class="col-lg-5 p-1">Hvis både bygning og lokale nr. er udfyldt, og rummmet ikke er i brug, så kan det slettes​</div>
 
 
-                        <div class="col-lg-4">
-                            <div class="row">
-
-                                <div class="col-12 p-1 dynamic-Font-Size-12 center">
-                                    <label>
-                                        Valgt Rum:
-                                    </label>
-                                </div>
-
-                                <div class="col-12 p-1">
-                                    <input readonly type="text" class="form-control background-white" id="chosenRoom" aria-label="room" asp-for="@Model.DeleteRoom">
-                                </div>
-
-                                <div class="col-12 p-1 center">
-                                    <button type="button" class="btn btn-danger btn-sm btn-red" style="width:100px" asp-action="MassDestructionDeleteBuildingOrRoom">Slet</button>
-                                </div>
-
-                            </div>
-                        </div>
+                    <div class="col-lg-2 col-sm-12 p-1"></div>
 
 
-                        <div class="col-lg-4">
-
-                            <div class="row">
-
-                                <div class="col-12 p-1 dynamic-Font-Size-12 center">
-                                    <label>
-                                        Lokale nr:
-                                    </label>
-                                </div>
-
-                                <div class="col-12 p-1">
-                                    <input class="form-select" id="romNrInput" list="roomNumbers" aria-label="roomNumber" asp-for="@Model.DeleteRoomNumber" onkeyup="showRoom()">
-                                    <datalist id="roomNumbers">
-                                        @foreach (var item in Model.RoomNumbers)
-                                        {
-                                            <option>@item</option>
-                                        }
-                                    </datalist>
-                                </div>
-
-                                <div class="col-12 p-1 center ">
-                                    <button type="button" class="btn btn-danger btn-sm btn-red" style="width:100px" asp-action="MassDestructionDeleteBuildingOrRoom">Slet</button>
-                                </div>
-                            </div>
-
-                        </div>
-
+                    <div class="col-lg-5 p-1">
+                        Reol navn, etage nr. Og plads nummer kan kun slettes såfremt at der ikke er nogle
+                        placeringer hvor de indgår i. Du bør derfor sikre dig at ingen af dem indgår i en placering først
                     </div>
                 </div>
 
+                <div class="row p-1">
+                    <div class="col-lg-5 p-1">@deleteFeeback</div>
 
-                <div class="col-lg-2">
 
+                    <div class="col-lg-2 col-sm-12 p-1"></div>
+
+
+                    <div class="col-lg-5 p-1"></div>
                 </div>
 
 
-                <div class="col-lg-5">
+                <div class="row">
 
+
+                    <div class="col-lg-5">
+
+                        <div class="row">
+
+                            <div class="col-lg-4">
+                                <div class="row">
+
+                                    <div class="col-12 dynamic-Font-Size-12 p-1 center">
+                                        <label>
+                                            Bygning:
+                                        </label>
+                                    </div>
+
+                                    <div class="col-12 p-1">
+                                        <input class=" form-select" id="buldingInput" list="buildings" aria-label="building" asp-for="@Model.DeleteBuilding" onkeyup="showRoom('buldingInput')">
+                                        <datalist id="buildings">
+                                            @foreach (var item in Model.Buildings)
+                                            {
+                                                <option>@item</option>
+                                            }
+                                        </datalist>
+                                    </div>
+
+                                    <div class="col-12 p-1 center">
+                                        @*Remember that the name needs to be the same as the variable that is sent to the controller*@
+                                        <button type="submit" name="deleteBuildingData" class="btn btn-danger btn-sm btn-red" style="width:100px" value="@Model.DeleteBuilding" asp-action="DeleteBuilding">Slet</button>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-lg-4">
+                                <div class="row">
+
+                                    <div class="col-12 p-1 dynamic-Font-Size-12 center">
+                                        <label>
+                                            Valgt Rum:
+                                        </label>
+                                    </div>
+
+                                    <div class="col-12 p-1">
+                                        <input readonly type="text" class="form-control background-white" id="chosenRoom" aria-label="room" asp-for="@Model.DeleteRoom" oninput="submit('chosenRoom')">
+                                    </div>
+
+                                    <div class="col-12 p-1 center">
+                                        @*Remember that the name needs to be the same as the variable that is sent to the controller*@
+                                        <button type="submit" name="deleteRoomData" class="btn btn-danger btn-sm btn-red" style="width:100px" value="@Model.DeleteRoom" asp-action="DeleteRoom">Slet</button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-4">
+
+                                <div class="row">
+
+                                    <div class="col-12 p-1 dynamic-Font-Size-12 center">
+                                        <label>
+                                            Lokale nr:
+                                        </label>
+                                    </div>
+
+                                    <div class="col-12 p-1">
+                                        <input class="form-select" id="romNrInput" list="roomNumbers" aria-label="roomNumber" asp-for="@Model.DeleteRoomNumber" onkeyup="showRoom('romNrInput')">
+                                        <datalist id="roomNumbers">
+                                            @foreach (var item in Model.RoomNumbers)
+                                            {
+                                                <option>@item</option>
+                                            }
+                                        </datalist>
+                                    </div>
+
+                                    <div class="col-12 p-1 center ">
+                                        @*Remember that the name needs to be the same as the variable that is sent to the controller*@
+                                        <button type="submit" name="deleteRoomNumberData" class="btn btn-danger btn-sm btn-red" style="width:100px" value="@Model.DeleteRoomNumber" asp-action="DeleteRoomNumber">Slet</button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-2">
+
+                    </div>
+
+
+                    <div class="col-lg-5">
+
+                    </div>
                 </div>
             </div>
+
         </div>
 
+
+
+        @*Footer of the Massdestruction area*@
+        <div class="row containerFooter">
+            <h4>&nbsp;</h4>
+        </div>
     </div>
 
 
-
-    @*Footer of the Massdestruction area*@
-    <div class="row containerFooter">
-        <h4>&nbsp;</h4>
-    </div>
-</div>
-
+</form>
 
 
 

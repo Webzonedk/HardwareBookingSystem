@@ -8,6 +8,25 @@ function submit(input) {
 
 }
 
+//Submitting data from view (Not used at the moment)
+function submit2(input) {
+
+    document.getelementById(input).submit();
+
+    let building = document.getElementById("buldingInput").value;//getting value
+    let roomNr = document.getElementById("romNrInput").value;//getting value
+    let chosenRoom = document.getElementById("chosenRoom");//inserting value
+
+    if (building != "" && roomNr != "") {
+        chosenRoom.value = building + "." + roomNr;
+    }
+    else {
+        chosenRoom.value = "";
+    }
+}
+
+
+
 
 //Function to show specified room in the input field in the massdestruction area
 function showRoom() {

@@ -23,6 +23,9 @@ namespace HUS_project.DAL
             connectionString = configuration.GetConnectionString("DBContext");
         }
 
+
+
+
         //Getting Building names for the dropdown in Blue Oister bar
         internal List<string> GetBuildings()
         {
@@ -54,6 +57,7 @@ namespace HUS_project.DAL
             con.Close();
             return buildings;
         }
+
 
 
 
@@ -91,6 +95,7 @@ namespace HUS_project.DAL
 
 
 
+
         //Getting shelf names for the dropdown in Blue Oister bar
         internal List<string> GetShelfName()
         {
@@ -122,6 +127,7 @@ namespace HUS_project.DAL
             con.Close();
             return shelfNames;
         }
+
 
 
 
@@ -159,6 +165,7 @@ namespace HUS_project.DAL
 
 
 
+
         //Getting shelf spots for the dropdown in Blue Oister bar
         internal List<string> GetShelfSpot()
         {
@@ -190,6 +197,7 @@ namespace HUS_project.DAL
             con.Close();
             return shelfSpots;
         }
+
 
 
 
@@ -284,6 +292,8 @@ namespace HUS_project.DAL
         }
 
 
+
+
         //Getting specific room, based on the choosen building and roomNr in the mass destruction.
         internal List<StorageLocationModel> GetSpecificRoom(EditStorageLocationModel dataFromView)
         {
@@ -359,57 +369,6 @@ namespace HUS_project.DAL
 
 
 
-        //Method to Delete a single location based on locationID
-        internal string DeleteLocation(int locationID)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("DeleteStorageLocation", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@locationID", System.Data.SqlDbType.Int).Value = locationID;
-            cmd.Parameters.Add("@alert", System.Data.SqlDbType.VarChar, 10).Direction = System.Data.ParameterDirection.Output;
-            cmd.ExecuteNonQuery();
-            string alert;
-            if (cmd.Parameters["@alert"].Value != System.DBNull.Value)
-            {
-                alert = (string)cmd.Parameters["@alert"].Value;
-            }
-            else
-            {
-                alert = "empty";
-            }
-            con.Close();
-            return alert;
-        }
-
-
-
-        //Method to Delete a building or roomNumber or Room, based on the input fields in massdestruction area
-        internal string DeleteBuildingOrRoom(EditStorageLocationModel dataFromView)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("DeleteRoomsAndBuildingsMassDestruction", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@buildingNameToDelete", System.Data.SqlDbType.Int).Value = dataFromView.DeleteBuilding;
-            cmd.Parameters.Add("@RoomNumberToDelete", System.Data.SqlDbType.Int).Value = dataFromView.DeleteRoomNumber;
-            cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 100).Direction = System.Data.ParameterDirection.Output;
-            //Check if RoomToDelete is nessesary depending on the input from the view
-           // cmd.Parameters.Add("@RoomToDelete", System.Data.SqlDbType.VarChar, 10).Direction = System.Data.ParameterDirection.Output;
-            cmd.ExecuteNonQuery();
-            string deleteFeedback;
-            if (cmd.Parameters["@deleteFeedback"].Value != System.DBNull.Value)
-            {
-                deleteFeedback = (string)cmd.Parameters["@deleteFeedback"].Value;
-            }
-            else
-            {
-                deleteFeedback = "Nothing was deleted";
-            }
-            con.Close();
-            return deleteFeedback;
-        }
-
 
 
         //Method to create a location based on the input fields in the Blue Oister Bar
@@ -454,6 +413,109 @@ namespace HUS_project.DAL
 
 
 
+
+        //Method to Delete a single location based on locationID
+        internal string DeleteLocation(int locationID)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("DeleteStorageLocation", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@locationID", System.Data.SqlDbType.Int).Value = locationID;
+            cmd.Parameters.Add("@alert", System.Data.SqlDbType.VarChar, 10).Direction = System.Data.ParameterDirection.Output;
+            cmd.ExecuteNonQuery();
+            string alert;
+            if (cmd.Parameters["@alert"].Value != System.DBNull.Value)
+            {
+                alert = (string)cmd.Parameters["@alert"].Value;
+            }
+            else
+            {
+                alert = "empty";
+            }
+            con.Close();
+            return alert;
+        }
+
+
+
+
+        //Method to Delete a building or roomNumber or Room, based on the input fields in massdestruction area
+        internal string DeleteBuilding(string dataFromView)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("DeleteRoomsAndBuildingsMassDestruction", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@buildingNameToDelete", System.Data.SqlDbType.VarChar, 50).Value = dataFromView;
+            cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 100).Direction = System.Data.ParameterDirection.Output;
+            cmd.ExecuteNonQuery();
+            string deleteFeedback;
+            if (cmd.Parameters["@deleteFeedback"].Value != System.DBNull.Value)
+            {
+                deleteFeedback = (string)cmd.Parameters["@deleteFeedback"].Value;
+            }
+            else
+            {
+                deleteFeedback = "Nothing was deleted";
+            }
+            con.Close();
+            return deleteFeedback;
+        }
+
+
+
+        //Method to Delete a building or roomNumber or Room, based on the input fields in massdestruction area
+        internal string DeleteRoomNumber(string dataFromView)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("DeleteRoomsAndBuildingsMassDestruction", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@RoomNumberToDelete", System.Data.SqlDbType.VarChar, 10).Value = dataFromView;
+            cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 100).Direction = System.Data.ParameterDirection.Output;
+            cmd.ExecuteNonQuery();
+            string deleteFeedback;
+            if (cmd.Parameters["@deleteFeedback"].Value != System.DBNull.Value)
+            {
+                deleteFeedback = (string)cmd.Parameters["@deleteFeedback"].Value;
+            }
+            else
+            {
+                deleteFeedback = "Nothing was deleted";
+            }
+            con.Close();
+            return deleteFeedback;
+        }
+
+
+        //Method to Delete a building or roomNumber or Room, based on the input fields in massdestruction area
+        internal string DeleteRoom(string dataFromView)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("DeleteRoomsAndBuildingsMassDestruction", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@buildingNameToDelete", System.Data.SqlDbType.VarChar, 50).Value = dataFromView;
+            cmd.Parameters.Add("@RoomNumberToDelete", System.Data.SqlDbType.VarChar, 10).Value = dataFromView;
+            cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 100).Direction = System.Data.ParameterDirection.Output;
+            cmd.ExecuteNonQuery();
+            string deleteFeedback;
+            if (cmd.Parameters["@deleteFeedback"].Value != System.DBNull.Value)
+            {
+                deleteFeedback = (string)cmd.Parameters["@deleteFeedback"].Value;
+            }
+            else
+            {
+                deleteFeedback = "Nothing was deleted";
+            }
+            con.Close();
+            return deleteFeedback;
+        }
+
+
+
+      
 
 
 
