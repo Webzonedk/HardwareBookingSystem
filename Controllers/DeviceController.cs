@@ -81,39 +81,50 @@ namespace HUS_project.Controllers
                 string base64 = sourceimage.Substring(sourceimage.IndexOf(',') + 1);
                 byte[] datastream = Convert.FromBase64String(base64);
 
-                //convert byte array to image file
-                using (MemoryStream m = new MemoryStream(datastream))
+                //test new upload method
+                string filenameOut = $"Capture_{modelID}.png";
+                ImageModel imageM = new ImageModel(datastream, modelID, filenameOut);
+                int success = dbManager.UploadImage(imageM);
+
+                //set image source if successful upload
+                if (success > 0)
                 {
-                    using (Image image = Image.FromStream(m))
-                    {
-                        string root = (string)AppDomain.CurrentDomain.GetData("webRootPath");
-                        string webroot = root + "\\DeviceContent\\";
-
-                        string filename = $"Capture_{modelID}.png";
-                        if (Directory.Exists(webroot))
-                        {
-                            // save image to directory
-                            image.Save(webroot + filename, ImageFormat.Png);
-                            m.Dispose();
-                            image.Dispose();
-                            datastream = null;
-
-                            //get filename
-                            deviceData.Image = filename;
-                            Debug.WriteLine("image saved");
-                        }
-
-                    }
-
+                    deviceData.Image = string.Format("data:image/png;base64,{0}", base64);
                 }
+
+                ////convert byte array to image file
+                //using (MemoryStream m = new MemoryStream(datastream))
+                //{
+                //    using (Image image = Image.FromStream(m))
+                //    {
+                //        string root = (string)AppDomain.CurrentDomain.GetData("webRootPath");
+                //        string webroot = root + "\\DeviceContent\\";
+
+                //        string filename = $"Capture_{modelID}.png";
+                //        if (Directory.Exists(webroot))
+                //        {
+                //            // save image to directory
+                //            image.Save(webroot + filename, ImageFormat.Png);
+                //            m.Dispose();
+                //            image.Dispose();
+                //            datastream = null;
+
+                //            //get filename
+                //            deviceData.Image = filename;
+                //            Debug.WriteLine("image saved");
+                //        }
+
+                //    }
+
+                //}
             }
             else
             {
                 //check if image exists
                 if (!CheckExistingModelNames(deviceData.Image))
                 {
-                    string filepath = "missing_image.png";
-                    deviceData.Image = filepath;
+                   // string filepath = "missing_image.png";
+                    deviceData.Image = null;
                 }
 
 
@@ -130,16 +141,9 @@ namespace HUS_project.Controllers
             editdata.ModelNames = modelNames;
             editdata.Room = new string($"{data.Location.Location.Building}.{data.Location.Location.RoomNumber.ToString()}");
             editdata.Shelf = new string($"{data.Location.ShelfName}.{data.Location.ShelfLevel}.{data.Location.ShelfSpot}");
+            editdata.ImagePath = deviceData.Image;
+            //  editdata.ImagePath = source;
 
-            //set image path if using camera data
-            //if (TryGetFromBase64String(deviceData.Image))
-            //{
-            //    editdata.ImagePath = $"Capture_{modelID}.png";
-            //}
-            //else
-            //{
-            //    editdata.ImagePath = $"missing_image.png";
-            //}
 
             return View("EditView", editdata);
         }
@@ -172,12 +176,20 @@ namespace HUS_project.Controllers
 
                     int modelID = dbsharedManager.GetModelID(deviceData.Device.Model.ModelName);
 
-                    string filename = $"Capture_{modelID}.png";
+                    ImageModel im = dbsharedManager.DownloadImage(modelID);
+                    if(im.ImageData != null)
+                    {
+                        string newbase64 = Convert.ToBase64String(im.ImageData);
+                        string source = string.Format("data:image/png;base64,{0}", newbase64);
+                        deviceData.Image = source;
+                    }
+
+                  /*  string filename = $"Capture_{modelID}.png";
                     string imagepath = (string)AppDomain.CurrentDomain.GetData("webRootPath") + "\\DeviceContent\\" + filename;
                     if (System.IO.File.Exists(imagepath))
                     {
                         deviceData.Image = filename;
-                    }
+                    }*/
                 }
 
 
@@ -212,13 +224,26 @@ namespace HUS_project.Controllers
             editdata.Room = new string($"{data.Location.Location.Building}.{data.Location.Location.RoomNumber.ToString()}");
             editdata.Shelf = new string($"{data.Location.ShelfName}.{data.Location.ShelfLevel}.{data.Location.ShelfSpot}");
 
-            //check if image exists
-            string filename = $"Capture_{modelID}.png";
-            string imagepath = (string)AppDomain.CurrentDomain.GetData("webRootPath") + "\\DeviceContent\\" + filename;
-            if (System.IO.File.Exists(imagepath))
+            //test download image
+            ImageModel im = dbsharedManager.DownloadImage(modelID);
+
+            //set image path if
+            if (im.ImageData != null)
             {
-                editdata.ImagePath = filename;
+                string newbase64 = Convert.ToBase64String(im.ImageData);
+                string source = string.Format("data:image/png;base64,{0}", newbase64);
+                editdata.ImagePath = source;
             }
+
+
+
+            //check if image exists
+            //string filename = $"Capture_{modelID}.png";
+            //string imagepath = (string)AppDomain.CurrentDomain.GetData("webRootPath") + "\\DeviceContent\\" + filename;
+            //if (System.IO.File.Exists(imagepath))
+            //{
+            //    editdata.ImagePath = filename;
+            //}
 
 
             editdata.Logs = logs;
@@ -275,11 +300,12 @@ namespace HUS_project.Controllers
             int modelID = shared.GetModelID(data.Device.Model.ModelName);
 
             //check if image exists
-            string filename = $"Capture_{modelID}.png";
-            string imagepath = (string)AppDomain.CurrentDomain.GetData("webRootPath") + "\\DeviceContent\\" + filename;
-            if (System.IO.File.Exists(imagepath))
+            ImageModel im = shared.DownloadImage(modelID);
+            if (im.ImageData != null)
             {
-                data.ImagePath = filename;
+                string newbase64 = Convert.ToBase64String(im.ImageData);
+                string source = string.Format("data:image/png;base64,{0}", newbase64);
+                data.ImagePath = source;
             }
 
             //set message to be shown in view
@@ -425,6 +451,9 @@ namespace HUS_project.Controllers
             //get data from the manager
             infoList = DBDManager.GetDeviceInventory(infoList);
 
+            //test image validation
+            CheckImageValidations();
+
             //send data to the manager
 
             //var combinedLists = infoList.BorrowedDevices.Zip(infoList.InventoryStatuses, (b, i) => new { device = b, status = i });
@@ -507,8 +536,8 @@ namespace HUS_project.Controllers
             return RedirectToAction("PrintQR", "QRCode");
         }
 
-        #region Helper methods
 
+        #region Helper methods
         //returns list of device logs
         private List<DeviceModel> GetDeviceLogs(int id)
         {
@@ -530,13 +559,18 @@ namespace HUS_project.Controllers
             data.Logs = logs;
             EditDeviceModel newdata = data;
 
-            //check if image exists
-            string filename = $"Capture_{modelID}.png";
-            string imagepath = (string)AppDomain.CurrentDomain.GetData("webRootPath") + "\\DeviceContent\\" + filename;
-            if (System.IO.File.Exists(imagepath))
+            //check if image exists & set image path
+            ImageModel im = shared.DownloadImage(modelID);
+            if (im.ImageData != null)
             {
-                newdata.ImagePath = filename;
+                string newbase64 = Convert.ToBase64String(im.ImageData);
+                string source = string.Format("data:image/png;base64,{0}", newbase64);
+                newdata.ImagePath = source;
             }
+
+
+
+
 
             //fetch storage locations if user has typed a valid room
             if (data.Room != null)
@@ -645,6 +679,55 @@ namespace HUS_project.Controllers
                 }
             }
             return false;
+        }
+
+        private void CheckImageValidations()
+        {
+            //  DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            DBManagerShared sharedDBManager = new DBManagerShared(configuration);
+            List<string> modelNames = sharedDBManager.GetModelNames();
+
+            //get list of model IDs
+            List<int> modelIDs = new List<int>();
+            for (int i = 0; i < modelNames.Count; i++)
+            {
+                modelIDs.Add(sharedDBManager.GetModelID(modelNames[i]));
+            }
+
+            //get list of file names
+
+            string imagepath = (string)AppDomain.CurrentDomain.GetData("webRootPath") + "\\DeviceContent\\";
+            string[] imagepaths = Directory.GetFiles(imagepath);
+
+            for (int j = 0; j < imagepaths.Length; j++)
+            {
+                bool match = false;
+                string[] subs = imagepaths[j].Split('\\');
+                string fileName = subs[subs.Length - 1];
+
+                for (int k = 0; k < modelIDs.Count; k++)
+                {
+                    string comparer = $"Capture_{modelIDs[k]}.png";
+                    Debug.WriteLine($"comparing {comparer} width {fileName}");
+                    if (fileName == comparer)
+                    {
+                        match = true;
+                        break;
+                    }
+
+                }
+
+                if (!match)
+                {
+                    if (fileName != "missing_image")
+                    {
+
+                        Debug.WriteLine($"model does not exists: {fileName}");
+                    }
+                }
+            }
+
+
         }
 
         #endregion
