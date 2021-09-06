@@ -36,6 +36,16 @@ function CheckInputField() {
 
 
 
+//Fading function to fade out lines on list when a storagelocation is deleted
+function fadeOut(input) {
+    console.log(input)
+    $("#" + input).slideUp('fast', function () {
+    });
+}
+
+
+
+
 //call submit at scanDevice view
 function ReturnToEdit(val) {
     //var location = $("#content").val();

@@ -47,12 +47,17 @@ namespace HUS_project.Controllers
         [HttpPost]
         public IActionResult DeleteSingleLocation(string deleteLocation)
         {
+            string[] substring = deleteLocation.Split('.');
+            string locationID = substring[0];
+            string selectedID = substring[1];
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            string alert = manager.DeleteLocation(int.Parse(deleteLocation));
+            string alert = manager.DeleteLocation(int.Parse(locationID));
             if (alert == "occupied")
             {
                 ViewBag.alert = "occupied";
             }
+            ViewBag.selectedID = selectedID;
+
             return View("LocationAdmin", GetStorageLocations());
         }
 
@@ -74,7 +79,7 @@ namespace HUS_project.Controllers
         //------------------------------------
         //Delete building, RoomNumber or specifik room in the massdestruction area.
         [HttpPost]
-        public IActionResult DeleteBuilding(string deleteBuildingData)
+        public IActionResult DeleteBuilding(EditStorageLocationModel deleteBuildingData)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
             string deleteMessage = manager.DeleteBuilding(deleteBuildingData);
@@ -97,7 +102,7 @@ namespace HUS_project.Controllers
         //------------------------------------
         //Delete building, RoomNumber or specifik room in the massdestruction area.
         [HttpPost]
-        public IActionResult DeleteRoomNumber(string deleteRoomNumberData)
+        public IActionResult DeleteRoomNumber(EditStorageLocationModel deleteRoomNumberData)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
             string deleteMessage = manager.DeleteRoomNumber(deleteRoomNumberData);
@@ -116,7 +121,7 @@ namespace HUS_project.Controllers
         //------------------------------------
         //Delete building, RoomNumber or specifik room in the massdestruction area.
         [HttpPost]
-        public IActionResult DeleteRoom(string deleteRoomData)
+        public IActionResult DeleteRoom(EditStorageLocationModel deleteRoomData)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
             string deleteMessage = manager.DeleteRoom(deleteRoomData);

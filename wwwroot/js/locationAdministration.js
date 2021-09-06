@@ -1,17 +1,65 @@
 ﻿
-
-
 //Submitting data from view
 function submit(input) {
 
     document.getelementById(input).submit();
+}
+
+
+////Submitting data from view
+//$(document).ready(function (e) {
+
+//    console.log("test test test")
+//    let scrollToDiv = document.getElementById("insertData");
+//    scrollToDiv.scrollTop = scrollToDiv.scrollHeight;
+//});
+
+
+
+//$(document).ready(function () {
+
+//window.scrollTo(0, document.body.scrollHeight);
+//});
+
+
+
+
+
+
+
+
+//Scrolling down to selected ID
+function scrollToDiv(input, id) {
+    console.log("test test test " + input);
+    if (input != "") {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    if (id != "") {
+        let result = parseFloat(id);
+        result++;
+        let ele = document.getElementById(result);
+        console.log(result)
+        window.scrollTo(ele.offsetLeft, ele.offsetTop);
+
+    }
+
 
 }
+
+
+//function scroll(divID) {
+//    let ele = document.getElementById(divID + 1);
+//    console.log(ele)
+//    window.scrollTo(ele.offsetLeft, ele.offsetTop);
+//}
+
+
+
 
 //Submitting data from view (Not used at the moment)
 function submit2(input) {
 
-    document.getelementById(input).submit();
 
     let building = document.getElementById("buldingInput").value;//getting value
     let roomNr = document.getElementById("romNrInput").value;//getting value
@@ -23,6 +71,7 @@ function submit2(input) {
     else {
         chosenRoom.value = "";
     }
+    document.getelementById(input).submit();
 }
 
 
@@ -54,10 +103,6 @@ function alertFunction(tempData) {
 }
 
 
-//Fading function to fade out lines on list when a storagelocation is deleted
-function fadeOut(input) {
-    $("#" + input).slideUp();
-}
 
 
 //Function to check if inout fields is filled before submitting
