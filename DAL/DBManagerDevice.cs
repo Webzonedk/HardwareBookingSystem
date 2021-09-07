@@ -329,6 +329,32 @@ namespace HUS_project.DAL
             return data;
         }
 
+        internal bool CheckLocation(StorageLocationModel location)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("EditDeviceLocation", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = location.Location.Building;
+            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = location.Location.RoomNumber;
+            cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = location.ShelfName;
+            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = location.ShelfLevel;
+            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = location.ShelfSpot;
+
+            cmd.Parameters.Add("@count", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
+            cmd.ExecuteNonQuery();
+            con.Close();
+
+            int count = Convert.ToInt32(cmd.Parameters["@count"].Value);
+            if(count> 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         // get all devices based on search query
         internal ModelInfoModel GetDeviceInventory(ModelInfoModel SearchModel)
