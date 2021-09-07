@@ -46,3 +46,7 @@ Special assignments by ID
 .col350 {
     width: 350px !important;
 }
+
+.capitalized{
+    text-transform:uppercase;
+}
