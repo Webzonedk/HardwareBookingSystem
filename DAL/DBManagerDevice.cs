@@ -333,7 +333,7 @@ namespace HUS_project.DAL
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("EditDeviceLocation", con);
+            SqlCommand cmd = new SqlCommand("validateLocation", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = location.Location.Building;
             cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = location.Location.RoomNumber;
