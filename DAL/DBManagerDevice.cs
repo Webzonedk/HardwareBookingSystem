@@ -68,13 +68,13 @@ namespace HUS_project.DAL
                 catch (Exception)
                 {
                     File.Delete($"{webroot}{newfilename}");
-                    File.Move($"{webroot}{oldName}", $"{webroot}{newfilename}");
+                     File.Move($"{webroot}{oldName}", $"{webroot}{newfilename}");
 
                     //throw;
                 }
             }
 
-
+            
 
             return deviceID;
         }
@@ -102,7 +102,7 @@ namespace HUS_project.DAL
             return success;
         }
 
-
+      
 
         internal int EditDevice(EditDeviceModel deviceData)
         {
@@ -213,7 +213,7 @@ namespace HUS_project.DAL
                 CategoryModel c = new CategoryModel();
                 m.Category = c;
 
-
+            
                 device.ChangedBy = (string)reader["changedBy"];
                 device.ChangeDate = (DateTime)reader["logDate"];
                 device.Notes = (string)reader["note"];
@@ -409,30 +409,6 @@ namespace HUS_project.DAL
 
             con.Close();
             return SearchModel;
-        }
-
-        //returns true if number of columns returned is > 0
-        internal bool CheckLocation(StorageLocationModel location)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("ValidateLocation", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = location.Location.Building;
-            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar).Value = location.Location.RoomNumber;
-            cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = location.ShelfName;
-            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar).Value = location.ShelfLevel;
-            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar).Value = location.ShelfSpot;
-            cmd.Parameters.Add("@count", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
-            cmd.ExecuteNonQuery();
-
-            int numCols = Convert.ToInt32(cmd.Parameters["@count"].Value);
-            if (numCols > 0)
-            {
-                return true;
-            }
-
-            return false;
         }
     }
 }
