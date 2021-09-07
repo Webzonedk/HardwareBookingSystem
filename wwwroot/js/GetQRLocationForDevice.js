@@ -6,8 +6,9 @@ function SubmitQRCode() {
     let outputfield = document.getElementById("content");
     if (checkfield.checked) {
 
+      
         var QRcode = sessionStorage.getItem(id.value);
-        outputfield.value = id.value + "-" + QRcode;
+        outputfield.value = QRcode;
         document.getElementById("ScanLocationForm").submit();
 
     }

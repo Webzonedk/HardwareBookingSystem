@@ -392,7 +392,7 @@ Set height
    
     /*padding: 10px 10px 10px 10px;*/
     border: solid;
-    border-width: 2px;
+    border-width: 0px;
     border-color: #1c209a;
     border-radius: 10px;
     max-width:100%;

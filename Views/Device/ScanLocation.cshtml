@@ -18,7 +18,7 @@
 <form id="ScanLocationForm" asp-action="ReturnScanData" method="post" form>
 
     <input id="content" type="text" asp-for="@Model.Room" value=""/>
-
+    <input id="deviceID" type="text" asp-for="@Model.Device.DeviceID" hidden />
 
 </form>
 

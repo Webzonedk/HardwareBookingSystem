@@ -28,3 +28,11 @@ function UploadImage(event) {
     }
     
 }
+
+//function to send data to check image 
+function PostToCheckImage() {
+
+    var imagesource = document.getElementById("pictureFromCamera").src;
+    document.getElementById("hiddenimage").setAttribute('value', imagesource);
+    form.submit();
+}
