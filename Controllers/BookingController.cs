@@ -193,18 +193,76 @@ namespace HUS_project.Controllers
         }
 
 
-        public IActionResult DisableBooking(string bookingID)
+        public IActionResult DeleteBooking(string bookingID)
         {
             return GoToBooking(bookingID);
         }
 
+        /// <summary>
+        /// Deletes the itemline for this booking and model, and deletes the booking if there are no more ItemLines.
+        /// </summary>
+        /// <param name="bookingID"></param>
+        /// <param name="modelName"></param>
+        /// <returns></returns>
+        public IActionResult DeleteItemLine(BookingModel booking, string modelName)
+        {
+            DBManagerBooking dBManager = new DBManagerBooking(configuration);
+            dBManager.DeleteItemLine(booking.BookingID, modelName);
 
+            if(booking.Items.Count < 2)
+            {
+                // Delete booking also
+                return DeleteBooking(booking.BookingID.ToString());
+            }
+            return GoToBooking(booking.BookingID.ToString());
+        }
+
+        /// <summary>
+        /// Determines which kind of button was pressed and engagages the appropriate function.
+        /// </summary>
+        /// <param name="bookingModel"></param>
+        /// <param name="location"></param>
+        /// <param name="updateBooking"></param>
+        /// <param name="disableBooking"></param>
+        /// <param name="deleteItemLine"></param>
+        /// <returns></returns>
+        public IActionResult ProcessBookingEditSubmit(BookingModel bookingModel, string location, string updateBooking, string deleteBooking, string deleteItemLine)
+        {
+            if(updateBooking != null)
+            {
+                return UpdateBooking(bookingModel, location);
+            }
+            else if(deleteBooking != null)
+            {
+                // DISABLE or DELETE BOOKING
+                return DeleteBooking(bookingModel.BookingID.ToString());
+            }
+            else if(deleteItemLine != null)
+            {
+                // Delete ItemLine, no fuss, maybe?
+                return DeleteItemLine(bookingModel, deleteItemLine);
+            }
+            else
+            {
+                // Should Never happen, but refreshes page
+                return GoToBooking(bookingModel.BookingID.ToString());
+            }
+        }
+
+
+        /// <summary>
+        /// Only updates startDate, returnDate, location and ItemLine.Quantity
+        /// </summary>
+        /// <param name="bookingModel"></param>
+        /// <param name="location"></param>
+        /// <returns></returns>
         public IActionResult UpdateBooking(BookingModel bookingModel, string location)
         {
             // First we check to see if anything needs changing with the booking itself
 
             DBManagerBooking dBManager = new DBManagerBooking(configuration);
             BookingModel originalBooking = dBManager.GetBooking(bookingModel.BookingID);
+            originalBooking.Items = dBManager.GetItemLines(bookingModel.BookingID);
             string errorMessages = "Fejl:";
             
 
@@ -212,9 +270,9 @@ namespace HUS_project.Controllers
             {
                 // Input Data checks, to see if the data inputted has valid shapes.
                 DateTime newStartDate = bookingModel.PlannedBorrowDate;
-                bool validNewStartDate = bookingModel.PlannedBorrowDate != null && bookingModel.PlannedBorrowDate != originalBooking.PlannedBorrowDate;
+                bool validNewStartDate = bookingModel.PlannedBorrowDate != null && newStartDate.Date > DateTime.Now.Date && newStartDate.Date != originalBooking.PlannedBorrowDate.Date;
                 DateTime newReturnDate = bookingModel.PlannedReturnDate;
-                bool validNewReturnDate = bookingModel.PlannedReturnDate != null && bookingModel.PlannedReturnDate != originalBooking.PlannedReturnDate;
+                bool validNewReturnDate = bookingModel.PlannedReturnDate != null && newReturnDate.Date != originalBooking.PlannedReturnDate.Date;
 
                 BuildingModel newRoom = new BuildingModel();
                 bool validNewLocation = false;
@@ -231,13 +289,35 @@ namespace HUS_project.Controllers
                     }
                 }
 
+                // Determining if ItemLines changed.
+                bool validItemLinesChange = false;
+                foreach (ItemLineModel ilm in bookingModel.Items)
+                {
+                    foreach (ItemLineModel ilmO in originalBooking.Items)
+                    {
+                        if (ilm.Model.ModelName == ilmO.Model.ModelName)
+                        {
+                            if (ilm.Quantity != ilmO.Quantity)
+                            {
+                                // CHange Detected!
+                                validItemLinesChange = true;
+                            }
+                            break;
+                        }
+                    }
+                    if (validItemLinesChange)
+                    {
+                        break;
+                    }
+                }
+
+
                 // Logic check, if the dates make somewhat basic sense in relation to now and each other (We don't approve of no time-travellers or non-euclideans).
 
                 // If new Start date is valid so far, is earlier than new potential/existing return date, and isn't today or prior, it can still be changed.
-                if (validNewStartDate && ((validNewReturnDate ? newStartDate.Date > newReturnDate.Date : newStartDate.Date > originalBooking.PlannedReturnDate.Date) || 
-                    newStartDate.Date <= DateTime.Now.Date))
+                if (validNewStartDate && (validNewReturnDate ? newStartDate.Date > newReturnDate.Date : newStartDate.Date > originalBooking.PlannedReturnDate.Date))
                 {
-                    errorMessages += "\nStart Dato blev ikke ændret: start dato er efter slut dato, eller er i dag eller før.";
+                    errorMessages += "\nStart Dato blev ikke ændret fordi start dato er efter slut dato";
                     validNewStartDate = false;
                 }
 
@@ -255,45 +335,23 @@ namespace HUS_project.Controllers
                     }
                 }
 
-                // Determining if ItemLines changed.
-                bool itemLinesChanged = false;
-                foreach (ItemLineModel ilm in bookingModel.Items)
-                {
-                    foreach(ItemLineModel ilmO in originalBooking.Items)
-                    {
-                        if(ilm.Model.ModelName == ilmO.Model.ModelName)
-                        {
-                            if(ilm.Quantity != ilmO.Quantity)
-                            {
-                                // CHange Detected!
-                                itemLinesChanged = true;
-                            }
-                            break;
-                        }
-                    }
-                    if (itemLinesChanged)
-                    {
-                        break;
-                    }
-                }
-
 
                 // Database Check
 
                 // Date & ItemLine.Quantity Database Check:
-                if (validNewStartDate || validNewReturnDate || itemLinesChanged)
+                if (validNewStartDate || validNewReturnDate || validItemLinesChange)
                 {
-                    originalBooking.Items = dBManager.GetItemLines(bookingModel.BookingID);
-                    foreach (ItemLineModel ilm in itemLinesChanged ? bookingModel.Items : originalBooking.Items)
+                    foreach (ItemLineModel ilm in validItemLinesChange ? bookingModel.Items : originalBooking.Items)
                     {
                         // If the amount requested is greater than the amount available in that period, the dates cannot be changed.
                         int quantityAvailable = dBManager.GetModelQuantityAvailableExcludingBooking(validNewStartDate ? newStartDate : originalBooking.PlannedBorrowDate, validNewReturnDate ? newReturnDate : originalBooking.PlannedReturnDate, ilm.Model.ModelName, bookingModel.BookingID);
-                        if (ilm.Quantity > quantityAvailable)
+                        if (ilm.Quantity > quantityAvailable || ilm.Quantity <= 0)
                         {
                             validNewStartDate = false;
                             validNewReturnDate = false;
-                            
-                            errorMessages += "\n" + ilm.Model.ModelName + " er der kun " + quantityAvailable + " stk. ledige i den periode (Inklusiv dem allerede bestilt).";
+                            validItemLinesChange = false;
+
+                            errorMessages += "\nVi har kun " + quantityAvailable + " stk. " + ilm.Model.ModelName + " ledige i den periode (Inklusiv dem allerede bestilt), eller du skal minimum bestille 1.";
                             break;
                         }
                     }
@@ -302,13 +360,33 @@ namespace HUS_project.Controllers
                 if (validNewLocation) 
                 {
                     DBManagerAdministration dBMAdmin = new DBManagerAdministration(configuration);
-                    if (!dBMAdmin.DoesRoomExist(newRoom))
+                    validNewLocation = dBMAdmin.DoesRoomExist(newRoom);
+                    if (!validNewLocation)
                     {
-                        validNewLocation = false;
+                        errorMessages += "\nLokale eksisterer ikke. F.eks. \"D.32\"";
                     }
                 }
 
+
                 // Apply Update as Appropriate
+                if(validItemLinesChange || validNewStartDate || validNewReturnDate || validNewLocation)
+                {
+                    BookingModel finalBooking = new BookingModel(
+                        originalBooking.BookingID, "", 
+                        validItemLinesChange ? bookingModel.Items : originalBooking.Items,
+                        new List<DeviceModel>(),
+                        validNewLocation ? newRoom : originalBooking.Location,
+                        validNewStartDate ? bookingModel.PlannedBorrowDate : originalBooking.PlannedBorrowDate, 
+                        validNewReturnDate ? bookingModel.PlannedReturnDate : originalBooking.PlannedReturnDate, 1
+                        );
+
+                    int bookingLogID = dBManager.UpdateBookingAndLog(finalBooking, HttpContext.Session.GetString("uniLogin"));
+
+                    foreach(ItemLineModel ilm in finalBooking.Items)
+                    {
+                        dBManager.UpdateItemLineAndLog(finalBooking.BookingID, bookingLogID, ilm.Model.ModelName, ilm.Quantity);
+                    }
+                }
 
             }
             else

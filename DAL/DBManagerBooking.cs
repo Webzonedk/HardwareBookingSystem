@@ -213,6 +213,65 @@ namespace HUS_project.DAL
         }
 
         /// <summary>
+        /// Updates the Booking and Logs the changes.
+        /// </summary>
+        /// <param name="updatedBooking"></param>
+        /// <param name="alterer">Who's logged in, making these changes</param>
+        /// <returns>bookingLogID, for ItemLineLogs</returns>
+        internal int UpdateBookingAndLog(BookingModel updatedBooking, string alterer)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("UpdateBookingAndLog", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@bookingID", updatedBooking.BookingID);
+            cmd.Parameters.AddWithValue("@rentDate", updatedBooking.PlannedBorrowDate);
+            cmd.Parameters.AddWithValue("@returnDate", updatedBooking.PlannedReturnDate);
+            cmd.Parameters.AddWithValue("@alterer", alterer);
+            cmd.Parameters.AddWithValue("@note", updatedBooking.Notes);
+            cmd.Parameters.AddWithValue("@roomNr", updatedBooking.Location.RoomNumber);
+            cmd.Parameters.AddWithValue("@buildingName", updatedBooking.Location.Building);
+
+            con.Open();
+            int bookingLogID = Convert.ToInt32(cmd.ExecuteScalar());
+            con.Close();
+
+            return bookingLogID;
+        }
+
+        internal void UpdateItemLineAndLog(int bookingID, int bookingLogID, string modelName, int newQuantity)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("UpdateItemLineAndLog", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@bookingID", bookingID);
+            cmd.Parameters.AddWithValue("@bookingLogID", bookingLogID);
+            cmd.Parameters.AddWithValue("@modelName", modelName);
+            cmd.Parameters.AddWithValue("@newQuantity", newQuantity);
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+
+        /// <summary>
+        /// Deletes an ItemLine from a Booking.
+        /// </summary>
+        /// <param name="bookingID"></param>
+        /// <param name="modelName"></param>
+        internal void DeleteItemLine(int bookingID, string modelName)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("DeleteItemLine", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@bookingID", bookingID);
+            cmd.Parameters.AddWithValue("@modelName", modelName);
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+
+        /// <summary>
         /// Counts the current number of devices of ModelName type in storage.
         /// </summary>
         /// <param name="modelName"></param>
