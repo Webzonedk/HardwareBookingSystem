@@ -13,6 +13,7 @@
 
 
   <ItemGroup>
+    <Folder Include="wwwroot\DeviceContent\" />
     <Folder Include="wwwroot\DeviceImages\" />
   </ItemGroup>
 

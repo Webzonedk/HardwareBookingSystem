@@ -91,7 +91,7 @@
             <br />
             <!--modelnames dropdown-->
             <div class="form-floating ">
-                <input class="form-select" list="modelNames" id="exampleDataList" asp-for="@Model.Device.Model.ModelName" onchange="this.form.submit()" required>
+                <input class="form-select" list="modelNames" id="exampleDataList" asp-for="@Model.Device.Model.ModelName" onchange="PostToCheckImage()" required data-toggle="tooltip" data-placement="top" title="hvis enheds navnet ikke eksisterer i forvejen, oprettes en ny">
                 <datalist id="modelNames">
 
                     @foreach (var item in Model.ModelNames)
@@ -152,8 +152,6 @@
 <script src="~/js/textCount.js"></script>
 
 <!--javascript to enable web cam-->
-
 <script src="~/js/Camera_simple.js"></script>
-@*<script src="~/js/SnapPicture.js"></script>*@
 <script src="~/js/HideElements.js"></script>
 <script src="~/js/PostImage.js"></script>

@@ -231,6 +231,41 @@ namespace HUS_project.DAL
             return Logs;
         }
 
+        internal List<DeviceModel> GetAllDeviceLogs(int deviceID)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("GetAllDeviceLogs", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceID;
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            List<DeviceModel> Logs = new List<DeviceModel>();
+            while (reader.Read())
+            {
+                DeviceModel device = new DeviceModel();
+                ModelModel m = new ModelModel();
+                CategoryModel c = new CategoryModel();
+                m.Category = c;
+
+
+                device.ChangedBy = (string)reader["changedBy"];
+                device.ChangeDate = (DateTime)reader["logDate"];
+                device.Notes = (string)reader["note"];
+                m.Category.Category = (string)reader["categoryName"];
+                m.ModelName = (string)reader["modelName"];
+
+
+                device.Model = m;
+                Logs.Add(device);
+            }
+
+
+
+            con.Close();
+            return Logs;
+        }
+
         //Get storagelocations from database when changing room
         internal EditDeviceModel GetStorageLocations(EditDeviceModel editData)
         {
@@ -294,6 +329,32 @@ namespace HUS_project.DAL
             return data;
         }
 
+        internal bool CheckLocation(StorageLocationModel location)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("validateLocation", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = location.Location.Building;
+            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = location.Location.RoomNumber;
+            cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = location.ShelfName;
+            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = location.ShelfLevel;
+            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = location.ShelfSpot;
+
+            cmd.Parameters.Add("@count", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
+            cmd.ExecuteNonQuery();
+            con.Close();
+
+            int count = Convert.ToInt32(cmd.Parameters["@count"].Value);
+            if(count> 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         // get all devices based on search query
         internal ModelInfoModel GetDeviceInventory(ModelInfoModel SearchModel)

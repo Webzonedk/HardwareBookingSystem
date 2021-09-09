@@ -4,13 +4,14 @@
 @{
     ViewData["Title"] = "Rediger Bestilling";
 }
-<form asp-action="UpdateBooking" method="post" id="updateBookingForm">
+<form asp-action="ProcessBookingEditSubmit" method="post" id="processBookingEditSubmit">
     <div class="row blue-oyster-bar center box-shadow">
 
         <div class="row">
 
             <div class="col-3 text-white align-items-center">
                 <h3 style="margin-top:30px;">Bestilling: @Model.BookingID af @Model.Customer</h3>
+                <input type="hidden" name="bookingID" asp-for="BookingID" value="@Model.BookingID" />
             </div>
 
             <div class="col-1">
@@ -60,39 +61,37 @@
                 <!-- If return date has not passed, the update button will be available.-->
                 @if (Model.PlannedReturnDate.Date > DateTime.Now.Date && httpContextAccessor.HttpContext.Session.GetString("uniLogin") == Model.Customer)
                 {
-                    <button type="submit" name="bookingID" value="@Model.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
+                    <button type="submit" name="updateBooking" value="@Model.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
                         <span>Gem Ændringer</span>
                     </button>
                 }
                 else
                 {
-                    <button disabled type="submit" name="bookingID" value="@Model.BookingID" class="btn btn-primary btn-sm btn-dark" style="width:100px">
+                    <button disabled type="submit" name="updateBooking" value="@Model.BookingID" class="btn btn-primary btn-sm btn-dark" style="width:100px">
                         <span>Gem Ændringer</span>
                     </button>
                 }
 
             </div>
 
-            <!--
+            
             <div class="col-2">
-                @using (Html.BeginForm("DisableBooking", "Booking"))
+                <!-- If the planned borrow date has not yet come to pass, and it is the owner of the booking who logged in, then the booking may be deleted by the user.-->
+                @if (Model.Customer == httpContextAccessor.HttpContext.Session.GetString("uniLogin") && Model.PlannedBorrowDate.Date > DateTime.Now.Date)
                 {
-                    // If the planned borrow date has not yet come to pass, and it is the owner of the booking who logged in, then the booking may be disabled by the user.
-                    @if (Model.Customer == httpContextAccessor.HttpContext.Session.GetString("uniLogin") && Model.PlannedBorrowDate.Date > DateTime.Now.Date)
-                    {
-                        <button type="submit" name="bookingID" value="@Model.BookingID" class="btn btn-primary btn-sm btn-red alert" style="width:100px">
-                            <span>Slet Ordre</span>
-                        </button>
-                    }
-                    else
-                    {
-                        <button disabled type="submit" name="bookingID" value="@Model.BookingID" class="btn btn-primary btn-sm btn-dark" style="width:100px">
-                            <span>Slet Ordre</span>
-                        </button>
-                    }
+                    <button type="submit" name="deleteBooking" value="@Model.BookingID" class="btn btn-primary btn-sm btn-red alert" style="width:100px">
+                        <span>Slet Ordre</span>
+                    </button>
                 }
+                else
+                {
+                    <button disabled type="submit" name="deleteBooking" value="@Model.BookingID" class="btn btn-primary btn-sm btn-dark" style="width:100px">
+                        <span>Slet Ordre</span>
+                    </button>
+                }
+
             </div>
-            -->
+            
             @if (httpContextAccessor.HttpContext.Session.GetString("bookingEditError") != null || httpContextAccessor.HttpContext.Session.GetString("bookingEditError") != "")
             {
                 <div class="row">
@@ -117,14 +116,28 @@
         <div class="row containerBody">
             <div class="col-1"></div>
             <div class="col-11 row">
-                @for (int i = 0; i < Model.Items.Count; i++)
+                @if (Model.PlannedBorrowDate.Date > DateTime.Now.Date)
                 {
-                    <div class="col-5 center">(@Model.Items[i].Model.Category.Category) @Model.Items[i].Model.ModelName <input type="hidden" asp-for="@Model.Items[i].Model.ModelName" /> <input type="number" asp-for="@Model.Items[i].Quantity" /> Stk.</div>
+                    for (int i = 0; i < Model.Items.Count; i++)
+                    {
+                        <div class="col-5 center">(@Model.Items[i].Model.Category.Category) @Model.Items[i].Model.ModelName <input type="hidden" asp-for="@Model.Items[i].Model.ModelName" /> <input type="number" asp-for="@Model.Items[i].Quantity" /> Stk.</div>
+                        <button type="submit" name="deleteItemLine" value="@Model.Items[i].Model.ModelName" class="btn btn-primary btn-sm btn-red alert" style="width:100px">
+                            <span>Slet Varelinje</span>
+                        </button>
+                    }
                 }
+                else
+                {
+                    for (int i = 0; i < Model.Items.Count; i++)
+                    {
+                        <div class="col-5 center">(@Model.Items[i].Model.Category.Category) @Model.Items[i].Model.ModelName <input type="hidden" asp-for="@Model.Items[i].Model.ModelName" /> <input type="hidden" asp-for="@Model.Items[i].Quantity" /> - @Model.Items[i].Quantity Stk.</div>
+                    }
+                }
+
             </div>
         </div>
         <div class="row containerFooter">
             <h4>&nbsp;</h4>
         </div>
     </div>
-</form> <!-- End of Update Booking Form -->
+</form>

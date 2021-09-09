@@ -6,7 +6,7 @@
 
     //event listening for scan data
     scanner.addListener('scan', function (content) {
-        /*alert(content);*/
+       /* alert(content);*/
         label.value = content;
         if (label.value != null) {
             sessionStorage.setItem(id.value, content);
@@ -30,7 +30,7 @@
     });
 
     function update(e) {
-        label.textContent = e.target.value;
+       /* label.textContent = e.target.value;*/
     }
 
 });
