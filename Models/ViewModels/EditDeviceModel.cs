@@ -18,6 +18,10 @@ namespace HUS_project.Models.ViewModels
         private List<string> shelfs;
         private List<DeviceModel> logs;
         private List<DeviceModel> locationLogs;
+        private int selectedLogs;
+
+       
+
         #endregion
 
         #region Properties
@@ -81,6 +85,11 @@ namespace HUS_project.Models.ViewModels
         {
             get { return locationLogs; }
             set { locationLogs = value; }
+        }
+        public int SelectedLogs
+        {
+            get { return selectedLogs; }
+            set { selectedLogs = value; }
         }
 
         #endregion

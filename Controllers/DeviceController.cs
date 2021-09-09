@@ -202,7 +202,7 @@ namespace HUS_project.Controllers
             storagelocation = dbManager.GetStorageLocations(editdata);
             editdata.Rooms = storagelocation.Rooms;
             editdata.Shelfs = storagelocation.Shelfs;
-
+            editdata.SelectedLogs = 10;
 
             return View(editdata);
         }
@@ -215,6 +215,17 @@ namespace HUS_project.Controllers
             return View("EditView", newdata);
         }
 
+        [HttpPost]
+        public IActionResult GetAllLogs(EditDeviceModel data)
+        {
+            //initializing DB managers
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            EditDeviceModel newdata = data;
+            newdata.Logs = dbManager.GetAllDeviceLogs(data.Device.DeviceID);
+            newdata.SelectedLogs = newdata.Logs.Count;
+            ModelState.Clear();
+            return View("EditView", newdata);
+        }
 
         [HttpPost]
         //saves new location on device to database
@@ -237,8 +248,8 @@ namespace HUS_project.Controllers
 
             //send data to database
             data = dbManager.EditDeviceLocation(data);
-
-            List<DeviceModel> logs = dbManager.GetDeviceLogs(data.Device.DeviceID);
+            List<DeviceModel> logs = dbManager.GetAllDeviceLogs(data.Device.DeviceID);
+            
             data.Logs = logs;
 
             //save Device name & other important things
@@ -513,11 +524,7 @@ namespace HUS_project.Controllers
             List<string> output = new List<string>();
             string data = $"Dev-{input.Device.DeviceID}-{input.Device.SerialNumber}";
             output.Add(data);
-            output.Add(data);
-            output.Add(data);
-            output.Add(data);
-            output.Add(data);
-            output.Add(data);
+            
             //redirect to method
             return SendToQRController(output);
         }
@@ -526,16 +533,6 @@ namespace HUS_project.Controllers
         [HttpPost]
         public IActionResult SendToQRController(List<string> data)
         {
-
-
-            //debugging test of multiple strings
-            for (int i = 0; i < data.Count; i++)
-            {
-                string testdata = $"{data[i]}";
-                data[i] = testdata;
-            }
-
-
             TempData["QRData"] = data.ToArray();
 
             return RedirectToAction("PrintQR", "QRCode");
@@ -567,7 +564,7 @@ namespace HUS_project.Controllers
             DBManagerShared shared = new DBManagerShared(configuration);
 
             //get the logs back again
-            List<DeviceModel> logs = dbManager.GetDeviceLogs(data.Device.DeviceID);
+            List<DeviceModel> logs = dbManager.GetAllDeviceLogs(data.Device.DeviceID);
             int modelID = shared.GetModelID(data.Device.Model.ModelName);
             data.Logs = logs;
             EditDeviceModel newdata = data;
@@ -631,6 +628,7 @@ namespace HUS_project.Controllers
 
             // clear model
             ModelState.Clear();
+           
 
             return newdata;
         }
