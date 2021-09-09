@@ -442,7 +442,8 @@ namespace HUS_project.Controllers
         public IActionResult ReturnScanData(EditDeviceModel data)
         {
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
-
+            DBManagerShared dbsharedManager = new DBManagerShared(configuration);
+            
             string[] splittedData = data.Room.Split('-');
             EditDeviceModel newdata = new EditDeviceModel();
             DeviceModel device = new DeviceModel();
@@ -478,6 +479,9 @@ namespace HUS_project.Controllers
                         newdata.Room = $"{location_string[0]}.{location_string[1]}";
                         newdata.Shelf = $"{location_string[2]}.{location_string[3]}.{location_string[4]}";
                         newdata = GetNewLocation(newdata);
+                        newdata.Categories = dbsharedManager.GetCategories();
+                        newdata.ModelNames = dbsharedManager.GetModelNames();
+                        newdata.SelectedLogs = 10;
                     }
                     else
                     {
@@ -509,6 +513,7 @@ namespace HUS_project.Controllers
                 newdata = GetNewLocation(newdata);
                 newdata.Room = new string($"{device.Location.Location.Building}.{device.Location.Location.RoomNumber.ToString()}");
                 newdata.Shelf = new string($"{device.Location.ShelfName}.{device.Location.ShelfLevel}.{device.Location.ShelfSpot}");
+              
             }
 
 
