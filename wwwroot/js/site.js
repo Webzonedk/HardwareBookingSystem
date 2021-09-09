@@ -38,7 +38,7 @@ function CheckInputField() {
 
 //Fading function to fade out lines on list when a storagelocation is deleted
 function fadeOut(input) {
-    console.log(input)
+ //console.log(input)
     $("#" + input).slideUp('fast', function () {
     });
 }

@@ -116,10 +116,10 @@
         </div>
         <div class="row">
             @{string toolTip = "Alle felter kan oprettes enkeltvis. \n\n" +
-                                                                                                                                               "Hvis Bygning og Lokale er udfyldt samtidigt vil der \n" +
-                                                                                                                                               "oprettes et Lokale hvis ikke det eksisterer i forvejen.\n\n " +
-                                                                                                                                               "Hvis alle felter er udfyldt, vil der oprettes en placering.\n\n" +
-                                                                                                                                               "Men kun hvis det ikke findes I forvejen."; }
+                                                                                                                                                 "Hvis Bygning og Lokale er udfyldt samtidigt vil der \n" +
+                                                                                                                                                 "oprettes et Lokale hvis ikke det eksisterer i forvejen.\n\n " +
+                                                                                                                                                 "Hvis alle felter er udfyldt, vil der oprettes en placering.\n\n" +
+                                                                                                                                                 "Men kun hvis det ikke findes I forvejen."; }
             <div class="col p-3">
                 <button type="submit" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip" asp-action="CreateLocation" onclick="checkInputFields1()">Tilføj Placering</button>
             </div>
@@ -207,16 +207,22 @@
                 <div class="col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">@Model.StorageLocations[i].ShelfLevel</div>
                 <div class="col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">@Model.StorageLocations[i].ShelfSpot</div>
                 <div class="col-lg-3 p-1"></div>
-                <div class="col-lg-2 col-6 p-1 center "><button type="button" class="btn btn-primary btn-sm btn-blue" style="width:100px">QR-Kode</button></div>
+                <div class="col-lg-2 col-6 p-1 center "><button type="submit" name="printQR" class="btn btn-primary btn-sm btn-blue" style="width:100px" value="@Model.StorageLocations[i].LocationID" asp-action="PrintSingleLocationQR">QR-Kode</button></div>
+                @*<input type="hidden" value="@Model.StorageLocations[i]" asp-for="@Model.StorageLocation" />*@
                 <div class="col-lg-2 col-6 p-1 center ">
-                    @if (@Model.StorageLocations[i].Location.Building != "Modtagelse" && @Model.StorageLocations[i].Location.Building !="Værksted")
+                    @if (@Model.StorageLocations[i].Location.Building != "Modtagelse" && @Model.StorageLocations[i].Location.Building != "Værksted")
                     {
-                    @*Remember that the name needs to be the same as the variable that is sent to the controller*@
-                    <button type="submit" name="deleteLocation" class="btn btn-danger btn-sm btn-red" value="@Model.StorageLocations[i].LocationID.@i" style="width:100px" asp-action="DeleteSingleLocation" onclick="fadeOut(@i)">Slet</button>
+                        @*Remember that the name needs to be the same as the variable that is sent to the controller*@
+                        <button type="submit" name="deleteLocation" class="btn btn-danger btn-sm btn-red" value="@Model.StorageLocations[i].LocationID.@i" style="width:100px" asp-action="DeleteSingleLocation" onclick="fadeOut(@i)">Slet</button>
+                    }
+                    @if (i == Model.StorageLocations.Count - 1)
+                    {
+                        <button type="submit" class="btn btn-primary btn-sm btn-blue" style="width:150px" asp-action="PrintAllQRCodes">Print alle QR-Koder</button>
                     }
                 </div>
             </div>
         }
+        <input type="hidden" asp-for="@Model.StorageLocations" />
 
         <div class="row containerFooter">
             <h4>&nbsp;</h4>

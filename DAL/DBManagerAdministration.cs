@@ -368,6 +368,43 @@ namespace HUS_project.DAL
         }
 
 
+        internal EditStorageLocationModel GetSpecificStorageLocation(string dataFromView)
+        {
+            EditStorageLocationModel selectedStorageLocation = new EditStorageLocationModel();
+            StorageLocationModel storageLocation = new StorageLocationModel();
+            BuildingModel building = new BuildingModel();
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("SelectStorageLocationBasedOnID", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@locationID", System.Data.SqlDbType.Int).Value = int.Parse(dataFromView);
+            cmd.ExecuteNonQuery();
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            try
+            {
+
+                while (reader.Read())
+                {
+                    building.Building = (string)reader["buildingName"];
+                    building.RoomNumber = (string)reader["roomNr"];
+                    storageLocation.ShelfName = (string)reader["shelfName"];
+                    storageLocation.ShelfLevel = (string)reader["shelfLevel"];
+                    storageLocation.ShelfSpot = (string)reader["shelfSpot"];
+                }
+                storageLocation.Location = building;
+                selectedStorageLocation.StorageLocation = storageLocation;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return selectedStorageLocation;
+        }
+
+
 
 
 
@@ -443,7 +480,7 @@ namespace HUS_project.DAL
         //Method to Delete a building, based on the input fields in massdestruction area
         internal string DeleteBuilding(EditStorageLocationModel dataFromView)
         {
-            string deleteFeedback=null;
+            string deleteFeedback = null;
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("DeleteBuilding", con);
@@ -457,11 +494,6 @@ namespace HUS_project.DAL
                 {
                     deleteFeedback = (string)cmd.Parameters["@deleteFeedback"].Value;
                 }
-                //else
-                //{
-                //    deleteFeedback = $"Bygning {dataFromView.DeleteBuilding.ToUpper()} Blev ikke slettet";
-                //}
-
             }
             catch (Exception)
             {
@@ -475,12 +507,12 @@ namespace HUS_project.DAL
         //Method to Delete a roomNumber, based on the input fields in massdestruction area
         internal string DeleteRoomNumber(EditStorageLocationModel dataFromView)
         {
-            string deleteFeedback=null;
+            string deleteFeedback = null;
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("DeleteRoomNumber", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@RoomNumberToDelete", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.DeleteRoomNumber;
+            cmd.Parameters.Add("@RoomNumberToDelete", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.DeleteRoomNumber.ToUpper();
             cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 100).Direction = System.Data.ParameterDirection.Output;
             cmd.ExecuteNonQuery();
             try
@@ -489,16 +521,11 @@ namespace HUS_project.DAL
                 {
                     deleteFeedback = (string)cmd.Parameters["@deleteFeedback"].Value;
                 }
-                //else
-                //{
-                //    deleteFeedback = $"Lokale nummer {dataFromView.DeleteRoomNumber} Blev ikke slettet";
-                //}
-
             }
             catch (Exception)
             {
 
-               
+
             }
             con.Close();
             return deleteFeedback;
@@ -508,26 +535,21 @@ namespace HUS_project.DAL
         //Method to Delete a Room, based on the input fields in massdestruction area
         internal string DeleteRoom(EditStorageLocationModel dataFromView)
         {
-            string deleteFeedback=null;
+            string deleteFeedback = null;
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("DeleteSelectedRoom", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@buildingNameToDelete", System.Data.SqlDbType.VarChar, 50).Value = dataFromView.DeleteBuilding;
-            cmd.Parameters.Add("@RoomNumberToDelete", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.DeleteRoomNumber;
+            cmd.Parameters.Add("@buildingNameToDelete", System.Data.SqlDbType.VarChar, 50).Value = dataFromView.DeleteBuilding.ToUpper();
+            cmd.Parameters.Add("@RoomNumberToDelete", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.DeleteRoomNumber.ToUpper();
             cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 100).Direction = System.Data.ParameterDirection.Output;
             cmd.ExecuteNonQuery();
             try
             {
-            if (cmd.Parameters["@deleteFeedback"].Value != System.DBNull.Value)
-            {
-                deleteFeedback = (string)cmd.Parameters["@deleteFeedback"].Value;
-            }
-            //else
-            //{
-            //    deleteFeedback = $"Rum {dataFromView.DeleteBuilding}.{dataFromView.DeleteRoomNumber} Blev ikke slettet";
-            //}
-
+                if (cmd.Parameters["@deleteFeedback"].Value != System.DBNull.Value)
+                {
+                    deleteFeedback = (string)cmd.Parameters["@deleteFeedback"].Value;
+                }
             }
             catch (Exception)
             {

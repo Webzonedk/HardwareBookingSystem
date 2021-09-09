@@ -73,6 +73,54 @@ namespace HUS_project.Controllers
 
 
 
+        //Sending QRCode to QRview for a single location
+        [HttpPost]
+        public IActionResult PrintSingleLocationQR(string printQR)
+        {
+            DBManagerAdministration manager = new DBManagerAdministration(configuration);
+            EditStorageLocationModel locations = manager.GetSpecificStorageLocation(printQR);
+
+            string[] locationArray = new string[1];
+
+            string location = $"{locations.StorageLocation.Location.Building}." +
+                       $"{locations.StorageLocation.Location.RoomNumber}." +
+                       $"{locations.StorageLocation.ShelfName}." +
+                       $"{locations.StorageLocation.ShelfLevel}." +
+                       $"{locations.StorageLocation.ShelfSpot}";
+            locationArray[0] = location;
+            TempData["QRData"] = locationArray;
+
+            return RedirectToAction("PrintQR", "QRCode");
+
+        }
+
+
+        //Sending QRCodes to QRview for all locations
+        [HttpPost]
+        public IActionResult PrintAllQRCodes(EditStorageLocationModel QRdata)
+        {
+            EditStorageLocationModel locations = GetStorageLocations();
+            List<string> locationStrings = new List<string>();
+
+            for (int i = 0; i < locations.StorageLocations.Count; i++)
+            {
+                string location = $"{locations.StorageLocations[i].Location.Building}." +
+                      $"{locations.StorageLocations[i].Location.RoomNumber}." +
+                      $"{locations.StorageLocations[i].ShelfName}." +
+                      $"{locations.StorageLocations[i].ShelfLevel}." +
+                      $"{locations.StorageLocations[i].ShelfSpot}";
+                locationStrings.Add(location);
+            }
+
+            TempData["QRData"] = locationStrings.ToArray();
+
+            return RedirectToAction("PrintQR", "QRCode");
+
+        }
+
+
+
+
 
         //------------------------------------
         //This one is not finish
@@ -166,16 +214,6 @@ namespace HUS_project.Controllers
 
 
 
-        //QR code generation
-        public void CreateQRCode()
-        {
-
-        }
-
-        public void PrintQRCode()
-        {
-
-        }
 
 
     }
