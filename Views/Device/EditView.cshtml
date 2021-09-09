@@ -12,7 +12,7 @@
 
 <form class="was-validated" asp-action="GetLocations" method="post" autocomplete="off" id="editForm">
 
-
+    <input id="selectedLogCount" type="hidden" asp-for="@Model.SelectedLogs" />
     <div class="row blue-oyster-bar center box-shadow"></div>
 
     <div class="container containerMain box-shadow">
@@ -246,34 +246,34 @@
                             {
                                 <div class="col-md-12 p-3" style="height:100px">&nbsp;</div>
                                 @*<div class="col-md-12 p-3" style="height:100px">this is easy you can do it!</div>*@
-                               
+
                             }
 
                             @*<div class="row " >*@
 
 
-                           
-
-                        <div class="col-md-12 align-self-end">
-
-                            <!--button save location-->
-                           
-
-                            <button type="submit" class="mb-3 mx-2 btn-primary btn Button-Size btn-sm" formaction="EditLocation" formmethod="post">Gem placering</button>
 
 
+                            <div class="col-md-12 align-self-end">
 
-                            <!--button scan location-->
+                                <!--button save location-->
 
-                            <button type="submit" class="mb-3 mx-2 btn-primary btn Button-Size btn-sm" formaction="ScanLocation" formmethod="post">Skan placering</button>
+
+                                <button type="submit" class="mb-3 mx-2 btn-primary btn Button-Size btn-sm" formaction="EditLocation" formmethod="post">Gem placering</button>
 
 
 
+                                <!--button scan location-->
 
-                            @*</div>*@
+                                <button type="submit" class="mb-3 mx-2 btn-primary btn Button-Size btn-sm" formaction="ScanLocation" formmethod="post">Skan placering</button>
 
 
-                        </div>
+
+
+                                @*</div>*@
+
+
+                            </div>
 
                         </div>
                     </div>
@@ -304,7 +304,7 @@
                             else
                             {
 
-                                <div class="col-12 py-1 px-3 text-green" id="warning">&nbsp;</div>
+                                <div class="col-12 py-1 px-3 text-red" id="warning">&nbsp;</div>
                             }
 
 
@@ -339,97 +339,116 @@
 
 
 
-</form>
 
-<!--test alternating colors-->
+    <!--test alternating colors-->
 
-<div class="container containerMain box-shadow">
-
-
-    <div class="row containerHeader">
-        <h4 class="col text-white">Log</h4>
-    </div>
+    <div class="container containerMain box-shadow">
 
 
-    @foreach (DeviceModel device in Model.Logs)
-    {
-        <div class="row containerBody alternating_row dynamic-Font-Size-10" style="padding: 10px 10px 10px 10px">
-            <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1">
-                <div class=" row ">
-                    <div>
 
-                        @if (Model.ImagePath != null)
-                        {
-                            <img class="img-bg" src="@Url.Content(Model.ImagePath)" style="width: 100%" />
-                        }
-                        else
-                        {
-                            <img class="img-bg" src="~/Graphic/missing_image.png" style="width: 90%" />
-                        }
+        <input type="hidden" asp-for="@Model.Device.DeviceID" />
+        <div class="row containerHeader">
+            <h4 class="col text-white">Log</h4>
+        </div>
+
+
+        @foreach (DeviceModel device in Model.Logs.Take(@Model.SelectedLogs))
+        {
+            <div class="row containerBody alternating_row dynamic-Font-Size-10">
+                <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1">
+                    <div class=" row ">
+                        <div>
+
+                            @if (Model.ImagePath != null)
+                            {
+                                <img class="img-bg" src="@Url.Content(Model.ImagePath)" style="width: 100%" />
+                            }
+                            else
+                            {
+                                <img class="img-bg" src="~/Graphic/missing_image.png" style="width: 90%" />
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1">
+                <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1">
 
-                <div class="row">
-                    <h4>Kategori:</h4>
-                    <div class=" dynamic-Font-Size-14">
-                        @device.Model.Category.Category
+                    <div class="row">
+                        <h4>Kategori:</h4>
+                        <div class=" dynamic-Font-Size-14">
+                            @device.Model.Category.Category
+                        </div>
                     </div>
-                </div>
-
-                <br />
-
-                <div class="row">
-                    <h4>Enhedsnavn:</h4>
-                    <div class=" dynamic-Font-Size-14">
-                        @device.Model.ModelName
-                    </div>
-                </div>
-
-
-            </div>
-
-            <div class="col-xl-4 col-lg-4 col-md-3 col-3 p-1">
-                <div class="row">
-                    <h4>Beskrivelse:</h4>
-                    <div class=" dynamic-Font-Size-14">
-                        @device.Notes
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-2 col-lg-2 col-md-3 col-3 p-1">
-                <div class="row">
-                    <h4>Ændret:</h4>
-                    <div class=" dynamic-Font-Size-14">
-                        @device.ChangeDate
-                    </div>
-
 
                     <br />
 
                     <div class="row">
-                        <h4>Af:</h4>
+                        <h4>Enhedsnavn:</h4>
                         <div class=" dynamic-Font-Size-14">
-                            @device.ChangedBy
+                            @device.Model.ModelName
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="col-xl-4 col-lg-4 col-md-3 col-3 p-1">
+                    <div class="row">
+                        <h4>Beskrivelse:</h4>
+                        <div class=" dynamic-Font-Size-14">
+                            @device.Notes
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-2 col-lg-2 col-md-3 col-3 p-1">
+                    <div class="row">
+                        <h4>Ændret:</h4>
+                        <div class=" dynamic-Font-Size-14">
+                            @device.ChangeDate
+                        </div>
+
+
+                        <br />
+
+                        <div class="row">
+                            <h4>Af:</h4>
+                            <div class=" dynamic-Font-Size-14">
+                                @device.ChangedBy
+                            </div>
+
                         </div>
 
                     </div>
+                </div>
+
+            </div>
+
+        }
+
+        @if (Model.SelectedLogs <= 10)
+        {
+            <div class="row p-1">
+                <div class="text-center">
+                    <button type="submit" class=" btn-primary btn Button-Size" asp-action="GetAllLogs">Vis alle Logs</button>
 
                 </div>
             </div>
+        }
+        else
+        {
+            <div class="row p-1">
+                <div class="text-center">
+                    <button type="submit" class=" btn-primary btn Button-Size" name="submit" value="@Model.Device.DeviceID" asp-action="EditView">Vis færre Logs</button>
 
+                </div>
+            </div>
+        }
+
+
+
+        <div class="row containerFooter">
+            <h4>&nbsp;</h4>
         </div>
 
-    }
-
-<div class="row containerFooter">
-     <div class="col-12 align-self-end p-3">
-        <button type="submit" class=" btn-primary btn Button-Size btn-sm " formmethod="post" onclick="return CheckInputField()">Slet enhed</button>
-
     </div>
-    <h4>&nbsp;</h4>
-</div>
-
-</div>
+</form>
