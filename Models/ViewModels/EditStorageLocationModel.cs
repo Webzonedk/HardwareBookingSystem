@@ -158,7 +158,7 @@ namespace HUS_project.Models.ViewModels
             set { deleteShelfSpot = value; }
         }
 
-
+    
         #endregion
 
 

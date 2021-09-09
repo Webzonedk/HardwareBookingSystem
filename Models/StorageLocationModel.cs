@@ -56,6 +56,8 @@ namespace HUS_project.Models
             set { location = value; }
         }
 
+
+
         #endregion
 
 

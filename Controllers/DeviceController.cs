@@ -26,9 +26,6 @@ namespace HUS_project.Controllers
         }
 
 
-
-
-
         //get model name and category names before returning to view
         public IActionResult CreateDevice()
         {
@@ -44,7 +41,6 @@ namespace HUS_project.Controllers
             deviceData.ModelNames = modelNames;
             deviceData.Device = new DeviceModel();
 
-            //check if image exists in folder, based on model ID
 
             return View(deviceData);
         }
@@ -69,9 +65,7 @@ namespace HUS_project.Controllers
             List<string> categories = dbsharedManager.GetCategories();
             List<string> modelNames = dbsharedManager.GetModelNames();
 
-            //set image path
-            string imagepath = deviceData.Image;
-            string _webroot = (string)AppDomain.CurrentDomain.GetData("webRootPath");
+
 
             //check if image string is base64
             if (TryGetFromBase64String(deviceData.Image))
@@ -81,7 +75,7 @@ namespace HUS_project.Controllers
                 string base64 = sourceimage.Substring(sourceimage.IndexOf(',') + 1);
                 byte[] datastream = Convert.FromBase64String(base64);
 
-                //test new upload method
+                //upload image to DB
                 string filenameOut = $"Capture_{modelID}.png";
                 ImageModel imageM = new ImageModel(datastream, modelID, filenameOut);
                 int success = dbManager.UploadImage(imageM);
@@ -92,46 +86,17 @@ namespace HUS_project.Controllers
                     deviceData.Image = string.Format("data:image/png;base64,{0}", base64);
                 }
 
-                ////convert byte array to image file
-                //using (MemoryStream m = new MemoryStream(datastream))
-                //{
-                //    using (Image image = Image.FromStream(m))
-                //    {
-                //        string root = (string)AppDomain.CurrentDomain.GetData("webRootPath");
-                //        string webroot = root + "\\DeviceContent\\";
-
-                //        string filename = $"Capture_{modelID}.png";
-                //        if (Directory.Exists(webroot))
-                //        {
-                //            // save image to directory
-                //            image.Save(webroot + filename, ImageFormat.Png);
-                //            m.Dispose();
-                //            image.Dispose();
-                //            datastream = null;
-
-                //            //get filename
-                //            deviceData.Image = filename;
-                //            Debug.WriteLine("image saved");
-                //        }
-
-                //    }
-
-                //}
             }
             else
             {
                 //check if image exists
                 if (!CheckExistingModelNames(deviceData.Image))
                 {
-                   // string filepath = "missing_image.png";
                     deviceData.Image = null;
                 }
 
 
             }
-
-
-
 
             //set return data
             EditDeviceModel editdata = new EditDeviceModel();
@@ -142,8 +107,6 @@ namespace HUS_project.Controllers
             editdata.Room = new string($"{data.Location.Location.Building}.{data.Location.Location.RoomNumber.ToString()}");
             editdata.Shelf = new string($"{data.Location.ShelfName}.{data.Location.ShelfLevel}.{data.Location.ShelfSpot}");
             editdata.ImagePath = deviceData.Image;
-            //  editdata.ImagePath = source;
-
 
             return View("EditView", editdata);
         }
@@ -177,19 +140,13 @@ namespace HUS_project.Controllers
                     int modelID = dbsharedManager.GetModelID(deviceData.Device.Model.ModelName);
 
                     ImageModel im = dbsharedManager.DownloadImage(modelID);
-                    if(im.ImageData != null)
+                    if (im.ImageData != null)
                     {
                         string newbase64 = Convert.ToBase64String(im.ImageData);
                         string source = string.Format("data:image/png;base64,{0}", newbase64);
                         deviceData.Image = source;
                     }
 
-                  /*  string filename = $"Capture_{modelID}.png";
-                    string imagepath = (string)AppDomain.CurrentDomain.GetData("webRootPath") + "\\DeviceContent\\" + filename;
-                    if (System.IO.File.Exists(imagepath))
-                    {
-                        deviceData.Image = filename;
-                    }*/
                 }
 
 
@@ -224,10 +181,10 @@ namespace HUS_project.Controllers
             editdata.Room = new string($"{data.Location.Location.Building}.{data.Location.Location.RoomNumber.ToString()}");
             editdata.Shelf = new string($"{data.Location.ShelfName}.{data.Location.ShelfLevel}.{data.Location.ShelfSpot}");
 
-            //test download image
+            //download image from DB
             ImageModel im = dbsharedManager.DownloadImage(modelID);
 
-            //set image path if
+            //set image path if exists
             if (im.ImageData != null)
             {
                 string newbase64 = Convert.ToBase64String(im.ImageData);
@@ -236,26 +193,16 @@ namespace HUS_project.Controllers
             }
 
 
-
-            //check if image exists
-            //string filename = $"Capture_{modelID}.png";
-            //string imagepath = (string)AppDomain.CurrentDomain.GetData("webRootPath") + "\\DeviceContent\\" + filename;
-            //if (System.IO.File.Exists(imagepath))
-            //{
-            //    editdata.ImagePath = filename;
-            //}
-
-
             editdata.Logs = logs;
             editdata.Categories = categories;
             editdata.ModelNames = modelNames;
             editdata.Rooms = storagelocation.Rooms;
 
-            //test to get all rooms and shelves
+            //get all rooms and shelves
             storagelocation = dbManager.GetStorageLocations(editdata);
             editdata.Rooms = storagelocation.Rooms;
             editdata.Shelfs = storagelocation.Shelfs;
-
+            editdata.SelectedLogs = 10;
 
             return View(editdata);
         }
@@ -268,6 +215,17 @@ namespace HUS_project.Controllers
             return View("EditView", newdata);
         }
 
+        [HttpPost]
+        public IActionResult GetAllLogs(EditDeviceModel data)
+        {
+            //initializing DB managers
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            EditDeviceModel newdata = data;
+            newdata.Logs = dbManager.GetAllDeviceLogs(data.Device.DeviceID);
+            newdata.SelectedLogs = newdata.Logs.Count;
+            ModelState.Clear();
+            return View("EditView", newdata);
+        }
 
         [HttpPost]
         //saves new location on device to database
@@ -290,8 +248,8 @@ namespace HUS_project.Controllers
 
             //send data to database
             data = dbManager.EditDeviceLocation(data);
-
-            List<DeviceModel> logs = dbManager.GetDeviceLogs(data.Device.DeviceID);
+            List<DeviceModel> logs = dbManager.GetAllDeviceLogs(data.Device.DeviceID);
+            
             data.Logs = logs;
 
             //save Device name & other important things
@@ -327,6 +285,8 @@ namespace HUS_project.Controllers
         {
             //initializing DB managers
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            DBManagerShared dbsharedManager = new DBManagerShared(configuration);
+
             EditDeviceModel storagelocation = dbManager.GetStorageLocations(null);
 
             //check categories
@@ -404,6 +364,18 @@ namespace HUS_project.Controllers
                 ViewBag.edit = "Enhed ikke Gemt";
             }
 
+            //download image
+            int modelID = dbsharedManager.GetModelID(data.Device.Model.ModelName);
+            ImageModel im = dbsharedManager.DownloadImage(modelID);
+
+            //set image path if
+            if (im.ImageData != null)
+            {
+                string newbase64 = Convert.ToBase64String(im.ImageData);
+                string source = string.Format("data:image/png;base64,{0}", newbase64);
+                data.ImagePath = source;
+            }
+
             return View("EditView", data);
         }
 
@@ -452,15 +424,8 @@ namespace HUS_project.Controllers
             infoList = DBDManager.GetDeviceInventory(infoList);
 
             //test image validation
-            CheckImageValidations();
+            // CheckImageValidations();
 
-            //send data to the manager
-
-            //var combinedLists = infoList.BorrowedDevices.Zip(infoList.InventoryStatuses, (b, i) => new { device = b, status = i });
-            //foreach (var item in combinedLists)
-            //{
-            //    Debug.WriteLine("device ID: " +item.device.DeviceID + " status: " + item.status);
-            //}
 
             return View(infoList);
         }
@@ -477,23 +442,79 @@ namespace HUS_project.Controllers
         public IActionResult ReturnScanData(EditDeviceModel data)
         {
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
-
+            DBManagerShared dbsharedManager = new DBManagerShared(configuration);
+            
             string[] splittedData = data.Room.Split('-');
-
-            //create dummy data
-            splittedData[1] = "K.1.A.0.4";
-
-            //get data from splitted strings
-            int id = int.Parse(splittedData[0]);
-            string[] location = splittedData[1].Split('.');
-
-            //fill model with data
-            DeviceModel device = dbManager.GetDeviceInfoWithLocation(id);
             EditDeviceModel newdata = new EditDeviceModel();
-            newdata.Device = device;
-            newdata.Room = $"{location[0]}.{location[1]}";
-            newdata.Shelf = $"{location[2]}.{location[3]}.{location[4]}";
-            newdata = GetNewLocation(newdata);
+            DeviceModel device = new DeviceModel();
+            bool LocationValid = true;
+          
+            //validate returned Scan data
+            if (splittedData[0].Contains("Loc"))
+            {
+                //create dummy data
+                // splittedData[1] = "K.1.A.0.2";
+
+                //get data from splitted strings
+                int id = data.Device.DeviceID;
+                string[] location_string = splittedData[1].Split('.');
+
+                //continue if array has the correct size
+                if (location_string.Length == 5)
+                {
+                    //validate scanned data using DB manager
+                    StorageLocationModel _location = new StorageLocationModel
+                    {
+                        Location = new BuildingModel { Building = location_string[0], RoomNumber = location_string[1] },
+                        ShelfName = location_string[2],
+                        ShelfLevel = location_string[3],
+                        ShelfSpot = location_string[4]
+                    };
+
+                    if (dbManager.CheckLocation(_location))
+                    {
+                        //fill model with data
+                        device = dbManager.GetDeviceInfoWithLocation(id);
+                        newdata.Device = device;
+                        newdata.Room = $"{location_string[0]}.{location_string[1]}";
+                        newdata.Shelf = $"{location_string[2]}.{location_string[3]}.{location_string[4]}";
+                        newdata = GetNewLocation(newdata);
+                        newdata.Categories = dbsharedManager.GetCategories();
+                        newdata.ModelNames = dbsharedManager.GetModelNames();
+                        newdata.SelectedLogs = 10;
+                    }
+                    else
+                    {
+                        ViewBag.LocationError = "Lokation ikke fundet";
+                        LocationValid = false;
+                    }
+                }
+                else
+                {
+                    ViewBag.LocationError = "QR kode ikke godkendt!";
+                    LocationValid = false;
+                }
+
+            }
+            else
+            {
+                LocationValid = false;
+                Debug.WriteLine("QR code not valid!");
+                ViewBag.LocationError = "QR kode ikke godkendt!";
+            }
+
+            //return old model if location is not valid
+            if(LocationValid == false)
+            {
+                device = dbManager.GetDeviceInfoWithLocation(data.Device.DeviceID);
+
+                newdata.Device = device;
+                newdata.Room = null;
+                newdata = GetNewLocation(newdata);
+                newdata.Room = new string($"{device.Location.Location.Building}.{device.Location.Location.RoomNumber.ToString()}");
+                newdata.Shelf = new string($"{device.Location.ShelfName}.{device.Location.ShelfLevel}.{device.Location.ShelfSpot}");
+              
+            }
 
 
             return View("EditView", newdata);
@@ -508,11 +529,7 @@ namespace HUS_project.Controllers
             List<string> output = new List<string>();
             string data = $"Dev-{input.Device.DeviceID}-{input.Device.SerialNumber}";
             output.Add(data);
-            output.Add(data);
-            output.Add(data);
-            output.Add(data);
-            output.Add(data);
-            output.Add(data);
+            
             //redirect to method
             return SendToQRController(output);
         }
@@ -521,16 +538,6 @@ namespace HUS_project.Controllers
         [HttpPost]
         public IActionResult SendToQRController(List<string> data)
         {
-
-
-            //debugging test of multiple strings
-            for (int i = 0; i < data.Count; i++)
-            {
-                string testdata = $"{data[i]}";
-                data[i] = testdata;
-            }
-
-
             TempData["QRData"] = data.ToArray();
 
             return RedirectToAction("PrintQR", "QRCode");
@@ -546,6 +553,14 @@ namespace HUS_project.Controllers
             return data;
         }
 
+        //returns all logs from device
+        private List<DeviceModel> GetAllDeviceLogs(int id)
+        {
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            List<DeviceModel> data = dbManager.GetAllDeviceLogs(id);
+            return data;
+        }
+
         //returns model with new location
         private EditDeviceModel GetNewLocation(EditDeviceModel data)
         {
@@ -554,7 +569,7 @@ namespace HUS_project.Controllers
             DBManagerShared shared = new DBManagerShared(configuration);
 
             //get the logs back again
-            List<DeviceModel> logs = dbManager.GetDeviceLogs(data.Device.DeviceID);
+            List<DeviceModel> logs = dbManager.GetAllDeviceLogs(data.Device.DeviceID);
             int modelID = shared.GetModelID(data.Device.Model.ModelName);
             data.Logs = logs;
             EditDeviceModel newdata = data;
@@ -618,6 +633,7 @@ namespace HUS_project.Controllers
 
             // clear model
             ModelState.Clear();
+           
 
             return newdata;
         }
@@ -681,6 +697,7 @@ namespace HUS_project.Controllers
             return false;
         }
 
+        //unsafe code! might not get used
         private void CheckImageValidations()
         {
             //  DBManagerDevice dbManager = new DBManagerDevice(configuration);

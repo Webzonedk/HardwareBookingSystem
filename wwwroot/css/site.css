@@ -96,7 +96,8 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    overflow-x: scroll; /*Alternative can be set to hidden but it will disturb the pageload and make it jumpy*/
+    /*overflow-x: scroll;*/ /*Alternative can be set to hidden but it will disturb the pageload and make it jumpy*/
+    overflow-y: scroll; /*Alternative can be set to hidden but it will disturb the pageload and make it jumpy*/
 }
 
 .footer {
@@ -218,6 +219,10 @@ text colors
 
 .FontSizeHeaders {
     font-size: 30px;
+}
+
+.text-bold{
+    font-weight:bold;
 }
 
 
@@ -386,17 +391,13 @@ Set height
 ----------------------------------------------------------------------*/
 
 .img-bg {
-    /*background-color: #1c209a;*/
-    /*height: 100%;*/
-    /*width: 100%;*/
-   
-    /*padding: 10px 10px 10px 10px;*/
+    
     border: solid;
     border-width: 2px;
-    border-color: #1c209a;
+    border-color: #cdcdcd;
     border-radius: 10px;
-    max-width:100%;
-   /* max-height:100%;*/
+    max-width: 100%;
+    /* max-height:100%;*/
 }
 
 /*----------------------------------------------------------------------
