@@ -538,11 +538,12 @@ namespace HUS_project.DAL
             string deleteFeedback = null;
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
-            SqlCommand cmd = new SqlCommand("DeleteSelectedRoom", con);
+            SqlCommand cmd = new SqlCommand("DeleteRoom", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.Add("@buildingNameToDelete", System.Data.SqlDbType.VarChar, 50).Value = dataFromView.DeleteBuilding.ToUpper();
             cmd.Parameters.Add("@RoomNumberToDelete", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.DeleteRoomNumber.ToUpper();
-            cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 100).Direction = System.Data.ParameterDirection.Output;
+            cmd.Parameters.Add("@RoomToDelete", System.Data.SqlDbType.Int).Value = 0;
+            cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
             cmd.ExecuteNonQuery();
             try
             {
