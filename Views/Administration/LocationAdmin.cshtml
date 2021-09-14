@@ -7,7 +7,7 @@
 
 <!--Variables to be used with JavaScripts-->
 @{string tempData = ViewBag.alert;}
-@{string deleteFeeback = ViewBag.deleteMessage;}
+@{string deleteFeedback = ViewBag.deleteMessage;}
 @{string selectedID = ViewBag.selectedID;}
 
 
@@ -31,7 +31,7 @@
 
 <script>
         $(document).ready(function () {
-            scrollToDiv('@deleteFeeback','@selectedID');
+            scrollToDiv('@deleteFeedback','@selectedID');
         });
 </script>
 
@@ -115,11 +115,11 @@
             </div>
         </div>
         <div class="row">
-            @{string toolTip = "Alle felter kan oprettes enkeltvis. \n\n" +
-                                                                                                                                                 "Hvis Bygning og Lokale er udfyldt samtidigt vil der \n" +
-                                                                                                                                                 "oprettes et Lokale hvis ikke det eksisterer i forvejen.\n\n " +
-                                                                                                                                                 "Hvis alle felter er udfyldt, vil der oprettes en placering.\n\n" +
-                                                                                                                                                 "Men kun hvis det ikke findes I forvejen."; }
+            @{string toolTip =  "\nAlle felter kan oprettes enkeltvis, hvis ikke de findes i forvejen. \n\n" +
+                                "Hvis Bygning og Lokale er udfyldt samtidigt kan der \n" +
+                                "oprettes et Lokale, hvis ikke det eksisterer i forvejen.\n\n" +
+                                "Hvis alle felter er udfyldt, kan der oprettes en placering,\n" +
+                                "hvis denne ikke findes i forvejen.\n"; }
             <div class="col p-3">
                 <button type="submit" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip" asp-action="CreateLocation" onclick="checkInputFields1()">Tilføj Placering</button>
             </div>
@@ -283,8 +283,31 @@
                 </div>
 
                 <div class="row p-1">
+                    @try
+                    {
+                        @if (deleteFeedback != null)
+                        {
+                            if (deleteFeedback.Contains("ikke") == true)
+                            {
+                                <div class="col-lg-5 p-1 text-red">@deleteFeedback</div>
 
-                    <div class="col-lg-5 p-1 text-red">@deleteFeeback</div>
+                            }
+                            else
+                            {
+                                <div class="col-lg-5 p-1 text-green">@deleteFeedback</div>
+
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+
+
+
+
 
 
                     <div class="col-lg-2 col-sm-12 p-1"></div>
