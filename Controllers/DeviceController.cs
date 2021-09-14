@@ -107,7 +107,7 @@ namespace HUS_project.Controllers
             editdata.Room = new string($"{data.Location.Location.Building}.{data.Location.Location.RoomNumber.ToString()}");
             editdata.Shelf = new string($"{data.Location.ShelfName}.{data.Location.ShelfLevel}.{data.Location.ShelfSpot}");
             editdata.ImagePath = deviceData.Image;
-
+            editdata.SelectedLogs = 10;
             return View("EditView", editdata);
         }
 
@@ -239,22 +239,57 @@ namespace HUS_project.Controllers
             //prep data for database
             string[] splittedRoom = data.Room.Split('.');
             string[] splittedShelf = data.Shelf.Split('.');
+            bool inputValidated = false;
+           
+            //validate input
+            if(splittedRoom.Length == 2)
+            {
+                if(splittedShelf.Length == 3)
+                {
+                    inputValidated = true;
+                }
+            }
 
-            //set data models
-            BuildingModel building = new BuildingModel(splittedRoom[0], splittedRoom[1]);
-            StorageLocationModel storageLocation = new StorageLocationModel(splittedShelf[0], splittedShelf[1], splittedShelf[2], building);
-            data.Device.Location = storageLocation;
-            data.Device.Notes = "Placering redigeret";
+            if(inputValidated)
+            {
+                //set data models
+                BuildingModel building = new BuildingModel(splittedRoom[0], splittedRoom[1]);
+                StorageLocationModel storageLocation = new StorageLocationModel(splittedShelf[0], splittedShelf[1], splittedShelf[2], building);
+                data.Device.Location = storageLocation;
+                data.Device.Notes = "Placering redigeret";
+                bool locationValidated = dbManager.CheckLocation(storageLocation);
 
-            //send data to database
-            data = dbManager.EditDeviceLocation(data);
+                if(locationValidated)
+                {
+                    //send data to database
+                    data = dbManager.EditDeviceLocation(data);
+
+                    //set message to be shown in view
+                    if (data.Feedback > 0)
+                    {
+                        ViewBag.Location = "Placering Gemt";
+                    }
+                    else
+                    {
+                        ViewBag.LocationError = "Placering ikke Gemt";
+                    }
+                }
+                else
+                {
+                    ViewBag.LocationError = "Placering er ikke korrekt indtastet";
+                }
+                
+            }
+            else
+            {
+                ViewBag.LocationError = "Placering er ikke korrekt indtastet";
+            }
+           
             List<DeviceModel> logs = dbManager.GetAllDeviceLogs(data.Device.DeviceID);
             
             data.Logs = logs;
 
-            //save Device name & other important things
-            //send data to database
-            int success = dbManager.EditDevice(data);
+           
             int modelID = shared.GetModelID(data.Device.Model.ModelName);
 
             //check if image exists
@@ -266,15 +301,7 @@ namespace HUS_project.Controllers
                 data.ImagePath = source;
             }
 
-            //set message to be shown in view
-            if (success > 0)
-            {
-                ViewBag.Location = "Placering Gemt";
-            }
-            else
-            {
-                ViewBag.Location = "Placering ikke Gemt";
-            }
+           
 
             return View("EditView", data);
         }
@@ -348,7 +375,7 @@ namespace HUS_project.Controllers
             #endregion
 
             //get the logs again
-            List<DeviceModel> logs = dbManager.GetDeviceLogs(data.Device.DeviceID);
+            List<DeviceModel> logs = dbManager.GetAllDeviceLogs(data.Device.DeviceID);
             data.Logs = logs;
 
             //send data to database
@@ -549,7 +576,7 @@ namespace HUS_project.Controllers
         private List<DeviceModel> GetDeviceLogs(int id)
         {
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
-            List<DeviceModel> data = dbManager.GetDeviceLogs(id);
+            List<DeviceModel> data = dbManager.GetAllDeviceLogs(id);
             return data;
         }
 

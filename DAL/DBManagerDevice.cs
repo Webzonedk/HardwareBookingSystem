@@ -13,7 +13,7 @@ namespace HUS_project.DAL
 {
     public class DBManagerDevice
     {
-        //private fields containting connectionstrings for databases
+        //private fields containing connectionstrings for databases
         private readonly IConfiguration configuration;
         private readonly string connectionString;
 
@@ -114,6 +114,7 @@ namespace HUS_project.DAL
             cmd.Parameters.Add("@modelDescription", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Model.ModelDescription;
             cmd.Parameters.Add("@categoryName", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Model.Category.Category;
             cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceData.Device.DeviceID;
+            cmd.Parameters.Add("@serialNumber", System.Data.SqlDbType.VarChar).Value = deviceData.Device.SerialNumber;
             cmd.Parameters.Add("@status", System.Data.SqlDbType.TinyInt).Value = deviceData.Device.Status;
             cmd.Parameters.Add("@note", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Notes;
             cmd.Parameters.Add("@changedBy", System.Data.SqlDbType.VarChar).Value = deviceData.Device.ChangedBy;
@@ -142,9 +143,14 @@ namespace HUS_project.DAL
             cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = deviceData.Device.Location.ShelfSpot;
             cmd.Parameters.Add("@changedBy", System.Data.SqlDbType.VarChar).Value = deviceData.Device.ChangedBy;
             cmd.Parameters.Add("@note", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Notes;
+            cmd.Parameters.Add("@serialNumber", System.Data.SqlDbType.VarChar).Value = deviceData.Device.SerialNumber;
             cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceData.Device.DeviceID;
+            cmd.Parameters.Add("@feedback", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
             cmd.ExecuteNonQuery();
             con.Close();
+
+           deviceData.Feedback = Convert.ToInt32(cmd.Parameters["@feedback"].Value);
+
             return deviceData;
         }
 
@@ -195,42 +201,8 @@ namespace HUS_project.DAL
             return device;
         }
 
+       
         //Get device Logs from database before edit
-        internal List<DeviceModel> GetDeviceLogs(int deviceID)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("GetDeviceLogs", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceID;
-
-            SqlDataReader reader = cmd.ExecuteReader();
-            List<DeviceModel> Logs = new List<DeviceModel>();
-            while (reader.Read())
-            {
-                DeviceModel device = new DeviceModel();
-                ModelModel m = new ModelModel();
-                CategoryModel c = new CategoryModel();
-                m.Category = c;
-
-            
-                device.ChangedBy = (string)reader["changedBy"];
-                device.ChangeDate = (DateTime)reader["logDate"];
-                device.Notes = (string)reader["note"];
-                m.Category.Category = (string)reader["categoryName"];
-                m.ModelName = (string)reader["modelName"];
-
-
-                device.Model = m;
-                Logs.Add(device);
-            }
-
-
-
-            con.Close();
-            return Logs;
-        }
-
         internal List<DeviceModel> GetAllDeviceLogs(int deviceID)
         {
             SqlConnection con = new SqlConnection(connectionString);
@@ -246,16 +218,20 @@ namespace HUS_project.DAL
                 DeviceModel device = new DeviceModel();
                 ModelModel m = new ModelModel();
                 CategoryModel c = new CategoryModel();
+                StorageLocationModel stl = new StorageLocationModel();
+               
                 m.Category = c;
 
-
+                device.SerialNumber = (string)reader["serialNumber"];
                 device.ChangedBy = (string)reader["changedBy"];
                 device.ChangeDate = (DateTime)reader["logDate"];
                 device.Notes = (string)reader["note"];
                 m.Category.Category = (string)reader["categoryName"];
                 m.ModelName = (string)reader["modelName"];
-
-
+                string building = (string)reader["room"];
+                string location = (string)reader["location"];
+                stl = CombineLocation(string.Format("{0}{1}{2}", building, ".", location));
+                device.Location = stl;
                 device.Model = m;
                 Logs.Add(device);
             }
@@ -436,5 +412,26 @@ namespace HUS_project.DAL
             con.Close();
             return SearchModel;
         }
+
+        #region helper methods
+
+        //returns storagemodel from string input
+        internal StorageLocationModel CombineLocation(string location)
+        {
+            string[] splittedLocation = location.Split('.');
+            BuildingModel bm = new BuildingModel();
+            StorageLocationModel storage = new StorageLocationModel();
+
+            bm.Building = splittedLocation[0];
+            bm.RoomNumber = splittedLocation[1];
+            storage.ShelfName = splittedLocation[2];
+            storage.ShelfLevel = splittedLocation[3];
+            storage.ShelfSpot = splittedLocation[4];
+
+            storage.Location = bm;
+            return storage;
+        }
+
+        #endregion
     }
 }

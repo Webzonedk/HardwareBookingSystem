@@ -19,7 +19,7 @@ namespace HUS_project.Models.ViewModels
         private List<DeviceModel> logs;
         private List<DeviceModel> locationLogs;
         private int selectedLogs;
-
+        private int feedback;
        
 
         #endregion
@@ -90,6 +90,12 @@ namespace HUS_project.Models.ViewModels
         {
             get { return selectedLogs; }
             set { selectedLogs = value; }
+        }
+
+        public int Feedback
+        {
+            get { return feedback; }
+            set { feedback = value; }
         }
 
         #endregion
