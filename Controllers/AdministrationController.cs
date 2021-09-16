@@ -24,18 +24,24 @@ namespace HUS_project.Controllers
         {
             this.configuration = config;
         }
-        public IActionResult CategoryAdmin()
-        {
-            return View();
-        }
 
+
+
+
+        //----------------------------------------------------------------------------
+        //Returns the main view for location admin
+        //----------------------------------------------------------------------------
         public IActionResult LocationAdmin()
         {
             return View(GetStorageLocations());
         }
 
 
+
+
+        //----------------------------------------------------------------------------
         //Returns the searchresult when something has been choosen in the search fields
+        //----------------------------------------------------------------------------
         public IActionResult LocationAdminResult(EditStorageLocationModel dataFromView)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
@@ -43,7 +49,11 @@ namespace HUS_project.Controllers
         }
 
 
+
+
+        //----------------------------------------------------------------------------
         //Delete a single location from the overview
+        //----------------------------------------------------------------------------
         [HttpPost]
         public IActionResult DeleteSingleLocation(string deleteLocation)
         {
@@ -62,18 +72,130 @@ namespace HUS_project.Controllers
         }
 
 
+
+
+        //----------------------------------------------------------------------------
         //Creating a new location if not exist, based on input fields in Blue oister bar
+        //----------------------------------------------------------------------------
         [HttpPost]
         public IActionResult CreateLocation(EditStorageLocationModel dataFromView)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            manager.CreateLocation(dataFromView);
+
+            //Create building if filled in
+            if (dataFromView.StorageLocation.Location.Building != null)
+            {
+                string buildingNameFeedBack = manager.CreateBuilding(dataFromView);
+                if (buildingNameFeedBack != null)
+                {
+                    ViewBag.buildingNameFeedBack = buildingNameFeedBack;
+                }
+                else
+                {
+                    ViewBag.buildingNameFeedBack = "";
+                }
+            }
+
+            //Creating a room if both building and room is filled in. Else only create RoomNumber if filled in
+            if (dataFromView.StorageLocation.Location.RoomNumber != null)
+            {
+                string roomNumberFeedBack;
+                string roomFeedBack=null;
+                if (dataFromView.StorageLocation.Location.Building != null)
+                {
+                    roomNumberFeedBack = manager.CreateRoomNumber(dataFromView);
+                    roomFeedBack = manager.CreateRoom(dataFromView);
+                }
+                else
+                {
+                    roomNumberFeedBack = manager.CreateRoomNumber(dataFromView);
+                }
+
+                if (roomNumberFeedBack != null)
+                {
+                    ViewBag.roomNumberFeedBack = roomNumberFeedBack;
+                }
+                else
+                {
+                    ViewBag.roomNumberFeedBack = "";
+                }
+
+                if (roomFeedBack != null)
+                {
+                    ViewBag.roomFeedBack = roomFeedBack;
+                }
+                else
+                {
+                    ViewBag.roomFeedBack = "";
+                }
+            }
+
+            //Create shelf name if filled in
+            if (dataFromView.StorageLocation.ShelfName != null)
+            {
+                string shelfNameFeedBack = manager.CreateShelfName(dataFromView);
+                if (shelfNameFeedBack != null)
+                {
+                    ViewBag.shelfNameFeedBack = shelfNameFeedBack;
+                }
+                else
+                {
+                    ViewBag.shelfNameFeedBack = "";
+                }
+            }
+
+            //Create shelfLevel if filled in
+            if (dataFromView.StorageLocation.ShelfLevel != null)
+            {
+                string shelfLevelFeedBack = manager.CreateShelfLevel(dataFromView);
+                if (shelfLevelFeedBack != null)
+                {
+                    ViewBag.shelfLevelFeedBack = shelfLevelFeedBack;
+                }
+                else
+                {
+                    ViewBag.shelfLevelFeedBack = "";
+                }
+            }
+
+            //Create shelfSpot if filled in
+            if (dataFromView.StorageLocation.ShelfSpot != null)
+            {
+                string shelfSpotFeedBack = manager.CreateShelfSpot(dataFromView);
+                if (shelfSpotFeedBack != null)
+                {
+                    ViewBag.shelfSpotFeedBack = shelfSpotFeedBack;
+                }
+                else
+                {
+                    ViewBag.shelfSpotFeedBack = "";
+                }
+            }
+
+            //Create storagelocation if all fields are filled in.
+            if ((dataFromView.StorageLocation.ShelfSpot != null) && (dataFromView.StorageLocation.Location.Building != null) && (dataFromView.StorageLocation.Location.RoomNumber != null)
+                && (dataFromView.StorageLocation.ShelfName != null) && (dataFromView.StorageLocation.ShelfLevel != null))
+            {
+                string storageLocationFeedBack = manager.CreateLocation(dataFromView);
+                if (storageLocationFeedBack != null)
+                {
+                    ViewBag.storageLocationFeedBack = storageLocationFeedBack;
+                }
+                else
+                {
+                    ViewBag.storageLocationFeedBack = "";
+                }
+            }
+
             return View("LocationAdmin", GetStorageLocations());
         }
 
 
 
+
+        //----------------------------------------------------------------------------
         //Sending QRCode to QRview for a single location
+        //----------------------------------------------------------------------------
         [HttpPost]
         public IActionResult PrintSingleLocationQR(string printQR)
         {
@@ -95,7 +217,11 @@ namespace HUS_project.Controllers
         }
 
 
+
+
+        //----------------------------------------------------------------------------
         //Sending QRCodes to QRview for all locations
+        //----------------------------------------------------------------------------
         [HttpPost]
         public IActionResult PrintAllQRCodes(EditStorageLocationModel QRdata)
         {
@@ -122,10 +248,9 @@ namespace HUS_project.Controllers
 
 
 
-        //------------------------------------
-        //This one is not finish
-        //------------------------------------
+        //----------------------------------------------------------------------------
         //Delete building, RoomNumber or specifik room in the massdestruction area.
+        //----------------------------------------------------------------------------
         [HttpPost]
         public IActionResult DeleteBuilding(EditStorageLocationModel deleteBuildingData)
         {
@@ -145,10 +270,9 @@ namespace HUS_project.Controllers
 
 
 
-        //------------------------------------
-        //This one is not finish
-        //------------------------------------
+        //----------------------------------------------------------------------------
         //Delete building, RoomNumber or specifik room in the massdestruction area.
+        //----------------------------------------------------------------------------
         [HttpPost]
         public IActionResult DeleteRoomNumber(EditStorageLocationModel deleteRoomNumberData)
         {
@@ -164,10 +288,9 @@ namespace HUS_project.Controllers
 
 
 
-        //------------------------------------
-        //This one is not finish
-        //------------------------------------
+        //----------------------------------------------------------------------------
         //Delete building, RoomNumber or specifik room in the massdestruction area.
+        //----------------------------------------------------------------------------
         [HttpPost]
         public IActionResult DeleteRoom(EditStorageLocationModel deleteRoomData)
         {
@@ -182,8 +305,9 @@ namespace HUS_project.Controllers
 
 
 
-
+        //----------------------------------------------------------------------------
         //Getting the locations from DB and listing dropdowns in Blue oister bar, and also listing the selected Storagelocation.
+        //----------------------------------------------------------------------------
         private EditStorageLocationModel GetStorageLocations()
         {
             EditStorageLocationModel dropDownData = new EditStorageLocationModel();
