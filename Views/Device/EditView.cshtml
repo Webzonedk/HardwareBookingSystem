@@ -141,7 +141,7 @@
                                         }
 
                                     </datalist>
-                                    <label for="exampleDataList">Indtast enhedsnavn</label>
+                                    <label for="exampleDataList">Indtast modelnavn</label>
                                 </div>
                             </div>
 
@@ -388,6 +388,15 @@
                         </div>
                     </div>
 
+                    <br />
+
+                    <div class="row">
+                        <h4>Serienummer:</h4>
+                        <div class=" dynamic-Font-Size-14">
+                            @device.SerialNumber
+                        </div>
+                    </div>
+
 
                 </div>
 
@@ -414,6 +423,16 @@
                             <h4>Af:</h4>
                             <div class=" dynamic-Font-Size-14">
                                 @device.ChangedBy
+                            </div>
+
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <h4>Placering:</h4>
+                            <div class=" dynamic-Font-Size-14">
+                                @($"{device.Location.Location.Building}.{device.Location.Location.RoomNumber}.{device.Location.ShelfName}.{device.Location.ShelfLevel}.{device.Location.ShelfSpot} ")
                             </div>
 
                         </div>
