@@ -17,12 +17,12 @@ namespace HUS_project.Controllers
     public class DeviceController : Controller
     {
         private readonly IConfiguration configuration;
-
+        
 
         // constructor of homecontroller
         public DeviceController(IConfiguration config)
         {
-            this.configuration = config;
+            this.configuration = config; 
         }
 
 
@@ -104,8 +104,8 @@ namespace HUS_project.Controllers
             editdata.Logs = logs;
             editdata.Categories = categories;
             editdata.ModelNames = modelNames;
-            editdata.Room = new string($"{data.Location.Location.Building}.{data.Location.Location.RoomNumber.ToString()}");
-            editdata.Shelf = new string($"{data.Location.ShelfName}.{data.Location.ShelfLevel}.{data.Location.ShelfSpot}");
+            //   editdata.Room = new string($"{data.Location.Location.Building}.{data.Location.Location.RoomNumber.ToString()}");
+            editdata.Location = new string($"{data.Location.Location.Building}.{data.Location.Location.RoomNumber.ToString()}.{data.Location.ShelfName}.{data.Location.ShelfLevel}.{data.Location.ShelfSpot}");
             editdata.ImagePath = deviceData.Image;
             editdata.SelectedLogs = 10;
             return View("EditView", editdata);
@@ -173,13 +173,13 @@ namespace HUS_project.Controllers
             List<DeviceModel> logs = GetDeviceLogs(ID);
             List<string> categories = dbsharedManager.GetCategories();
             List<string> modelNames = dbsharedManager.GetModelNames();
-            EditDeviceModel storagelocation = dbManager.GetStorageLocations(null);
+            EditDeviceModel storagelocation = dbManager.GetStorageLocations();
             int modelID = dbsharedManager.GetModelID(data.Model.ModelName);
 
             EditDeviceModel editdata = new EditDeviceModel();
             editdata.Device = data;
-            editdata.Room = new string($"{data.Location.Location.Building}.{data.Location.Location.RoomNumber.ToString()}");
-            editdata.Shelf = new string($"{data.Location.ShelfName}.{data.Location.ShelfLevel}.{data.Location.ShelfSpot}");
+            //   editdata.Room = new string($"{data.Location.Location.Building}.{data.Location.Location.RoomNumber.ToString()}");
+            editdata.Location = new string($"{data.Location.Location.Building}.{data.Location.Location.RoomNumber.ToString()}.{data.Location.ShelfName}.{data.Location.ShelfLevel}.{data.Location.ShelfSpot}");
 
             //download image from DB
             ImageModel im = dbsharedManager.DownloadImage(modelID);
@@ -196,12 +196,12 @@ namespace HUS_project.Controllers
             editdata.Logs = logs;
             editdata.Categories = categories;
             editdata.ModelNames = modelNames;
-            editdata.Rooms = storagelocation.Rooms;
+            //  editdata.Rooms = storagelocation.Rooms;
 
             //get all rooms and shelves
-            storagelocation = dbManager.GetStorageLocations(editdata);
-            editdata.Rooms = storagelocation.Rooms;
-            editdata.Shelfs = storagelocation.Shelfs;
+            // storagelocation = dbManager.GetStorageLocations(editdata);
+            //  editdata.Rooms = storagelocation.Rooms;
+            editdata.Locations = storagelocation.Locations;
             editdata.SelectedLogs = 10;
 
             return View(editdata);
@@ -237,32 +237,30 @@ namespace HUS_project.Controllers
             data.Device.ChangedBy = HttpContext.Session.GetString("uniLogin");
 
             //prep data for database
-            string[] splittedRoom = data.Room.Split('.');
-            string[] splittedShelf = data.Shelf.Split('.');
+            string[] splittedShelf = data.Location.Split('.');
             bool inputValidated = false;
-           
-            //validate input
-            if(splittedRoom.Length == 2)
+
+            
+
+            if (splittedShelf.Length == 5)
             {
-                if(splittedShelf.Length == 3)
-                {
-                    inputValidated = true;
-                }
+                inputValidated = true;
             }
 
-            if(inputValidated)
+            if (inputValidated)
             {
                 //set data models
-                BuildingModel building = new BuildingModel(splittedRoom[0], splittedRoom[1]);
-                StorageLocationModel storageLocation = new StorageLocationModel(splittedShelf[0], splittedShelf[1], splittedShelf[2], building);
+                BuildingModel building = new BuildingModel(splittedShelf[0], splittedShelf[1]);
+                StorageLocationModel storageLocation = new StorageLocationModel(splittedShelf[2], splittedShelf[3], splittedShelf[4], building);
                 data.Device.Location = storageLocation;
                 data.Device.Notes = "Placering redigeret";
                 bool locationValidated = dbManager.CheckLocation(storageLocation);
 
-                if(locationValidated)
+                if (locationValidated)
                 {
                     //send data to database
                     data = dbManager.EditDeviceLocation(data);
+                    dbManager.CreateLog(data);
 
                     //set message to be shown in view
                     if (data.Feedback > 0)
@@ -278,18 +276,22 @@ namespace HUS_project.Controllers
                 {
                     ViewBag.LocationError = "Placering er ikke korrekt indtastet";
                 }
-                
+
             }
             else
             {
                 ViewBag.LocationError = "Placering er ikke korrekt indtastet";
             }
-           
-            List<DeviceModel> logs = dbManager.GetAllDeviceLogs(data.Device.DeviceID);
-            
-            data.Logs = logs;
 
-           
+            List<DeviceModel> logs = dbManager.GetAllDeviceLogs(data.Device.DeviceID);
+            EditDeviceModel locationList = dbManager.GetStorageLocations();
+            data.Logs = logs;
+            data.Locations = locationList.Locations;
+
+            //get dropdwowns again
+            data.Categories = shared.GetCategories();
+            data.ModelNames = shared.GetModelNames();
+
             int modelID = shared.GetModelID(data.Device.Model.ModelName);
 
             //check if image exists
@@ -301,7 +303,7 @@ namespace HUS_project.Controllers
                 data.ImagePath = source;
             }
 
-           
+
 
             return View("EditView", data);
         }
@@ -314,59 +316,35 @@ namespace HUS_project.Controllers
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
             DBManagerShared dbsharedManager = new DBManagerShared(configuration);
 
-            EditDeviceModel storagelocation = dbManager.GetStorageLocations(null);
+            EditDeviceModel storagelocation = dbManager.GetStorageLocations();
 
-            //check categories
-            bool Category_validated = checkUserInput(data.Categories, data.Device.Model.Category.Category);
-
-            //check modelNames
-            bool ModelName_validated = checkUserInput(data.ModelNames, data.Device.Model.ModelName);
-
-            //check BuildingNames
-            bool Building_validated = checkUserInput(storagelocation.Rooms, data.Room);
+            
 
             //check RoomNames
-            bool Room_validated = checkUserInput(storagelocation.Shelfs, data.Shelf);
+            bool Room_validated = checkUserInput(storagelocation.Locations, data.Location);
 
-            if (Category_validated && ModelName_validated && Building_validated && Room_validated)
-            {
-                Debug.WriteLine("success");
-            }
-            else
-            {
-                //set view bags
-                if (!Category_validated)
-                {
-                    ViewBag.Error = "indtast en gyldig kategori";
-                }
-                else if (!ModelName_validated)
-                {
-                    ViewBag.Error = "indtast et gyldigt model navn";
-                }
-                else if (!Building_validated)
-                {
-                    ViewBag.LocationError = "indtast en gyldig lokation";
-                }
-                else if (!Room_validated)
-                {
-                    ViewBag.LocationError = "indtast en gyldig hylde";
-                }
+           
 
+            if (!Room_validated)
+            {
+                ViewBag.LocationError = "indtast en gyldig hylde";
+                data.Locations = storagelocation.Locations;
                 return View("EditView", data);
             }
+           
 
 
             data.Device.ChangedBy = HttpContext.Session.GetString("uniLogin");
             data.Device.Notes = "Enhed redigeret";
 
+           
             #region saving new location
             //prep data for database
-            string[] splittedRoom = data.Room.Split('.');
-            string[] splittedShelf = data.Shelf.Split('.');
+            string[] splittedShelf = data.Location.Split('.');
 
             //set data models
-            BuildingModel building = new BuildingModel(splittedRoom[0], splittedRoom[1]);
-            StorageLocationModel storageLocation = new StorageLocationModel(splittedShelf[0], splittedShelf[1], splittedShelf[2], building);
+            BuildingModel building = new BuildingModel(splittedShelf[0], splittedShelf[1]);
+            StorageLocationModel storageLocation = new StorageLocationModel(splittedShelf[2], splittedShelf[3], splittedShelf[4], building);
             data.Device.Location = storageLocation;
             //data.Device.Notes = "Placering redigeret";
 
@@ -374,13 +352,11 @@ namespace HUS_project.Controllers
             data = dbManager.EditDeviceLocation(data);
             #endregion
 
-            //get the logs again
-            List<DeviceModel> logs = dbManager.GetAllDeviceLogs(data.Device.DeviceID);
-            data.Logs = logs;
+           
 
             //send data to database
             int success = dbManager.EditDevice(data);
-
+            dbManager.CreateLog(data);
             //set message to be shown in view
             if (success > 0)
             {
@@ -390,6 +366,18 @@ namespace HUS_project.Controllers
             {
                 ViewBag.edit = "Enhed ikke Gemt";
             }
+
+            //get the logs again
+            List<DeviceModel> logs = dbManager.GetAllDeviceLogs(data.Device.DeviceID);
+            data.Logs = logs;
+
+            //get locations again
+            EditDeviceModel locations = dbManager.GetStorageLocations();
+            data.Locations = locations.Locations;
+
+            //get dropdwowns again
+            data.Categories = dbsharedManager.GetCategories();
+            data.ModelNames = dbsharedManager.GetModelNames();
 
             //download image
             int modelID = dbsharedManager.GetModelID(data.Device.Model.ModelName);
@@ -406,6 +394,7 @@ namespace HUS_project.Controllers
             return View("EditView", data);
         }
 
+        [HttpPost]
         //Deactivate Device
         public IActionResult DeleteDevice(EditDeviceModel data)
         {
@@ -416,23 +405,25 @@ namespace HUS_project.Controllers
             data.Device.Status = 0;
 
             //change status of device to deactivated
-            int success = dbManager.EditDevice(data);
+            int success = dbManager.DeleteDevice(data);
             if (success > 0)
             {
+                dbManager.CreateLog(data);
                 ViewBag.Delete = "Enhed slettet";
+                //create blank model
+                data = new EditDeviceModel();
+                DeviceModel device = new DeviceModel();
+                data.Device = device;
+
+                // clear model
+                ModelState.Clear();
             }
             else
             {
-                ViewBag.Delete = "Enhed er i brug";
+                ViewBag.ErrorDelete = "Enheden kan ikke slettes, da den er i brug";
             }
 
-            //create blank model
-            data = new EditDeviceModel();
-            DeviceModel device = new DeviceModel();
-            data.Device = device;
 
-            // clear model
-            ModelState.Clear();
 
             return View("EditView", data);
         }
@@ -450,8 +441,7 @@ namespace HUS_project.Controllers
             //get data from the manager
             infoList = DBDManager.GetDeviceInventory(infoList);
 
-            //test image validation
-            // CheckImageValidations();
+            
 
 
             return View(infoList);
@@ -460,7 +450,7 @@ namespace HUS_project.Controllers
         //opens view for scanning of QR codes
         public IActionResult ScanLocation(EditDeviceModel data)
         {
-            data.Room = "";
+            data.Location = "";
             return View(data);
         }
 
@@ -470,18 +460,15 @@ namespace HUS_project.Controllers
         {
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
             DBManagerShared dbsharedManager = new DBManagerShared(configuration);
-            
-            string[] splittedData = data.Room.Split('-');
+
+            string[] splittedData = data.Location.Split('-');
             EditDeviceModel newdata = new EditDeviceModel();
             DeviceModel device = new DeviceModel();
             bool LocationValid = true;
-          
+
             //validate returned Scan data
             if (splittedData[0].Contains("Loc"))
             {
-                //create dummy data
-                // splittedData[1] = "K.1.A.0.2";
-
                 //get data from splitted strings
                 int id = data.Device.DeviceID;
                 string[] location_string = splittedData[1].Split('.');
@@ -503,8 +490,7 @@ namespace HUS_project.Controllers
                         //fill model with data
                         device = dbManager.GetDeviceInfoWithLocation(id);
                         newdata.Device = device;
-                        newdata.Room = $"{location_string[0]}.{location_string[1]}";
-                        newdata.Shelf = $"{location_string[2]}.{location_string[3]}.{location_string[4]}";
+                        newdata.Location = $"{location_string[0]}.{location_string[1]}.{location_string[2]}.{location_string[3]}.{location_string[4]}";
                         newdata = GetNewLocation(newdata);
                         newdata.Categories = dbsharedManager.GetCategories();
                         newdata.ModelNames = dbsharedManager.GetModelNames();
@@ -518,7 +504,7 @@ namespace HUS_project.Controllers
                 }
                 else
                 {
-                    ViewBag.LocationError = "QR kode ikke godkendt!";
+                    ViewBag.LocationError = "Den skannede QR kode er ikke en lokation";
                     LocationValid = false;
                 }
 
@@ -526,21 +512,18 @@ namespace HUS_project.Controllers
             else
             {
                 LocationValid = false;
-                Debug.WriteLine("QR code not valid!");
-                ViewBag.LocationError = "QR kode ikke godkendt!";
+                ViewBag.LocationError = "Den skannede QR kode er ikke en lokation";
             }
 
             //return old model if location is not valid
-            if(LocationValid == false)
+            if (LocationValid == false)
             {
                 device = dbManager.GetDeviceInfoWithLocation(data.Device.DeviceID);
 
                 newdata.Device = device;
-                newdata.Room = null;
                 newdata = GetNewLocation(newdata);
-                newdata.Room = new string($"{device.Location.Location.Building}.{device.Location.Location.RoomNumber.ToString()}");
-                newdata.Shelf = new string($"{device.Location.ShelfName}.{device.Location.ShelfLevel}.{device.Location.ShelfSpot}");
-              
+                newdata.Location = new string($"{device.Location.Location.Building}.{device.Location.Location.RoomNumber.ToString()}.{device.Location.ShelfName}.{device.Location.ShelfLevel}.{device.Location.ShelfSpot}");
+
             }
 
 
@@ -557,6 +540,7 @@ namespace HUS_project.Controllers
             string data = $"Dev-{input.Device.DeviceID}-{input.Device.SerialNumber}";
             output.Add(data);
             
+
             //redirect to method
             return SendToQRController(output);
         }
@@ -610,57 +594,15 @@ namespace HUS_project.Controllers
                 newdata.ImagePath = source;
             }
 
-
-
-
-
-            //fetch storage locations if user has typed a valid room
-            if (data.Room != null)
-            {
-                //prep data for database
-                string[] splittedRoom = data.Room.Split('.');
-
-                //prep data model
-                EditDeviceModel editData = new EditDeviceModel();
-                DeviceModel device = new DeviceModel();
-                BuildingModel building = new BuildingModel(splittedRoom[0], splittedRoom[1]);
-                StorageLocationModel storageLocation = new StorageLocationModel();
-                storageLocation.Location = building;
-                device.Location = storageLocation;
-                editData.Device = device;
-
-                //get storagelocations
-                EditDeviceModel locations = dbManager.GetStorageLocations(editData);
-
-                newdata.Shelfs = locations.Shelfs;
-
-                //fill out shelf data if present
-                if (data.Shelf != null)
-                {
-                    newdata.Shelf = data.Shelf;
-                }
-                else
-                {
-                    newdata.Shelf = null;
-                }
-
-
-
-            }
-            //return the same data without having selected anything
-            else
-            {
-                EditDeviceModel storagelocation = dbManager.GetStorageLocations(null);
-                newdata.Rooms = storagelocation.Rooms;
-                newdata.Shelf = null;
-            }
-
-
+            //get locations
+            EditDeviceModel storagelocation = dbManager.GetStorageLocations();
+            newdata.Locations = storagelocation.Locations;
+           
 
 
             // clear model
             ModelState.Clear();
-           
+
 
             return newdata;
         }

@@ -7,12 +7,14 @@
 
 <!--java script to count remaining text in description-->
 <script src="~/js/Editdevice.js"></script>
+<script src="~/js/textCount.js"></script>
 
 
 
-<form class="was-validated" asp-action="GetLocations" method="post" autocomplete="off" id="editForm">
+<form class="was-validated" asp-action="EditDevice" method="post" autocomplete="off" id="editForm">
 
     <input id="selectedLogCount" type="hidden" asp-for="@Model.SelectedLogs" />
+    <input id="status" type="hidden" asp-for="@Model.Device.Status" />
     <div class="row blue-oyster-bar center box-shadow"></div>
 
     <div class="container containerMain box-shadow">
@@ -86,7 +88,6 @@
                             else
                             {
                                 <div class="col-md-12 py-1 px-3">&nbsp;</div>
-                                @*<div class="col-md-12 py-1 px-3">this is easy too!;</div>*@
                             }
 
 
@@ -94,7 +95,7 @@
                             <!--Save Button-->
                             <div class="col align-self-end p-3">
 
-                                <button type="submit" class=" btn-primary btn Button-Size btn-sm" formaction="EditDevice">Gem</button>
+                                <button type="submit" class=" btn-primary btn Button-Size btn-sm">Gem</button>
 
                             </div>
                         </div>
@@ -110,38 +111,43 @@
                         <div class="row">
 
                             <div class="col-md-12 py-1 px-3">
-                                <div class="form-floating ">
-                                    <input class="form-select" list="categories" id="exampleDataList" asp-for="@Model.Device.Model.Category.Category" required>
-                                    <datalist id="categories">
 
-                                        @for (int i = 0; i < Model.Categories.Count; i++)
+
+                                <div class="form-floating">
+                                    <select class="form-select" id="categories" asp-for="@Model.Device.Model.Category.Category" required>
+                                        <option hidden></option>
+                                        @foreach (var item in Model.Categories)
                                         {
-                                            // lambda function that binds the model to a hidden inputfield that gets posted to controller
-                                            @Html.HiddenFor(model => Model.Categories[i])
-                                            <option>@Model.Categories[i]</option>
+                                            <option>@item</option>
                                         }
 
-                                    </datalist>
-                                    <label for="exampleDataList">vælg kategori</label>
+                                    </select>
+                                    <label>vælg kategori</label>
                                 </div>
+
                             </div>
 
 
                             <!--models list-->
                             <div class="col-md-12 py-1 px-3">
                                 <div class="form-floating ">
-                                    <input class="form-select" list="modelNames" id="exampleDataList" asp-for="@Model.Device.Model.ModelName" required>
-                                    <datalist id="modelNames">
+                                    <select class="form-select" id="exampleDataList" asp-for="@Model.Device.Model.ModelName" required>
 
-                                        @for (int i = 0; i < Model.ModelNames.Count; i++)
+                                        @*@for (int i = 0; i < Model.ModelNames.Count; i++)
+                                            {
+                                                // lambda function that binds the model to a hidden inputfield that gets posted to controller
+                                                @Html.HiddenFor(model => Model.ModelNames[i])
+                                                <option>@Model.ModelNames[i]</option>
+                                            }*@
+
+                                        @foreach (var item in Model.ModelNames)
                                         {
-                                            // lambda function that binds the model to a hidden inputfield that gets posted to controller
-                                            @Html.HiddenFor(model => Model.ModelNames[i])
-                                            <option>@Model.ModelNames[i]</option>
+                                            <option>@item</option>
                                         }
 
-                                    </datalist>
-                                    <label for="exampleDataList">Indtast modelnavn</label>
+
+                                    </select>
+                                    <label>Indtast modelnavn</label>
                                 </div>
                             </div>
 
@@ -186,32 +192,14 @@
                     <div class="col-md-3 border_EditBox">
 
                         <div class="row" style="height:auto">
-                            <div class="col-md-12 py-1 px-3">
-
-
-                                <div class="form-floating ">
-
-                                    <input class="form-select" list="locationsdropdown" id="locations" asp-for="@Model.Room" onchange="return SubmitValidation('editForm')" required>
-                                    <datalist id="locationsdropdown">
-
-                                        @foreach (var item in Model.Rooms)
-                                        {
-                                            <option>@item</option>
-                                        }
-
-                                    </datalist>
-                                    <label for="locations">lager Lokale</label>
-                                </div>
-                            </div>
-
 
                             <div class="col-md-12 py-1 px-3">
 
                                 <div class="form-floating ">
-                                    <input class="form-select" list="shelvesdropdown" id="shelves" asp-for="@Model.Shelf" required>
+                                    <input class="form-select" list="shelvesdropdown" id="shelves" asp-for="@Model.Location" required>
                                     <datalist id="shelvesdropdown">
 
-                                        @foreach (var item in Model.Shelfs)
+                                        @foreach (var item in Model.Locations)
                                         {
                                             <option>@item</option>
 
@@ -236,42 +224,27 @@
                             @if (ViewBag.Location != null)
                             {
 
-                                <div class="col-md-12 p-3 text-green" style="height:100px">@ViewBag.Location</div>
+                                <div class="col-md-12 p-3 text-green" style="height:165px">@ViewBag.Location</div>
                             }
                             else if (ViewBag.LocationError != null)
                             {
-                                <div class="col-md-12 p-3 text-red" style="height:100px">@ViewBag.LocationError</div>
+                                <div class="col-md-12 p-3 text-red" style="height:165px">@ViewBag.LocationError</div>
                             }
                             else
                             {
-                                <div class="col-md-12 p-3" style="height:100px">&nbsp;</div>
-                                @*<div class="col-md-12 p-3" style="height:100px">this is easy you can do it!</div>*@
+                                <div class="col-md-12 p-3" style="height:165px">&nbsp;</div>
 
                             }
-
-                            @*<div class="row " >*@
-
 
 
 
                             <div class="col-md-12 align-self-end">
 
                                 <!--button save location-->
-
-
                                 <button type="submit" class="mb-3 mx-2 btn-primary btn Button-Size btn-sm" formaction="EditLocation" formmethod="post">Gem placering</button>
 
-
-
                                 <!--button scan location-->
-
                                 <button type="submit" class="mb-3 mx-2 btn-primary btn Button-Size btn-sm" formaction="ScanLocation" formmethod="post">Skan placering</button>
-
-
-
-
-                                @*</div>*@
-
 
                             </div>
 
@@ -288,9 +261,12 @@
                             <div class="col-12 py-1 px-3">
 
                                 <div class="form-floating">
-                                    <textarea class="form-control" placeholder="Leave a comment here" id="deleteNote" style="height: 140px" asp-for="@Model.Device.Notes"></textarea>
+                                    <textarea class="form-control" placeholder="Leave a comment here" id="deleteNote" onchange="textcounter('1000')" style="height: 140px" asp-for="@Model.Device.Notes" required maxlength="1000"></textarea>
                                     <label for="deleteNote">årsag</label>
                                 </div>
+                                <span id="remaining"></span>
+                                <span id="limit">(Max 1000 tegn)</span>
+
 
                             </div>
 
@@ -303,13 +279,17 @@
                             }
                             else
                             {
-
+                                if (ViewBag.ErrorDelete != null)
+                                {
+                                    <div class="col-12 py-1 px-3 text-red">@ViewBag.ErrorDelete&nbsp;</div>
+                                }
                                 <div class="col-12 py-1 px-3 text-red" id="warning">&nbsp;</div>
                             }
 
 
                             <div class="col-12 align-self-end p-3">
-                                <button type="submit" class=" btn-primary btn Button-Size btn-sm " formmethod="post" onclick="return CheckInputField()">Slet enhed</button>
+                                @*<button type="submit" class=" btn-primary btn Button-Size btn-sm " formmethod="post" onclick="CheckInputField()">Slet enhed</button>*@
+                                <input type="button" class=" btn-primary btn Button-Size btn-sm " formmethod="post" onclick="CheckInputField()" value="Slet enhed" />
 
                             </div>
 
@@ -340,8 +320,8 @@
 
 
 
-    <!--test alternating colors-->
 
+    <!--test alternating colors-->
     <div class="container containerMain box-shadow">
 
 
@@ -355,44 +335,44 @@
         @foreach (DeviceModel device in Model.Logs.Take(@Model.SelectedLogs))
         {
             <div class="row containerBody alternating_row dynamic-Font-Size-10">
-                <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1">
+                <div class="col-md-3 col-6 p-3">
                     <div class=" row ">
                         <div>
 
                             @if (Model.ImagePath != null)
                             {
-                                <img class="img-bg" src="@Url.Content(Model.ImagePath)" style="width: 100%" />
+                                <img class="img-bg" src="@Url.Content(Model.ImagePath)" style="width: 65%" />
                             }
                             else
                             {
-                                <img class="img-bg" src="~/Graphic/missing_image.png" style="width: 90%" />
+                                <img class="img-bg" src="~/Graphic/missing_image.png" style="width: 65%" />
                             }
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1">
+                <div class="col-md-3 col-6 p-3">
 
-                    <div class="row">
-                        <h4>Kategori:</h4>
-                        <div class=" dynamic-Font-Size-14">
+                    <div class="row p-1">
+                        <h5  class="m-0">Kategori:</h5>
+                        <div class=" dynamic-Font-Size-12">
                             @device.Model.Category.Category
                         </div>
                     </div>
 
-                    <br />
 
-                    <div class="row">
-                        <h4>Enhedsnavn:</h4>
-                        <div class=" dynamic-Font-Size-14">
+
+                    <div class="row p-1">
+                        <h5 class="m-0">Enhedsnavn:</h5>
+                        <div class=" dynamic-Font-Size-12">
                             @device.Model.ModelName
                         </div>
                     </div>
 
-                    <br />
 
-                    <div class="row">
-                        <h4>Serienummer:</h4>
-                        <div class=" dynamic-Font-Size-14">
+
+                    <div class="row p-1">
+                        <h5 class="m-0">Serienummer:</h5>
+                        <div class=" dynamic-Font-Size-12">
                             @device.SerialNumber
                         </div>
                     </div>
@@ -400,44 +380,43 @@
 
                 </div>
 
-                <div class="col-xl-4 col-lg-4 col-md-3 col-3 p-1">
-                    <div class="row">
-                        <h4>Beskrivelse:</h4>
-                        <div class=" dynamic-Font-Size-14">
+                <div class="col-md-3 col-6 p-3">
+                    <div class="row p-1">
+                        <h5 class="m-0">Beskrivelse:</h5>
+                        <div class=" dynamic-Font-Size-12">
                             @device.Notes
                         </div>
                     </div>
                 </div>
 
-                <div class="col-xl-2 col-lg-2 col-md-3 col-3 p-1">
-                    <div class="row">
-                        <h4>Ændret:</h4>
-                        <div class=" dynamic-Font-Size-14">
+                <div class="col-md-3 col-6 p-3">
+
+                    <div class="row p-1">
+                        <h5 class="m-0">Ændret:</h5>
+                        <div class=" dynamic-Font-Size-12">
                             @device.ChangeDate
                         </div>
 
+                    </div>
 
-                        <br />
 
-                        <div class="row">
-                            <h4>Af:</h4>
-                            <div class=" dynamic-Font-Size-14">
-                                @device.ChangedBy
-                            </div>
-
-                        </div>
-
-                        <br />
-
-                        <div class="row">
-                            <h4>Placering:</h4>
-                            <div class=" dynamic-Font-Size-14">
-                                @($"{device.Location.Location.Building}.{device.Location.Location.RoomNumber}.{device.Location.ShelfName}.{device.Location.ShelfLevel}.{device.Location.ShelfSpot} ")
-                            </div>
-
+                    <div class="row p-1">
+                        <h5 class="m-0">Af:</h5>
+                        <div class=" dynamic-Font-Size-12">
+                            @device.ChangedBy
                         </div>
 
                     </div>
+
+
+                    <div class="row p-1">
+                        <h5 class="m-0">Placering:</h5>
+                        <div class=" dynamic-Font-Size-12">
+                            @($"{device.Location.Location.Building}.{device.Location.Location.RoomNumber}.{device.Location.ShelfName}.{device.Location.ShelfLevel}.{device.Location.ShelfSpot} ")
+                        </div>
+
+                    </div>
+
                 </div>
 
             </div>

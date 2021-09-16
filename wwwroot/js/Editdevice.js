@@ -12,6 +12,7 @@ function SubmitValidation(input) {
 function CheckInputField() {
 
     var field = document.getElementById("deleteNote").value;
+  /*  var form = document.getElementById("editform");*/
     if (field == "") {
 
         /* var AlertBox = confirm("For at slette enheden, skal årsag udfyldes");*/
@@ -25,7 +26,7 @@ function CheckInputField() {
         document.getElementById("editForm").action = "DeleteDevice";
         document.getElementById("warning").innerText = '';
         console.info("delete");
-        form.submit();
+        document.getElementById("editForm").submit();
     }
 }
 

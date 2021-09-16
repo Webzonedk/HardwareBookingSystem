@@ -92,6 +92,12 @@ html {
     }
 }
 
+@page {
+    size: auto; /* auto is the initial value */
+    /*margin: 0mm;*/ /* this affects the margin in the printer settings */
+    margin-top: 3mm;
+    margin-bottom: 0mm;
+}
 
 body {
     /* Margin bottom by footer height */

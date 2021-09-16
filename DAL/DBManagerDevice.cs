@@ -103,7 +103,7 @@ namespace HUS_project.DAL
         }
 
       
-
+        //edit device 
         internal int EditDevice(EditDeviceModel deviceData)
         {
             SqlConnection con = new SqlConnection(connectionString);
@@ -124,6 +124,25 @@ namespace HUS_project.DAL
             {
                 success = 1;
             }
+
+            con.Close();
+            return success;
+        }
+
+        //delete device
+        internal int DeleteDevice(EditDeviceModel deviceData)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("DeleteDevice", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            
+            cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceData.Device.DeviceID;
+            cmd.Parameters.Add("@status", System.Data.SqlDbType.TinyInt).Value = deviceData.Device.Status;
+            cmd.Parameters.Add("@feedback", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
+            cmd.ExecuteNonQuery();
+
+            int success = Convert.ToInt32(cmd.Parameters["@feedback"].Value);
 
             con.Close();
             return success;
@@ -150,6 +169,35 @@ namespace HUS_project.DAL
             con.Close();
 
            deviceData.Feedback = Convert.ToInt32(cmd.Parameters["@feedback"].Value);
+
+            return deviceData;
+        }
+
+        //create Log
+        internal EditDeviceModel CreateLog(EditDeviceModel deviceData)
+        {
+            //create correct storage location model
+            StorageLocationModel stl = CombineLocation(deviceData.Location);
+            deviceData.Device.Location = stl;
+
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("CreateLog", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Location.Location.Building;
+            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = deviceData.Device.Location.Location.RoomNumber;
+            cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Location.ShelfName;
+            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = deviceData.Device.Location.ShelfLevel;
+            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = deviceData.Device.Location.ShelfSpot;
+            cmd.Parameters.Add("@changedBy", System.Data.SqlDbType.VarChar).Value = deviceData.Device.ChangedBy;
+            cmd.Parameters.Add("@note", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Notes;
+            cmd.Parameters.Add("@serialNumber", System.Data.SqlDbType.VarChar).Value = deviceData.Device.SerialNumber;
+            cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceData.Device.DeviceID;
+            //cmd.Parameters.Add("@feedback", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
+            cmd.ExecuteNonQuery();
+            con.Close();
+
+          //  deviceData.Feedback = Convert.ToInt32(cmd.Parameters["@feedback"].Value);
 
             return deviceData;
         }
@@ -243,62 +291,62 @@ namespace HUS_project.DAL
         }
 
         //Get storagelocations from database when changing room
-        internal EditDeviceModel GetStorageLocations(EditDeviceModel editData)
+        internal EditDeviceModel GetStorageLocations()
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("GetStorageLocation", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            if (editData != null)
-            {
-                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = editData.Device.Location.Location.Building;
-                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.Int).Value = (string)editData.Device.Location.Location.RoomNumber;
-            }
-            else
-            {
-                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = null;
-                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.Int).Value = null;
-            }
+            //if (editData != null)
+            //{
+            //    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = editData.Device.Location.Location.Building;
+            //    cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.Int).Value = (string)editData.Device.Location.Location.RoomNumber;
+            //}
+            //else
+            //{
+            //    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = null;
+            //    cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.Int).Value = null;
+            //}
 
 
             //get data
             SqlDataReader reader = cmd.ExecuteReader();
             List<string> storageLocations = new List<string>();
-            List<string> Rooms = new List<string>();
+           // List<string> Rooms = new List<string>();
 
             //get shelves & rooms
             while (reader.Read())
             {
-                string location = new string($"{(string)reader["shelfName"]}.{(string)reader["shelfLevel"]}.{(string)reader["shelfSpot"]}");
+                string location = new string($"{(string)reader["buildingName"]}.{(string)reader["roomNr"]}.{(string)reader["shelfName"]}.{(string)reader["shelfLevel"]}.{(string)reader["shelfSpot"]}");
                 storageLocations.Add(location);
 
-                if (editData == null)
-                {
+                //if (editData == null)
+                //{
 
-                    //add rooms 
-                    string room = new string($"{(string)reader["buildingName"]}.{(string)reader["roomNr"]}");
-                    if (Rooms.Count <= 0)
-                    {
-                        Rooms.Add(room);
+                //    //add rooms 
+                //    string room = new string($"{(string)reader["buildingName"]}.{(string)reader["roomNr"]}");
+                //    if (Rooms.Count <= 0)
+                //    {
+                //        Rooms.Add(room);
 
-                    }
-                    //add room to list of not the same
-                    else
-                    {
-                        if (!string.Equals(room, Rooms[Rooms.Count - 1]))
-                        {
-                            Rooms.Add(room);
-                        }
-                    }
-                }
+                //    }
+                //    //add room to list of not the same
+                //    else
+                //    {
+                //        if (!string.Equals(room, Rooms[Rooms.Count - 1]))
+                //        {
+                //            Rooms.Add(room);
+                //        }
+                //    }
+                //}
 
             }
 
 
 
             EditDeviceModel data = new EditDeviceModel();
-            data.Rooms = Rooms;
-            data.Shelfs = storageLocations;
+          //  data.Rooms = Rooms;
+            data.Locations = storageLocations;
 
 
             con.Close();
@@ -312,10 +360,10 @@ namespace HUS_project.DAL
             SqlCommand cmd = new SqlCommand("validateLocation", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = location.Location.Building;
-            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = location.Location.RoomNumber;
+            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar).Value = location.Location.RoomNumber;
             cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = location.ShelfName;
-            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = location.ShelfLevel;
-            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = location.ShelfSpot;
+            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar).Value = location.ShelfLevel;
+            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar).Value = location.ShelfSpot;
 
             cmd.Parameters.Add("@count", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
             cmd.ExecuteNonQuery();
@@ -391,6 +439,7 @@ namespace HUS_project.DAL
                 BuildingModel building = new BuildingModel();
 
                 device.DeviceID = (int)reader["deviceID"];
+                device.Status = (byte)reader["status"];
                 category.Category = (string)reader["categoryName"];
                 model.ModelName = (string)reader["modelName"];
 
