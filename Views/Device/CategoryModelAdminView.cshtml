@@ -1,0 +1,189 @@
+﻿@model HUS_project.Models.ViewModels.CategoryModelAdmin_Model
+@{
+    ViewData["Title"] = "Opret/Rediger Kategorier & ModelNavne";
+}
+
+<form class="was-validated" method="post" autocomplete="off" id="editForm">
+
+
+    <div class="row blue-oyster-bar center box-shadow">
+
+
+
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+
+            <div class="p-1">
+                <h4>Opret Ny Kategori:</h4>
+
+            </div>
+
+            <div class="p-1">
+                <input style="width:100%" asp-for="@Model.New_Category" />
+
+            </div>
+
+            <div class="p-1">
+                <button type="submit" class="btn btn-primary btn-sm btn-blue" style="width:100px" asp-action="CreateCategory">Opret</button>
+
+            </div>
+
+
+        </div>
+
+        <div class="col-sm-4"></div>
+
+
+
+
+    </div>
+
+    <!-----------------------Redigering af kategorier eller Model navne------------------------------------------------>
+    <div class="row ">
+        <div class="col-1">
+
+        </div>
+        <!--left box for editing categories-->
+        <div class="container col-md-4 containerMain box-shadow">
+
+
+            <div class="row containerHeader">
+                <div class="col-md-12">
+                    <h4 class="col text-white">Rediger Kategorier</h4>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class=" col-md-12 col-12 ">
+
+
+                    @for (int i = 0; i < Model.CategoryNames.Count; i++)
+                    {
+
+
+                        <div class="row containerBody alternating_row dynamic-Font-Size-10">
+
+                            <div class="col-lg-6 col-12 p-1 ">
+
+
+                                <input style="width:100%" asp-for="@Model.CategoryNames[i]" />
+
+
+                            </div>
+
+                            <div class="col-lg-3 col-6 p-1 center">
+
+
+                                <button type="submit" name="edit" class="btn btn-primary btn-sm btn-blue" style="width:100px" asp-action="EditCategory" value="@i-@Model.CategoryIds[i]">Gem</button>
+
+
+
+                            </div>
+
+
+                            <div class="col-lg-3 col-6 p-1 center">
+
+                                <button type="submit" name="delete" class="btn btn-primary btn-sm btn-red" style="width:100px" asp-action="DeleteCategory" value="@Model.CategoryIds[i]">Slet</button>
+
+                            </div>
+
+                        </div>
+
+
+
+                    }
+
+
+                </div>
+
+
+
+            </div>
+
+            <div class="row containerFooter">
+                <h4>&nbsp;</h4>
+            </div>
+
+        </div>
+
+        <div class="col-2">
+
+        </div>
+
+        <!--right box for editing model names-->
+        <div class="container col-md-4 containerMain box-shadow">
+
+
+            <div class="row containerHeader">
+                <div class="col-md-12">
+                    <h4 class="col text-white">Rediger Model Navne</h4>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class=" col-md-12 col-12 ">
+
+
+                    @for (int i = 0; i < Model.ModelNames.Count; i++)
+                    {
+
+
+                        <div class="row containerBody alternating_row dynamic-Font-Size-10">
+
+                            <div class="col-lg-6 col-12 p-1 ">
+
+
+                                <input style="width:100%" asp-for="@Model.ModelNames[i]" />
+
+
+                            </div>
+
+                            <div class="col-lg-3 col-6 p-1 center">
+
+
+                                <button type="submit" name="edit" class="btn btn-primary btn-sm btn-blue" style="width:100px" asp-action="EditModelName" value="@i-@Model.ModelIds[i]">Gem</button>
+
+
+
+                            </div>
+
+
+                            <div class="col-lg-3 col-6 p-1 center">
+
+                                <button type="submit" name="delete" class="btn btn-primary btn-sm btn-red" style="width:100px" asp-action="DeletModelName" value="@Model.ModelIds[i]">Slet</button>
+
+                            </div>
+
+                        </div>
+
+
+
+                    }
+
+
+
+                </div>
+
+
+
+            </div>
+
+            <div class="row containerFooter">
+                <h4>&nbsp;</h4>
+            </div>
+
+        </div>
+
+        <div class="col-1">
+
+        </div>
+
+    </div>
+
+</form>
