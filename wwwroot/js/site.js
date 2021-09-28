@@ -24,6 +24,16 @@ function fadeOut(input) {
     });
 }
 
+function fadeOutSlow() {
+    //console.log(input)
+    let x = document.getElementsByClassName("fadeUp")
+    for (var i = 0; i < 7; i++) {
+    $(x[i]).slideUp('slow', function () {
+    });
+
+    }
+}
+
 
 
 
@@ -37,7 +47,7 @@ function ReturnToEdit(val) {
     //console.log(output);
 
     //submit();
-    console.log("test test test" + val);
+
 }
 
 

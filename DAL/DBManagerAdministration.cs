@@ -219,7 +219,7 @@ namespace HUS_project.DAL
 
                 if (dataFromView.StorageLocation.Location.Building != null)
                 {
-                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = dataFromView.StorageLocation.Location.Building;
+                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = dataFromView.StorageLocation.Location.Building.ToUpper();
                 }
                 else
                 {
@@ -229,7 +229,7 @@ namespace HUS_project.DAL
 
                 if (dataFromView.StorageLocation.Location.RoomNumber != null)
                 {
-                    cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.Location.RoomNumber;
+                    cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.Location.RoomNumber.ToUpper();
                 }
                 else
                 {
@@ -239,7 +239,7 @@ namespace HUS_project.DAL
 
                 if (dataFromView.StorageLocation.ShelfName != null)
                 {
-                    cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.ShelfName;
+                    cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.ShelfName.ToUpper();
                 }
                 else
                 {
@@ -249,7 +249,7 @@ namespace HUS_project.DAL
 
                 if (dataFromView.StorageLocation.ShelfLevel != null)
                 {
-                    cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.ShelfLevel;
+                    cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.ShelfLevel.ToUpper();
                 }
                 else
                 {
@@ -259,7 +259,7 @@ namespace HUS_project.DAL
 
                 if (dataFromView.StorageLocation.ShelfSpot != null)
                 {
-                    cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.ShelfSpot;
+                    cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.ShelfSpot.ToUpper();
                 }
                 else
                 {
@@ -322,7 +322,7 @@ namespace HUS_project.DAL
 
                 if (dataFromView.StorageLocation.Location.Building != null)
                 {
-                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.Location.Building;
+                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.Location.Building.ToUpper();
                 }
                 else
                 {
@@ -332,7 +332,7 @@ namespace HUS_project.DAL
 
                 if (dataFromView.StorageLocation.Location.RoomNumber != null)
                 {
-                    cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.Location.RoomNumber;
+                    cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.Location.RoomNumber.ToUpper();
                 }
                 else
                 {
@@ -461,11 +461,11 @@ namespace HUS_project.DAL
                 string createStorageLocationFeedBack;
                 if (storagelocation.StorageLocation.Location.Building != null && storagelocation.StorageLocation.Location.RoomNumber != null && storagelocation.StorageLocation.ShelfName != null && storagelocation.StorageLocation.ShelfLevel != null && storagelocation.StorageLocation.ShelfSpot != null)
                 {
-                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = storagelocation.StorageLocation.Location.Building;
-                    cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.RoomNumber;
-                    cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfName;
-                    cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfLevel;
-                    cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfSpot;
+                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = storagelocation.StorageLocation.Location.Building.ToUpper();
+                    cmd.Parameters.Add("@roomNumber", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.RoomNumber.ToUpper();
+                    cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfName.ToUpper();
+                    cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfLevel.ToUpper();
+                    cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfSpot.ToUpper();
                     cmd.Parameters.Add("@createStorageLocationFeedBack", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
                 }
 
@@ -504,8 +504,8 @@ namespace HUS_project.DAL
                 string createBuildingFeedBack;
                 if (storagelocation.StorageLocation.Location.Building != null)
                 {
-                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = storagelocation.StorageLocation.Location.Building;
-                    cmd.Parameters.Add("@createBuildingFeedBack", System.Data.SqlDbType.VarChar,200).Direction = System.Data.ParameterDirection.Output;
+                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = storagelocation.StorageLocation.Location.Building.ToUpper();
+                    cmd.Parameters.Add("@createBuildingFeedBack", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
                 }
                 cmd.ExecuteNonQuery();
                 if (cmd.Parameters["@createBuildingFeedBack"].Value != System.DBNull.Value)
@@ -539,9 +539,9 @@ namespace HUS_project.DAL
                 SqlCommand cmd = new SqlCommand("CreateRoomNumber", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 string createRoomNumberFeedBack;
-                if (storagelocation.StorageLocation.Location.Building != null)
+                if (storagelocation.StorageLocation.Location.RoomNumber != null)
                 {
-                    cmd.Parameters.Add("@roomNumber", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.Building;
+                    cmd.Parameters.Add("@roomNumber", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.RoomNumber.ToUpper();
                     cmd.Parameters.Add("@createRoomNumberFeedBack", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
 
                 }
@@ -580,10 +580,10 @@ namespace HUS_project.DAL
                 SqlCommand cmd = new SqlCommand("CreateRoom", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 string createRoomFeedBack;
-                if (storagelocation.StorageLocation.Location.Building != null)
+                if (storagelocation.StorageLocation.Location.Building != null && storagelocation.StorageLocation.Location.RoomNumber != null)
                 {
-                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = storagelocation.StorageLocation.Location.Building;
-                    cmd.Parameters.Add("@roomNumber", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.Building;
+                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = storagelocation.StorageLocation.Location.Building.ToUpper();
+                    cmd.Parameters.Add("@roomNumber", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.RoomNumber.ToUpper();
                     cmd.Parameters.Add("@createRoomFeedBack", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
                 }
                 cmd.ExecuteNonQuery();
@@ -621,9 +621,9 @@ namespace HUS_project.DAL
                 SqlCommand cmd = new SqlCommand("CreateShelfName", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 string createShelfNameFeedBack;
-                if (storagelocation.StorageLocation.Location.Building != null)
+                if (storagelocation.StorageLocation.ShelfName != null)
                 {
-                    cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.Building;
+                    cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfName.ToUpper();
                     cmd.Parameters.Add("@createShelfNameFeedBack", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
                 }
                 cmd.ExecuteNonQuery();
@@ -642,8 +642,6 @@ namespace HUS_project.DAL
             {
 
             }
-
-
         }
 
 
@@ -661,9 +659,9 @@ namespace HUS_project.DAL
                 SqlCommand cmd = new SqlCommand("CreateShelfLevel", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 string createShelfLevelFeedBack;
-                if (storagelocation.StorageLocation.Location.Building != null)
+                if (storagelocation.StorageLocation.ShelfLevel != null)
                 {
-                    cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.Building;
+                    cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfLevel.ToUpper();
                     cmd.Parameters.Add("@createShelfLevelFeedBack", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
                 }
                 cmd.ExecuteNonQuery();
@@ -699,9 +697,9 @@ namespace HUS_project.DAL
                 SqlCommand cmd = new SqlCommand("CreateShelfSpot", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 string createShelfSpotFeedBack;
-                if (storagelocation.StorageLocation.Location.Building != null)
+                if (storagelocation.StorageLocation.ShelfSpot != null)
                 {
-                    cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.Building;
+                    cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfSpot.ToUpper();
                     cmd.Parameters.Add("@createShelfSpotFeedBack", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
                 }
                 cmd.ExecuteNonQuery();
@@ -722,6 +720,11 @@ namespace HUS_project.DAL
             }
 
         }
+
+
+
+
+
 
 
 

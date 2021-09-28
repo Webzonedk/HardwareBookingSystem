@@ -1,27 +1,59 @@
 ﻿
 //Submitting data from view
-function submit(input) {
+function submit(formID) {
+    let activeID = document.activeElement.id;
+    document.getElementById("hiddenInputFieldID").value = activeID;
+    console.log(activeID);
+    document.getelementById(formID).submit();
+}
 
-    document.getelementById(input).submit();
+ 
+//this method runs when view has loaded
+$(document).ready(function (e) {
+
+    var hiddenInput = document.getElementById("hiddenInputFieldID");
+    let searchBar = document.getElementById(hiddenInput.value)
+    var length = searchBar.value.length;
+
+
+    if (searchBar.setSelectionRange) {
+        searchBar.focus();
+        searchBar.setSelectionRange(length, length);
+    }
+    else if (searchbar.createTextRange) {
+        var t = searchbar.createTextRange();
+        t.collapse(true);
+        t.moveEnd('character', length);
+        t.moveStart('character', length);
+        t.select();
+    }
+
+});
+
+
+//functions to delay sumit while typing in the input field
+var timer;
+function SetTimeout() {
+
+    var doneTypingInterval = 1000; // wait 1 second
+
+    clearTimeout(timer);
+    timer = setTimeout(doneTyping, doneTypingInterval);
+
 }
 
 
-////Submitting data from view
-//$(document).ready(function (e) {
+//clear timer on key down
+function ClearTimeout() {
 
-//    console.log("test test test")
-//    let scrollToDiv = document.getElementById("insertData");
-//    scrollToDiv.scrollTop = scrollToDiv.scrollHeight;
-//});
+    clearTimeout(timer);
+}
 
+function doneTyping() {
 
+    document.getElementById("searchform").submit();
 
-//$(document).ready(function () {
-
-//window.scrollTo(0, document.body.scrollHeight);
-//});
-
-
+}
 
 
 
@@ -30,7 +62,7 @@ function submit(input) {
 
 //Scrolling down to selected ID
 function scrollToDiv(input, id) {
-    console.log("test test test " + input);
+
     if (input != "") {
         window.scrollTo(0, document.body.scrollHeight);
     }
@@ -48,31 +80,6 @@ function scrollToDiv(input, id) {
 }
 
 
-//function scroll(divID) {
-//    let ele = document.getElementById(divID + 1);
-//    console.log(ele)
-//    window.scrollTo(ele.offsetLeft, ele.offsetTop);
-//}
-
-
-
-
-//Submitting data from view (Not used at the moment)
-function submit2(input) {
-
-
-    let building = document.getElementById("buldingInput").value;//getting value
-    let roomNr = document.getElementById("romNrInput").value;//getting value
-    let chosenRoom = document.getElementById("chosenRoom");//inserting value
-
-    if (building != "" && roomNr != "") {
-        chosenRoom.value = building + "." + roomNr;
-    }
-    else {
-        chosenRoom.value = "";
-    }
-    document.getelementById(input).submit();
-}
 
 
 
@@ -104,16 +111,3 @@ function alertFunction(tempData) {
 
 
 
-
-//Function to check if inout fields is filled before submitting
-//might be obsolete
-function checkInputFields() {
-    let a = document.getElementById("buildingDropDown").value;
-    let b = document.getElementById("roomNumberDropDown").value;
-    let c = document.getElementById("shelfNameDropDown").value;
-    let d = document.getElementById("shelfLevelDropDown").value;
-    let e = document.getElementById("shelfSpotDropDown").value;
-    if (a == null || a == "", b == null || b == "", c == null || c == "", d == null || d == "", e == null || e == "") {
-        alert("Lokationen blev IKKE oprettet! \n Alle felter skal være udfyldt.");
-    }
-}

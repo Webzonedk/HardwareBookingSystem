@@ -27,6 +27,14 @@ namespace HUS_project.Models.ViewModels
         private string deleteShelfName;
         private string deleteShelfLevel;
         private string deleteShelfSpot;
+        private string hiddenFieldID;
+
+        public string HiddenFieldID
+        {
+            get { return hiddenFieldID; }
+            set { hiddenFieldID = value; }
+        }
+
         #endregion
 
 
