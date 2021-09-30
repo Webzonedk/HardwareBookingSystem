@@ -1,41 +1,58 @@
 ﻿
 //Submitting data from view
 function submit(formID) {
-    let activeID = document.activeElement.id;
-    document.getElementById("hiddenInputFieldID").value = activeID;
-    console.log(activeID);
+
     document.getelementById(formID).submit();
 }
 
- 
+function returnToInputField() {
+    let activeID = document.activeElement.id;
+    document.getElementById("hiddenInputFieldID").value = activeID;
+}
+
 //this method runs when view has loaded
 $(document).ready(function (e) {
 
-    var hiddenInput = document.getElementById("hiddenInputFieldID");
+    let hiddenInput = document.getElementById("hiddenInputFieldID");
     let searchBar = document.getElementById(hiddenInput.value)
-    var length = searchBar.value.length;
+    if (searchBar != null) {
+
+        let length = searchBar.value.length;
+
+        if (searchBar.setSelectionRange) {
+            searchBar.focus();
+            searchBar.setSelectionRange(length, length);
+        }
+        else if (searchbar.createTextRange) {
+            let t = searchbar.createTextRange();
+            t.collapse(true);
+            t.moveEnd('character', length);
+            t.moveStart('character', length);
+            t.select();
+        }
+
+    }
 
 
-    if (searchBar.setSelectionRange) {
-        searchBar.focus();
-        searchBar.setSelectionRange(length, length);
-    }
-    else if (searchbar.createTextRange) {
-        var t = searchbar.createTextRange();
-        t.collapse(true);
-        t.moveEnd('character', length);
-        t.moveStart('character', length);
-        t.select();
-    }
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+    //Function to set a timer to wait before sliding up feedback and run the function called FadeOutSlow
+    setTimeout(FadeOutSlow, 2000);
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+
+
+
+
 
 });
 
 
 //functions to delay sumit while typing in the input field
-var timer;
+let timer;
 function SetTimeout() {
 
-    var doneTypingInterval = 1000; // wait 1 second
+    let doneTypingInterval = 1000; // wait 1 second
 
     clearTimeout(timer);
     timer = setTimeout(doneTyping, doneTypingInterval);
@@ -51,11 +68,20 @@ function ClearTimeout() {
 
 function doneTyping() {
 
-    document.getElementById("searchform").submit();
+    document.getElementById("listStorageLocations").submit();
 
 }
 
 
+//Function to slide up th feedback (included in the document.ready as well)
+function FadeOutSlow() {
+    let x = document.getElementsByClassName("fadeUp")
+    for (var i = 0; i < 7; i++) {
+        $(x[i]).slideUp('slow', function () {
+        });
+
+    }
+}
 
 
 

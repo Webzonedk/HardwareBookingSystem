@@ -5,6 +5,9 @@
 
 // Write your JavaScript code.
 
+
+
+
 function SubmitValidation(input) {
 
     document.getElementById(input).submit();
@@ -19,20 +22,16 @@ function SubmitValidation(input) {
 
 //Fading function to fade out lines on list when a storagelocation is deleted
 function fadeOut(input) {
- //console.log(input)
+    //console.log(input)
     $("#" + input).slideUp('fast', function () {
     });
 }
 
-function fadeOutSlow() {
-    //console.log(input)
-    let x = document.getElementsByClassName("fadeUp")
-    for (var i = 0; i < 7; i++) {
-    $(x[i]).slideUp('slow', function () {
-    });
 
-    }
-}
+
+
+
+
 
 
 

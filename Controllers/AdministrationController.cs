@@ -42,6 +42,7 @@ namespace HUS_project.Controllers
         //----------------------------------------------------------------------------
         //Returns the searchresult when something has been choosen in the search fields
         //----------------------------------------------------------------------------
+        [HttpPost]
         public IActionResult LocationAdminResult(EditStorageLocationModel dataFromView)
         {
             DBManagerAdministration manager = new DBManagerAdministration(configuration);

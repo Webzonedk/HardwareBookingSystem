@@ -391,6 +391,7 @@ namespace HUS_project.DAL
                 searchResult.ShelfLevels = shelfLevels;
                 searchResult.ShelfSpots = shelfspots;
                 searchResult.Filter = 0;
+                searchResult.HiddenFieldID = dataFromView.HiddenFieldID;
 
                 searchResult.StorageLocations = storageLocations;
                 searchResult.StorageLocation = dataFromView.StorageLocation;

@@ -54,6 +54,7 @@
 
 <!--Blue Oister Bar with search fields-->
 <form asp-action="LocationAdminResult" method="post" id="listStorageLocations">
+    <input id="hiddenInputFieldID" type="hidden" asp-for="@Model.HiddenFieldID" />
     <div class="row blue-oyster-bar center box-shadow">
         <div class="row">
 
@@ -61,7 +62,7 @@
             </div>
             <div class="col-xl-2 col-sm-4 gx-3 gy-3">
                 <div class="form-floating">
-                    <input class="form-select capitalized " id="buildingDropDown" list="buildings" aria-label="Vælg Bygning" pattern="[A-Za-z0-9æøåÆØÅ]{0,50}" title="Bogstaver og tal og max. 50 karakterer" maxlength="50" asp-for="@Model.StorageLocation.Location.Building" onkeyup="submit('listStorageLocations')">
+                    <input class="form-select capitalized " id="buildingDropDown" list="buildings" aria-label="Vælg Bygning" pattern="[A-Za-z0-9æøåÆØÅ]{0,50}" title="Bogstaver og tal og max. 50 karakterer" maxlength="50" asp-for="@Model.StorageLocation.Location.Building" onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
                     <datalist id="buildings">
                         @foreach (var item in Model.Buildings)
                         {
@@ -91,7 +92,7 @@
             </div>
             <div class="col-xl-2 col-sm-4 gx-3 gy-3">
                 <div class="form-floating">
-                    <input class="form-select capitalized" id="roomNumberDropDown" list="roomNumbers" aria-label="Vælg lokalenummer" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.Location.RoomNumber" onkeyup="submit('listStorageLocations')">
+                    <input class="form-select capitalized" id="roomNumberDropDown" list="roomNumbers" aria-label="Vælg lokalenummer" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.Location.RoomNumber"  onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
                     <datalist id="roomNumbers">
                         @foreach (var item in Model.RoomNumbers)
                         {
@@ -121,7 +122,7 @@
             </div>
             <div class="col-xl-2 col-sm-4 gx-3 gy-3">
                 <div class="form-floating">
-                    <input class="form-select capitalized" id="shelfNameDropDown" list="shelfNames" aria-label="Vælg ReolNavn" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.ShelfName" onkeyup="submit('listStorageLocations')">
+                    <input class="form-select capitalized" id="shelfNameDropDown" list="shelfNames" aria-label="Vælg ReolNavn" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.ShelfName" onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
                     <datalist id="shelfNames">
                         @foreach (var item in Model.ShelfNames)
                         {
@@ -151,7 +152,7 @@
             </div>
             <div class="col-xl-2 col-sm-6 gx-3 gy-3">
                 <div class="form-floating">
-                    <input class="form-select capitalized" id="shelfLevelDropDown" list="shelfLevels" aria-label="Vælg Etage" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.ShelfLevel" onkeyup="submit('listStorageLocations')">
+                    <input class="form-select capitalized" id="shelfLevelDropDown" list="shelfLevels" aria-label="Vælg Etage" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.ShelfLevel" onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
                     <datalist id="shelfLevels">
                         @foreach (var item in Model.ShelfLevels)
                         {
@@ -181,7 +182,7 @@
             </div>
             <div class="col-xl-2 col-sm-6 gx-3 gy-3">
                 <div class="form-floating">
-                    <input class="form-select capitalized" id="shelfSpotDropDown" list="shelfSpots" aria-label="Vælg Hyldeplads" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.ShelfSpot" onkeyup="submit('listStorageLocations')">
+                    <input class="form-select capitalized" id="shelfSpotDropDown" list="shelfSpots" aria-label="Vælg Hyldeplads" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.ShelfSpot" onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
                     <datalist id="shelfSpots">
                         @foreach (var item in Model.ShelfSpots)
                         {
@@ -240,19 +241,18 @@
             }
             catch (Exception)
             {
-
                 throw;
             }
             @{string toolTip = "\nAlle felter kan oprettes enkeltvis, hvis ikke de findes i forvejen. \n\n" +
-                                                                      "Hvis Bygning og Lokale er udfyldt samtidigt kan der \n" +
-                                                                      "oprettes et Lokale, hvis ikke det eksisterer i forvejen.\n\n" +
-                                                                      "Hvis alle felter er udfyldt, kan der oprettes en vareplacering,\n" +
-                                                                      "hvis denne ikke findes i forvejen.\n"; }
+                                                                          "Hvis Bygning og Lokale er udfyldt samtidigt kan der \n" +
+                                                                          "oprettes et Lokale, hvis ikke det eksisterer i forvejen.\n\n" +
+                                                                          "Hvis alle felter er udfyldt, kan der oprettes en vareplacering,\n" +
+                                                                          "hvis denne ikke findes i forvejen.\n"; }
             <div class="col-sm-2 p-3">
-                <button type="submit" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip" asp-action="CreateLocation" onclick="fadeOutSlow()">Tilføj Placering</button>
+                <button type="submit" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip" asp-action="CreateLocation">Tilføj Placering</button>
 
             </div>
-            <input id="hiddenInputFieldID" type="hidden" asp-for="@Model.HiddenFieldID" />
+
             @try
             {
                 @if (storageLocationFeedBack != null)
@@ -277,7 +277,6 @@
             }
             catch (Exception)
             {
-
                 throw;
             }
             <div class="col-sm-1"></div>
