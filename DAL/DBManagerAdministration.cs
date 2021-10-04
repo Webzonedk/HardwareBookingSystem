@@ -296,6 +296,11 @@ namespace HUS_project.DAL
                     selectedStorageLocations.Add(selectedStorageLocation);
                 }
                 con.Close();
+
+                for (int i = 0; i < selectedStorageLocations.Count; i++)
+                {
+                    selectedStorageLocations[i].UnitCount = CountDevices(selectedStorageLocations[i]);
+                }
                 return selectedStorageLocations;
             }
             finally
@@ -403,6 +408,34 @@ namespace HUS_project.DAL
             }
         }
 
+
+
+
+        //----------------------------------------------------------------------------
+        //Method to count devices, room numbers, shelf names, shelf levels and shelf spots to the drop downs in the Blue Oister bar//
+        //----------------------------------------------------------------------------
+        internal int CountDevices(StorageLocationModel data)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("CountDevicesOnLocation", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            int unitCount=0;
+            if (data.LocationID > 0)
+            {
+                cmd.Parameters.Add("@locationID", System.Data.SqlDbType.Int).Value = data.LocationID;
+            }
+
+            con.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                unitCount = (int)reader["unitCount"];
+            }
+            con.Close();
+
+
+            return unitCount;
+        }
 
 
 

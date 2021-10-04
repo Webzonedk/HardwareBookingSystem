@@ -101,7 +101,7 @@ namespace HUS_project.Controllers
             if (dataFromView.StorageLocation.Location.RoomNumber != null)
             {
                 string roomNumberFeedBack;
-                string roomFeedBack=null;
+                string roomFeedBack = null;
                 if (dataFromView.StorageLocation.Location.Building != null)
                 {
                     roomNumberFeedBack = manager.CreateRoomNumber(dataFromView);

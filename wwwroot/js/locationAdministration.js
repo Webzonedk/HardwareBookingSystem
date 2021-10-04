@@ -73,6 +73,7 @@ function doneTyping() {
 }
 
 
+
 //Function to slide up th feedback (included in the document.ready as well)
 function FadeOutSlow() {
     let x = document.getElementsByClassName("fadeUp")

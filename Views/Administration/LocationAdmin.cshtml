@@ -92,7 +92,7 @@
             </div>
             <div class="col-xl-2 col-sm-4 gx-3 gy-3">
                 <div class="form-floating">
-                    <input class="form-select capitalized" id="roomNumberDropDown" list="roomNumbers" aria-label="Vælg lokalenummer" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.Location.RoomNumber"  onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
+                    <input class="form-select capitalized" id="roomNumberDropDown" list="roomNumbers" aria-label="Vælg lokalenummer" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.Location.RoomNumber" onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
                     <datalist id="roomNumbers">
                         @foreach (var item in Model.RoomNumbers)
                         {
@@ -215,71 +215,71 @@
         </div>
         <div class="row">
             <div class="col-sm-1"></div>
-            @try
-            {
-                @if (roomFeedBack != null)
+            <div class="col-sm-4 gx-3 gy-3">
+                @try
                 {
-
-                    if (roomFeedBack.Contains("allerede") == true)
+                    @if (roomFeedBack != null)
                     {
-                        <div class="fadeUp col-sm-4 p-1 text-red" id="feedback1">
-                            @roomFeedBack
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="fadeUp col-sm-4 p-1 text-white" id="feedback1">
-                            @roomFeedBack
-                        </div>
 
+                        if (roomFeedBack.Contains("allerede") == true)
+                        {
+                            <div class="fadeUp text-red" id="feedback1">
+                                @roomFeedBack
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="fadeUp text-white" id="feedback1">
+                                @roomFeedBack
+                            </div>
+
+                        }
                     }
                 }
-                else
+                catch (Exception)
                 {
-                    <div class="col-sm-4  p-1"> </div>
+                    throw;
                 }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            </div>
+
+
             @{string toolTip = "\nAlle felter kan oprettes enkeltvis, hvis ikke de findes i forvejen. \n\n" +
-                                                                          "Hvis Bygning og Lokale er udfyldt samtidigt kan der \n" +
-                                                                          "oprettes et Lokale, hvis ikke det eksisterer i forvejen.\n\n" +
-                                                                          "Hvis alle felter er udfyldt, kan der oprettes en vareplacering,\n" +
-                                                                          "hvis denne ikke findes i forvejen.\n"; }
+                                                                                "Hvis Bygning og Lokale er udfyldt samtidigt kan der \n" +
+                                                                                "oprettes et Lokale, hvis ikke det eksisterer i forvejen.\n\n" +
+                                                                                "Hvis alle felter er udfyldt, kan der oprettes en vareplacering,\n" +
+                                                                                "hvis denne ikke findes i forvejen.\n"; }
             <div class="col-sm-2 p-3">
                 <button type="submit" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip" asp-action="CreateLocation">Tilføj Placering</button>
 
             </div>
 
-            @try
-            {
-                @if (storageLocationFeedBack != null)
+
+            <div class="col-sm-4 gx-3 gy-3">
+
+                @try
                 {
-                    if (storageLocationFeedBack.Contains("allerede") == true)
+                    @if (storageLocationFeedBack != null)
                     {
-                        <div class="fadeUp col-sm-4  p-1 text-red" id="feedback2">
-                            @storageLocationFeedBack
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="fadeUp col-sm-4 p-1 text-white" id="feedback2">
-                            @storageLocationFeedBack
-                        </div>
+                        if (storageLocationFeedBack.Contains("allerede") == true)
+                        {
+                            <div class="fadeUp text-red" id="feedback2">
+                                @storageLocationFeedBack
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="fadeUp text-white" id="feedback2">
+                                @storageLocationFeedBack
+                            </div>
+                        }
                     }
                 }
-                else
+                catch (Exception)
                 {
-                    <div class="col-sm-4 p-1"> </div>
+                    throw;
                 }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            <div class="col-sm-1"></div>
+                <div class="col-sm-1"></div>
+            </div>
         </div>
     </div>
 
