@@ -24,6 +24,47 @@ namespace HUS_project.DAL
             connectionString = configuration.GetConnectionString("DBContext");
         }
 
+
+
+        //----------------------------------------------------------------------------
+        //Method to get all building, room numbers, shelf names, shelf levels and shelf spots to the drop downs in the Blue Oister bar//
+        //----------------------------------------------------------------------------
+        internal EditStorageLocationModel GetLocations(EditStorageLocationModel dataFromView)
+        {
+            try
+            {
+
+
+                List<StorageLocationModel> storageLocations = GetSelectedStorageLocations(dataFromView);
+                EditStorageLocationModel searchResult = new EditStorageLocationModel();
+
+                List<string> buildings = GetBuildings();
+                List<string> roomNumbers = GetRoomNumbers();
+                List<string> shelfNames = GetShelfName();
+                List<string> shelfLevels = GetShelfLevel();
+                List<string> shelfspots = GetShelfSpot();
+
+
+                searchResult.Buildings = buildings;
+                searchResult.RoomNumbers = roomNumbers;
+                searchResult.ShelfNames = shelfNames;
+                searchResult.ShelfLevels = shelfLevels;
+                searchResult.ShelfSpots = shelfspots;
+                searchResult.Filter = 0;
+                searchResult.HiddenFieldID = dataFromView.HiddenFieldID;
+
+                searchResult.StorageLocations = storageLocations;
+                searchResult.StorageLocation = dataFromView.StorageLocation;
+                return searchResult;
+            }
+            finally
+            {
+
+            }
+        }
+
+
+
         //----------------------------------------------------------------------------
         //Getting Building names for the dropdown in Blue Oister bar
         //----------------------------------------------------------------------------
@@ -313,6 +354,36 @@ namespace HUS_project.DAL
 
 
         //----------------------------------------------------------------------------
+        //Method to count devicesin a single location//
+        //----------------------------------------------------------------------------
+        internal int CountDevices(StorageLocationModel data)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("CountDevicesOnLocation", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            int unitCount = 0;
+            if (data.LocationID > 0)
+            {
+                cmd.Parameters.Add("@locationID", System.Data.SqlDbType.Int).Value = data.LocationID;
+            }
+
+            con.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                unitCount = (int)reader["counter"];
+            }
+            con.Close();
+
+
+            return unitCount;
+        }
+
+
+
+
+
+        //----------------------------------------------------------------------------
         //Getting specific room, based on the choosen building and roomNr in the mass destruction.
         //----------------------------------------------------------------------------
         internal List<StorageLocationModel> GetSpecificRoom(EditStorageLocationModel dataFromView)
@@ -371,71 +442,9 @@ namespace HUS_project.DAL
 
 
 
-        //----------------------------------------------------------------------------
-        //Method to get all building, room numbers, shelf names, shelf levels and shelf spots to the drop downs in the Blue Oister bar//
-        //----------------------------------------------------------------------------
-        internal EditStorageLocationModel GetLocations(EditStorageLocationModel dataFromView)
-        {
-            try
-            {
-
-
-                List<StorageLocationModel> storageLocations = GetSelectedStorageLocations(dataFromView);
-                EditStorageLocationModel searchResult = new EditStorageLocationModel();
-
-                List<string> buildings = GetBuildings();
-                List<string> roomNumbers = GetRoomNumbers();
-                List<string> shelfNames = GetShelfName();
-                List<string> shelfLevels = GetShelfLevel();
-                List<string> shelfspots = GetShelfSpot();
-
-
-                searchResult.Buildings = buildings;
-                searchResult.RoomNumbers = roomNumbers;
-                searchResult.ShelfNames = shelfNames;
-                searchResult.ShelfLevels = shelfLevels;
-                searchResult.ShelfSpots = shelfspots;
-                searchResult.Filter = 0;
-                searchResult.HiddenFieldID = dataFromView.HiddenFieldID;
-
-                searchResult.StorageLocations = storageLocations;
-                searchResult.StorageLocation = dataFromView.StorageLocation;
-                return searchResult;
-            }
-            finally
-            {
-
-            }
-        }
 
 
 
-
-        //----------------------------------------------------------------------------
-        //Method to count devices, room numbers, shelf names, shelf levels and shelf spots to the drop downs in the Blue Oister bar//
-        //----------------------------------------------------------------------------
-        internal int CountDevices(StorageLocationModel data)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            SqlCommand cmd = new SqlCommand("CountDevicesOnLocation", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            int unitCount=0;
-            if (data.LocationID > 0)
-            {
-                cmd.Parameters.Add("@locationID", System.Data.SqlDbType.Int).Value = data.LocationID;
-            }
-
-            con.Open();
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                unitCount = (int)reader["unitCount"];
-            }
-            con.Close();
-
-
-            return unitCount;
-        }
 
 
 
@@ -894,6 +903,8 @@ namespace HUS_project.DAL
             }
 
         }
+
+
 
 
 

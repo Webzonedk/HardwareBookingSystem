@@ -31,22 +31,4 @@ function fadeOut(input) {
 
 
 
-
-
-
-
-
-//call submit at scanDevice view
-function ReturnToEdit(val) {
-    //var location = $("#content").val();
-    //console.log(location);
-    //var id = 0;
-
-    //var output = location + '-' + id;
-    //console.log(output);
-
-    //submit();
-
-}
-
-
+$('[data-toggle="tooltip"]').tooltip()

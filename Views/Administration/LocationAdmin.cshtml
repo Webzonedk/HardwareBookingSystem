@@ -244,10 +244,10 @@
 
 
             @{string toolTip = "\nAlle felter kan oprettes enkeltvis, hvis ikke de findes i forvejen. \n\n" +
-                                                                                "Hvis Bygning og Lokale er udfyldt samtidigt kan der \n" +
-                                                                                "oprettes et Lokale, hvis ikke det eksisterer i forvejen.\n\n" +
-                                                                                "Hvis alle felter er udfyldt, kan der oprettes en vareplacering,\n" +
-                                                                                "hvis denne ikke findes i forvejen.\n"; }
+                                                                                            "Hvis Bygning og Lokale er udfyldt samtidigt kan der \n" +
+                                                                                            "oprettes et Lokale, hvis ikke det eksisterer i forvejen.\n\n" +
+                                                                                            "Hvis alle felter er udfyldt, kan der oprettes en vareplacering,\n" +
+                                                                                            "hvis denne ikke findes i forvejen.\n"; }
             <div class="col-sm-2 p-3">
                 <button type="submit" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip" asp-action="CreateLocation">Tilføj Placering</button>
 
@@ -292,9 +292,16 @@
 
 
 
+
+
+
+
+
+    @*-------------------------------------------------------------------*@
     @*-------------------------------------------------------------------*@
     @*-------------------------------------------------------------------*@
     @* The list of storagelocations matching the search terms *@
+    @*-------------------------------------------------------------------*@
     @*-------------------------------------------------------------------*@
     @*-------------------------------------------------------------------*@
     <div class="container containerMain box-shadow">
@@ -369,13 +376,29 @@
                 <div class="col-lg-2 col-6 p-1 center ">
                     @if (@Model.StorageLocations[i].Location.Building != "Modtagelse" && @Model.StorageLocations[i].Location.Building != "Værksted")
                     {
-                        @*Remember that the name needs to be the same as the variable that is sent to the controller*@
-                        <button type="submit" name="deleteLocation" class="btn btn-danger btn-sm btn-red" value="@Model.StorageLocations[i].LocationID.@i" style="width:100px" asp-action="DeleteSingleLocation" onclick="fadeOut(@i)">Slet</button>
-                    }
-                    @*@if (i == Model.StorageLocations.Count - 1)
+                        if (@Model.StorageLocations[i].UnitCount == 0)
                         {
-                            <button type="submit" class="btn btn-primary btn-sm btn-blue" style="width:150px" asp-action="PrintAllQRCodes">Print alle QR-Koder</button>
-                        }*@
+                            @*Remember that the name needs to be the same as the variable that is sent to the controller*@
+                            <button type="submit" name="deleteLocation" class="btn btn-danger btn-sm btn-red" value="@Model.StorageLocations[i].LocationID.@i" style="width:100px" asp-action="DeleteSingleLocation" onclick="fadeOut(@i)">Slet (@Model.StorageLocations[i].UnitCount)</button>
+                        }
+                        else
+                        {
+                            string toolTip1 = $"Placeringen kan ikke slettes da der findes ({@Model.StorageLocations[i].UnitCount}) enheder på placeringen";
+
+                            <span class="tool-tip" data-toggle="tooltip" data-placement="top" title="@toolTip1">
+                                <button class="btn btn-danger btn-sm btn-dark" disabled="disabled" style="width:100px"> Slet (@Model.StorageLocations[i].UnitCount) </button>
+                            </span>
+                        }
+                    }
+                    else
+                    {
+                        string toolTip2 = "Denne Placering kan ikke slettes da den er guddommelig!";
+                        <span class="tool-tip" data-toggle="tooltip" data-placement="top" title="@toolTip2">
+                            <button class="btn btn-danger btn-sm btn-dark" disabled="disabled" style="width:100px">
+                                Slet (@Model.StorageLocations[i].UnitCount)
+                            </button>
+                        </span>
+                    }
                 </div>
 
 
@@ -409,9 +432,16 @@
 
 
 
+
+
+
+
+
+@*-------------------------------------------------------------------*@
 @*-------------------------------------------------------------------*@
 @*-------------------------------------------------------------------*@
 @* The Mass destruction area *@
+@*-------------------------------------------------------------------*@
 @*-------------------------------------------------------------------*@
 @*-------------------------------------------------------------------*@
 <form asp-action="" method="post" id="insertData">
