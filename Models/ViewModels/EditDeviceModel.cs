@@ -9,17 +9,15 @@ namespace HUS_project.Models.ViewModels
     {
         #region fields
         private DeviceModel device;
-        private string room;
-        private string shelf;
+        private string location;
         private string imagePath;
         private List<string> modelNames;
         private List<string> categoryNames;
-        private List<string> rooms;
-        private List<string> shelfs;
+        private List<string> locations;
         private List<DeviceModel> logs;
         private List<DeviceModel> locationLogs;
         private int selectedLogs;
-
+        private int feedback;
        
 
         #endregion
@@ -32,22 +30,17 @@ namespace HUS_project.Models.ViewModels
             set { device = value; }
         }
 
-        public string Room
-        {
-            get { return room; }
-            set { room = value; }
-        }
-
+        
         public string ImagePath
         {
             get { return imagePath; }
             set { imagePath = value; }
         }
 
-        public string Shelf
+        public string Location
         {
-            get { return shelf; }
-            set { shelf = value; }
+            get { return location; }
+            set { location = value; }
         }
 
         public List<string> ModelNames
@@ -63,16 +56,12 @@ namespace HUS_project.Models.ViewModels
             set { categoryNames = value; }
         }
 
-        public List<string> Rooms
-        {
-            get { return rooms; }
-            set { rooms = value; }
-        }
+       
 
-        public List<string> Shelfs
+        public List<string> Locations
         {
-            get { return shelfs; }
-            set { shelfs = value; }
+            get { return locations; }
+            set { locations = value; }
         }
 
         public List<DeviceModel> Logs
@@ -92,6 +81,12 @@ namespace HUS_project.Models.ViewModels
             set { selectedLogs = value; }
         }
 
+        public int Feedback
+        {
+            get { return feedback; }
+            set { feedback = value; }
+        }
+
         #endregion
 
         #region Constructors
@@ -100,19 +95,17 @@ namespace HUS_project.Models.ViewModels
             //initialize lists
             categoryNames = new List<string>();
             modelNames = new List<string>();
-            rooms = new List<string>();
-            shelfs = new List<string>();
+            locations = new List<string>();
             logs = new List<DeviceModel>();
             locationLogs = new List<DeviceModel>();
         }
 
-        public EditDeviceModel(DeviceModel device, List<string> modelNames, List<string> categories, List<string> rooms,List<string> locations,List<DeviceModel> logs, List<DeviceModel> locationlogs,string _imagepath)
+        public EditDeviceModel(DeviceModel device, List<string> modelNames, List<string> categories,List<string> locations,List<DeviceModel> logs, List<DeviceModel> locationlogs,string _imagepath)
         {
             this.device = device;
             this.modelNames = modelNames;
             this.categoryNames = categories;
-            this.rooms = rooms;
-            this.shelfs = locations;
+            this.locations = locations;
             this.logs = logs;
             this.LocationLogs = locationlogs;
             this.imagePath = _imagepath;

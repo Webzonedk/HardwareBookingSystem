@@ -14,6 +14,13 @@ namespace HUS_project.Models
         private string shelfLevel;
         private string shelfSpot;
         private BuildingModel location;
+        private int unitCount;
+
+        public int UnitCount
+        {
+            get { return unitCount; }
+            set { unitCount = value; }
+        }
 
         #endregion
 

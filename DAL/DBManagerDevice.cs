@@ -13,7 +13,7 @@ namespace HUS_project.DAL
 {
     public class DBManagerDevice
     {
-        //private fields containting connectionstrings for databases
+        //private fields containing connectionstrings for databases
         private readonly IConfiguration configuration;
         private readonly string connectionString;
 
@@ -28,8 +28,6 @@ namespace HUS_project.DAL
 
         internal int CreateDevice(DeviceModel deviceData)
         {
-            Debug.WriteLine(connectionString);
-            //  Debug.WriteLine("Server=ANDREASPC; Database=HardwareUdlaanSystem; User Id=Husv1ld; Password=Wh3nY0uN33dSom3th1ng;");
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("CreateDevice", con);
@@ -68,15 +66,31 @@ namespace HUS_project.DAL
                 catch (Exception)
                 {
                     File.Delete($"{webroot}{newfilename}");
-                     File.Move($"{webroot}{oldName}", $"{webroot}{newfilename}");
+                    File.Move($"{webroot}{oldName}", $"{webroot}{newfilename}");
 
                     //throw;
                 }
             }
 
-            
+
 
             return deviceID;
+        }
+
+        internal int CreateCategory(string name)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("AddCategory", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@categoryName", System.Data.SqlDbType.VarChar).Value = name;
+
+            //execute query
+            int feedback = cmd.ExecuteNonQuery();
+
+            con.Close();
+
+            return feedback;
         }
 
         internal int UploadImage(ImageModel fileData)
@@ -102,8 +116,8 @@ namespace HUS_project.DAL
             return success;
         }
 
-      
 
+        //edit device 
         internal int EditDevice(EditDeviceModel deviceData)
         {
             SqlConnection con = new SqlConnection(connectionString);
@@ -114,6 +128,7 @@ namespace HUS_project.DAL
             cmd.Parameters.Add("@modelDescription", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Model.ModelDescription;
             cmd.Parameters.Add("@categoryName", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Model.Category.Category;
             cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceData.Device.DeviceID;
+            cmd.Parameters.Add("@serialNumber", System.Data.SqlDbType.VarChar).Value = deviceData.Device.SerialNumber;
             cmd.Parameters.Add("@status", System.Data.SqlDbType.TinyInt).Value = deviceData.Device.Status;
             cmd.Parameters.Add("@note", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Notes;
             cmd.Parameters.Add("@changedBy", System.Data.SqlDbType.VarChar).Value = deviceData.Device.ChangedBy;
@@ -123,6 +138,95 @@ namespace HUS_project.DAL
             {
                 success = 1;
             }
+
+            con.Close();
+            return success;
+        }
+
+        //edit category
+        internal int EditCategory(int id, string newCategory)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("EditCategory", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@categoryID", System.Data.SqlDbType.Int).Value = id;
+            cmd.Parameters.Add("@categoryName", System.Data.SqlDbType.VarChar).Value = newCategory;
+
+            int success = cmd.ExecuteNonQuery();
+            con.Close();
+
+
+
+            return success;
+        }
+
+        //edit model name
+        internal int EditModel(int id, string newModelName)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("EditModelName", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@modelID", System.Data.SqlDbType.Int).Value = id;
+            cmd.Parameters.Add("@modelName", System.Data.SqlDbType.VarChar).Value = newModelName;
+
+            int success = cmd.ExecuteNonQuery();
+            con.Close();
+
+
+
+            return success;
+        }
+
+        //delete device
+        internal int DeleteDevice(EditDeviceModel deviceData)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("DeleteDevice", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+            cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceData.Device.DeviceID;
+            cmd.Parameters.Add("@status", System.Data.SqlDbType.TinyInt).Value = deviceData.Device.Status;
+            cmd.Parameters.Add("@feedback", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
+            cmd.ExecuteNonQuery();
+
+            int success = Convert.ToInt32(cmd.Parameters["@feedback"].Value);
+
+            con.Close();
+            return success;
+        }
+
+        //delete category
+        internal int DeleteCategory(int id)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("DeleteCategory", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@categoryID", System.Data.SqlDbType.Int).Value = id;
+
+            int success = cmd.ExecuteNonQuery();
+
+
+
+            con.Close();
+            return success;
+        }
+
+        //delete modelName
+        internal int DeleteModelName(int id)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("DeleteModelName", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@modelID", System.Data.SqlDbType.Int).Value = id;
+
+            int success = cmd.ExecuteNonQuery();
+
+
 
             con.Close();
             return success;
@@ -142,9 +246,43 @@ namespace HUS_project.DAL
             cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = deviceData.Device.Location.ShelfSpot;
             cmd.Parameters.Add("@changedBy", System.Data.SqlDbType.VarChar).Value = deviceData.Device.ChangedBy;
             cmd.Parameters.Add("@note", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Notes;
+            cmd.Parameters.Add("@serialNumber", System.Data.SqlDbType.VarChar).Value = deviceData.Device.SerialNumber;
             cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceData.Device.DeviceID;
+            cmd.Parameters.Add("@feedback", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
             cmd.ExecuteNonQuery();
             con.Close();
+
+            deviceData.Feedback = Convert.ToInt32(cmd.Parameters["@feedback"].Value);
+
+            return deviceData;
+        }
+
+        //create Log
+        internal EditDeviceModel CreateLog(EditDeviceModel deviceData)
+        {
+            //create correct storage location model
+            StorageLocationModel stl = CombineLocation(deviceData.Location);
+            deviceData.Device.Location = stl;
+
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("CreateLog", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Location.Location.Building;
+            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = deviceData.Device.Location.Location.RoomNumber;
+            cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Location.ShelfName;
+            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = deviceData.Device.Location.ShelfLevel;
+            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = deviceData.Device.Location.ShelfSpot;
+            cmd.Parameters.Add("@changedBy", System.Data.SqlDbType.VarChar).Value = deviceData.Device.ChangedBy;
+            cmd.Parameters.Add("@note", System.Data.SqlDbType.VarChar).Value = deviceData.Device.Notes;
+            cmd.Parameters.Add("@serialNumber", System.Data.SqlDbType.VarChar).Value = deviceData.Device.SerialNumber;
+            cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceData.Device.DeviceID;
+            //cmd.Parameters.Add("@feedback", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
+            cmd.ExecuteNonQuery();
+            con.Close();
+
+            //  deviceData.Feedback = Convert.ToInt32(cmd.Parameters["@feedback"].Value);
+
             return deviceData;
         }
 
@@ -195,42 +333,8 @@ namespace HUS_project.DAL
             return device;
         }
 
+
         //Get device Logs from database before edit
-        internal List<DeviceModel> GetDeviceLogs(int deviceID)
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("GetDeviceLogs", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceID;
-
-            SqlDataReader reader = cmd.ExecuteReader();
-            List<DeviceModel> Logs = new List<DeviceModel>();
-            while (reader.Read())
-            {
-                DeviceModel device = new DeviceModel();
-                ModelModel m = new ModelModel();
-                CategoryModel c = new CategoryModel();
-                m.Category = c;
-
-            
-                device.ChangedBy = (string)reader["changedBy"];
-                device.ChangeDate = (DateTime)reader["logDate"];
-                device.Notes = (string)reader["note"];
-                m.Category.Category = (string)reader["categoryName"];
-                m.ModelName = (string)reader["modelName"];
-
-
-                device.Model = m;
-                Logs.Add(device);
-            }
-
-
-
-            con.Close();
-            return Logs;
-        }
-
         internal List<DeviceModel> GetAllDeviceLogs(int deviceID)
         {
             SqlConnection con = new SqlConnection(connectionString);
@@ -246,16 +350,20 @@ namespace HUS_project.DAL
                 DeviceModel device = new DeviceModel();
                 ModelModel m = new ModelModel();
                 CategoryModel c = new CategoryModel();
+                StorageLocationModel stl = new StorageLocationModel();
+
                 m.Category = c;
 
-
+                device.SerialNumber = (string)reader["serialNumber"];
                 device.ChangedBy = (string)reader["changedBy"];
                 device.ChangeDate = (DateTime)reader["logDate"];
                 device.Notes = (string)reader["note"];
                 m.Category.Category = (string)reader["categoryName"];
                 m.ModelName = (string)reader["modelName"];
-
-
+                string building = (string)reader["room"];
+                string location = (string)reader["location"];
+                stl = CombineLocation(string.Format("{0}{1}{2}", building, ".", location));
+                device.Location = stl;
                 device.Model = m;
                 Logs.Add(device);
             }
@@ -267,62 +375,31 @@ namespace HUS_project.DAL
         }
 
         //Get storagelocations from database when changing room
-        internal EditDeviceModel GetStorageLocations(EditDeviceModel editData)
+        internal EditDeviceModel GetStorageLocations()
         {
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("GetStorageLocation", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            if (editData != null)
-            {
-                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = editData.Device.Location.Location.Building;
-                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.Int).Value = (string)editData.Device.Location.Location.RoomNumber;
-            }
-            else
-            {
-                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = null;
-                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.Int).Value = null;
-            }
-
 
             //get data
             SqlDataReader reader = cmd.ExecuteReader();
             List<string> storageLocations = new List<string>();
-            List<string> Rooms = new List<string>();
+
 
             //get shelves & rooms
             while (reader.Read())
             {
-                string location = new string($"{(string)reader["shelfName"]}.{(string)reader["shelfLevel"]}.{(string)reader["shelfSpot"]}");
+                string location = new string($"{(string)reader["buildingName"]}.{(string)reader["roomNr"]}.{(string)reader["shelfName"]}.{(string)reader["shelfLevel"]}.{(string)reader["shelfSpot"]}");
                 storageLocations.Add(location);
-
-                if (editData == null)
-                {
-
-                    //add rooms 
-                    string room = new string($"{(string)reader["buildingName"]}.{(string)reader["roomNr"]}");
-                    if (Rooms.Count <= 0)
-                    {
-                        Rooms.Add(room);
-
-                    }
-                    //add room to list of not the same
-                    else
-                    {
-                        if (!string.Equals(room, Rooms[Rooms.Count - 1]))
-                        {
-                            Rooms.Add(room);
-                        }
-                    }
-                }
 
             }
 
 
 
             EditDeviceModel data = new EditDeviceModel();
-            data.Rooms = Rooms;
-            data.Shelfs = storageLocations;
+            //  data.Rooms = Rooms;
+            data.Locations = storageLocations;
 
 
             con.Close();
@@ -336,17 +413,17 @@ namespace HUS_project.DAL
             SqlCommand cmd = new SqlCommand("validateLocation", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = location.Location.Building;
-            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.TinyInt).Value = location.Location.RoomNumber;
+            cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar).Value = location.Location.RoomNumber;
             cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar).Value = location.ShelfName;
-            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.TinyInt).Value = location.ShelfLevel;
-            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.TinyInt).Value = location.ShelfSpot;
+            cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar).Value = location.ShelfLevel;
+            cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar).Value = location.ShelfSpot;
 
             cmd.Parameters.Add("@count", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
             cmd.ExecuteNonQuery();
             con.Close();
 
             int count = Convert.ToInt32(cmd.Parameters["@count"].Value);
-            if(count> 0)
+            if (count > 0)
             {
                 return true;
             }
@@ -415,6 +492,7 @@ namespace HUS_project.DAL
                 BuildingModel building = new BuildingModel();
 
                 device.DeviceID = (int)reader["deviceID"];
+                device.Status = (byte)reader["status"];
                 category.Category = (string)reader["categoryName"];
                 model.ModelName = (string)reader["modelName"];
 
@@ -436,5 +514,68 @@ namespace HUS_project.DAL
             con.Close();
             return SearchModel;
         }
+
+
+        //get all modelNames ids
+        internal List<int> GetAllModelIds()
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("GetAllModelIds", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            List<int> modelIDs = new List<int>();
+            while (reader.Read())
+            {
+                int modelID = (int)reader["modelID"];
+                modelIDs.Add(modelID);
+            }
+
+            con.Close();
+            return modelIDs;
+        }
+
+        //get all categoryName ids
+        internal List<int> GetAllCategoryIds()
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("GetAllCategoryIds", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            List<int> categoryIDs = new List<int>();
+            while (reader.Read())
+            {
+                int categoryID = (int)reader["categoryID"];
+                categoryIDs.Add(categoryID);
+            }
+
+            con.Close();
+            return categoryIDs;
+        }
+
+
+        #region helper methods
+
+        //returns storagemodel from string input
+        internal StorageLocationModel CombineLocation(string location)
+        {
+            string[] splittedLocation = location.Split('.');
+            BuildingModel bm = new BuildingModel();
+            StorageLocationModel storage = new StorageLocationModel();
+
+            bm.Building = splittedLocation[0];
+            bm.RoomNumber = splittedLocation[1];
+            storage.ShelfName = splittedLocation[2];
+            storage.ShelfLevel = splittedLocation[3];
+            storage.ShelfSpot = splittedLocation[4];
+
+            storage.Location = bm;
+            return storage;
+        }
+
+        #endregion
     }
 }
