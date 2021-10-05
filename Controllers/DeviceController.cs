@@ -17,12 +17,12 @@ namespace HUS_project.Controllers
     public class DeviceController : Controller
     {
         private readonly IConfiguration configuration;
-        
+
 
         // constructor of homecontroller
         public DeviceController(IConfiguration config)
         {
-            this.configuration = config; 
+            this.configuration = config;
         }
 
 
@@ -43,6 +43,24 @@ namespace HUS_project.Controllers
 
 
             return View(deviceData);
+        }
+
+        //creates new category
+        public IActionResult CreateCategory(CategoryModelAdmin_Model data)
+        {
+            // initializing DB managers
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            DBManagerShared dbsharedManager = new DBManagerShared(configuration);
+            int feedback = dbManager.CreateCategory(data.New_Category);
+
+
+            data = new CategoryModelAdmin_Model();
+            data.ModelNames = dbsharedManager.GetModelNames();
+            data.CategoryNames = dbsharedManager.GetCategories();
+            data.CategoryIds = dbManager.GetAllCategoryIds();
+            data.ModelIds = dbManager.GetAllModelIds();
+
+            return View("CategoryModelAdminView",data);
         }
 
         [HttpPost]
@@ -90,12 +108,12 @@ namespace HUS_project.Controllers
             else
             {
                 //check if image exists
-                if (!CheckExistingModelNames(deviceData.Image))
-                {
-                    deviceData.Image = null;
-                }
+                //if (!CheckExistingModelNames(deviceData.Image))
+                //{
+                //    deviceData.Image = null;
+                //}
 
-
+                deviceData.Image = null;
             }
 
             //set return data
@@ -240,7 +258,7 @@ namespace HUS_project.Controllers
             string[] splittedShelf = data.Location.Split('.');
             bool inputValidated = false;
 
-            
+
 
             if (splittedShelf.Length == 5)
             {
@@ -318,12 +336,12 @@ namespace HUS_project.Controllers
 
             EditDeviceModel storagelocation = dbManager.GetStorageLocations();
 
-            
+
 
             //check RoomNames
             bool Room_validated = checkUserInput(storagelocation.Locations, data.Location);
 
-           
+
 
             if (!Room_validated)
             {
@@ -331,13 +349,13 @@ namespace HUS_project.Controllers
                 data.Locations = storagelocation.Locations;
                 return View("EditView", data);
             }
-           
+
 
 
             data.Device.ChangedBy = HttpContext.Session.GetString("uniLogin");
             data.Device.Notes = "Enhed redigeret";
 
-           
+
             #region saving new location
             //prep data for database
             string[] splittedShelf = data.Location.Split('.');
@@ -352,7 +370,7 @@ namespace HUS_project.Controllers
             data = dbManager.EditDeviceLocation(data);
             #endregion
 
-           
+
 
             //send data to database
             int success = dbManager.EditDevice(data);
@@ -394,6 +412,66 @@ namespace HUS_project.Controllers
             return View("EditView", data);
         }
 
+        public IActionResult CategoryModelAdminView()
+        {
+            //initializing DB managers
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            DBManagerShared dbsharedManager = new DBManagerShared(configuration);
+
+            CategoryModelAdmin_Model data = new CategoryModelAdmin_Model();
+            data.ModelNames = dbsharedManager.GetModelNames();
+            data.CategoryNames = dbsharedManager.GetCategories();
+            data.CategoryIds = dbManager.GetAllCategoryIds();
+            data.ModelIds = dbManager.GetAllModelIds();
+            return View(data);
+        }
+
+        [HttpPost]
+        public IActionResult EditCategory(string edit, CategoryModelAdmin_Model data)
+        {
+            //initializing DB managers
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            DBManagerShared dbsharedManager = new DBManagerShared(configuration);
+
+            string[] split = edit.Split('-');
+            int categoryIndex = int.Parse(split[0]);
+            string categoryName = data.CategoryNames[categoryIndex];
+            int id = int.Parse(split[1]);
+
+            int feedback = dbManager.EditCategory(id, categoryName);
+
+            // CategoryModelAdmin_Model data = new CategoryModelAdmin_Model();
+            data.ModelNames = dbsharedManager.GetModelNames();
+            data.CategoryNames = dbsharedManager.GetCategories();
+            data.CategoryIds = dbManager.GetAllCategoryIds();
+            data.ModelIds = dbManager.GetAllModelIds();
+
+            return View("CategoryModelAdminView", data);
+        }
+
+        [HttpPost]
+        public IActionResult EditModelName(string edit, CategoryModelAdmin_Model data)
+        {
+            //initializing DB managers
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            DBManagerShared dbsharedManager = new DBManagerShared(configuration);
+
+            string[] split = edit.Split('-');
+            int modelIndex = int.Parse(split[0]);
+            string modelName = data.ModelNames[modelIndex];
+            int id = int.Parse(split[1]);
+
+            int feedback = dbManager.EditModel(id, modelName);
+
+            // CategoryModelAdmin_Model data = new CategoryModelAdmin_Model();
+            data.ModelNames = dbsharedManager.GetModelNames();
+            data.CategoryNames = dbsharedManager.GetCategories();
+            data.CategoryIds = dbManager.GetAllCategoryIds();
+            data.ModelIds = dbManager.GetAllModelIds();
+
+            return View("CategoryModelAdminView", data);
+        }
+
         [HttpPost]
         //Deactivate Device
         public IActionResult DeleteDevice(EditDeviceModel data)
@@ -417,23 +495,75 @@ namespace HUS_project.Controllers
 
                 // clear model
                 ModelState.Clear();
+
+
+                ModelInfoModel info = new ModelInfoModel();
+                info.SearchName = "L";
+                info = dbManager.GetDeviceInventory(info);
+                return View("Inventory", info);
             }
             else
             {
                 ViewBag.ErrorDelete = "Enheden kan ikke slettes, da den er i brug";
+                return View("EditView", data);
             }
 
 
+            //  return View("EditView", data);
 
-            return View("EditView", data);
         }
+
+        [HttpPost]
+        //delete category
+        public IActionResult DeleteCategory(string delete)
+        {
+            //initializing DB managers
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            DBManagerShared dbsharedManager = new DBManagerShared(configuration);
+
+            
+            int id = int.Parse(delete);
+
+            int feedback = dbManager.DeleteCategory(id);
+
+             CategoryModelAdmin_Model data = new CategoryModelAdmin_Model();
+            data.ModelNames = dbsharedManager.GetModelNames();
+            data.CategoryNames = dbsharedManager.GetCategories();
+            data.CategoryIds = dbManager.GetAllCategoryIds();
+            data.ModelIds = dbManager.GetAllModelIds();
+
+            return View("CategoryModelAdminView", data);
+        }
+
+        [HttpPost]
+        //delete modelName
+        public IActionResult DeletModelName(string delete)
+        {
+            //initializing DB managers
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            DBManagerShared dbsharedManager = new DBManagerShared(configuration);
+
+
+            int id = int.Parse(delete);
+
+            int feedback = dbManager.DeleteModelName(id);
+
+            CategoryModelAdmin_Model data = new CategoryModelAdmin_Model();
+            data.ModelNames = dbsharedManager.GetModelNames();
+            data.CategoryNames = dbsharedManager.GetCategories();
+            data.CategoryIds = dbManager.GetAllCategoryIds();
+            data.ModelIds = dbManager.GetAllModelIds();
+
+            return View("CategoryModelAdminView", data);
+        }
+
         public IActionResult Inventory(ModelInfoModel infoList)
         {
             //generate an instance of the database manager
             DBManagerDevice DBDManager = new DBManagerDevice(configuration);
 
             //set dummy data to database
-            infoList.SearchName = "L";
+            infoList.SearchName = "";
 
             infoList.Category = null;
             infoList.InStock = 0;
@@ -441,7 +571,7 @@ namespace HUS_project.Controllers
             //get data from the manager
             infoList = DBDManager.GetDeviceInventory(infoList);
 
-            
+
 
 
             return View(infoList);
@@ -539,7 +669,7 @@ namespace HUS_project.Controllers
             List<string> output = new List<string>();
             string data = $"Dev-{input.Device.DeviceID}-{input.Device.SerialNumber}";
             output.Add(data);
-            
+
 
             //redirect to method
             return SendToQRController(output);
@@ -597,7 +727,7 @@ namespace HUS_project.Controllers
             //get locations
             EditDeviceModel storagelocation = dbManager.GetStorageLocations();
             newdata.Locations = storagelocation.Locations;
-           
+
 
 
             // clear model

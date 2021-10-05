@@ -28,8 +28,6 @@ namespace HUS_project.DAL
 
         internal int CreateDevice(DeviceModel deviceData)
         {
-            Debug.WriteLine(connectionString);
-            //  Debug.WriteLine("Server=ANDREASPC; Database=HardwareUdlaanSystem; User Id=Husv1ld; Password=Wh3nY0uN33dSom3th1ng;");
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand cmd = new SqlCommand("CreateDevice", con);
@@ -68,15 +66,31 @@ namespace HUS_project.DAL
                 catch (Exception)
                 {
                     File.Delete($"{webroot}{newfilename}");
-                     File.Move($"{webroot}{oldName}", $"{webroot}{newfilename}");
+                    File.Move($"{webroot}{oldName}", $"{webroot}{newfilename}");
 
                     //throw;
                 }
             }
 
-            
+
 
             return deviceID;
+        }
+
+        internal int CreateCategory(string name)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("AddCategory", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@categoryName", System.Data.SqlDbType.VarChar).Value = name;
+
+            //execute query
+            int feedback = cmd.ExecuteNonQuery();
+
+            con.Close();
+
+            return feedback;
         }
 
         internal int UploadImage(ImageModel fileData)
@@ -102,7 +116,7 @@ namespace HUS_project.DAL
             return success;
         }
 
-      
+
         //edit device 
         internal int EditDevice(EditDeviceModel deviceData)
         {
@@ -129,6 +143,42 @@ namespace HUS_project.DAL
             return success;
         }
 
+        //edit category
+        internal int EditCategory(int id, string newCategory)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("EditCategory", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@categoryID", System.Data.SqlDbType.Int).Value = id;
+            cmd.Parameters.Add("@categoryName", System.Data.SqlDbType.VarChar).Value = newCategory;
+
+            int success = cmd.ExecuteNonQuery();
+            con.Close();
+
+
+
+            return success;
+        }
+
+        //edit model name
+        internal int EditModel(int id, string newModelName)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("EditModelName", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@modelID", System.Data.SqlDbType.Int).Value = id;
+            cmd.Parameters.Add("@modelName", System.Data.SqlDbType.VarChar).Value = newModelName;
+
+            int success = cmd.ExecuteNonQuery();
+            con.Close();
+
+
+
+            return success;
+        }
+
         //delete device
         internal int DeleteDevice(EditDeviceModel deviceData)
         {
@@ -136,13 +186,47 @@ namespace HUS_project.DAL
             con.Open();
             SqlCommand cmd = new SqlCommand("DeleteDevice", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            
+
             cmd.Parameters.Add("@deviceID", System.Data.SqlDbType.Int).Value = deviceData.Device.DeviceID;
             cmd.Parameters.Add("@status", System.Data.SqlDbType.TinyInt).Value = deviceData.Device.Status;
             cmd.Parameters.Add("@feedback", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
             cmd.ExecuteNonQuery();
 
             int success = Convert.ToInt32(cmd.Parameters["@feedback"].Value);
+
+            con.Close();
+            return success;
+        }
+
+        //delete category
+        internal int DeleteCategory(int id)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("DeleteCategory", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@categoryID", System.Data.SqlDbType.Int).Value = id;
+
+            int success = cmd.ExecuteNonQuery();
+
+
+
+            con.Close();
+            return success;
+        }
+
+        //delete modelName
+        internal int DeleteModelName(int id)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("DeleteModelName", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@modelID", System.Data.SqlDbType.Int).Value = id;
+
+            int success = cmd.ExecuteNonQuery();
+
+
 
             con.Close();
             return success;
@@ -168,7 +252,7 @@ namespace HUS_project.DAL
             cmd.ExecuteNonQuery();
             con.Close();
 
-           deviceData.Feedback = Convert.ToInt32(cmd.Parameters["@feedback"].Value);
+            deviceData.Feedback = Convert.ToInt32(cmd.Parameters["@feedback"].Value);
 
             return deviceData;
         }
@@ -197,7 +281,7 @@ namespace HUS_project.DAL
             cmd.ExecuteNonQuery();
             con.Close();
 
-          //  deviceData.Feedback = Convert.ToInt32(cmd.Parameters["@feedback"].Value);
+            //  deviceData.Feedback = Convert.ToInt32(cmd.Parameters["@feedback"].Value);
 
             return deviceData;
         }
@@ -249,7 +333,7 @@ namespace HUS_project.DAL
             return device;
         }
 
-       
+
         //Get device Logs from database before edit
         internal List<DeviceModel> GetAllDeviceLogs(int deviceID)
         {
@@ -267,7 +351,7 @@ namespace HUS_project.DAL
                 ModelModel m = new ModelModel();
                 CategoryModel c = new CategoryModel();
                 StorageLocationModel stl = new StorageLocationModel();
-               
+
                 m.Category = c;
 
                 device.SerialNumber = (string)reader["serialNumber"];
@@ -297,22 +381,11 @@ namespace HUS_project.DAL
             con.Open();
             SqlCommand cmd = new SqlCommand("GetStorageLocation", con);
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            //if (editData != null)
-            //{
-            //    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = editData.Device.Location.Location.Building;
-            //    cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.Int).Value = (string)editData.Device.Location.Location.RoomNumber;
-            //}
-            //else
-            //{
-            //    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = null;
-            //    cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.Int).Value = null;
-            //}
-
 
             //get data
             SqlDataReader reader = cmd.ExecuteReader();
             List<string> storageLocations = new List<string>();
-           // List<string> Rooms = new List<string>();
+
 
             //get shelves & rooms
             while (reader.Read())
@@ -320,32 +393,12 @@ namespace HUS_project.DAL
                 string location = new string($"{(string)reader["buildingName"]}.{(string)reader["roomNr"]}.{(string)reader["shelfName"]}.{(string)reader["shelfLevel"]}.{(string)reader["shelfSpot"]}");
                 storageLocations.Add(location);
 
-                //if (editData == null)
-                //{
-
-                //    //add rooms 
-                //    string room = new string($"{(string)reader["buildingName"]}.{(string)reader["roomNr"]}");
-                //    if (Rooms.Count <= 0)
-                //    {
-                //        Rooms.Add(room);
-
-                //    }
-                //    //add room to list of not the same
-                //    else
-                //    {
-                //        if (!string.Equals(room, Rooms[Rooms.Count - 1]))
-                //        {
-                //            Rooms.Add(room);
-                //        }
-                //    }
-                //}
-
             }
 
 
 
             EditDeviceModel data = new EditDeviceModel();
-          //  data.Rooms = Rooms;
+            //  data.Rooms = Rooms;
             data.Locations = storageLocations;
 
 
@@ -370,7 +423,7 @@ namespace HUS_project.DAL
             con.Close();
 
             int count = Convert.ToInt32(cmd.Parameters["@count"].Value);
-            if(count> 0)
+            if (count > 0)
             {
                 return true;
             }
@@ -461,6 +514,48 @@ namespace HUS_project.DAL
             con.Close();
             return SearchModel;
         }
+
+
+        //get all modelNames ids
+        internal List<int> GetAllModelIds()
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("GetAllModelIds", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            List<int> modelIDs = new List<int>();
+            while (reader.Read())
+            {
+                int modelID = (int)reader["modelID"];
+                modelIDs.Add(modelID);
+            }
+
+            con.Close();
+            return modelIDs;
+        }
+
+        //get all categoryName ids
+        internal List<int> GetAllCategoryIds()
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("GetAllCategoryIds", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            List<int> categoryIDs = new List<int>();
+            while (reader.Read())
+            {
+                int categoryID = (int)reader["categoryID"];
+                categoryIDs.Add(categoryID);
+            }
+
+            con.Close();
+            return categoryIDs;
+        }
+
 
         #region helper methods
 

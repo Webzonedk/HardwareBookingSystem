@@ -34,6 +34,6 @@ function textcounter(input) {
             return false;
         }
         console.log("typing");
-        $("#remaining").html((input - this.value.length) + "/2000");
+        $("#remaining").html((input - this.value.length) + "/" +input);
     });
 }
