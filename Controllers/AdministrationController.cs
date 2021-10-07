@@ -28,6 +28,7 @@ namespace HUS_project.Controllers
 
 
 
+
         //----------------------------------------------------------------------------
         //Returns the main view for location admin
         //----------------------------------------------------------------------------
@@ -35,6 +36,7 @@ namespace HUS_project.Controllers
         {
             return View(GetStorageLocations());
         }
+
 
 
 
@@ -52,25 +54,38 @@ namespace HUS_project.Controllers
 
 
 
-        //----------------------------------------------------------------------------
-        //Delete a single location from the overview
-        //----------------------------------------------------------------------------
-        [HttpPost]
-        public IActionResult DeleteSingleLocation(string deleteLocation)
-        {
-            string[] substring = deleteLocation.Split('.');
-            string locationID = substring[0];
-            string selectedID = substring[1];
-            DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            string alert = manager.DeleteLocation(int.Parse(locationID));
-            if (alert == "occupied")
-            {
-                ViewBag.alert = "occupied";
-            }
-            ViewBag.selectedID = selectedID;
 
-            return View("LocationAdmin", GetStorageLocations());
+        //----------------------------------------------------------------------------
+        //Getting the locations from DB and listing dropdowns in Blue oister bar, and also listing the selected Storagelocation.
+        //----------------------------------------------------------------------------
+        private EditStorageLocationModel GetStorageLocations()
+        {
+            EditStorageLocationModel dropDownData = new EditStorageLocationModel();
+            StorageLocationModel selectedStorageLocation = new StorageLocationModel();
+            BuildingModel buildingModel = new BuildingModel();
+            selectedStorageLocation.Location = buildingModel;
+            dropDownData.StorageLocation = selectedStorageLocation;
+
+            DBManagerAdministration manager = new DBManagerAdministration(configuration);
+            List<string> buildings = manager.GetBuildings();
+            List<string> roomNumbers = manager.GetRoomNumbers();
+            List<string> rooms = manager.GetRooms();
+            List<string> shelfNames = manager.GetShelfName();
+            List<string> shelfLevels = manager.GetShelfLevel();
+            List<string> shelfspots = manager.GetShelfSpot();
+            List<StorageLocationModel> storageLocations = manager.GetSelectedStorageLocations(dropDownData);
+
+            dropDownData.Buildings = buildings;
+            dropDownData.RoomNumbers = roomNumbers;
+            dropDownData.Rooms = rooms;
+            dropDownData.ShelfNames = shelfNames;
+            dropDownData.ShelfLevels = shelfLevels;
+            dropDownData.ShelfSpots = shelfspots;
+            dropDownData.StorageLocations = storageLocations;
+
+            return dropDownData;
         }
+
 
 
 
@@ -194,6 +209,7 @@ namespace HUS_project.Controllers
 
 
 
+
         //----------------------------------------------------------------------------
         //Sending QRCode to QRview for a single location
         //----------------------------------------------------------------------------
@@ -216,6 +232,7 @@ namespace HUS_project.Controllers
             return RedirectToAction("PrintQR", "QRCode");
 
         }
+
 
 
 
@@ -250,20 +267,59 @@ namespace HUS_project.Controllers
 
 
         //----------------------------------------------------------------------------
-        //Delete building, RoomNumber or specifik room in the massdestruction area.
+        //Delete a single location from the overview
+        //----------------------------------------------------------------------------
+        [HttpPost]
+        public IActionResult DeleteSingleLocation(string deleteLocation)
+        {
+            string[] substring = deleteLocation.Split('.');
+            string locationID = substring[0];
+            string selectedID = substring[1];
+            DBManagerAdministration manager = new DBManagerAdministration(configuration);
+            string alert = manager.DeleteLocation(int.Parse(locationID));
+            if (alert == "occupied")
+            {
+                ViewBag.alert = "occupied";
+            }
+            ViewBag.selectedID = selectedID;
+
+            return View("LocationAdmin", GetStorageLocations());
+        }
+
+
+
+
+
+        //----------------------------------------------------------------------------
+        //Delete building in the massdestruction area.
         //----------------------------------------------------------------------------
         [HttpPost]
         public IActionResult DeleteBuilding(EditStorageLocationModel deleteBuildingData)
         {
-            DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            string deleteMessage = manager.DeleteBuilding(deleteBuildingData);
-            if (deleteMessage != null)
+            if (deleteBuildingData.DeleteBuilding != null)
             {
-                ViewBag.deleteMessage = deleteMessage;
+                try
+                {
+                    DBManagerAdministration manager = new DBManagerAdministration(configuration);
+                    string deleteMessage = manager.DeleteBuilding(deleteBuildingData);
+                    if (deleteMessage != null)
+                    {
+                        ViewBag.deleteBuildingAndRoomFeedback = deleteMessage;
+                    }
+                    else
+                    {
+                        ViewBag.deleteBuildingAndRoomFeedback = "";
+                    }
+
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
             else
             {
-                ViewBag.deleteMessage = "";
+                ViewBag.deleteBuildingAndRoomFeedback = "Der er ikke valgt en bygning.";
             }
             return View("LocationAdmin", GetStorageLocations());
         }
@@ -271,17 +327,32 @@ namespace HUS_project.Controllers
 
 
 
+
         //----------------------------------------------------------------------------
-        //Delete building, RoomNumber or specifik room in the massdestruction area.
+        //Delete RoomNumber in the massdestruction area.
         //----------------------------------------------------------------------------
         [HttpPost]
         public IActionResult DeleteRoomNumber(EditStorageLocationModel deleteRoomNumberData)
         {
-            DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            string deleteMessage = manager.DeleteRoomNumber(deleteRoomNumberData);
-            if (deleteMessage != null)
+            if (deleteRoomNumberData.DeleteRoomNumber != null)
             {
-                ViewBag.deleteMessage = deleteMessage;
+                try
+                {
+                    DBManagerAdministration manager = new DBManagerAdministration(configuration);
+                    string deleteMessage = manager.DeleteRoomNumber(deleteRoomNumberData);
+                    if (deleteMessage != null)
+                    {
+                        ViewBag.deleteBuildingAndRoomFeedback = deleteMessage;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                ViewBag.deleteBuildingAndRoomFeedback = "Der er ikke valgt et lokalenummer.";
             }
             return View("LocationAdmin", GetStorageLocations());
         }
@@ -289,56 +360,162 @@ namespace HUS_project.Controllers
 
 
 
+
         //----------------------------------------------------------------------------
-        //Delete building, RoomNumber or specifik room in the massdestruction area.
+        //Delete room in the massdestruction area.
         //----------------------------------------------------------------------------
         [HttpPost]
         public IActionResult DeleteRoom(EditStorageLocationModel deleteRoomData)
         {
-            DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            string deleteMessage = manager.DeleteRoom(deleteRoomData);
-            if (deleteMessage != null)
+            if (deleteRoomData.DeleteRoom != null)
             {
-                ViewBag.deleteMessage = deleteMessage;
+                try
+                {
+
+                    DBManagerAdministration manager = new DBManagerAdministration(configuration);
+                    string[] substring = deleteRoomData.DeleteRoom.Split('.');
+                    if (substring[0] != null)
+                    {
+                        deleteRoomData.DeleteBuilding = substring[0];
+                    }
+                    if (substring[1] != null)
+                    {
+                        deleteRoomData.DeleteRoomNumber = substring[1];
+                    }
+                    if (deleteRoomData.DeleteBuilding != null && deleteRoomData.DeleteRoomNumber != null)
+                    {
+                        try
+                        {
+                            string deleteMessage = manager.DeleteRoom(deleteRoomData);
+                            if (deleteMessage != null)
+                            {
+                                ViewBag.deleteBuildingAndRoomFeedback = deleteMessage;
+                            }
+                            else
+                            {
+                                ViewBag.deleteBuildingAndRoomFeedback = "Det indtastede input i feltet rum er i forkert format.";
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            throw;
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.deleteBuildingAndRoomFeedback = "Det indtastede input i feltet rum er i forkert format.";
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                ViewBag.deleteBuildingAndRoomFeedback = "Der er ikke valgt et rum.";
             }
             return View("LocationAdmin", GetStorageLocations());
         }
 
 
 
+
+
         //----------------------------------------------------------------------------
-        //Getting the locations from DB and listing dropdowns in Blue oister bar, and also listing the selected Storagelocation.
+        //Delete shelfName in the massdestruction area.
         //----------------------------------------------------------------------------
-        private EditStorageLocationModel GetStorageLocations()
+        [HttpPost]
+        public IActionResult DeleteShelfName(EditStorageLocationModel deleteShelfNameData)
         {
-            EditStorageLocationModel dropDownData = new EditStorageLocationModel();
-            StorageLocationModel selectedStorageLocation = new StorageLocationModel();
-            BuildingModel buildingModel = new BuildingModel();
-            selectedStorageLocation.Location = buildingModel;
-            dropDownData.StorageLocation = selectedStorageLocation;
-
-            DBManagerAdministration manager = new DBManagerAdministration(configuration);
-            List<string> buildings = manager.GetBuildings();
-            List<string> roomNumbers = manager.GetRoomNumbers();
-            List<string> shelfNames = manager.GetShelfName();
-            List<string> shelfLevels = manager.GetShelfLevel();
-            List<string> shelfspots = manager.GetShelfSpot();
-            List<StorageLocationModel> storageLocations = manager.GetSelectedStorageLocations(dropDownData);
-
-            dropDownData.Buildings = buildings;
-            dropDownData.RoomNumbers = roomNumbers;
-            dropDownData.ShelfNames = shelfNames;
-            dropDownData.ShelfLevels = shelfLevels;
-            dropDownData.ShelfSpots = shelfspots;
-            dropDownData.StorageLocations = storageLocations;
-
-            return dropDownData;
+            if (deleteShelfNameData.DeleteShelfName != null)
+            {
+                try
+                {
+                    DBManagerAdministration manager = new DBManagerAdministration(configuration);
+                    string deleteMessage = manager.DeleteShelfName(deleteShelfNameData);
+                    if (deleteMessage != null)
+                    {
+                        ViewBag.deleteLocationFeedback = deleteMessage;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                ViewBag.deleteLocationFeedback = "Der er ikke valgt et hylde navn.";
+            }
+            return View("LocationAdmin", GetStorageLocations());
         }
 
 
 
 
 
+        //----------------------------------------------------------------------------
+        //Delete shelfLevel in the massdestruction area.
+        //----------------------------------------------------------------------------
+        [HttpPost]
+        public IActionResult DeleteShelfLevel(EditStorageLocationModel deleteShelfLevelData)
+        {
+            if (deleteShelfLevelData.DeleteShelfLevel != null)
+            {
+                try
+                {
+                    DBManagerAdministration manager = new DBManagerAdministration(configuration);
+                    string deleteMessage = manager.DeleteShelfLevel(deleteShelfLevelData);
+                    if (deleteMessage != null)
+                    {
+                        ViewBag.deleteLocationFeedback = deleteMessage;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                ViewBag.deleteLocationFeedback = "Der er ikke valgt en etage.";
+            }
+            return View("LocationAdmin", GetStorageLocations());
+        }
+
+
+
+
+
+        //----------------------------------------------------------------------------
+        //Delete shelfLevel in the massdestruction area.
+        //----------------------------------------------------------------------------
+        [HttpPost]
+        public IActionResult DeleteShelfSpot(EditStorageLocationModel deleteShelfSpotData)
+        {
+            if (deleteShelfSpotData.DeleteShelfSpot != null)
+            {
+                try
+                {
+                    DBManagerAdministration manager = new DBManagerAdministration(configuration);
+                    string deleteMessage = manager.DeleteShelfSpot(deleteShelfSpotData);
+                    if (deleteMessage != null)
+                    {
+                        ViewBag.deleteLocationFeedback = deleteMessage;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                ViewBag.deleteLocationFeedback = "Der er ikke valgt en plads.";
+            }
+            return View("LocationAdmin", GetStorageLocations());
+        }
 
 
     }
