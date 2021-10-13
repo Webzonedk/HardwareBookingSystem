@@ -27,6 +27,8 @@ namespace HUS_project.Controllers
             return View();
         }
 
+
+        //not currently in use! should be removed at some time or repurposed
         public IActionResult Main()
         {
             return View();
@@ -142,7 +144,8 @@ namespace HUS_project.Controllers
             }
             else if(HttpContext.Session.GetInt32("accessLevel") == 1)
             {
-                return View("Main");
+               // return View("Main");
+                return RedirectToAction("InventorySearch", "CreateBooking");
             }
             else
             {

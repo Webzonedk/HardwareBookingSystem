@@ -54,13 +54,10 @@ namespace HUS_project.Controllers
             int feedback = dbManager.CreateCategory(data.New_Category);
 
 
-            data = new CategoryModelAdmin_Model();
-            data.ModelNames = dbsharedManager.GetModelNames();
-            data.CategoryNames = dbsharedManager.GetCategories();
-            data.CategoryIds = dbManager.GetAllCategoryIds();
-            data.ModelIds = dbManager.GetAllModelIds();
+           
+            data = GetAdminLists();
 
-            return View("CategoryModelAdminView",data);
+            return View("CategoryModelAdminView", data);
         }
 
         [HttpPost]
@@ -418,11 +415,8 @@ namespace HUS_project.Controllers
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
             DBManagerShared dbsharedManager = new DBManagerShared(configuration);
 
-            CategoryModelAdmin_Model data = new CategoryModelAdmin_Model();
-            data.ModelNames = dbsharedManager.GetModelNames();
-            data.CategoryNames = dbsharedManager.GetCategories();
-            data.CategoryIds = dbManager.GetAllCategoryIds();
-            data.ModelIds = dbManager.GetAllModelIds();
+            CategoryModelAdmin_Model data = GetAdminLists();
+           
             return View(data);
         }
 
@@ -439,12 +433,7 @@ namespace HUS_project.Controllers
             int id = int.Parse(split[1]);
 
             int feedback = dbManager.EditCategory(id, categoryName);
-
-            // CategoryModelAdmin_Model data = new CategoryModelAdmin_Model();
-            data.ModelNames = dbsharedManager.GetModelNames();
-            data.CategoryNames = dbsharedManager.GetCategories();
-            data.CategoryIds = dbManager.GetAllCategoryIds();
-            data.ModelIds = dbManager.GetAllModelIds();
+            data = GetAdminLists();
 
             return View("CategoryModelAdminView", data);
         }
@@ -521,16 +510,10 @@ namespace HUS_project.Controllers
             DBManagerDevice dbManager = new DBManagerDevice(configuration);
             DBManagerShared dbsharedManager = new DBManagerShared(configuration);
 
-            
+
             int id = int.Parse(delete);
-
             int feedback = dbManager.DeleteCategory(id);
-
-             CategoryModelAdmin_Model data = new CategoryModelAdmin_Model();
-            data.ModelNames = dbsharedManager.GetModelNames();
-            data.CategoryNames = dbsharedManager.GetCategories();
-            data.CategoryIds = dbManager.GetAllCategoryIds();
-            data.ModelIds = dbManager.GetAllModelIds();
+            CategoryModelAdmin_Model data = GetAdminLists();
 
             return View("CategoryModelAdminView", data);
         }
@@ -545,14 +528,8 @@ namespace HUS_project.Controllers
 
 
             int id = int.Parse(delete);
-
             int feedback = dbManager.DeleteModelName(id);
-
-            CategoryModelAdmin_Model data = new CategoryModelAdmin_Model();
-            data.ModelNames = dbsharedManager.GetModelNames();
-            data.CategoryNames = dbsharedManager.GetCategories();
-            data.CategoryIds = dbManager.GetAllCategoryIds();
-            data.ModelIds = dbManager.GetAllModelIds();
+            CategoryModelAdmin_Model data = GetAdminLists();
 
             return View("CategoryModelAdminView", data);
         }
@@ -561,12 +538,35 @@ namespace HUS_project.Controllers
         {
             //generate an instance of the database manager
             DBManagerDevice DBDManager = new DBManagerDevice(configuration);
+            DBManagerShared Dbshared = new DBManagerShared(configuration);
+
+            if(infoList.SearchName == null)
+            {
+                infoList.SearchName = "";
+            }
 
             //set dummy data to database
-            infoList.SearchName = "";
+            infoList.SearchName = infoList.SearchName;
+            infoList.DeviceStatus = infoList.DeviceStatus;
 
-            infoList.Category = null;
-            infoList.InStock = 0;
+            //set instock
+            if (infoList.DeviceStatus == "Alle")
+            {
+                infoList.InStock = 2;
+            }
+            else if(infoList.DeviceStatus == "På Lager")
+            {
+                infoList.InStock = 1;
+            }
+            else if (infoList.DeviceStatus == "Udlånte")
+            {
+                infoList.InStock = 0;
+            }
+
+            infoList.Category = infoList.Category;
+            infoList.Categories = Dbshared.GetCategories();
+            infoList.InventoryStatuses = new List<string>() { "Alle", "På Lager", "Udlånte" };
+
 
             //get data from the manager
             infoList = DBDManager.GetDeviceInventory(infoList);
@@ -653,7 +653,9 @@ namespace HUS_project.Controllers
                 newdata.Device = device;
                 newdata = GetNewLocation(newdata);
                 newdata.Location = new string($"{device.Location.Location.Building}.{device.Location.Location.RoomNumber.ToString()}.{device.Location.ShelfName}.{device.Location.ShelfLevel}.{device.Location.ShelfSpot}");
-
+                newdata.Categories = dbsharedManager.GetCategories();
+                newdata.ModelNames = dbsharedManager.GetModelNames();
+                newdata.SelectedLogs = 10;
             }
 
 
@@ -844,6 +846,22 @@ namespace HUS_project.Controllers
             }
 
 
+        }
+
+        //get categories & modelNames & their IDs
+        private CategoryModelAdmin_Model GetAdminLists()
+        {
+            //initializing DB managers
+            DBManagerDevice dbManager = new DBManagerDevice(configuration);
+            DBManagerShared dbsharedManager = new DBManagerShared(configuration);
+
+            CategoryModelAdmin_Model viewmodelLists = new CategoryModelAdmin_Model();
+
+            viewmodelLists.ModelNames = dbsharedManager.GetModelNames();
+            viewmodelLists.CategoryNames = dbsharedManager.GetCategories();
+            viewmodelLists.CategoryIds = dbManager.GetAllCategoryIds();
+            viewmodelLists.ModelIds = dbManager.GetAllModelIds();
+            return viewmodelLists;
         }
 
         #endregion

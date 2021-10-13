@@ -1,4 +1,8 @@
 ﻿
+function ClearInputField(inputID) {
+    document.getElementById(inputID).value = "";
+};
+
 //Submitting data from view
 function submit(formID) {
 
@@ -8,7 +12,7 @@ function submit(formID) {
 function returnToInputField() {
     let activeID = document.activeElement.id;
     document.getElementById("hiddenInputFieldID").value = activeID;
-}
+};
 
 //this method runs when view has loaded
 $(document).ready(function (e) {
@@ -74,10 +78,39 @@ function doneTyping() {
 
 
 
+
+//Scrolling down to selected ID
+function scrollToDiv(input, input2, id) {
+
+    if (input != '' || input2 !='') {
+        window.scrollTo(0, document.body.scrollHeight);
+        //let ele = document.getElementById(input);
+        //console.log(input)
+        //window.scrollTo(ele.offsetLeft, ele.offsetTop);
+    }
+
+    if (id != '') {
+        console.log(id)
+
+        let result = parseFloat(id);
+        if (result > 1) {
+            result--;
+        }
+        else {
+            result = 1;
+        }
+        let ele = document.getElementById(result);
+        window.scrollTo(ele.offsetLeft, ele.offsetTop);
+    }
+}
+
+
+
+
 //Function to slide up th feedback (included in the document.ready as well)
 function FadeOutSlow() {
     let x = document.getElementsByClassName("fadeUp")
-    for (var i = 0; i < 7; i++) {
+    for (var i = 0; i < 25; i++) {
         $(x[i]).slideUp('slow', function () {
         });
 
@@ -87,43 +120,7 @@ function FadeOutSlow() {
 
 
 
-//Scrolling down to selected ID
-function scrollToDiv(input, id) {
 
-    if (input != "") {
-        window.scrollTo(0, document.body.scrollHeight);
-    }
-
-    if (id != "") {
-        let result = parseFloat(id);
-        result++;
-        let ele = document.getElementById(result);
-        console.log(result)
-        window.scrollTo(ele.offsetLeft, ele.offsetTop);
-
-    }
-
-
-}
-
-
-
-
-
-
-//Function to show specified room in the input field in the massdestruction area
-function showRoom() {
-    let building = document.getElementById("buldingInput").value;//getting value
-    let roomNr = document.getElementById("romNrInput").value;//getting value
-    let chosenRoom = document.getElementById("chosenRoom");//inserting value
-
-    if (building != "" && roomNr != "") {
-        chosenRoom.value = building + "." + roomNr;
-    }
-    else {
-        chosenRoom.value = "";
-    }
-}
 
 
 

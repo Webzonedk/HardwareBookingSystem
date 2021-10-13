@@ -3,51 +3,109 @@
     ViewData["Title"] = "Lagerstyring";
 }
 
+<script src="~/js/Inventory.js"></script>
+
 <div class=" row blue-oyster-bar center box-shadow">
 
     <!--first row-->
     <div class="row">
-        <div class="col text-white">
-            <label>søgeord:</label>
-        </div>
 
-        <div class="col text-white">
-            <label>Kategori:</label>
-        </div>
 
-        <div class="col text-white">
-            <label>Status:</label>
-        </div>
+        <div class="col-6">
 
-        <div class="col text-white">
-            <form class="" asp-area="" asp-controller="Device" asp-action="CategoryModelAdminView" method="post">
+            <form class="" id="searchform" asp-controller="Device" asp-action="Inventory" method="post">
 
-                <button class="btn-blue" type="submit">Kategori/Model Administration</button>
+                <div class="row">
+
+                    <div class="col-2"></div>
+
+                    <!--dropdown for categories-->
+                    <div class="col-4 text-white">
+                        <label>Kategori:</label>
+
+                        <select class="form-select" id="categories" asp-for="@Model.Category" onchange="this.form.submit()">
+                            <option></option>
+                            @foreach (var item in Model.Categories)
+                            {
+                                <option>@item</option>
+                            }
+
+                        </select>
+
+                    </div>
+
+                    <!--dropdown for status-->
+                    <div class="col-4 text-white">
+                        <label for="status">Status:</label>
+
+                        <select class="form-select" id="status" asp-for="@Model.DeviceStatus" onchange="this.form.submit()">
+                            <option hidden></option>
+                            @foreach (var item in Model.InventoryStatuses)
+                            {
+                                <option>@item</option>
+                            }
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-2"></div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-2"></div>
+
+
+                    <div class="col-8">
+
+                        <div class="form-floating mb-2">
+                            <input type="search" class="form-control" asp-for="@Model.SearchName" id="searchbar" onkeyup="SetTimeout()" onkeydown="ClearTimeout()" placeholder="name@example.com">
+                            <label for="searchbar">søg efter enhed:</label>
+                        </div>
+
+                    </div>
+
+                    <div class="col-2">
+
+                    </div>
+
+                </div>
+
             </form>
 
-
-
         </div>
 
-        <div class="col text-white">
-            <form class="" asp-area="" asp-controller="Device" asp-action="CreateDevice" method="post">
+        <div class="col-6">
 
-                <button class="btn-blue" type="submit">Opret enhed</button>
+            <form  method="post">
+
+
+                <div class="row">
+
+                    <!--edit category-->
+                    <div class="col-2 text-white">
+
+                        <button class="btn btn-primary btn-sm btn-blue" type="submit" asp-action="CategoryModelAdminView">Kategori/Model Administration</button>
+
+                    </div>
+
+                    <!--create device-->
+                    <div class="col-2 text-white">
+
+
+                        <button class="btn btn-primary btn-sm btn-blue" type="submit" asp-action="CreateDevice">Enheds oprettelse</button>
+
+                    </div>
+
+
+
+                </div>
+
             </form>
+
         </div>
-
-        @*<div class="col text-white">
-            <form class="" asp-area="" asp-controller="Device" asp-action="EditView" method="post">
-
-                <button class="btn-blue" type="submit">rediger enhed</button>
-            </form>
-        </div>*@
-
-
-
-
     </div>
-
 
 </div>
 
@@ -60,12 +118,13 @@
         </div>
 
         <div class="row containerSubHeader border-top border-bottom border-white border-1 dynamic-Font-Size-10">
-            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">ID</div>
-            <div class="col-xl-5 col-lg-3 col-md-2 col-2 p-1 border-end border-white border-1">Beskrivelse</div>
-            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">Kategori</div>
-            <div class="col-xl-1 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">Lokale</div>
-            <div class="col-xl-1 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">Hylde</div>
-            <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">Status</div>
+            <div class="col-md-1 col-2 p-1 border-end border-white border-1 border-bottom">ID</div>
+            <div class="col-md-4 col-6 p-1 border-end border-white border-1 border-bottom">Beskrivelse</div>
+            <div class="col-md-2 col-4 p-1 border-end border-white border-1 border-bottom">Kategori</div>
+            <div class="col-md-2 col-4 p-1 border-end border-white border-1">Lokale</div>
+            <div class="col-md-2 col-4 p-1 border-end border-white border-1">Status</div>
+            <div class="col-md-1 col-4 p-1 border-white border-1"></div>
+
         </div>
 
 
@@ -77,15 +136,14 @@
 
 
             <div class="row containerBody alternating_row dynamic-Font-Size-10">
-                <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">@device.DeviceID</div>
-                <div class="col-xl-5 col-lg-3 col-md-2 col-2 p-1 border-end border-white border-1">@device.Model.ModelName</div>
-                <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">@device.Model.Category.Category</div>
-                <div class="col-xl-1 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">@(device.Location.Location.Building +"."+device.Location.Location.RoomNumber )</div>
-                <div class="col-xl-1 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">@(device.Location.ShelfName + "."+device.Location.ShelfLevel + "." + device.Location.ShelfSpot)</div>
-                <div class="col-xl-1 col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1">@device.Status</div>
-                @*  <div class="col-xl-1 p-1"></div>*@
+                <div class=" col-md-1 col-2 p-1 border-end border-white border-1">@device.DeviceID</div>
+                <div class=" col-md-4 col-6 p-1 border-end border-white border-1">@device.Model.ModelName</div>
+                <div class=" col-md-2 col-4 p-1 border-end border-white border-1">@device.Model.Category.Category</div>
+                <div class=" col-md-2 col-4 p-1 border-end border-white border-1">@(device.Location.Location.Building +"."+device.Location.Location.RoomNumber )</div>
+                <div class=" col-md-2 col-4 p-1 border-end border-white border-1">@device.BookingStatus</div>
+                @*  <div class="col-xlcol-4-1 p-1"></div>*@
 
-                <div class="col-lg-2 col-12 p-1 center ">
+                <div class="col-md-1 col-2 p-1 border-white border-1 center">
                     <button class="btn btn-primary btn-sm btn-blue" type="submit" name="submit" value="@device.DeviceID">Rediger </button>
                 </div>
 

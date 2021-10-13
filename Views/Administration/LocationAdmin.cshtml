@@ -7,7 +7,8 @@
 
 <!--Variables to be used with JavaScripts-->
 @{string tempData = ViewBag.alert;}
-@{string deleteFeedback = ViewBag.deleteMessage;}
+@{string deleteBuildingAndRoomFeedback = ViewBag.deleteBuildingAndRoomFeedback;}
+@{string deleteLocationFeedback = ViewBag.deleteLocationFeedback;}
 @{string selectedID = ViewBag.selectedID;}
 @{string buildingNameFeedBack = ViewBag.buildingNameFeedBack;}
 @{string roomNumberFeedBack = ViewBag.roomNumberFeedBack;}
@@ -32,16 +33,15 @@
 
 
 
-
-
-
-
 <script>
     $(document).ready(function () {
-        fadeOutSlow();
-            scrollToDiv('@deleteFeedback','@selectedID');
+        scrollToDiv('@deleteBuildingAndRoomFeedback', '@deleteLocationFeedback', '@selectedID');
         });
 </script>
+
+
+
+
 
 
 
@@ -244,10 +244,10 @@
 
 
             @{string toolTip = "\nAlle felter kan oprettes enkeltvis, hvis ikke de findes i forvejen. \n\n" +
-                                                                                            "Hvis Bygning og Lokale er udfyldt samtidigt kan der \n" +
-                                                                                            "oprettes et Lokale, hvis ikke det eksisterer i forvejen.\n\n" +
-                                                                                            "Hvis alle felter er udfyldt, kan der oprettes en vareplacering,\n" +
-                                                                                            "hvis denne ikke findes i forvejen.\n"; }
+                                                                                                            "Hvis Bygning og Lokale er udfyldt samtidigt kan der \n" +
+                                                                                                            "oprettes et Lokale, hvis ikke det eksisterer i forvejen.\n\n" +
+                                                                                                            "Hvis alle felter er udfyldt, kan der oprettes en vareplacering,\n" +
+                                                                                                            "hvis denne ikke findes i forvejen.\n"; }
             <div class="col-sm-2 p-3">
                 <button type="submit" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip" asp-action="CreateLocation">Tilføj Placering</button>
 
@@ -354,7 +354,7 @@
             </div>
             <div class="col-lg-1 col-md-2 col-2 p-1 border-end border-white border-1 headerSortLink">
                 <div class="headerSortLink">
-                    Placering
+                    Hyldeplads
                 </div>
             </div>
         </div>
@@ -444,89 +444,85 @@
 @*-------------------------------------------------------------------*@
 @*-------------------------------------------------------------------*@
 @*-------------------------------------------------------------------*@
-<form asp-action="" method="post" id="insertData">
-    <div class="container containerMain box-shadow">
+
+@*<form asp-action="" method="post" id="insertData">*@
+<div class="container containerMain box-shadow">
 
 
-        @*Header of the Massdestruction area*@
-        <div class="row containerHeader">
-            <h4 class="col">Masseudryddelse</h4>
-        </div>
+    @*Header of the Massdestruction area*@
+    <div class="row containerHeader">
+        <h4 class="col">Masseudryddelse</h4>
+    </div>
 
 
 
-        @*Body of the Massdestruction area*@
-        <div class="row containerBody">
-            <div class="col-12">
-                <div class="row p-1">
-                    <div class="col-lg-4 p-1"></div>
+    @*Body of the Massdestruction area*@
+    <div class="row containerBody">
+        <div class="col-12">
+            <div class="row p-1">
+                <div class="col-lg-4 p-1"></div>
 
 
-                    <div class="col-lg-4 col-sm-12 p-1 text-red text-bold center">(Hvis du ikke kender konsekvensen, så lad hellere være)</div>
+                <div class="col-lg-4 col-sm-12 p-1 text-red text-bold center">(Hvis du ikke kender konsekvensen, så lad hellere være)</div>
 
 
-                    <div class="col-lg-4 p-1"></div>
+                <div class="col-lg-4 p-1"></div>
+            </div>
+
+
+
+
+            <div class="row p-1">
+                <div class="col-lg-5 p-1">
+                    Bygning og lokale nr. kan kun slettes hvis de ikke findes i et rum.
+                    Rum kan kun slettes hvis ikke der finde lokationer i rummet.
                 </div>
 
 
+                <div class="col-lg-2 col-sm-12 p-1"></div>
 
 
-                <div class="row p-1">
-                    <div class="col-lg-5 p-1">Hvis både bygning og lokale nr. er udfyldt, og rummmet ikke er i brug, så kan det slettes​</div>
-
-
-                    <div class="col-lg-2 col-sm-12 p-1"></div>
-
-
-                    <div class="col-lg-5 p-1">
-                        Reol navn, etage nr. Og plads nummer kan kun slettes såfremt at der ikke er nogle
-                        placeringer hvor de indgår i. Du bør derfor sikre dig at ingen af dem indgår i en placering først
-                    </div>
+                <div class="col-lg-5 p-1">
+                    Reol navn, etage, og hyldeplads kan kun slettes, såfremt at der ikke er nogle
+                    placeringer hvor de indgår i.
                 </div>
+            </div>
 
-                <div class="row p-1">
-                    @try
-                    {
-                        @if (deleteFeedback != null)
+
+
+            <div class="row">
+
+
+                <div class="col-lg-5">
+
+                    <div class="row">
+
+                        @try
                         {
-                            if (deleteFeedback.Contains("ikke") == true)
+                            @if (deleteBuildingAndRoomFeedback != null)
                             {
-                                <div class="col-lg-5 p-1 text-red">@deleteFeedback</div>
+                                if (deleteBuildingAndRoomFeedback.Contains("ikke") == true || deleteBuildingAndRoomFeedback.Contains("forkert") == true)
+                                {
+                                    <div class="col-12 p-1 text-red fadeUp">@deleteBuildingAndRoomFeedback</div>
 
-                            }
-                            else
-                            {
-                                <div class="col-lg-5 p-1 text-green">@deleteFeedback</div>
+                                }
+                                else
+                                {
+                                    <div class="col-12 p-1 text-green fadeUp">@deleteBuildingAndRoomFeedback</div>
 
+                                }
                             }
                         }
-                    }
-                    catch (Exception)
-                    {
+                        catch (Exception)
+                        {
 
-                        throw;
-                    }
+                            throw;
+                        }
+                    </div>
 
-
-
-
-
-
-                    <div class="col-lg-2 col-sm-12 p-1"></div>
-
-
-                    <div class="col-lg-5 p-1"></div>
-                </div>
-
-
-                <div class="row">
-
-
-                    <div class="col-lg-5">
-
-                        <div class="row">
-
-                            <div class="col-lg-4">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <form method="post" id="deleteBuilding">
                                 <div class="row">
 
                                     <div class="col-12 dynamic-Font-Size-12 p-1 center">
@@ -536,25 +532,26 @@
                                     </div>
 
                                     <div class="col-12 p-1">
-                                        <input class=" form-select capitalized" id="buldingInput" list="buildings" aria-label="building" asp-for="@Model.DeleteBuilding" onkeyup="showRoom()">
+                                        <input class=" form-select capitalized" id="buldingInput" list="buildings" aria-label="building" pattern="[A-Za-z0-9æøåÆØÅ]{0,50}" title="Bogstaver og tal og max. 50 karakterer" maxlength="50" asp-for="@Model.DeleteBuilding" onsubmit="ClearInputField('buldingInput')">
                                         <datalist id="buildings">
-                                            @foreach (var item in Model.Buildings)
+                                            @for (int i = 0; i < Model.Buildings.Count; i++)
                                             {
-                                                <option>@item</option>
+                                                <option>@Model.Buildings[i]</option>
                                             }
                                         </datalist>
                                     </div>
 
                                     <div class="col-12 p-1 center">
-                                        <button type="submit" class="btn btn-danger btn-sm btn-red" style="width:100px" asp-action="DeleteBuilding" onclick="submit('insertData')">Slet</button>
+                                        <button type="submit" class="btn btn-danger btn-sm btn-red" style="width:100px" asp-action="DeleteBuilding" onclick="submit('deleteBuilding')">Slet</button>
                                     </div>
 
                                 </div>
 
-                            </div>
+                            </form>
+                        </div>
 
-
-                            <div class="col-lg-4">
+                        <div class="col-lg-4">
+                            <form method="post" id="deleteRoom">
                                 <div class="row">
 
                                     <div class="col-12 p-1 dynamic-Font-Size-12 center">
@@ -564,18 +561,25 @@
                                     </div>
 
                                     <div class="col-12 p-1">
-                                        <input readonly type="text" class="form-control background-white capitalized" id="chosenRoom" aria-label="room" asp-for="@Model.DeleteRoom">
+                                        <input class="form-select capitalized" id="chosenRoom" list="rooms" aria-label="room" pattern="^[A-Za-z0-9æøåÆØÅ]{1,50}[\.]{1}[A-Za-z0-9æøåÆØÅ]{1,10}$" title="Skal indeholde bygning og lokalenummer adskilt med et punktum (format: bygning.nummer) (max 50).(max 10)" maxlength="61" asp-for="@Model.DeleteRoom" onsubmit="ClearInputField('chosenRoom')">
+                                        <datalist id="rooms">
+                                            @for (int i = 0; i < Model.Rooms.Count; i++)
+                                            {
+                                                <option>@Model.Rooms[i]</option>
+                                            }
+                                        </datalist>
                                     </div>
 
                                     <div class="col-12 p-1 center">
-                                        <button type="submit" class="btn btn-danger btn-sm btn-red" style="width:100px" asp-action="DeleteRoom" onclick="submit('insertData')">Slet</button>
+                                        <button type="submit" class="btn btn-danger btn-sm btn-red" style="width:100px" asp-action="DeleteRoom" onclick="submit('deleteRoom')">Slet</button>
                                     </div>
 
                                 </div>
-                            </div>
+                            </form>
+                        </div>
 
-
-                            <div class="col-lg-4">
+                        <div class="col-lg-4">
+                            <form method="post" id="deleteRoomNumber">
 
                                 <div class="row">
 
@@ -586,49 +590,164 @@
                                     </div>
 
                                     <div class="col-12 p-1">
-                                        <input class="form-select capitalized" id="romNrInput" list="roomNumbers" aria-label="roomNumber" asp-for="@Model.DeleteRoomNumber" onkeyup="showRoom()">
+                                        <input class="form-select capitalized" id="romNrInput" list="roomNumbers" aria-label="roomNumber" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.DeleteRoomNumber" onsubmit="ClearInputField('romNrInput')">
                                         <datalist id="roomNumbers">
-                                            @foreach (var item in Model.RoomNumbers)
+                                            @for (int i = 0; i < Model.RoomNumbers.Count; i++)
                                             {
-                                                <option>@item</option>
+                                                <option>@Model.RoomNumbers[i]</option>
                                             }
                                         </datalist>
                                     </div>
 
                                     <div class="col-12 p-1 center ">
-                                        <button type="submit" class="btn btn-danger btn-sm btn-red" style="width:100px" value="@Model.DeleteRoomNumber" asp-action="DeleteRoomNumber" onclick="submit('insertData')">Slet</button>
+                                        <button type="submit" class="btn btn-danger btn-sm btn-red" style="width:100px" asp-action="DeleteRoomNumber" onclick="submit('deleteRoomNumber')">Slet</button>
                                     </div>
                                 </div>
 
-                            </div>
-
+                            </form>
                         </div>
-                    </div>
-
-
-                    <div class="col-lg-2">
-
-                    </div>
-
-
-                    <div class="col-lg-5">
 
                     </div>
                 </div>
+
+
+                <div class="col-lg-2">
+
+                </div>
+
+
+                <div class="col-lg-5">
+
+                    <div class="row">
+
+                        @try
+                        {
+                            @if (deleteLocationFeedback != null)
+                            {
+                                if (deleteLocationFeedback.Contains("ikke") == true || deleteLocationFeedback.Contains("forkert") == true)
+                                {
+                                    <div class="col-12 p-1 text-red fadeUp">@deleteLocationFeedback</div>
+
+                                }
+                                else
+                                {
+                                    <div class="col-12 p-1 text-green fadeUp">@deleteLocationFeedback</div>
+
+                                }
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                            throw;
+                        }
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <form method="post" id="deleteShelfName">
+                                <div class="row">
+
+                                    <div class="col-12 dynamic-Font-Size-12 p-1 center">
+                                        <label>
+                                            Reol:
+                                        </label>
+                                    </div>
+
+                                    <div class="col-12 p-1">
+                                        <input class=" form-select capitalized" id="shelfNameInput" list="shelfNames" aria-label="shelfName" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.DeleteShelfName" onsubmit="ClearInputField('shelfNameInput')">
+                                        <datalist id="shelfNames">
+                                            @for (int i = 0; i < Model.ShelfNames.Count; i++)
+                                            {
+                                                <option>@Model.ShelfNames[i]</option>
+                                            }
+                                        </datalist>
+                                    </div>
+
+                                    <div class="col-12 p-1 center">
+                                        <button type="submit" class="btn btn-danger btn-sm btn-red" style="width:100px" asp-action="DeleteShelfName" onclick="submit('deleteShelfName')">Slet</button>
+                                    </div>
+
+                                </div>
+
+                            </form>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <form method="post" id="deleteShelfLevel">
+                                <div class="row">
+
+                                    <div class="col-12 p-1 dynamic-Font-Size-12 center">
+                                        <label>
+                                            Etage:
+                                        </label>
+                                    </div>
+
+                                    <div class="col-12 p-1">
+                                        <input class="form-select capitalized" id="shelfLevelInput" list="shelfLevels" aria-label="shelfLevel" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.DeleteShelfLevel" onsubmit="ClearInputField('shelfLevelInput')">
+                                        <datalist id="shelfLevels">
+                                            @for (int i = 0; i < Model.ShelfLevels.Count; i++)
+                                            {
+                                                <option>@Model.ShelfLevels[i]</option>
+                                            }
+                                        </datalist>
+                                    </div>
+
+                                    <div class="col-12 p-1 center">
+                                        <button type="submit" class="btn btn-danger btn-sm btn-red" style="width:100px" asp-action="DeleteShelfLevel" onclick="submit('deleteShelfLevel')">Slet</button>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <form method="post" id="deleteShelfSpot">
+
+                                <div class="row">
+
+                                    <div class="col-12 p-1 dynamic-Font-Size-12 center">
+                                        <label>
+                                            Plads:
+                                        </label>
+                                    </div>
+
+                                    <div class="col-12 p-1">
+                                        <input class="form-select capitalized" id="shelfSpotInput" list="shelfSpots" aria-label="shelfSpot" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.DeleteShelfSpot" onsubmit="ClearInputField('shelfSpotInput')">
+                                        <datalist id="shelfSpots">
+                                            @for (int i = 0; i < Model.ShelfSpots.Count; i++)
+                                            {
+                                                <option>@Model.ShelfSpots[i]</option>
+                                            }
+                                        </datalist>
+                                    </div>
+
+                                    <div class="col-12 p-1 center ">
+                                        <button type="submit" class="btn btn-danger btn-sm btn-red" style="width:100px" asp-action="DeleteShelfSpot" onclick="submit('deleteShelfSpot')">Slet</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
-
         </div>
 
-
-
-        @*Footer of the Massdestruction area*@
-        <div class="row containerFooter">
-            <h4>&nbsp;</h4>
-        </div>
     </div>
 
 
-</form>
+
+    @*Footer of the Massdestruction area*@
+    <div class="row containerFooter">
+        <h4>&nbsp;</h4>
+    </div>
+</div>
+
+
+@*</form>*@
 
 
 

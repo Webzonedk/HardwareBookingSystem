@@ -22,7 +22,6 @@ function SubmitValidation(input) {
 
 //Fading function to fade out lines on list when a storagelocation is deleted
 function fadeOut(input) {
-    //console.log(input)
     $("#" + input).slideUp('fast', function () {
     });
 }
@@ -31,4 +30,4 @@ function fadeOut(input) {
 
 
 
-$('[data-toggle="tooltip"]').tooltip()
+////$('[data-toggle="tooltip"]').tooltip()

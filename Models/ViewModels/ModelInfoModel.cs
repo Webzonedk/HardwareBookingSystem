@@ -15,7 +15,7 @@ namespace HUS_project.Models.ViewModels
         private string category;
         private byte filter;
         private string searchName;
-        private int deviceStatus;
+        private string deviceStatus;
         private byte inStock;
         #endregion
 
@@ -68,7 +68,7 @@ namespace HUS_project.Models.ViewModels
             set { inStock = value; }
         }
 
-        public int DeviceStatus
+        public string DeviceStatus
         {
             get { return deviceStatus; }
             set { deviceStatus = value; }
@@ -91,9 +91,10 @@ namespace HUS_project.Models.ViewModels
             categoryNames = new List<string>();
             borrowedDevices = new List<DeviceModel>();
             inventoryStatuses = new List<string>();
+            this.deviceStatus = "Alle";
         }
 
-        public ModelInfoModel(DeviceModel device, List<DeviceModel> borrowedDevices, List<string> categoryNames, string category, byte filter, string searchName, int deviceStatus, byte inStock, List<string> inventoryStatuses)
+        public ModelInfoModel(DeviceModel device, List<DeviceModel> borrowedDevices, List<string> categoryNames, string category, byte filter, string searchName, string deviceStatus, byte inStock, List<string> inventoryStatuses)
         {
             this.device = device;
             this.borrowedDevices = borrowedDevices;

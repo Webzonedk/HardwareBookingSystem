@@ -26,6 +26,8 @@ namespace HUS_project.DAL
 
 
 
+
+
         //----------------------------------------------------------------------------
         //Method to get all building, room numbers, shelf names, shelf levels and shelf spots to the drop downs in the Blue Oister bar//
         //----------------------------------------------------------------------------
@@ -65,6 +67,8 @@ namespace HUS_project.DAL
 
 
 
+
+
         //----------------------------------------------------------------------------
         //Getting Building names for the dropdown in Blue Oister bar
         //----------------------------------------------------------------------------
@@ -101,6 +105,8 @@ namespace HUS_project.DAL
 
 
 
+
+
         //----------------------------------------------------------------------------
         //Getting Room numbers (Not actual rooms) for the dropdown in Blue Oister bar
         //----------------------------------------------------------------------------
@@ -119,7 +125,6 @@ namespace HUS_project.DAL
 
                 while (reader.Read())
                 {
-                    //EditStorageLocationModel output = new EditStorageLocationModel();
                     BuildingModel roomNumber = new BuildingModel(null, (string)reader["roomNr"]);
 
                     roomNumbers.Add(roomNumber.RoomNumber);
@@ -134,6 +139,46 @@ namespace HUS_project.DAL
 
 
         }
+
+
+
+
+
+        //----------------------------------------------------------------------------
+        //Getting Rooms for the dropdown in massDestruction
+        //----------------------------------------------------------------------------
+        internal List<string> GetRooms()
+        {
+            try
+            {
+                SqlConnection con = new SqlConnection(connectionString);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("SelectRoom", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.ExecuteNonQuery();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                List<string> rooms = new List<string>();
+
+                while (reader.Read())
+                {
+                    BuildingModel room = new BuildingModel((string)reader["buildingName"], (string)reader["roomNr"]);
+                    //building.Building = (string)reader["buildingName"];
+                    //building.RoomNumber = (string)reader["roomNr"];
+
+                    rooms.Add(room.Building + "." + room.RoomNumber);
+                }
+                con.Close();
+                return rooms;
+            }
+            finally
+            {
+
+            }
+        }
+
+
+
 
 
         //----------------------------------------------------------------------------
@@ -172,6 +217,8 @@ namespace HUS_project.DAL
 
 
 
+
+
         //----------------------------------------------------------------------------
         //Getting shelf levels for the dropdown in Blue Oister bar
         //----------------------------------------------------------------------------
@@ -207,6 +254,9 @@ namespace HUS_project.DAL
         }
 
 
+
+
+
         //----------------------------------------------------------------------------
         //Getting shelf spots for the dropdown in Blue Oister bar
         //----------------------------------------------------------------------------
@@ -240,6 +290,7 @@ namespace HUS_project.DAL
 
 
         }
+
 
 
 
@@ -353,6 +404,7 @@ namespace HUS_project.DAL
 
 
 
+
         //----------------------------------------------------------------------------
         //Method to count devicesin a single location//
         //----------------------------------------------------------------------------
@@ -443,11 +495,6 @@ namespace HUS_project.DAL
 
 
 
-
-
-
-
-
         //----------------------------------------------------------------------------
         //Method to get all locations based on the searchTerms//
         //----------------------------------------------------------------------------
@@ -486,6 +533,7 @@ namespace HUS_project.DAL
             }
 
         }
+
 
 
 
@@ -533,6 +581,8 @@ namespace HUS_project.DAL
 
 
 
+
+
         //----------------------------------------------------------------------------
         //Method to create a building based on the input fields in the Blue Oister Bar
         //----------------------------------------------------------------------------
@@ -567,6 +617,8 @@ namespace HUS_project.DAL
 
             }
         }
+
+
 
 
 
@@ -607,6 +659,8 @@ namespace HUS_project.DAL
 
 
         }
+
+
 
 
 
@@ -652,6 +706,7 @@ namespace HUS_project.DAL
 
 
 
+
         //----------------------------------------------------------------------------
         //Method to create a shelf Name based on the input fields in the Blue Oister Bar
         //----------------------------------------------------------------------------
@@ -690,6 +745,7 @@ namespace HUS_project.DAL
 
 
 
+
         //----------------------------------------------------------------------------
         //Method to create a shelf Name based on the input fields in the Blue Oister Bar
         //----------------------------------------------------------------------------
@@ -724,6 +780,7 @@ namespace HUS_project.DAL
 
             }
         }
+
 
 
 
@@ -768,10 +825,6 @@ namespace HUS_project.DAL
 
 
 
-
-
-
-
         //----------------------------------------------------------------------------
         //Method to Delete a single location based on locationID
         //----------------------------------------------------------------------------
@@ -809,6 +862,7 @@ namespace HUS_project.DAL
 
 
 
+
         //----------------------------------------------------------------------------
         //Method to Delete a building, based on the input fields in massdestruction area
         //----------------------------------------------------------------------------
@@ -830,6 +884,7 @@ namespace HUS_project.DAL
                 }
                 con.Close();
                 return deleteFeedback;
+
             }
             finally
             {
@@ -837,6 +892,7 @@ namespace HUS_project.DAL
             }
 
         }
+
 
 
 
@@ -873,10 +929,11 @@ namespace HUS_project.DAL
 
 
 
+
         //----------------------------------------------------------------------------
         //Method to Delete a Room, based on the input fields in massdestruction area
         //----------------------------------------------------------------------------
-        internal string DeleteRoom(EditStorageLocationModel dataFromView)
+        internal string DeleteRoom(EditStorageLocationModel deleteRoomData)
         {
             try
             {
@@ -885,9 +942,9 @@ namespace HUS_project.DAL
                 con.Open();
                 SqlCommand cmd = new SqlCommand("DeleteRoom", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.Add("@buildingNameToDelete", System.Data.SqlDbType.VarChar, 50).Value = dataFromView.DeleteBuilding.ToUpper();
-                cmd.Parameters.Add("@RoomNumberToDelete", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.DeleteRoomNumber.ToUpper();
-                cmd.Parameters.Add("@RoomToDelete", System.Data.SqlDbType.Int).Value = 0;
+                cmd.Parameters.Add("@buildingNameToDelete", System.Data.SqlDbType.VarChar, 50).Value = deleteRoomData.DeleteBuilding.ToUpper();
+                cmd.Parameters.Add("@roomNumberToDelete", System.Data.SqlDbType.VarChar, 10).Value = deleteRoomData.DeleteRoomNumber.ToUpper();
+                cmd.Parameters.Add("@roomToDelete", System.Data.SqlDbType.Int).Value = 0;
                 cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
                 cmd.ExecuteNonQuery();
                 if (cmd.Parameters["@deleteFeedback"].Value != System.DBNull.Value)
@@ -904,6 +961,104 @@ namespace HUS_project.DAL
 
         }
 
+
+
+
+
+        //----------------------------------------------------------------------------
+        //Method to Delete a roomNumber, based on the input fields in massdestruction area
+        //----------------------------------------------------------------------------
+        internal string DeleteShelfName(EditStorageLocationModel dataFromView)
+        {
+            try
+            {
+                string deleteFeedback = null;
+                SqlConnection con = new SqlConnection(connectionString);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("DeleteShelfName", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@shelfNameToDelete", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.DeleteShelfName.ToUpper();
+                cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 100).Direction = System.Data.ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+                if (cmd.Parameters["@deleteFeedback"].Value != System.DBNull.Value)
+                {
+                    deleteFeedback = (string)cmd.Parameters["@deleteFeedback"].Value;
+                }
+                con.Close();
+                return deleteFeedback;
+            }
+            finally
+            {
+
+            }
+
+        }
+
+
+
+
+
+        //----------------------------------------------------------------------------
+        //Method to Delete a roomNumber, based on the input fields in massdestruction area
+        //----------------------------------------------------------------------------
+        internal string DeleteShelfLevel(EditStorageLocationModel dataFromView)
+        {
+            try
+            {
+                string deleteFeedback = null;
+                SqlConnection con = new SqlConnection(connectionString);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("DeleteShelfLevel", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@shelfLevelToDelete", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.DeleteShelfLevel.ToUpper();
+                cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 100).Direction = System.Data.ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+                if (cmd.Parameters["@deleteFeedback"].Value != System.DBNull.Value)
+                {
+                    deleteFeedback = (string)cmd.Parameters["@deleteFeedback"].Value;
+                }
+                con.Close();
+                return deleteFeedback;
+            }
+            finally
+            {
+
+            }
+
+        }
+
+
+
+
+
+        //----------------------------------------------------------------------------
+        //Method to Delete a roomNumber, based on the input fields in massdestruction area
+        //----------------------------------------------------------------------------
+        internal string DeleteShelfSpot(EditStorageLocationModel dataFromView)
+        {
+            try
+            {
+                string deleteFeedback = null;
+                SqlConnection con = new SqlConnection(connectionString);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("DeleteShelfSpot", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@shelfSpotToDelete", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.DeleteShelfSpot.ToUpper();
+                cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 100).Direction = System.Data.ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+                if (cmd.Parameters["@deleteFeedback"].Value != System.DBNull.Value)
+                {
+                    deleteFeedback = (string)cmd.Parameters["@deleteFeedback"].Value;
+                }
+                con.Close();
+                return deleteFeedback;
+            }
+            finally
+            {
+
+            }
+
+        }
 
 
 
