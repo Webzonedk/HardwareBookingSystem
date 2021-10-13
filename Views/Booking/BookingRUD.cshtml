@@ -6,14 +6,11 @@
 }
 <form asp-action="ProcessBookingEditSubmit" method="post" id="processBookingEditSubmit">
     <div class="row blue-oyster-bar center box-shadow">
-
         <div class="row">
-
             <div class="col-3 text-white align-items-center">
                 <h3 style="margin-top:30px;">Bestilling: @Model.BookingID af @Model.Customer</h3>
                 <input type="hidden" name="bookingID" asp-for="BookingID" value="@Model.BookingID" />
             </div>
-
             <div class="col-1">
                 <p>Udlån Start:</p>
                 <!-- If start date isn't today or earlier, and you are the one who made the booking, the start date can be moved. -->
