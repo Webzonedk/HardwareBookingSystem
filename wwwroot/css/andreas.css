@@ -13,27 +13,28 @@
     margin-right: auto;
 }
 
-.Button-Size{
+.Button-Size {
     min-width: 110px;
-  /*  min-height:70px;*/
+    /*  min-height:70px;*/
 }
 
-.alignBottom{
-    position:absolute;
-    bottom:0;
+.alignBottom {
+    position: absolute;
+    bottom: 0;
 }
 
-.Description_Size{
-    height:140px !important;
-    resize:none;
-   /* width:300px;*/
-  /* max-height:500px;*/
-   
-   
+.Description_Size {
+    height: 140px !important;
+    resize: none;
+    /* width:300px;*/
+    /* max-height:500px;*/
 }
 
-.space{
-    display:flex;
-    justify-content:space-between;
+.space {
+    display: flex;
+    justify-content: space-between;
 }
 
+.hidden {
+   visibility:hidden;
+}

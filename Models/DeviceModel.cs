@@ -17,8 +17,15 @@ namespace HUS_project.Models
         private string notes;
         private DateTime changeDate;
         private DateTime returnedDate;
+        private string bookingStatus;
+
+
         private string changedBy;
         private string returnedBy;
+
+
+
+
         
     
         #endregion
@@ -63,18 +70,24 @@ namespace HUS_project.Models
             set { notes = value; }
         }
 
+
+
         public DateTime ChangeDate
         {
             get { return changeDate; }
             set { changeDate = value; }
         }
-
         public DateTime ReturnedDate
         {
             get { return returnedDate; }
             set { returnedDate = value; }
         }
-
+        public string BookingStatus
+        {
+            get { return bookingStatus; }
+            set { bookingStatus = value; }
+        }
+      
         public string ChangedBy
         {
             get { return changedBy; }

@@ -471,17 +471,19 @@ namespace HUS_project.DAL
                 cmd.Parameters.Add("@searchName", System.Data.SqlDbType.VarChar).Value = null;
             }
 
-            if (SearchModel.InStock > 0)
-            {
-                cmd.Parameters.Add("@inStock", System.Data.SqlDbType.TinyInt).Value = SearchModel.InStock;
+            cmd.Parameters.Add("@inStock", System.Data.SqlDbType.TinyInt).Value = SearchModel.InStock;
 
-            }
-            else
-            {
-                cmd.Parameters.Add("@inStock", System.Data.SqlDbType.TinyInt).Value = null;
-            }
+            //if (SearchModel.InStock > 0)
+            //{
+            //    cmd.Parameters.Add("@inStock", System.Data.SqlDbType.TinyInt).Value = SearchModel.InStock;
 
+            //}
+            //else
+            //{
+            //    cmd.Parameters.Add("@inStock", System.Data.SqlDbType.TinyInt).Value = null;
+            //}
 
+            int counter = 0;
             SqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
@@ -492,22 +494,42 @@ namespace HUS_project.DAL
                 BuildingModel building = new BuildingModel();
 
                 device.DeviceID = (int)reader["deviceID"];
-                device.Status = (byte)reader["status"];
+
+
+                if (reader.IsDBNull(reader.GetOrdinal("returnDate")))
+                {
+                    device.BookingStatus = "På Lager";
+                }
+                else
+                {
+                    DateTime returnDate = (DateTime)reader["returnDate"];
+                    DateTime rentDate = (DateTime)reader["rentDate"];
+                    device.BookingStatus = $"{rentDate.ToShortDateString()}-{returnDate.ToShortDateString()}";
+
+                }
                 category.Category = (string)reader["categoryName"];
                 model.ModelName = (string)reader["modelName"];
 
+                if (!reader.IsDBNull(reader.GetOrdinal("bookedBuilding")))
+                {
 
-                building.RoomNumber = (string)reader["roomNr"];
-                building.Building = (string)reader["buildingName"];
-                location.ShelfName = (string)reader["shelfName"]; ;
-                location.ShelfLevel = (string)reader["shelfLevel"];
-                location.ShelfSpot = (string)reader["shelfSpot"];
+                }
+                else
+                {
+                    building.RoomNumber = (string)reader["roomNr"];
+                    building.Building = (string)reader["buildingName"];
+                    location.ShelfName = (string)reader["shelfName"]; ;
+                    location.ShelfLevel = (string)reader["shelfLevel"];
+                    location.ShelfSpot = (string)reader["shelfSpot"];
+
+                }
 
                 model.Category = category;
                 device.Model = model;
                 location.Location = building;
                 device.Location = location;
                 SearchModel.BorrowedDevices.Add(device);
+                counter++;
             }
 
 
@@ -577,5 +599,33 @@ namespace HUS_project.DAL
         }
 
         #endregion
+
+        //bare leg
+
+        internal void Test(string buildingName)
+        {
+            try
+            {
+                SqlConnection con = new SqlConnection(connectionString);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("CreateBuilding", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                string createBuildingFeedBack;
+               
+                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = buildingName;
+                cmd.Parameters.Add("@createBuildingFeedBack", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
+                createBuildingFeedBack = (string)cmd.Parameters["@createBuildingFeedBack"].Value;
+
+                cmd.ExecuteNonQuery();
+
+
+                con.Close();
+
+            }
+            finally
+            {
+
+            }
+        }
     }
 }

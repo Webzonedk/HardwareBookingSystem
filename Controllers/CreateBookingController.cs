@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,20 @@ namespace HUS_project.Controllers
 {
     public class CreateBookingController : Controller
     {
-        public IActionResult Index()
+        private readonly IConfiguration configuration;
+
+
+        public CreateBookingController(IConfiguration config)
+        {
+            this.configuration = config;
+        }
+
+        public IActionResult InventorySearch()
+        {
+            return View();
+        }
+
+       public IActionResult CreateBooking()
         {
             return View();
         }
