@@ -12,6 +12,7 @@ namespace HUS_project.Models.ViewModels
         private List<StorageLocationModel> storageLocations;
         private List<string> buildings;
         private List<string> roomNumbers;
+        private List<string> rooms;
         private List<string> shelfNames;
         private List<string> shelfLevels;
         private List<string> shelfSpots;
@@ -27,6 +28,14 @@ namespace HUS_project.Models.ViewModels
         private string deleteShelfName;
         private string deleteShelfLevel;
         private string deleteShelfSpot;
+        private string hiddenFieldID;
+
+
+
+
+
+
+
         #endregion
 
 
@@ -61,6 +70,12 @@ namespace HUS_project.Models.ViewModels
         {
             get { return roomNumbers; }
             set { roomNumbers = value; }
+        }
+
+        public List<string> Rooms
+        {
+            get { return rooms; }
+            set { rooms = value; }
         }
 
         public List<string> ShelfNames
@@ -158,7 +173,12 @@ namespace HUS_project.Models.ViewModels
             set { deleteShelfSpot = value; }
         }
 
-    
+        public string HiddenFieldID
+        {
+            get { return hiddenFieldID; }
+            set { hiddenFieldID = value; }
+        }
+
         #endregion
 
 
@@ -171,6 +191,7 @@ namespace HUS_project.Models.ViewModels
         {
             storageLocations = new List<StorageLocationModel>();
             buildings = new List<string>();
+            rooms = new List<string>();
             roomNumbers = new List<string>();
             shelfNames = new List<string>();
             shelfLevels = new List<string>();

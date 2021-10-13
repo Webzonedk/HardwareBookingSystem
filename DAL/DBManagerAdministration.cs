@@ -24,6 +24,51 @@ namespace HUS_project.DAL
             connectionString = configuration.GetConnectionString("DBContext");
         }
 
+
+
+
+
+        //----------------------------------------------------------------------------
+        //Method to get all building, room numbers, shelf names, shelf levels and shelf spots to the drop downs in the Blue Oister bar//
+        //----------------------------------------------------------------------------
+        internal EditStorageLocationModel GetLocations(EditStorageLocationModel dataFromView)
+        {
+            try
+            {
+
+
+                List<StorageLocationModel> storageLocations = GetSelectedStorageLocations(dataFromView);
+                EditStorageLocationModel searchResult = new EditStorageLocationModel();
+
+                List<string> buildings = GetBuildings();
+                List<string> roomNumbers = GetRoomNumbers();
+                List<string> shelfNames = GetShelfName();
+                List<string> shelfLevels = GetShelfLevel();
+                List<string> shelfspots = GetShelfSpot();
+
+
+                searchResult.Buildings = buildings;
+                searchResult.RoomNumbers = roomNumbers;
+                searchResult.ShelfNames = shelfNames;
+                searchResult.ShelfLevels = shelfLevels;
+                searchResult.ShelfSpots = shelfspots;
+                searchResult.Filter = 0;
+                searchResult.HiddenFieldID = dataFromView.HiddenFieldID;
+
+                searchResult.StorageLocations = storageLocations;
+                searchResult.StorageLocation = dataFromView.StorageLocation;
+                return searchResult;
+            }
+            finally
+            {
+
+            }
+        }
+
+
+
+
+
         //----------------------------------------------------------------------------
         //Getting Building names for the dropdown in Blue Oister bar
         //----------------------------------------------------------------------------
@@ -60,6 +105,8 @@ namespace HUS_project.DAL
 
 
 
+
+
         //----------------------------------------------------------------------------
         //Getting Room numbers (Not actual rooms) for the dropdown in Blue Oister bar
         //----------------------------------------------------------------------------
@@ -78,7 +125,6 @@ namespace HUS_project.DAL
 
                 while (reader.Read())
                 {
-                    //EditStorageLocationModel output = new EditStorageLocationModel();
                     BuildingModel roomNumber = new BuildingModel(null, (string)reader["roomNr"]);
 
                     roomNumbers.Add(roomNumber.RoomNumber);
@@ -93,6 +139,46 @@ namespace HUS_project.DAL
 
 
         }
+
+
+
+
+
+        //----------------------------------------------------------------------------
+        //Getting Rooms for the dropdown in massDestruction
+        //----------------------------------------------------------------------------
+        internal List<string> GetRooms()
+        {
+            try
+            {
+                SqlConnection con = new SqlConnection(connectionString);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("SelectRoom", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.ExecuteNonQuery();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                List<string> rooms = new List<string>();
+
+                while (reader.Read())
+                {
+                    BuildingModel room = new BuildingModel((string)reader["buildingName"], (string)reader["roomNr"]);
+                    //building.Building = (string)reader["buildingName"];
+                    //building.RoomNumber = (string)reader["roomNr"];
+
+                    rooms.Add(room.Building + "." + room.RoomNumber);
+                }
+                con.Close();
+                return rooms;
+            }
+            finally
+            {
+
+            }
+        }
+
+
+
 
 
         //----------------------------------------------------------------------------
@@ -131,6 +217,8 @@ namespace HUS_project.DAL
 
 
 
+
+
         //----------------------------------------------------------------------------
         //Getting shelf levels for the dropdown in Blue Oister bar
         //----------------------------------------------------------------------------
@@ -164,6 +252,9 @@ namespace HUS_project.DAL
 
 
         }
+
+
+
 
 
         //----------------------------------------------------------------------------
@@ -203,6 +294,7 @@ namespace HUS_project.DAL
 
 
 
+
         //----------------------------------------------------------------------------
         //Getting the complete list of storagelocations, based on the choices med in the Blue Oister bar to be shown in LocationAdmin view.
         //----------------------------------------------------------------------------
@@ -219,7 +311,7 @@ namespace HUS_project.DAL
 
                 if (dataFromView.StorageLocation.Location.Building != null)
                 {
-                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = dataFromView.StorageLocation.Location.Building;
+                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = dataFromView.StorageLocation.Location.Building.ToUpper();
                 }
                 else
                 {
@@ -229,7 +321,7 @@ namespace HUS_project.DAL
 
                 if (dataFromView.StorageLocation.Location.RoomNumber != null)
                 {
-                    cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.Location.RoomNumber;
+                    cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.Location.RoomNumber.ToUpper();
                 }
                 else
                 {
@@ -239,7 +331,7 @@ namespace HUS_project.DAL
 
                 if (dataFromView.StorageLocation.ShelfName != null)
                 {
-                    cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.ShelfName;
+                    cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.ShelfName.ToUpper();
                 }
                 else
                 {
@@ -249,7 +341,7 @@ namespace HUS_project.DAL
 
                 if (dataFromView.StorageLocation.ShelfLevel != null)
                 {
-                    cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.ShelfLevel;
+                    cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.ShelfLevel.ToUpper();
                 }
                 else
                 {
@@ -259,7 +351,7 @@ namespace HUS_project.DAL
 
                 if (dataFromView.StorageLocation.ShelfSpot != null)
                 {
-                    cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.ShelfSpot;
+                    cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.ShelfSpot.ToUpper();
                 }
                 else
                 {
@@ -296,6 +388,11 @@ namespace HUS_project.DAL
                     selectedStorageLocations.Add(selectedStorageLocation);
                 }
                 con.Close();
+
+                for (int i = 0; i < selectedStorageLocations.Count; i++)
+                {
+                    selectedStorageLocations[i].UnitCount = CountDevices(selectedStorageLocations[i]);
+                }
                 return selectedStorageLocations;
             }
             finally
@@ -303,6 +400,37 @@ namespace HUS_project.DAL
 
             }
         }
+
+
+
+
+
+        //----------------------------------------------------------------------------
+        //Method to count devicesin a single location//
+        //----------------------------------------------------------------------------
+        internal int CountDevices(StorageLocationModel data)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("CountDevicesOnLocation", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            int unitCount = 0;
+            if (data.LocationID > 0)
+            {
+                cmd.Parameters.Add("@locationID", System.Data.SqlDbType.Int).Value = data.LocationID;
+            }
+
+            con.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                unitCount = (int)reader["counter"];
+            }
+            con.Close();
+
+
+            return unitCount;
+        }
+
 
 
 
@@ -322,7 +450,7 @@ namespace HUS_project.DAL
 
                 if (dataFromView.StorageLocation.Location.Building != null)
                 {
-                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.Location.Building;
+                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.Location.Building.ToUpper();
                 }
                 else
                 {
@@ -332,7 +460,7 @@ namespace HUS_project.DAL
 
                 if (dataFromView.StorageLocation.Location.RoomNumber != null)
                 {
-                    cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.Location.RoomNumber;
+                    cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.StorageLocation.Location.RoomNumber.ToUpper();
                 }
                 else
                 {
@@ -363,44 +491,6 @@ namespace HUS_project.DAL
             }
         }
 
-
-
-
-        //----------------------------------------------------------------------------
-        //Method to get all building, room numbers, shelf names, shelf levels and shelf spots to the drop downs in the Blue Oister bar//
-        //----------------------------------------------------------------------------
-        internal EditStorageLocationModel GetLocations(EditStorageLocationModel dataFromView)
-        {
-            try
-            {
-
-
-                List<StorageLocationModel> storageLocations = GetSelectedStorageLocations(dataFromView);
-                EditStorageLocationModel searchResult = new EditStorageLocationModel();
-
-                List<string> buildings = GetBuildings();
-                List<string> roomNumbers = GetRoomNumbers();
-                List<string> shelfNames = GetShelfName();
-                List<string> shelfLevels = GetShelfLevel();
-                List<string> shelfspots = GetShelfSpot();
-
-
-                searchResult.Buildings = buildings;
-                searchResult.RoomNumbers = roomNumbers;
-                searchResult.ShelfNames = shelfNames;
-                searchResult.ShelfLevels = shelfLevels;
-                searchResult.ShelfSpots = shelfspots;
-                searchResult.Filter = 0;
-
-                searchResult.StorageLocations = storageLocations;
-                searchResult.StorageLocation = dataFromView.StorageLocation;
-                return searchResult;
-            }
-            finally
-            {
-
-            }
-        }
 
 
 
@@ -447,6 +537,7 @@ namespace HUS_project.DAL
 
 
 
+
         //----------------------------------------------------------------------------
         //Method to create a location based on the input fields in the Blue Oister Bar
         //----------------------------------------------------------------------------
@@ -461,11 +552,11 @@ namespace HUS_project.DAL
                 string createStorageLocationFeedBack;
                 if (storagelocation.StorageLocation.Location.Building != null && storagelocation.StorageLocation.Location.RoomNumber != null && storagelocation.StorageLocation.ShelfName != null && storagelocation.StorageLocation.ShelfLevel != null && storagelocation.StorageLocation.ShelfSpot != null)
                 {
-                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = storagelocation.StorageLocation.Location.Building;
-                    cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.RoomNumber;
-                    cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfName;
-                    cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfLevel;
-                    cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfSpot;
+                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = storagelocation.StorageLocation.Location.Building.ToUpper();
+                    cmd.Parameters.Add("@roomNumber", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.RoomNumber.ToUpper();
+                    cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfName.ToUpper();
+                    cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfLevel.ToUpper();
+                    cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfSpot.ToUpper();
                     cmd.Parameters.Add("@createStorageLocationFeedBack", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
                 }
 
@@ -490,6 +581,8 @@ namespace HUS_project.DAL
 
 
 
+
+
         //----------------------------------------------------------------------------
         //Method to create a building based on the input fields in the Blue Oister Bar
         //----------------------------------------------------------------------------
@@ -504,8 +597,8 @@ namespace HUS_project.DAL
                 string createBuildingFeedBack;
                 if (storagelocation.StorageLocation.Location.Building != null)
                 {
-                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = storagelocation.StorageLocation.Location.Building;
-                    cmd.Parameters.Add("@createBuildingFeedBack", System.Data.SqlDbType.VarChar,200).Direction = System.Data.ParameterDirection.Output;
+                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = storagelocation.StorageLocation.Location.Building.ToUpper();
+                    cmd.Parameters.Add("@createBuildingFeedBack", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
                 }
                 cmd.ExecuteNonQuery();
                 if (cmd.Parameters["@createBuildingFeedBack"].Value != System.DBNull.Value)
@@ -527,6 +620,8 @@ namespace HUS_project.DAL
 
 
 
+
+
         //----------------------------------------------------------------------------
         //Method to create a room number based on the input fields in the Blue Oister Bar
         //----------------------------------------------------------------------------
@@ -539,9 +634,9 @@ namespace HUS_project.DAL
                 SqlCommand cmd = new SqlCommand("CreateRoomNumber", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 string createRoomNumberFeedBack;
-                if (storagelocation.StorageLocation.Location.Building != null)
+                if (storagelocation.StorageLocation.Location.RoomNumber != null)
                 {
-                    cmd.Parameters.Add("@roomNumber", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.Building;
+                    cmd.Parameters.Add("@roomNumber", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.RoomNumber.ToUpper();
                     cmd.Parameters.Add("@createRoomNumberFeedBack", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
 
                 }
@@ -568,6 +663,8 @@ namespace HUS_project.DAL
 
 
 
+
+
         //----------------------------------------------------------------------------
         //Method to create a room based on the input fields in the Blue Oister Bar
         //----------------------------------------------------------------------------
@@ -580,10 +677,10 @@ namespace HUS_project.DAL
                 SqlCommand cmd = new SqlCommand("CreateRoom", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 string createRoomFeedBack;
-                if (storagelocation.StorageLocation.Location.Building != null)
+                if (storagelocation.StorageLocation.Location.Building != null && storagelocation.StorageLocation.Location.RoomNumber != null)
                 {
-                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = storagelocation.StorageLocation.Location.Building;
-                    cmd.Parameters.Add("@roomNumber", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.Building;
+                    cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = storagelocation.StorageLocation.Location.Building.ToUpper();
+                    cmd.Parameters.Add("@roomNumber", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.RoomNumber.ToUpper();
                     cmd.Parameters.Add("@createRoomFeedBack", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
                 }
                 cmd.ExecuteNonQuery();
@@ -609,6 +706,7 @@ namespace HUS_project.DAL
 
 
 
+
         //----------------------------------------------------------------------------
         //Method to create a shelf Name based on the input fields in the Blue Oister Bar
         //----------------------------------------------------------------------------
@@ -621,9 +719,9 @@ namespace HUS_project.DAL
                 SqlCommand cmd = new SqlCommand("CreateShelfName", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 string createShelfNameFeedBack;
-                if (storagelocation.StorageLocation.Location.Building != null)
+                if (storagelocation.StorageLocation.ShelfName != null)
                 {
-                    cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.Building;
+                    cmd.Parameters.Add("@shelfName", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfName.ToUpper();
                     cmd.Parameters.Add("@createShelfNameFeedBack", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
                 }
                 cmd.ExecuteNonQuery();
@@ -642,9 +740,8 @@ namespace HUS_project.DAL
             {
 
             }
-
-
         }
+
 
 
 
@@ -661,9 +758,9 @@ namespace HUS_project.DAL
                 SqlCommand cmd = new SqlCommand("CreateShelfLevel", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 string createShelfLevelFeedBack;
-                if (storagelocation.StorageLocation.Location.Building != null)
+                if (storagelocation.StorageLocation.ShelfLevel != null)
                 {
-                    cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.Building;
+                    cmd.Parameters.Add("@shelfLevel", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfLevel.ToUpper();
                     cmd.Parameters.Add("@createShelfLevelFeedBack", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
                 }
                 cmd.ExecuteNonQuery();
@@ -687,6 +784,7 @@ namespace HUS_project.DAL
 
 
 
+
         //----------------------------------------------------------------------------
         //Method to create a shelf Name based on the input fields in the Blue Oister Bar
         //----------------------------------------------------------------------------
@@ -699,9 +797,9 @@ namespace HUS_project.DAL
                 SqlCommand cmd = new SqlCommand("CreateShelfSpot", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 string createShelfSpotFeedBack;
-                if (storagelocation.StorageLocation.Location.Building != null)
+                if (storagelocation.StorageLocation.ShelfSpot != null)
                 {
-                    cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.Location.Building;
+                    cmd.Parameters.Add("@shelfSpot", System.Data.SqlDbType.VarChar, 10).Value = storagelocation.StorageLocation.ShelfSpot.ToUpper();
                     cmd.Parameters.Add("@createShelfSpotFeedBack", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
                 }
                 cmd.ExecuteNonQuery();
@@ -722,6 +820,7 @@ namespace HUS_project.DAL
             }
 
         }
+
 
 
 
@@ -763,6 +862,7 @@ namespace HUS_project.DAL
 
 
 
+
         //----------------------------------------------------------------------------
         //Method to Delete a building, based on the input fields in massdestruction area
         //----------------------------------------------------------------------------
@@ -784,6 +884,7 @@ namespace HUS_project.DAL
                 }
                 con.Close();
                 return deleteFeedback;
+
             }
             finally
             {
@@ -791,6 +892,7 @@ namespace HUS_project.DAL
             }
 
         }
+
 
 
 
@@ -827,10 +929,11 @@ namespace HUS_project.DAL
 
 
 
+
         //----------------------------------------------------------------------------
         //Method to Delete a Room, based on the input fields in massdestruction area
         //----------------------------------------------------------------------------
-        internal string DeleteRoom(EditStorageLocationModel dataFromView)
+        internal string DeleteRoom(EditStorageLocationModel deleteRoomData)
         {
             try
             {
@@ -839,9 +942,9 @@ namespace HUS_project.DAL
                 con.Open();
                 SqlCommand cmd = new SqlCommand("DeleteRoom", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.Add("@buildingNameToDelete", System.Data.SqlDbType.VarChar, 50).Value = dataFromView.DeleteBuilding.ToUpper();
-                cmd.Parameters.Add("@RoomNumberToDelete", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.DeleteRoomNumber.ToUpper();
-                cmd.Parameters.Add("@RoomToDelete", System.Data.SqlDbType.Int).Value = 0;
+                cmd.Parameters.Add("@buildingNameToDelete", System.Data.SqlDbType.VarChar, 50).Value = deleteRoomData.DeleteBuilding.ToUpper();
+                cmd.Parameters.Add("@roomNumberToDelete", System.Data.SqlDbType.VarChar, 10).Value = deleteRoomData.DeleteRoomNumber.ToUpper();
+                cmd.Parameters.Add("@roomToDelete", System.Data.SqlDbType.Int).Value = 0;
                 cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
                 cmd.ExecuteNonQuery();
                 if (cmd.Parameters["@deleteFeedback"].Value != System.DBNull.Value)
@@ -857,6 +960,106 @@ namespace HUS_project.DAL
             }
 
         }
+
+
+
+
+
+        //----------------------------------------------------------------------------
+        //Method to Delete a roomNumber, based on the input fields in massdestruction area
+        //----------------------------------------------------------------------------
+        internal string DeleteShelfName(EditStorageLocationModel dataFromView)
+        {
+            try
+            {
+                string deleteFeedback = null;
+                SqlConnection con = new SqlConnection(connectionString);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("DeleteShelfName", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@shelfNameToDelete", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.DeleteShelfName.ToUpper();
+                cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 100).Direction = System.Data.ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+                if (cmd.Parameters["@deleteFeedback"].Value != System.DBNull.Value)
+                {
+                    deleteFeedback = (string)cmd.Parameters["@deleteFeedback"].Value;
+                }
+                con.Close();
+                return deleteFeedback;
+            }
+            finally
+            {
+
+            }
+
+        }
+
+
+
+
+
+        //----------------------------------------------------------------------------
+        //Method to Delete a roomNumber, based on the input fields in massdestruction area
+        //----------------------------------------------------------------------------
+        internal string DeleteShelfLevel(EditStorageLocationModel dataFromView)
+        {
+            try
+            {
+                string deleteFeedback = null;
+                SqlConnection con = new SqlConnection(connectionString);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("DeleteShelfLevel", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@shelfLevelToDelete", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.DeleteShelfLevel.ToUpper();
+                cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 100).Direction = System.Data.ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+                if (cmd.Parameters["@deleteFeedback"].Value != System.DBNull.Value)
+                {
+                    deleteFeedback = (string)cmd.Parameters["@deleteFeedback"].Value;
+                }
+                con.Close();
+                return deleteFeedback;
+            }
+            finally
+            {
+
+            }
+
+        }
+
+
+
+
+
+        //----------------------------------------------------------------------------
+        //Method to Delete a roomNumber, based on the input fields in massdestruction area
+        //----------------------------------------------------------------------------
+        internal string DeleteShelfSpot(EditStorageLocationModel dataFromView)
+        {
+            try
+            {
+                string deleteFeedback = null;
+                SqlConnection con = new SqlConnection(connectionString);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("DeleteShelfSpot", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add("@shelfSpotToDelete", System.Data.SqlDbType.VarChar, 10).Value = dataFromView.DeleteShelfSpot.ToUpper();
+                cmd.Parameters.Add("@deleteFeedback", System.Data.SqlDbType.VarChar, 100).Direction = System.Data.ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+                if (cmd.Parameters["@deleteFeedback"].Value != System.DBNull.Value)
+                {
+                    deleteFeedback = (string)cmd.Parameters["@deleteFeedback"].Value;
+                }
+                con.Close();
+                return deleteFeedback;
+            }
+            finally
+            {
+
+            }
+
+        }
+
 
 
 

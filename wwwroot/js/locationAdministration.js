@@ -1,95 +1,126 @@
 ﻿
-//Submitting data from view
-function submit(input) {
+function ClearInputField(inputID) {
+    document.getElementById(inputID).value = "";
+};
 
-    document.getelementById(input).submit();
+//Submitting data from view
+function submit(formID) {
+
+    document.getelementById(formID).submit();
+}
+
+function returnToInputField() {
+    let activeID = document.activeElement.id;
+    document.getElementById("hiddenInputFieldID").value = activeID;
+};
+
+//this method runs when view has loaded
+$(document).ready(function (e) {
+
+    let hiddenInput = document.getElementById("hiddenInputFieldID");
+    let searchBar = document.getElementById(hiddenInput.value)
+    if (searchBar != null) {
+
+        let length = searchBar.value.length;
+
+        if (searchBar.setSelectionRange) {
+            searchBar.focus();
+            searchBar.setSelectionRange(length, length);
+        }
+        else if (searchbar.createTextRange) {
+            let t = searchbar.createTextRange();
+            t.collapse(true);
+            t.moveEnd('character', length);
+            t.moveStart('character', length);
+            t.select();
+        }
+
+    }
+
+
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+    //Function to set a timer to wait before sliding up feedback and run the function called FadeOutSlow
+    setTimeout(FadeOutSlow, 2000);
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+
+
+
+
+
+});
+
+
+//functions to delay sumit while typing in the input field
+let timer;
+function SetTimeout() {
+
+    let doneTypingInterval = 1000; // wait 1 second
+
+    clearTimeout(timer);
+    timer = setTimeout(doneTyping, doneTypingInterval);
+
 }
 
 
-////Submitting data from view
-//$(document).ready(function (e) {
+//clear timer on key down
+function ClearTimeout() {
 
-//    console.log("test test test")
-//    let scrollToDiv = document.getElementById("insertData");
-//    scrollToDiv.scrollTop = scrollToDiv.scrollHeight;
-//});
+    clearTimeout(timer);
+}
 
+function doneTyping() {
 
+    document.getElementById("listStorageLocations").submit();
 
-//$(document).ready(function () {
-
-//window.scrollTo(0, document.body.scrollHeight);
-//});
-
-
-
-
+}
 
 
 
 
 //Scrolling down to selected ID
-function scrollToDiv(input, id) {
-    console.log("test test test " + input);
-    if (input != "") {
+function scrollToDiv(input, input2, id) {
+
+    if (input != '' || input2 !='') {
         window.scrollTo(0, document.body.scrollHeight);
+        //let ele = document.getElementById(input);
+        //console.log(input)
+        //window.scrollTo(ele.offsetLeft, ele.offsetTop);
     }
 
-    if (id != "") {
+    if (id != '') {
+        console.log(id)
+
         let result = parseFloat(id);
-        result++;
+        if (result > 1) {
+            result--;
+        }
+        else {
+            result = 1;
+        }
         let ele = document.getElementById(result);
-        console.log(result)
         window.scrollTo(ele.offsetLeft, ele.offsetTop);
-
     }
-
-
 }
 
 
-//function scroll(divID) {
-//    let ele = document.getElementById(divID + 1);
-//    console.log(ele)
-//    window.scrollTo(ele.offsetLeft, ele.offsetTop);
-//}
 
 
+//Function to slide up th feedback (included in the document.ready as well)
+function FadeOutSlow() {
+    let x = document.getElementsByClassName("fadeUp")
+    for (var i = 0; i < 25; i++) {
+        $(x[i]).slideUp('slow', function () {
+        });
 
-
-//Submitting data from view (Not used at the moment)
-function submit2(input) {
-
-
-    let building = document.getElementById("buldingInput").value;//getting value
-    let roomNr = document.getElementById("romNrInput").value;//getting value
-    let chosenRoom = document.getElementById("chosenRoom");//inserting value
-
-    if (building != "" && roomNr != "") {
-        chosenRoom.value = building + "." + roomNr;
     }
-    else {
-        chosenRoom.value = "";
-    }
-    document.getelementById(input).submit();
 }
 
 
 
 
-//Function to show specified room in the input field in the massdestruction area
-function showRoom() {
-    let building = document.getElementById("buldingInput").value;//getting value
-    let roomNr = document.getElementById("romNrInput").value;//getting value
-    let chosenRoom = document.getElementById("chosenRoom");//inserting value
 
-    if (building != "" && roomNr != "") {
-        chosenRoom.value = building + "." + roomNr;
-    }
-    else {
-        chosenRoom.value = "";
-    }
-}
 
 
 
@@ -104,16 +135,3 @@ function alertFunction(tempData) {
 
 
 
-
-//Function to check if inout fields is filled before submitting
-//might be obsolete
-function checkInputFields() {
-    let a = document.getElementById("buildingDropDown").value;
-    let b = document.getElementById("roomNumberDropDown").value;
-    let c = document.getElementById("shelfNameDropDown").value;
-    let d = document.getElementById("shelfLevelDropDown").value;
-    let e = document.getElementById("shelfSpotDropDown").value;
-    if (a == null || a == "", b == null || b == "", c == null || c == "", d == null || d == "", e == null || e == "") {
-        alert("Lokationen blev IKKE oprettet! \n Alle felter skal være udfyldt.");
-    }
-}

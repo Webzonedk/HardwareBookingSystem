@@ -5,6 +5,9 @@
 
 // Write your JavaScript code.
 
+
+
+
 function SubmitValidation(input) {
 
     document.getElementById(input).submit();
@@ -19,7 +22,6 @@ function SubmitValidation(input) {
 
 //Fading function to fade out lines on list when a storagelocation is deleted
 function fadeOut(input) {
- //console.log(input)
     $("#" + input).slideUp('fast', function () {
     });
 }
@@ -27,17 +29,5 @@ function fadeOut(input) {
 
 
 
-//call submit at scanDevice view
-function ReturnToEdit(val) {
-    //var location = $("#content").val();
-    //console.log(location);
-    //var id = 0;
 
-    //var output = location + '-' + id;
-    //console.log(output);
-
-    //submit();
-    console.log("test test test" + val);
-}
-
-
+////$('[data-toggle="tooltip"]').tooltip()
