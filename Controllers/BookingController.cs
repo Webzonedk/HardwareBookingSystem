@@ -193,9 +193,17 @@ namespace HUS_project.Controllers
         }
 
 
-        public IActionResult DeleteBooking(string bookingID)
+        public IActionResult DeleteBooking(BookingModel booking)
         {
-            return GoToBooking(bookingID);
+            DBManagerBooking dBManagerBooking = new DBManagerBooking(configuration);
+            string reason = DateTime.Now > booking.PlannedBorrowDate ? "Afsluttet: Sidste enhed returneret" : "Afsluttet: Ordre aflyst af bestiller";
+            if (!dBManagerBooking.DeleteBooking(Convert.ToInt32(booking.BookingID), HttpContext.Session.GetString("uniLogin"), reason))
+            {
+                // Error Handling
+                HttpContext.Session.SetString("bookingEditError", "Ordre kunne ikke afsluttes, da sidste lånte enhed ikke er returneret");
+            }
+
+            return GoToBooking(booking.BookingID.ToString());
         }
 
         /// <summary>
@@ -212,7 +220,7 @@ namespace HUS_project.Controllers
             if(booking.Items.Count < 2)
             {
                 // Delete booking also
-                return DeleteBooking(booking.BookingID.ToString());
+                return DeleteBooking(booking);
             }
             return GoToBooking(booking.BookingID.ToString());
         }
@@ -235,7 +243,7 @@ namespace HUS_project.Controllers
             else if(deleteBooking != null)
             {
                 // DISABLE or DELETE BOOKING
-                return DeleteBooking(bookingModel.BookingID.ToString());
+                return DeleteBooking(bookingModel);
             }
             else if(deleteItemLine != null)
             {
