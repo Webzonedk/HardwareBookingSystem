@@ -75,7 +75,7 @@ namespace HUS_project.Controllers
 
                                 if(booking.Devices.Count < 2)
                                 {
-                                    DeleteBooking(booking);
+                                    return DeleteBooking(booking);
                                 }
                             }
                             else
@@ -206,9 +206,13 @@ namespace HUS_project.Controllers
             {
                 // Error Handling
                 HttpContext.Session.SetString("bookingEditError", "Ordre kunne ikke afsluttes, da sidste lånte enhed ikke er returneret");
+                return GoToBooking(booking.BookingID.ToString());
             }
-
-            return GoToBooking(booking.BookingID.ToString());
+            else
+            {
+                HomeController homeController = new HomeController(configuration);
+                return homeController.RelocateUser();
+            }
         }
 
         /// <summary>
