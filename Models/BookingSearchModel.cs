@@ -10,29 +10,10 @@ namespace HUS_project.Models
         private int modelID;
         private string modelName;
         private string categoryName;
-        private int inStock;
-        private DateTime rentDate;
-        private DateTime returnDate;
-
-
-
-        public DateTime ReturnDate
-        {
-            get { return returnDate; }
-            set { returnDate = value; }
-        }
-        public DateTime RentDate
-        {
-            get { return rentDate; }
-            set { rentDate = value; }
-        }
-
-
-        public int InStock
-        {
-            get { return inStock; }
-            set { inStock = value; }
-        }
+        private List<int> inStock;
+        private List<int> notInstock;
+        private List<DateTime> rentDate;
+        private List<DateTime> returnDate;
 
 
         public string CategoryName
@@ -45,17 +26,25 @@ namespace HUS_project.Models
             get { return modelName; }
             set { modelName = value; }
         }
-
-
         public int ModelID
         {
             get { return modelID; }
             set { modelID = value; }
         }
 
+
+
+        public List<int> InStock { get => inStock; set => inStock = value; }
+        public List<int> NotInstock { get => notInstock; set => notInstock = value; }
+        public List<DateTime> RentDate { get => rentDate; set => rentDate = value; }
+        public List<DateTime> ReturnDate { get => returnDate; set => returnDate = value; }
+
         public BookingSearchModel()
         {
-
+            inStock = new List<int>();
+            notInstock = new List<int>();
+            rentDate = new List<DateTime>();
+            returnDate = new List<DateTime>();
         }
 
 
