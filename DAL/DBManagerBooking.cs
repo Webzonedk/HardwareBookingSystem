@@ -178,7 +178,7 @@ namespace HUS_project.DAL
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
 
             con.Open();
-            int output = (Int32)cmd.ExecuteScalar();
+            int output = (int)cmd.ExecuteScalar();
             bool success = Convert.ToBoolean(output);
             con.Close();
             return success;
@@ -227,7 +227,7 @@ namespace HUS_project.DAL
 
 
         /// <summary>
-        /// ONLY USE IF THE BOOKING HAS NOT BEEN DELIVERED. Does what it says on the tin.
+        /// ONLY USE IF THE BOOKING HAS NOT BEEN DELIVERED. Does what it says on the tin. No Logs!
         /// </summary>
         /// <param name="deviceID">DeviceID of the BookedDevice</param>
         /// <param name="bookingID">BookingID of the BookedDevice</param>

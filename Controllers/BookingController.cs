@@ -72,6 +72,11 @@ namespace HUS_project.Controllers
                                 // Delivery has already been made. Update BookedDevice to be Returned.
                                 // "ReturnBookedDevice"
                                 dBManager.ReturnBookedDevice(device.DeviceID, booking.BookingID, HttpContext.Session.GetString("uniLogin"));
+
+                                if(booking.Devices.Count < 2)
+                                {
+                                    DeleteBooking(booking);
+                                }
                             }
                             else
                             {
