@@ -21,15 +21,6 @@ namespace HUS_project.DAL
             connectionString = configuration.GetConnectionString("DBContext");
         }
 
-        internal void CreateBooking()
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            SqlCommand cmd = new SqlCommand("StoredProcedureName", con);
-
-            con.Open();
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            con.Close();
-        }
         
         /// <summary>
         /// Gets all Booking information based on the bookingID provided.
@@ -147,26 +138,7 @@ namespace HUS_project.DAL
             return bookedDevices;
         }
 
-        /// <summary>
-        /// ONLY USE IF THE BOOKING HAS NOT BEEN DELIVERED. Does what it says on the tin.
-        /// </summary>
-        /// <param name="deviceID">DeviceID of the BookedDevice</param>
-        /// <param name="bookingID">BookingID of the BookedDevice</param>
-        internal void DeleteBookedDevice(int deviceID, int bookingID)
-        {
-            // The delivery for this booking has not been made yet, ergo the bookedDevice may be Deleted. An Undo.
-            // "DeleteBookedDevice"
-
-            SqlConnection con = new SqlConnection(connectionString);
-            SqlCommand cmd = new SqlCommand("DeleteBookedDevice", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@deviceID", deviceID);
-            cmd.Parameters.AddWithValue("@bookingID", bookingID);
-
-            con.Open();
-            cmd.ExecuteNonQuery();
-            con.Close();
-        }
+        
 
         /// <summary>
         /// Updates BookedDevice to be Returned
@@ -206,7 +178,7 @@ namespace HUS_project.DAL
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
 
             con.Open();
-            int output = (Int32)cmd.ExecuteScalar();
+            int output = (int)cmd.ExecuteScalar();
             bool success = Convert.ToBoolean(output);
             con.Close();
             return success;
@@ -253,6 +225,28 @@ namespace HUS_project.DAL
             con.Close();
         }
 
+
+        /// <summary>
+        /// ONLY USE IF THE BOOKING HAS NOT BEEN DELIVERED. Does what it says on the tin. No Logs!
+        /// </summary>
+        /// <param name="deviceID">DeviceID of the BookedDevice</param>
+        /// <param name="bookingID">BookingID of the BookedDevice</param>
+        internal void DeleteBookedDevice(int deviceID, int bookingID)
+        {
+            // The delivery for this booking has not been made yet, ergo the bookedDevice may be Deleted. An Undo.
+            // "DeleteBookedDevice"
+
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("DeleteBookedDevice", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@deviceID", deviceID);
+            cmd.Parameters.AddWithValue("@bookingID", bookingID);
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+
         /// <summary>
         /// Deletes an ItemLine from a Booking.
         /// </summary>
@@ -269,6 +263,29 @@ namespace HUS_project.DAL
             con.Open();
             cmd.ExecuteNonQuery();
             con.Close();
+        }
+
+        /// <summary>
+        /// Does Everything involved with deleting a Booking: Deleting and Logging the Booking itself and all associated BookedDevices and ItemLines.
+        /// </summary>
+        /// <param name="bookingID">Booking ID to be deleted</param>
+        /// <param name="deleter">Who is deleting this booking</param>
+        /// <param name="reason">Why they are deleting it "Cancelled by user", "Ended."</param>
+        /// <returns>True if Success</returns>
+        internal bool DeleteBooking(int bookingID, string deleter, string reason)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("DeleteBooking", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@bookingID", bookingID);
+            cmd.Parameters.AddWithValue("@deleter", deleter);
+            cmd.Parameters.AddWithValue("@deletionReason", reason);
+
+            con.Open();
+            bool result = (bool)cmd.ExecuteScalar();
+            con.Close();
+
+            return result;
         }
 
         /// <summary>
