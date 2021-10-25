@@ -31,6 +31,27 @@ namespace HUS_project.Controllers
             return View(data);
         }
 
+        [HttpPost]
+        public IActionResult AddToBasket(CreateBookingModel data, string submitData)
+        {
+            DBManagerCreateBooking dbManagerBooking = new DBManagerCreateBooking(configuration);
+            DBManagerShared dbShared = new DBManagerShared(configuration);
+
+
+
+            CreateBookingModel oldData = dbManagerBooking.GetInventory(data.SearchModel);
+            oldData.CategoryDropdown = dbShared.GetCategories();
+            data.SearchModel = oldData.SearchModel;
+            data.InventoryBooking = oldData.InventoryBooking;
+            
+            //add new itemline
+            ItemLineModel itemline = new ItemLineModel();
+            itemline.Model = dbShared.GetSingleModel(int.Parse(submitData));
+            data.ItemLines.Add(itemline);
+
+            return View("InventorySearch", data);
+        }
+
         public IActionResult CreateBooking()
         {
             return View();
