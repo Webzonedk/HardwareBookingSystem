@@ -473,15 +473,7 @@ namespace HUS_project.DAL
 
             cmd.Parameters.Add("@inStock", System.Data.SqlDbType.TinyInt).Value = SearchModel.InStock;
 
-            //if (SearchModel.InStock > 0)
-            //{
-            //    cmd.Parameters.Add("@inStock", System.Data.SqlDbType.TinyInt).Value = SearchModel.InStock;
-
-            //}
-            //else
-            //{
-            //    cmd.Parameters.Add("@inStock", System.Data.SqlDbType.TinyInt).Value = null;
-            //}
+            
 
             int counter = 0;
             SqlDataReader reader = cmd.ExecuteReader();
@@ -600,32 +592,6 @@ namespace HUS_project.DAL
 
         #endregion
 
-        //bare leg
-
-        internal void Test(string buildingName)
-        {
-            try
-            {
-                SqlConnection con = new SqlConnection(connectionString);
-                con.Open();
-                SqlCommand cmd = new SqlCommand("CreateBuilding", con);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                string createBuildingFeedBack;
-               
-                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar, 50).Value = buildingName;
-                cmd.Parameters.Add("@createBuildingFeedBack", System.Data.SqlDbType.VarChar, 200).Direction = System.Data.ParameterDirection.Output;
-                createBuildingFeedBack = (string)cmd.Parameters["@createBuildingFeedBack"].Value;
-
-                cmd.ExecuteNonQuery();
-
-
-                con.Close();
-
-            }
-            finally
-            {
-
-            }
-        }
+        
     }
 }

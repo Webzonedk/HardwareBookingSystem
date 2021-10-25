@@ -157,6 +157,33 @@ namespace HUS_project.DAL
             return modelID;
         }
 
+        internal ModelModel GetSingleModel(int modelID)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("GetSingleModel", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            
+            cmd.Parameters.Add("@modelID", System.Data.SqlDbType.Int).Value = modelID;
+
+            //execute query
+            SqlDataReader reader = cmd.ExecuteReader();
+            ModelModel model = new ModelModel();
+            CategoryModel category = new CategoryModel();
+
+            while (reader.Read())
+            {
+                model.ModelName = (string)reader["modelName"];
+                model.ModelDescription = (string)reader["modelDescription"];
+                category.Category = (string)reader["categoryName"];
+            }
+
+            model.Category = category;
+
+            con.Close();
+            return model;
+        }
+
         internal ImageModel DownloadImage(int modelID)
         {
             SqlConnection con = new SqlConnection(connectionString);

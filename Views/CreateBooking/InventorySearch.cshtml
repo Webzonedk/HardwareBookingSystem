@@ -1,52 +1,228 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model HUS_project.Models.ViewModels.CreateBookingModel
 @{
+    ViewData["Title"] = "BookingSøgning";
 }
 
-<script src="~/js/CreateBooking.js"></script>
+<script src="~/js/Inventory.js"></script>
 
 <div class="blue-oyster-bar">
-    @*SEARCH FORM*@
-    <form action="" method="post" id="SearchForm">
-        @*TITLES*@
+
+    <form action="InventorySearch" method="post" id="searchform">
+
         <div class="row">
-            <div class="col-md-3">
-                <label>Søgeord:</label>
+
+            <div class="col-2"></div>
+
+
+            <div class="col-8">
+
+                <div class="row">
+
+                    <div class="col-3">
+
+                        <div class="form-floating">
+                            <select class="form-select" id="categories" asp-for="@Model.SearchModel.Category" onchange="this.form.submit()" required>
+                                <option></option>
+                                @foreach (var item in Model.CategoryDropdown)
+                                {
+                                    <option>@item</option>
+                                }
+
+                            </select>
+                            <label>vælg kategori</label>
+                        </div>
+
+                    </div>
+
+
+
+                    @*Borrow from this date*@
+                    <div class="col-3">
+                        <input placeholder="Vælg Dato" type="text" DateTimeFormat="d/M/yyyy" onfocusin="(this.type='date')" @*onfocusout="(this.type='text')"*@ class="date">
+                    </div>
+                    @*Borrow until this date*@
+                    <div class="col-3">
+                        <input placeholder="Vælg Dato" type="text" DateTimeFormat="d/M/yyyy" onfocusin="(this.type='date')" @*onfocusout="(this.type='text')"*@ class="date">
+                    </div>
+
+                    <div class="col-3">
+
+                        <div class="form-floating">
+                            <select class="form-select" id="locations" asp-for="@Model.Location" required>
+                                <option hidden></option>
+                                @foreach (var item in Model.LocationDropdown)
+                                {
+                                    <option>@item</option>
+                                }
+
+                            </select>
+                            <label>Leveringssted</label>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col">
+
+                        <div class="form-floating mb-sm-1">
+                            <input type="search" class="form-control" asp-for="@Model.SearchModel.SearchName" id="searchbar" onkeyup="SetTimeout()" onkeydown="ClearTimeout()" placeholder="name@example.com">
+                            <label for="searchbar">søg efter enhed:</label>
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
-            <div class="col-md-3">
-                <label>Kategori:</label>
+
+
+
+            <div class="col-2">
+
+                <div class="row">
+                    <button type="submit" class=" btn-primary btn Button-Size btn-sm" asp-action="MyBasket">Se Kurv</button>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+
+
+                        <label class="text-white">enheder i kurven @Model.ItemLines.Count</label>
+
+
+
+
+                    </div>
+
+                </div>
+
+
+
+
+
             </div>
-            <div class="col-md-3">
-                <label>Udlån Start:</label>
-            </div>
-            <div class="col-md-3">
-                <label>Udlån Slut:</label>
-            </div>
+
         </div>
-        <div class="row">
-            @*Search Input*@
-            <div class="col-md-3">
-                <input autocomplete="off" />
-            </div>
-            @*Category Selector*@
-            <div class="col-md-3">
-                <select>
-                    <option>PC</option>
-                    <option>Printer</option>
-                    <option>Switch</option>
-                    <option>Rack</option>
-                </select>
-            </div>
-            @*Borrow from this date*@
-            <div class="col-md-3">
-                <input placeholder="Vælg Dato" type="text" DateTimeFormat="d/M/yyyy" onfocusin="(this.type='date')" @*onfocusout="(this.type='text')"*@ class="date">
-            </div>
-            @*Borrow until this date*@
-            <div class="col-md-3">
-                <input placeholder="Vælg Dato" type="text" DateTimeFormat="d/M/yyyy" onfocusin="(this.type='date')" @*onfocusout="(this.type='text')"*@ class="date">
-            </div>
-        </div>
+
     </form>
     @*SEARCH FORM END*@
+
+
+
+</div>
+
+<!--container listing search results-->
+<div class="container containerMain box-shadow">
+    <form asp-action="AddToBasket"  method="post">
+
+        <div class="row containerHeader">
+            <h4 class="col">Lagerbeholdning</h4>
+        </div>
+
+        <div class="row containerSubHeader border-top border-bottom border-white border-1 dynamic-Font-Size-10">
+            <div class="col-md-1 col-2 p-1 border-end border-white border-1">ID</div>
+            <div class="col-md-3 col-6 p-1 border-end border-white border-1">model navn</div>
+            <div class="col-md-2 col-4 p-1 border-end border-white border-1">Kategori</div>
+            <div class="col-md-1 col-4 p-1 border-end border-white border-1">På Lager</div>
+            <div class="col-md-1 col-4 p-1 border-end border-white border-1">Udlånt</div>
+            <div class="col-md-2 col-4 p-1 border-end border-white border-1">Lagerstatus</div>
+
+            <div class="col-md-1 col-4 p-1 border-white border-1"></div>
+
+        </div>
+
+      
+
+                <input type="hidden" asp-for="@Model.InventoryBooking"/>
+
+        @for (int i = 0; i < Model.InventoryBooking.Count; i++)
+        {
+
+            <div class="row containerBody alternating_row dynamic-Font-Size-10">
+                <div class=" col-md-1 col-2 p-1 border-end border-white border-1">@Model.InventoryBooking[i].ModelID</div>
+                <div class=" col-md-3 col-6 p-1 border-end border-white border-1">@Model.InventoryBooking[i].ModelName</div>
+                <div class=" col-md-2 col-4 p-1 border-end border-white border-1">@Model.InventoryBooking[i].CategoryName</div>
+
+
+
+                <div class=" col-md-1 col-4 p-1 border-end border-white border-1">
+
+                    @for (int j = 0; j < Model.InventoryBooking[i].InStock.Count; j++)
+                    {
+                        <div>@Model.InventoryBooking[i].InStock[j]</div>
+
+                    }
+
+
+                </div>
+
+                <div class=" col-md-1 col-4 p-1 border-end border-white border-1">
+
+                    @for (int j = 0; j < Model.InventoryBooking[i].NotInstock.Count; j++)
+                    {
+                        <div>@Model.InventoryBooking[i].NotInstock[j]</div>
+
+                    }
+
+                </div>
+
+                <div class=" col-md-2 col-4 p-1 border-end border-white border-1">
+
+                    @for (int j = 0; j < Model.InventoryBooking[j].RentDate.Count; j++)
+                    {
+                        <div>@(Model.InventoryBooking[i].RentDate[j].ToShortDateString()+"-"+ Model.InventoryBooking[i].ReturnDate[j].ToShortDateString())</div>
+
+
+                        <input type="hidden" asp-for="@(Model.InventoryBooking[i].RentDate[j].ToShortDateString()+"-"+ Model.InventoryBooking[i].ReturnDate[j].ToShortDateString())"/>
+                    }
+
+
+                </div>
+
+                <div class="col-md-2 col-2 p-1 border-white border-1 center">
+
+                    <div class="row">
+
+                        <div class="col-12">
+                            <div class="input-group input-group-sm mb-2">
+                                <input type="text" class="form-control" >
+
+                                <div class="btn-group-vertical">
+                                    <button class="btn-primary btn-sm" type="button"><i class="bi-arrow-up"></i></button>
+                                    <button class="btn-primary btn-sm" type="button"><i class="bi-arrow-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+
+                    <div class="row center">
+
+                        <div class="col-12">
+
+                            <button class="btn btn-primary btn-sm btn-blue" type="submit" name="submitData" value="@Model.InventoryBooking[i].ModelID">Tilføj til Kurv </button>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+        }
+
+        <div class="row containerFooter">
+            <h4>&nbsp;</h4>
+        </div>
+    </form>
 </div>
