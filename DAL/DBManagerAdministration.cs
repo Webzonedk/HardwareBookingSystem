@@ -145,7 +145,7 @@ namespace HUS_project.DAL
 
 
         //----------------------------------------------------------------------------
-        //Getting Rooms for the dropdown in massDestruction
+        //Getting Rooms for dropdown
         //----------------------------------------------------------------------------
         internal List<string> GetRooms()
         {
@@ -153,7 +153,7 @@ namespace HUS_project.DAL
             {
                 SqlConnection con = new SqlConnection(connectionString);
                 con.Open();
-                SqlCommand cmd = new SqlCommand("SelectRoom", con);
+                SqlCommand cmd = new SqlCommand("SelectRooms", con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.ExecuteNonQuery();
                 SqlDataReader reader = cmd.ExecuteReader();

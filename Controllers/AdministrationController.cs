@@ -67,9 +67,10 @@ namespace HUS_project.Controllers
             dropDownData.StorageLocation = selectedStorageLocation;
 
             DBManagerAdministration manager = new DBManagerAdministration(configuration);
+            DBManagerShared sharedManager = new DBManagerShared(configuration);
             List<string> buildings = manager.GetBuildings();
             List<string> roomNumbers = manager.GetRoomNumbers();
-            List<string> rooms = manager.GetRooms();
+            List<string> rooms = sharedManager.GetRooms();
             List<string> shelfNames = manager.GetShelfName();
             List<string> shelfLevels = manager.GetShelfLevel();
             List<string> shelfspots = manager.GetShelfSpot();
