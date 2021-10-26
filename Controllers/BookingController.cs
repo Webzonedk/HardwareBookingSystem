@@ -103,7 +103,7 @@ namespace HUS_project.Controllers
                 else
                 {
                     // This device does not exist or is Disabled
-                    HttpContext.Session.SetString("bookedDeviceError", "Denne enhed eksisterer ikke, eller er slået fra. Eller denne booking er deaktiveret.");
+                    HttpContext.Session.SetString("bookedDeviceError", "Denne Enhed eksisterer ikke, eller er slået fra. Eller denne Booking er deaktiveret.");
                 }
             }
             else
@@ -198,6 +198,11 @@ namespace HUS_project.Controllers
         }
 
 
+        /// <summary>
+        /// Deletes and logs a Booking and all associated tables.
+        /// </summary>
+        /// <param name="booking"></param>
+        /// <returns></returns>
         public IActionResult DeleteBooking(BookingModel booking)
         {
             DBManagerBooking dBManagerBooking = new DBManagerBooking(configuration);
@@ -205,7 +210,7 @@ namespace HUS_project.Controllers
             if (!dBManagerBooking.DeleteBooking(Convert.ToInt32(booking.BookingID), HttpContext.Session.GetString("uniLogin"), reason))
             {
                 // Error Handling
-                HttpContext.Session.SetString("bookingEditError", "Ordre kunne ikke afsluttes, da sidste lånte enhed ikke er returneret");
+                HttpContext.Session.SetString("bookingEditError", "Ordre kunne ikke afsluttes, da sidste lånte enhed(er) ikke er returneret");
                 return GoToBooking(booking.BookingID.ToString());
             }
             else
@@ -243,7 +248,7 @@ namespace HUS_project.Controllers
         /// <param name="disableBooking"></param>
         /// <param name="deleteItemLine"></param>
         /// <returns></returns>
-        public IActionResult ProcessBookingEditSubmit(BookingModel bookingModel, string location, string updateBooking, string deleteBooking, string deleteItemLine)
+        public IActionResult ProcessBookingEditSubmit(BookingModel bookingModel, string location, string updateBooking, string deleteBooking, string deleteItemLine, string deliverBooking)
         {
             if(updateBooking != null)
             {
@@ -259,6 +264,10 @@ namespace HUS_project.Controllers
                 // Delete ItemLine, no fuss, maybe?
                 return DeleteItemLine(bookingModel, deleteItemLine);
             }
+            else if(deliverBooking != null)
+            {
+                return DeliverBooking(bookingModel);
+            }
             else
             {
                 // Should Never happen, but refreshes page
@@ -266,6 +275,23 @@ namespace HUS_project.Controllers
             }
         }
 
+        /// <summary>
+        /// Does everything involved with delivering a booking. BookedDevices get logged, Booking deliverer gets registered, Devices get moved to "Udlånt".
+        /// </summary>
+        /// <param name="bookingModel"></param>
+        /// <returns></returns>
+        public IActionResult DeliverBooking(BookingModel bookingModel)
+        {
+            DBManagerBooking dBManager = new DBManagerBooking(configuration);
+
+            // Update Booking to be Delivered
+            int bookingLogID = dBManager.UpdateBookingAndLog(bookingModel, HttpContext.Session.GetString("uniLogin"), HttpContext.Session.GetString("uniLogin"));
+
+            // Log BookedDevices
+            dBManager.CreateBookedDevicesLogs(bookingLogID, bookingModel.BookingID);
+
+            return GoToBooking(bookingModel.BookingID.ToString());
+        }
 
         /// <summary>
         /// Only updates startDate, returnDate, location and ItemLine.Quantity

@@ -185,12 +185,32 @@ namespace HUS_project.DAL
         }
 
         /// <summary>
+        /// Creates BookedDeviceLogs for each BookedDevice for a Booking. .. And Sets the Devices to StorageLocation 3 (Udlånt)
+        /// </summary>
+        /// <param name="bookingLogID"></param>
+        /// <param name="bookingID"></param>
+        internal void CreateBookedDevicesLogs(int bookingLogID, int bookingID)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("CreateBookedDevicesLogs", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@bookingLogID", bookingLogID);
+            cmd.Parameters.AddWithValue("@bookingID", bookingID);
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+
+
+
+        /// <summary>
         /// Updates the Booking and Logs the changes.
         /// </summary>
         /// <param name="updatedBooking"></param>
         /// <param name="alterer">Who's logged in, making these changes</param>
         /// <returns>bookingLogID, for ItemLineLogs</returns>
-        internal int UpdateBookingAndLog(BookingModel updatedBooking, string alterer)
+        internal int UpdateBookingAndLog(BookingModel updatedBooking, string alterer, string deliverer = null)
         {
             SqlConnection con = new SqlConnection(connectionString);
             SqlCommand cmd = new SqlCommand("UpdateBookingAndLog", con);
@@ -202,6 +222,10 @@ namespace HUS_project.DAL
             cmd.Parameters.AddWithValue("@note", updatedBooking.Notes);
             cmd.Parameters.AddWithValue("@roomNr", updatedBooking.Location.RoomNumber);
             cmd.Parameters.AddWithValue("@buildingName", updatedBooking.Location.Building);
+            if (deliverer != null && deliverer != "")
+            {
+                cmd.Parameters.AddWithValue("@deliverer", deliverer);
+            }
 
             con.Open();
             int bookingLogID = Convert.ToInt32(cmd.ExecuteScalar());
@@ -248,7 +272,7 @@ namespace HUS_project.DAL
         }
 
         /// <summary>
-        /// Deletes an ItemLine from a Booking.
+        /// Deletes an ItemLine from a Booking, pre-bookingStart
         /// </summary>
         /// <param name="bookingID"></param>
         /// <param name="modelName"></param>
@@ -287,6 +311,8 @@ namespace HUS_project.DAL
 
             return result;
         }
+
+
 
         /// <summary>
         /// Counts the current number of devices of ModelName type in storage.
