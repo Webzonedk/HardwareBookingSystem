@@ -173,6 +173,7 @@ namespace HUS_project.DAL
 
             while (reader.Read())
             {
+                model.ModelID = (int)reader["modelID"];
                 model.ModelName = (string)reader["modelName"];
                 model.ModelDescription = (string)reader["modelDescription"];
                 category.Category = (string)reader["categoryName"];

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using HUS_project.Models.ViewModels;
 using HUS_project.Models;
+using System.Diagnostics;
 
 namespace HUS_project.DAL
 {
@@ -45,13 +46,16 @@ namespace HUS_project.DAL
             //get list of items booked and not in stock
             List<BookingSearchModel> notInstock = Select_Models_Not_In_Stock_Existing_Itemline(SearchModel);
 
-            
+
 
             //add list to inventory
             AddListToInventory(instocNotkBooked, inventory);
-            AddListToInventory(notInstock,inventory);
+            AddListToInventory(notInstock, inventory);
             AddListToInventory(instockBooked, inventory);
 
+            // remove time if datetime is too long
+            //inventory.SearchModel.RentDate = inventory.SearchModel.RentDate.Date;
+            //inventory.SearchModel.ReturnDate = inventory.SearchModel.ReturnDate.Date;
 
             return inventory;
         }
@@ -204,7 +208,7 @@ namespace HUS_project.DAL
             return false;
         }
 
-        private void AddListToInventory(List<BookingSearchModel> inputlist,CreateBookingModel inventory)
+        private void AddListToInventory(List<BookingSearchModel> inputlist, CreateBookingModel inventory)
         {
             for (int n = 0; n < inputlist.Count; n++)
             {
@@ -218,10 +222,16 @@ namespace HUS_project.DAL
                         {
                             if (inputlist[n].NotInstock.Count > 0)
                             {
-                                inventory.InventoryBooking[j].NotInstock.Add(inputlist[n].NotInstock[0]);
+
+                                if (inputlist[n].NotInstock[0] > 0)
+                                {
+                                    inventory.InventoryBooking[j].RentDate.Add(inputlist[n].RentDate[0]);
+                                    inventory.InventoryBooking[j].ReturnDate.Add(inputlist[n].ReturnDate[0]);
+                                    inventory.InventoryBooking[j].NotInstock.Add(inputlist[n].NotInstock[0]);
+                                }
                             }
-                            inventory.InventoryBooking[j].RentDate.Add(inputlist[n].RentDate[0]);
-                            inventory.InventoryBooking[j].ReturnDate.Add(inputlist[n].ReturnDate[0]);
+                            //inventory.InventoryBooking[j].RentDate.Add(inputlist[n].RentDate[0]);
+                            //inventory.InventoryBooking[j].ReturnDate.Add(inputlist[n].ReturnDate[0]);
                         }
 
                     }

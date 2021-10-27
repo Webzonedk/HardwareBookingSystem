@@ -39,15 +39,54 @@ namespace HUS_project.Controllers
 
 
 
+
             CreateBookingModel oldData = dbManagerBooking.GetInventory(data.SearchModel);
             oldData.CategoryDropdown = dbShared.GetCategories();
             data.SearchModel = oldData.SearchModel;
             data.InventoryBooking = oldData.InventoryBooking;
-            
+            data.CategoryDropdown = oldData.CategoryDropdown;
+
+
+            //split data
+            string[] splittedData = submitData.Split('-');
+         
+            int id = int.Parse(splittedData[0]);
+            int quantity = int.Parse(splittedData[1]);
+
+
+            //check if model exists in itemlines
+            bool found = false;
+            for (int i = 0; i < data.ItemLines.Count; i++)
+            {
+                int curId = data.ItemLines[i].Model.ModelID;
+                if (curId == id)
+                {
+                    data.ItemLines[i].Quantity += quantity;
+                    found = true;
+                    break;
+                }
+                else
+                {
+                    found = false;
+                }
+            }
+
             //add new itemline
-            ItemLineModel itemline = new ItemLineModel();
-            itemline.Model = dbShared.GetSingleModel(int.Parse(submitData));
-            data.ItemLines.Add(itemline);
+            if (!found)
+            {
+                ItemLineModel itemline = new ItemLineModel();
+                itemline.Model = dbShared.GetSingleModel(id);
+                itemline.Quantity = quantity;
+                data.ItemLines.Add(itemline);
+            }
+
+            //calculate basket count
+            for (int j = 0; j < data.ItemLines.Count; j++)
+            {
+                data.BasketCount += data.ItemLines[j].Quantity;
+            }
+
+
 
             return View("InventorySearch", data);
         }

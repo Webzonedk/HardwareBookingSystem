@@ -13,6 +13,16 @@ namespace HUS_project.Models.ViewModels
         private List<BookingSearchModel> inventoryBooking;
         private List<ItemLineModel> itemLines;
         private string location;
+        private int basketCount;
+
+        public int BasketCount
+        {
+            get { return basketCount; }
+            set { basketCount = value; }
+        }
+
+
+
 
         public string Location
         {
@@ -49,7 +59,8 @@ namespace HUS_project.Models.ViewModels
             itemLines = new List<ItemLineModel>();
             categoryDropdown = new List<string>();
             locationDropdown = new List<string>();
-            SearchModel = new BookingSearchCriteriaModel(null, "", DateTime.Now, DateTime.Now.AddDays(40));
+            SearchModel = new BookingSearchCriteriaModel(null, "", DateTime.Now.AddDays(1), DateTime.Now.AddDays(14));
+
         }
     }
 }

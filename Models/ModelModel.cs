@@ -10,6 +10,7 @@ namespace HUS_project.Models
 
         #region Fields
 
+        private int modelID;
         private string modelName;
         private string modelDescription;
         private CategoryModel category;
@@ -20,6 +21,11 @@ namespace HUS_project.Models
 
         #region Properties
 
+        public int ModelID
+        {
+            get { return modelID; }
+            set { modelID = value; }
+        }
         public string ModelName
         {
             get { return modelName; }
