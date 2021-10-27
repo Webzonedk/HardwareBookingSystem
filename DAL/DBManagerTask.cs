@@ -46,7 +46,6 @@ namespace HUS_project.DAL
                     new BuildingModel((string)reader["buildingName"], (string)reader["roomNr"]),
                     (DateTime)reader["rentDate"],
                     (DateTime)reader["returnDate"],
-                    1,
                     (string)reader["deliveredBy"],
                     (string)reader["bookingNotes"]);
                 bookings.Add(booking);
@@ -102,7 +101,6 @@ namespace HUS_project.DAL
                     new BuildingModel((string)reader["buildingName"], (string)reader["roomNr"]),
                     (DateTime)reader["rentDate"],
                     (DateTime)reader["returnDate"],
-                    1,
                     "N/A",
                     (string)reader["bookingNotes"]);
                 bookings.Add(booking);

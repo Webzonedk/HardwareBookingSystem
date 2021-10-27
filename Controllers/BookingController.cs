@@ -53,7 +53,7 @@ namespace HUS_project.Controllers
                 BookingModel booking = dBManager.GetBooking(int.Parse(bookingID));
                 booking.Devices = dBManager.GetBookedDevices(int.Parse(bookingID));
 
-                if (device.Model.ModelName != null && device.Status == 1 && booking.BookingStatus == 1)
+                if (device.Model.ModelName != null && device.Status == 1)
                 {
                     // Find out if you're supposed to Create the bookedDevice, or undo the bookedDevice or return the device
                     bool deviceInBookingAlready = false;
@@ -73,7 +73,17 @@ namespace HUS_project.Controllers
                                 // "ReturnBookedDevice"
                                 dBManager.ReturnBookedDevice(device.DeviceID, booking.BookingID, HttpContext.Session.GetString("uniLogin"));
 
-                                if(booking.Devices.Count < 2)
+                                // Here we will count how many devices have yet to be returned
+                                int unreturnedDevices = 0;
+                                foreach (DeviceModel device0 in booking.Devices)
+                                {
+                                    if(device0.ReturnedBy == null || device0.ReturnedBy == "")
+                                    {
+                                        unreturnedDevices++;
+                                    }
+                                }
+                                // If only one device Was unreturned (now returned in DB), the Booking may now be deleted and Closed.
+                                if(unreturnedDevices < 2)
                                 {
                                     return DeleteBooking(booking);
                                 }
@@ -420,7 +430,7 @@ namespace HUS_project.Controllers
                         new List<DeviceModel>(),
                         validNewLocation ? newRoom : originalBooking.Location,
                         validNewStartDate ? bookingModel.PlannedBorrowDate : originalBooking.PlannedBorrowDate, 
-                        validNewReturnDate ? bookingModel.PlannedReturnDate : originalBooking.PlannedReturnDate, 1
+                        validNewReturnDate ? bookingModel.PlannedReturnDate : originalBooking.PlannedReturnDate
                         );
 
                     int bookingLogID = dBManager.UpdateBookingAndLog(finalBooking, HttpContext.Session.GetString("uniLogin"));

@@ -55,23 +55,17 @@
                         <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-0 col-sm-0 p-1"></div>
                         <input class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-12 col-sm-12 p-1" name="deviceID" type="number" />
                     </div>
-                    @if (Model.Booking.BookingStatus == 1)
-                    {
-                        <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
-                            @if (Model.Booking.DeliveredBy != null)
-                            {
-                                <span>Tilføj/Returner Enhed</span>
-                            }
-                            else
-                            {
-                                <span>Tilføj/Fjern Enhed</span>
-                            }
-                        </button>
-                    }
-                    else
-                    {
-                        <button disabled class="btn btn-primary btn-dark" style="width:100px">Booking Deaktiveret</button>
-                    }
+                    
+                    <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
+                        @if (Model.Booking.DeliveredBy != null)
+                        {
+                            <span>Tilføj/Returner Enhed</span>
+                        }
+                        else
+                        {
+                            <span>Tilføj/Fjern Enhed</span>
+                        }
+                    </button>
                 }
             </div>
         </div>

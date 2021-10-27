@@ -18,7 +18,6 @@ namespace HUS_project.Models
         private DateTime plannedBorrowDate;
         private DateTime plannedReturnDate;
         private string deliveredBy;
-        private byte bookingStatus;
 
         #endregion
 
@@ -81,13 +80,6 @@ namespace HUS_project.Models
             set{ this.deliveredBy = value;}
         }
 
-
-        public byte BookingStatus
-        {
-            get { return this.bookingStatus; }
-            set { this.bookingStatus = value; }
-        }
-
         #endregion
 
 
@@ -99,7 +91,7 @@ namespace HUS_project.Models
 
         }
 
-        public BookingModel(int BookingID, string Customer, List<ItemLineModel> Items, List<DeviceModel> Devices, BuildingModel Location, DateTime PlannedBorrowDate, DateTime PlannedReturnDate, byte BookingStatus, string DeliveredBy = null, string Notes = null)
+        public BookingModel(int BookingID, string Customer, List<ItemLineModel> Items, List<DeviceModel> Devices, BuildingModel Location, DateTime PlannedBorrowDate, DateTime PlannedReturnDate, string DeliveredBy = null, string Notes = null)
         {
             this.bookingID = BookingID;
             this.customer = Customer;
@@ -109,7 +101,6 @@ namespace HUS_project.Models
             this.location = Location;
             this.plannedBorrowDate = PlannedBorrowDate;
             this.plannedReturnDate = PlannedReturnDate;
-            this.bookingStatus = BookingStatus;
             this.deliveredBy = DeliveredBy;
         }
 
