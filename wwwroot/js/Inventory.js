@@ -44,3 +44,25 @@ function doneTyping() {
     document.getElementById("searchform").submit();
 
 }
+
+
+
+//sends quantity to button before submit
+function SendValueToButton() {
+
+    let element = document.getElementById(event.target.id);
+    let splitted = element.id.split("_");
+    let id = "basket_" +splitted[1]
+    let button = document.getElementById(id);
+    let modelID = button.value;
+
+    let splittedvalues = button.value.split("-");
+    if (splittedvalues.length > 0) {
+
+        modelID = splittedvalues[0];
+
+    }
+
+    button.value = modelID + "-" + element.value;
+   
+}

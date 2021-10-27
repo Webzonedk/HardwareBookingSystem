@@ -38,11 +38,12 @@
 
                     @*Borrow from this date*@
                     <div class="col-3">
-                        <input placeholder="Vælg Dato" type="text" DateTimeFormat="d/M/yyyy" onfocusin="(this.type='date')" @*onfocusout="(this.type='text')"*@ class="date">
+                        <input placeholder="Vælg Dato" type="date" DateTimeFormat="d/M/yyyy"    onfocus="ClearTimeout()" onfocusout="SetTimeout()" class="date" asp-for="@Model.SearchModel.RentDate">
                     </div>
+                  
                     @*Borrow until this date*@
                     <div class="col-3">
-                        <input placeholder="Vælg Dato" type="text" DateTimeFormat="d/M/yyyy" onfocusin="(this.type='date')" @*onfocusout="(this.type='text')"*@ class="date">
+                        <input placeholder="Vælg Dato" type="date" DateTimeFormat="d/M/yyyy"   onfocus="ClearTimeout()" onfocusout="SetTimeout()" class="date" asp-for="@Model.SearchModel.ReturnDate">
                     </div>
 
                     <div class="col-3">
@@ -90,7 +91,7 @@
                     <div class="col-12">
 
 
-                        <label class="text-white">enheder i kurven @Model.ItemLines.Count</label>
+                        <label class="text-white">enheder i kurven @Model.BasketCount</label>
 
 
 
@@ -135,8 +136,15 @@
         </div>
 
       
+        @for (int n = 0; n < Model.ItemLines.Count; n++)
+        {
+            <input type="hidden" asp-for="@Model.ItemLines[n].Model.ModelID"/>
+            <input type="hidden" asp-for="@Model.ItemLines[n].Model.ModelName"/>
+            <input type="hidden" asp-for="@Model.ItemLines[n].Model.ModelDescription"/>
+            <input type="hidden" asp-for="@Model.ItemLines[n].Model.Category.Category"/>
+            <input type="hidden" asp-for="@Model.ItemLines[n].Quantity"/>
+        }
 
-                <input type="hidden" asp-for="@Model.InventoryBooking"/>
 
         @for (int i = 0; i < Model.InventoryBooking.Count; i++)
         {
@@ -146,6 +154,7 @@
                 <div class=" col-md-3 col-6 p-1 border-end border-white border-1">@Model.InventoryBooking[i].ModelName</div>
                 <div class=" col-md-2 col-4 p-1 border-end border-white border-1">@Model.InventoryBooking[i].CategoryName</div>
 
+                @*<input type="hidden" asp-for="@Model.InventoryBooking[i].ModelID"/>*@
 
 
                 <div class=" col-md-1 col-4 p-1 border-end border-white border-1">
@@ -171,12 +180,11 @@
 
                 <div class=" col-md-2 col-4 p-1 border-end border-white border-1">
 
-                    @for (int j = 0; j < Model.InventoryBooking[j].RentDate.Count; j++)
+                    @for (int j = 0; j < Model.InventoryBooking[i].RentDate.Count; j++)
                     {
                         <div>@(Model.InventoryBooking[i].RentDate[j].ToShortDateString()+"-"+ Model.InventoryBooking[i].ReturnDate[j].ToShortDateString())</div>
 
-
-                        <input type="hidden" asp-for="@(Model.InventoryBooking[i].RentDate[j].ToShortDateString()+"-"+ Model.InventoryBooking[i].ReturnDate[j].ToShortDateString())"/>
+                       
                     }
 
 
@@ -188,13 +196,13 @@
 
                         <div class="col-12">
                             <div class="input-group input-group-sm mb-2">
-                                <input type="text" class="form-control" >
-
-                                <div class="btn-group-vertical">
+                                <input type="number" class="form-control" name="input" id=@("input_"+i) value="0" onchange="SendValueToButton()"/>
+                                
+                                @*<div class="btn-group-vertical">
                                     <button class="btn-primary btn-sm" type="button"><i class="bi-arrow-up"></i></button>
                                     <button class="btn-primary btn-sm" type="button"><i class="bi-arrow-down"></i></button>
 
-                                </div>
+                                </div>*@
                             </div>
                         </div>
 
@@ -208,7 +216,7 @@
 
                         <div class="col-12">
 
-                            <button class="btn btn-primary btn-sm btn-blue" type="submit" name="submitData" value="@Model.InventoryBooking[i].ModelID">Tilføj til Kurv </button>
+                            <button class="btn btn-primary btn-sm btn-blue" type="submit" name="submitData" id=@("basket_"+i) value="@Model.InventoryBooking[i].ModelID" >Tilføj til Kurv </button>
                         </div>
 
                     </div>
