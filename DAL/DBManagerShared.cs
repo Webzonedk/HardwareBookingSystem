@@ -63,27 +63,6 @@ namespace HUS_project.DAL
             return modelNames;
         }
 
-        internal List<string> GetAllRooms()
-        {
-            SqlConnection con = new SqlConnection(connectionString);
-            con.Open();
-            SqlCommand cmd = new SqlCommand("GetAllRooms", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-          //  cmd.ExecuteNonQuery();
-
-            SqlDataReader reader = cmd.ExecuteReader();
-            List<string> rooms = new List<string>();
-            while (reader.Read())
-            {
-                int roomNr = (byte)reader["roomNr"];
-                string room = (string)reader["buildingName"] + "." + roomNr.ToString();
-                rooms.Add(room);
-            }
-
-
-            con.Close();
-            return rooms;
-        }
 
         internal int GetAvailableDeviceQuantities(DeviceModel dummy)
         {
@@ -156,6 +135,43 @@ namespace HUS_project.DAL
             con.Close();
             return modelID;
         }
+
+
+
+        //----------------------------------------------------------------------------
+        //Getting Rooms for dropdown
+        //----------------------------------------------------------------------------
+        internal List<string> GetRooms()
+        {
+            try
+            {
+                SqlConnection con = new SqlConnection(connectionString);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("SelectRooms", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.ExecuteNonQuery();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                List<string> rooms = new List<string>();
+
+                while (reader.Read())
+                {
+                    BuildingModel room = new BuildingModel((string)reader["buildingName"], (string)reader["roomNr"]);
+                    //building.Building = (string)reader["buildingName"];
+                    //building.RoomNumber = (string)reader["roomNr"];
+
+                    rooms.Add(room.Building + "." + room.RoomNumber);
+                }
+                con.Close();
+                return rooms;
+            }
+            finally
+            {
+
+            }
+        }
+
+
 
         internal ModelModel GetSingleModel(int modelID)
         {
