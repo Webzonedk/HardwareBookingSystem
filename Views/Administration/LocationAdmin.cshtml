@@ -374,7 +374,7 @@
                 <div class="col-lg-2 col-6 p-1 center "><button type="submit" name="printQR" class="btn btn-primary btn-sm btn-blue" style="width:100px" value="@Model.StorageLocations[i].LocationID" asp-action="PrintSingleLocationQR">QR-Kode</button></div>
                 @*<input type="hidden" value="@Model.StorageLocations[i]" asp-for="@Model.StorageLocation" />*@
                 <div class="col-lg-2 col-6 p-1 center ">
-                    @if (@Model.StorageLocations[i].Location.Building != "Modtagelse" && @Model.StorageLocations[i].Location.Building != "Værksted")
+                    @if (@Model.StorageLocations[i].Location.Building != "Modtagelse" && @Model.StorageLocations[i].Location.Building != "Værksted" && @Model.StorageLocations[i].Location.Building != "Udlånt")
                     {
                         if (@Model.StorageLocations[i].UnitCount == 0)
                         {
