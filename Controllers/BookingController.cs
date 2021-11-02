@@ -53,7 +53,7 @@ namespace HUS_project.Controllers
                 BookingModel booking = dBManager.GetBooking(int.Parse(bookingID));
                 booking.Devices = dBManager.GetBookedDevices(int.Parse(bookingID));
 
-                if (device.Model.ModelName != null && device.Status == 1 && booking.BookingStatus == 1)
+                if (device.Model.ModelName != null && device.Status == 1)
                 {
                     // Find out if you're supposed to Create the bookedDevice, or undo the bookedDevice or return the device
                     bool deviceInBookingAlready = false;
@@ -73,7 +73,17 @@ namespace HUS_project.Controllers
                                 // "ReturnBookedDevice"
                                 dBManager.ReturnBookedDevice(device.DeviceID, booking.BookingID, HttpContext.Session.GetString("uniLogin"));
 
-                                if(booking.Devices.Count < 2)
+                                // Here we will count how many devices have yet to be returned
+                                int unreturnedDevices = 0;
+                                foreach (DeviceModel device0 in booking.Devices)
+                                {
+                                    if(device0.ReturnedBy == null || device0.ReturnedBy == "")
+                                    {
+                                        unreturnedDevices++;
+                                    }
+                                }
+                                // If only one device Was unreturned (now returned in DB), the Booking may now be deleted and Closed.
+                                if(unreturnedDevices < 2)
                                 {
                                     return DeleteBooking(booking);
                                 }
@@ -207,16 +217,15 @@ namespace HUS_project.Controllers
         {
             DBManagerBooking dBManagerBooking = new DBManagerBooking(configuration);
             string reason = DateTime.Now > booking.PlannedBorrowDate ? "Afsluttet: Sidste enhed returneret" : "Afsluttet: Ordre aflyst af bestiller";
-            if (!dBManagerBooking.DeleteBooking(Convert.ToInt32(booking.BookingID), HttpContext.Session.GetString("uniLogin"), reason))
+            if (dBManagerBooking.DeleteBooking(Convert.ToInt32(booking.BookingID), HttpContext.Session.GetString("uniLogin"), reason))
+            {
+                return RedirectToAction("RelocateUser", "Home");
+            }
+            else
             {
                 // Error Handling
                 HttpContext.Session.SetString("bookingEditError", "Ordre kunne ikke afsluttes, da sidste lånte enhed(er) ikke er returneret");
                 return GoToBooking(booking.BookingID.ToString());
-            }
-            else
-            {
-                HomeController homeController = new HomeController(configuration);
-                return homeController.RelocateUser();
             }
         }
 
@@ -266,7 +275,7 @@ namespace HUS_project.Controllers
             }
             else if(deliverBooking != null)
             {
-                return DeliverBooking(bookingModel);
+                return DeliverBooking(bookingModel.BookingID);
             }
             else
             {
@@ -280,10 +289,10 @@ namespace HUS_project.Controllers
         /// </summary>
         /// <param name="bookingModel"></param>
         /// <returns></returns>
-        public IActionResult DeliverBooking(BookingModel bookingModel)
+        public IActionResult DeliverBooking(int bookingID)
         {
             DBManagerBooking dBManager = new DBManagerBooking(configuration);
-
+            BookingModel bookingModel = dBManager.GetBooking(bookingID);
             // Update Booking to be Delivered
             int bookingLogID = dBManager.UpdateBookingAndLog(bookingModel, HttpContext.Session.GetString("uniLogin"), HttpContext.Session.GetString("uniLogin"));
 
@@ -420,7 +429,7 @@ namespace HUS_project.Controllers
                         new List<DeviceModel>(),
                         validNewLocation ? newRoom : originalBooking.Location,
                         validNewStartDate ? bookingModel.PlannedBorrowDate : originalBooking.PlannedBorrowDate, 
-                        validNewReturnDate ? bookingModel.PlannedReturnDate : originalBooking.PlannedReturnDate, 1
+                        validNewReturnDate ? bookingModel.PlannedReturnDate : originalBooking.PlannedReturnDate
                         );
 
                     int bookingLogID = dBManager.UpdateBookingAndLog(finalBooking, HttpContext.Session.GetString("uniLogin"));

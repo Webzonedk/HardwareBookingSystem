@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using HUS_project.Models;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace HUS_project.DAL
 {
@@ -44,7 +45,6 @@ namespace HUS_project.DAL
             while (reader.Read())
             {
                 booking.Customer = (string)reader["orderedBy"];
-                booking.BookingStatus = (byte)reader["status"];
                 // DeliveredBy and Notes may be DBNull (Not the same as null for C#), which means pulling them out and converting to string
                 // - gives a critical error.
                 booking.DeliveredBy = reader["deliveredBy"] == DBNull.Value ? null : (string)reader["deliveredBy"];
@@ -304,12 +304,14 @@ namespace HUS_project.DAL
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
             cmd.Parameters.AddWithValue("@deleter", deleter);
             cmd.Parameters.AddWithValue("@deletionReason", reason);
+            cmd.Parameters.Add("@result", SqlDbType.Int).Direction = ParameterDirection.Output;
 
             con.Open();
-            bool result = (bool)cmd.ExecuteScalar();
+            cmd.ExecuteNonQuery();
+            int resultPreConversion = Convert.ToInt32(cmd.Parameters["@result"].Value);
             con.Close();
 
-            return result;
+            return resultPreConversion == 1;
         }
 
 

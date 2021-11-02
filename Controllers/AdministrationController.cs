@@ -16,7 +16,6 @@ namespace HUS_project.Controllers
     public class AdministrationController : Controller
     {
         //public bool field for checking state of login & field for configuration 
-        public bool IsLoggedIn;
         private readonly IConfiguration configuration;
 
         // constructor of homecontroller
