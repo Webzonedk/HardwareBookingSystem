@@ -217,16 +217,15 @@ namespace HUS_project.Controllers
         {
             DBManagerBooking dBManagerBooking = new DBManagerBooking(configuration);
             string reason = DateTime.Now > booking.PlannedBorrowDate ? "Afsluttet: Sidste enhed returneret" : "Afsluttet: Ordre aflyst af bestiller";
-            if (!dBManagerBooking.DeleteBooking(Convert.ToInt32(booking.BookingID), HttpContext.Session.GetString("uniLogin"), reason))
+            if (dBManagerBooking.DeleteBooking(Convert.ToInt32(booking.BookingID), HttpContext.Session.GetString("uniLogin"), reason))
+            {
+                return RedirectToAction("RelocateUser", "Home");
+            }
+            else
             {
                 // Error Handling
                 HttpContext.Session.SetString("bookingEditError", "Ordre kunne ikke afsluttes, da sidste lånte enhed(er) ikke er returneret");
                 return GoToBooking(booking.BookingID.ToString());
-            }
-            else
-            {
-                HomeController homeController = new HomeController(configuration);
-                return homeController.RelocateUser();
             }
         }
 
@@ -276,7 +275,7 @@ namespace HUS_project.Controllers
             }
             else if(deliverBooking != null)
             {
-                return DeliverBooking(bookingModel);
+                return DeliverBooking(bookingModel.BookingID);
             }
             else
             {
@@ -290,10 +289,10 @@ namespace HUS_project.Controllers
         /// </summary>
         /// <param name="bookingModel"></param>
         /// <returns></returns>
-        public IActionResult DeliverBooking(BookingModel bookingModel)
+        public IActionResult DeliverBooking(int bookingID)
         {
             DBManagerBooking dBManager = new DBManagerBooking(configuration);
-
+            BookingModel bookingModel = dBManager.GetBooking(bookingID);
             // Update Booking to be Delivered
             int bookingLogID = dBManager.UpdateBookingAndLog(bookingModel, HttpContext.Session.GetString("uniLogin"), HttpContext.Session.GetString("uniLogin"));
 
