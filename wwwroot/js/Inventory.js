@@ -52,9 +52,20 @@ function SendValueToButton() {
 
     let element = document.getElementById(event.target.id);
     let splitted = element.id.split("_");
-    let id = "basket_" +splitted[1]
+    let id = "basket_" + splitted[1];
+    let stock = document.getElementById("stock_" + splitted[1]);
     let button = document.getElementById(id);
     let modelID = button.value;
+
+    if (stock == null) {
+        stock = '0';
+    }
+    else {
+        stock = stock.innerText;
+    }
+
+
+
 
     let splittedvalues = button.value.split("-");
     if (splittedvalues.length > 0) {
@@ -63,6 +74,44 @@ function SendValueToButton() {
 
     }
 
-    button.value = modelID + "-" + element.value;
-   
+    button.value = modelID + "-" + stock + "-" + element.value;
+
+}
+
+//sends location to different form
+function SendLocationToForm() {
+    let selectedLocation = document.getElementById("locations");
+    let locationInput = document.getElementById("location");
+
+    locationInput.value = selectedLocation.value;
+
+    console.log(locationInput.value);
+}
+
+//sends new quantity to input to form for booking search
+function changeQuantity() {
+
+    // add or remove from basket
+    let fromInput = document.getElementById(event.target.id);
+    let splittedValues = fromInput.id.split('_');
+
+    let toInput = document.getElementById("searchOutput_" + splittedValues[1]);
+    toInput.value = fromInput.value;
+
+    console.log("from input: " + fromInput.value + " to input: " + toInput.value);
+
+
+    //calculate basket count
+    let array = document.getElementsByName("input");
+    let basket = document.getElementById("basket");
+    let hiddenbasket = document.getElementById("basketHidden");
+    let basketCount = 0;
+    for (var i = 0; i < array.length; i++) {
+
+        let val = parseInt(array[i].value);
+        basketCount = basketCount + val;
+    }
+    
+    hiddenbasket.value = basketCount;
+    basket.textContent = "enheder i kurven" + basketCount;
 }
