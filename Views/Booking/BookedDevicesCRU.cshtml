@@ -43,6 +43,21 @@
                             <span>Rediger Booking</span>
                         </button>
                     }
+                    @using (Html.BeginForm("DeliverBooking", "Booking"))
+                    {
+                        if (Model.Booking.Devices.Count > 0)
+                        {
+                            <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
+                                <span>Lever Bestilling</span>
+                            </button>
+                        }
+                        else
+                        {
+                            <button disabled>
+                                <span>Lever Bestilling</span>
+                            </button>
+                        }
+                    }
                 </div>
             </div>
             <div class="col-5">
@@ -55,7 +70,7 @@
                         <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-0 col-sm-0 p-1"></div>
                         <input class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-12 col-sm-12 p-1" name="deviceID" type="number" />
                     </div>
-                    
+
                     <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
                         @if (Model.Booking.DeliveredBy != null)
                         {
