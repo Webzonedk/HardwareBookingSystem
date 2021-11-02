@@ -154,7 +154,7 @@ namespace HUS_project.Controllers
 
             CreateBookingModel tempData = dbManagerBooking.GetInventory(data.SearchModel);
 
-            //sort tempData
+            //sort tempData//
             List<BookingSearchModel> temp = new List<BookingSearchModel>();
             for (int i = 0; i < data.ItemLines.Count; i++)
             {
