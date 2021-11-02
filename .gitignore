@@ -341,3 +341,4 @@ healthchecksdb
 
 # AppSettings
 appsettings.json
+appsettings.Development.json
