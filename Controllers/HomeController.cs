@@ -128,9 +128,7 @@ namespace HUS_project.Controllers
         /// <returns></returns>
         public IActionResult RelocateUser()
         {
-            int accessLevel = (int)HttpContext.Session.GetInt32("accessLevel");
-
-            if (accessLevel > 1)
+            if (HttpContext.Session.GetInt32("accessLevel") > 1)
             {
                 // The Task view: For the actions that the SKP Students in the hardware room needs to take today.
                 DBManagerTask DBTasker = new DBManagerTask(configuration);
@@ -144,7 +142,7 @@ namespace HUS_project.Controllers
                     );
                 return View("Task", tasks);
             }
-            else if(accessLevel == 1)
+            else if(HttpContext.Session.GetInt32("accessLevel") == 1)
             {
                // return View("Main");
                 return RedirectToAction("InventorySearch", "CreateBooking");
