@@ -165,6 +165,18 @@ Buttons
 .black-tooltip + .tooltip > .tooltip-arrow {
     border-bottom-color: #f00;
 }
+
+.buttonLink {
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    /*optional*/
+    font-family: arial, sans-serif;
+    /*input has OS specific font-family*/
+    color: #069;
+    text-decoration: underline;
+    cursor: pointer;
+}
 /*----------------------------------------------------------------------
 Borders
 ----------------------------------------------------------------------*/

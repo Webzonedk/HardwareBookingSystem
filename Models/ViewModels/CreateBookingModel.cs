@@ -13,6 +13,14 @@ namespace HUS_project.Models.ViewModels
         private List<BookingSearchModel> inventoryBooking;
         private List<ItemLineModel> itemLines;
         private string location;
+        private string modelName;
+
+        public string ModelName
+        {
+            get { return modelName; }
+            set { modelName = value; }
+        }
+
         private int basketCount;
 
         public int BasketCount
