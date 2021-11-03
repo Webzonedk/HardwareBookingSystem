@@ -1,16 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using HUS_project.Models;
+using HUS_project.Models.ViewModels;
+using System.Data.SqlClient;
 
 namespace HUS_project.DAL
 {
-    public class DBManagerHistory : Controller
+    public class DBManagerHistory
     {
-        public IActionResult Index()
+        //----------------------------------------------------------------------------
+        //private fields containting connectionstrings for databases
+        //----------------------------------------------------------------------------
+        private readonly IConfiguration configuration;
+        private readonly string connectionString;
+
+        //constructor setting connectionstrings to databases
+        public DBManagerHistory(IConfiguration _configuration)
         {
-            return View();
+            this.configuration = _configuration;
+            connectionString = configuration.GetConnectionString("DBContext");
         }
+
+
+
     }
 }
