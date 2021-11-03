@@ -118,7 +118,7 @@
             <input type="hidden" asp-for="@Model.ItemLines[n].Quantity" />
 
         }
-       
+
         <input type="hidden" asp-for="@Model.BasketCount" />
 
     </form>
@@ -132,7 +132,7 @@
 
 <!--container listing search results-->
 <div class="container containerMain box-shadow">
-    <form asp-action="AddToBasket" method="post">
+    <form asp-action="AddToBasket" id="basketForm" method="post">
 
         <div class="row containerHeader">
             <h4 class="col">Lagerbeholdning</h4>
@@ -171,13 +171,17 @@
 
             <div class="row containerBody alternating_row dynamic-Font-Size-10">
                 <div class=" col-md-1 col-2 p-1 border-end border-white border-1">@Model.InventoryBooking[i].ModelID</div>
-               @* <div class=" col-md-3 col-6 p-1 border-end border-white border-1">@Model.InventoryBooking[i].ModelName</div>*@
+
                 <div class=" col-md-3 col-6 p-1 border-end border-white border-1">
-                    @Html.ActionLink(@Model.InventoryBooking[i].ModelName, "test",new{data = @Model })
+
+                    <input type="hidden" id=@("output_"+i) value="@Model.InventoryBooking[i].ModelName" asp-for="@Model.ModelName" />
+
+                    <input class="buttonLink" type="submit" asp-action="Inspect" name="link" id=@("link_"+i) value="@Model.InventoryBooking[i].ModelName"/>
+
                 </div>
                 <div class=" col-md-2 col-4 p-1 border-end border-white border-1">@Model.InventoryBooking[i].CategoryName</div>
 
-                @*<input type="hidden" asp-for="@Model.InventoryBooking[i].ModelID"/>*@
+
 
 
                 <div class=" col-md-1 col-4 p-1 border-end border-white border-1">
@@ -220,7 +224,7 @@
                         <div class="col-12">
                             <div class="input-group input-group-sm mb-2">
 
-                                <input type="number" class="form-control" name="input" id=@("input_"+i) value="0" onchange="SendValueToButton()" min="0" />
+                                <input type="number" class="form-control" name="input" id=@("input_"+i) value="0" onchange="SendValueToButton('BookingSøgning')" min="0" />
 
                             </div>
                         </div>

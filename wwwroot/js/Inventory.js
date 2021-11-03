@@ -48,8 +48,9 @@ function doneTyping() {
 
 
 //sends quantity to button before submit
-function SendValueToButton() {
+function SendValueToButton(inputTitle) {
 
+    console.log(inputTitle);
     let element = document.getElementById(event.target.id);
     let splitted = element.id.split("_");
     let id = "basket_" + splitted[1];
@@ -66,7 +67,6 @@ function SendValueToButton() {
 
 
 
-
     let splittedvalues = button.value.split("-");
     if (splittedvalues.length > 0) {
 
@@ -74,7 +74,7 @@ function SendValueToButton() {
 
     }
 
-    button.value = modelID + "-" + stock + "-" + element.value;
+    button.value = modelID + "-" + stock + "-" + element.value +"-" + inputTitle;
 
 }
 
@@ -91,14 +91,17 @@ function SendLocationToForm() {
 //sends new quantity to input to form for booking search
 function changeQuantity() {
 
-    // add or remove from basket
+
+    //get elements from view 
     let fromInput = document.getElementById(event.target.id);
     let splittedValues = fromInput.id.split('_');
 
+    let stock = document.getElementById("stock_" + splittedValues[1])
     let toInput = document.getElementById("searchOutput_" + splittedValues[1]);
-    toInput.value = fromInput.value;
 
-    console.log("from input: " + fromInput.value + " to input: " + toInput.value);
+    //send input data to hidden input
+    toInput.value = fromInput.value;
+    
 
 
     //calculate basket count
@@ -111,7 +114,7 @@ function changeQuantity() {
         let val = parseInt(array[i].value);
         basketCount = basketCount + val;
     }
-    
+
     hiddenbasket.value = basketCount;
     basket.textContent = "enheder i kurven" + basketCount;
 }

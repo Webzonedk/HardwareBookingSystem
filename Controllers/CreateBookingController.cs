@@ -75,7 +75,7 @@ namespace HUS_project.Controllers
                 int id = int.Parse(splittedData[0]);
                 int stock = int.Parse(splittedData[1]);
                 int quantity = int.Parse(splittedData[2]);
-
+                string viewTitle = splittedData[3];
 
                 //check if model exists in itemlines
                 bool found = false;
@@ -154,7 +154,7 @@ namespace HUS_project.Controllers
 
             CreateBookingModel tempData = dbManagerBooking.GetInventory(data.SearchModel);
 
-            //sort tempData
+            //sort tempData & calculate basket capacity
             List<BookingSearchModel> temp = new List<BookingSearchModel>();
             for (int i = 0; i < data.ItemLines.Count; i++)
             {
@@ -167,22 +167,55 @@ namespace HUS_project.Controllers
                 }
             }
 
+            // get current stock
+            data.InventoryBooking = temp;
             data.CategoryDropdown = dbShared.GetCategories();
             data.LocationDropdown = dbShared.GetRooms();
             data.LocationDropdown.RemoveRange(0, 3);
-
+            
             return View(data);
         }
 
-        [HttpGet]
-        public ActionResult test(CreateBookingModel data)
+      
+        [HttpPost]
+        public IActionResult Inspect(CreateBookingModel data,string link)
         {
-            return RedirectToAction("Inspect", data);
-        }
+            DBManagerCreateBooking dbManagerBooking = new DBManagerCreateBooking(configuration);
+            DBManagerShared dbShared = new DBManagerShared(configuration);
 
-        public IActionResult Inspect(CreateBookingModel data)
-        {
-            return View(data);
+            //count number of items in basket
+            data.BasketCount = 0;
+            for (int i = 0; i < data.ItemLines.Count; i++)
+            {
+                data.BasketCount += data.ItemLines[i].Quantity;
+            }
+
+            CreateBookingModel newdata = dbManagerBooking.GetInventory(data.SearchModel);
+
+            //sort tempData & calculate basket capacity
+            List<BookingSearchModel> temp = new List<BookingSearchModel>();
+            
+                for (int j = 0; j < newdata.InventoryBooking.Count; j++)
+                {
+                    if(data.ModelName == newdata.InventoryBooking[j].ModelName)
+                    {
+                        temp.Add(newdata.InventoryBooking[j]);
+                    }
+                }
+            
+
+            // get current stock
+            newdata.InventoryBooking = temp;
+
+            newdata.CategoryDropdown = dbShared.GetCategories();
+            newdata.LocationDropdown = dbShared.GetRooms();
+            newdata.LocationDropdown.RemoveRange(0, 3);
+            newdata.ItemLines = data.ItemLines;
+            newdata.SearchModel = data.SearchModel;
+            newdata.BasketCount = data.BasketCount;
+            newdata.ModelName = data.ModelName;
+
+            return View(newdata);
         }
 
         public IActionResult CreateBooking()

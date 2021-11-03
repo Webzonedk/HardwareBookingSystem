@@ -11,6 +11,13 @@ namespace HUS_project.Models
         private string searchName;
         private DateTime rentDate;
         private DateTime returnDate;
+        private string room;
+
+        public string Room
+        {
+            get { return room; }
+            set { room = value; }
+        }
 
 
         public DateTime ReturnDate
@@ -38,6 +45,11 @@ namespace HUS_project.Models
         {
             get { return category; }
             set { category = value; }
+        }
+
+        public BookingSearchCriteriaModel()
+        {
+
         }
 
         public BookingSearchCriteriaModel(string category, string searchName, DateTime rentDate, DateTime returnDate)

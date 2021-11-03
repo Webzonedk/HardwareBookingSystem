@@ -147,7 +147,7 @@
 
 
 
-     
+
 
         <input type="hidden" id="location" asp-for="@Model.Location" />
 
@@ -158,6 +158,7 @@
             <input type="hidden" asp-for="@Model.ItemLines[i].Model.ModelDescription" />
             <input type="hidden" asp-for="@Model.ItemLines[i].Model.Category.Category" />
             <input type="hidden" id="test" asp-for="@Model.ItemLines[i].Quantity" />
+            <input type="hidden" id=@("stock_" + i) asp-for="@Model.InventoryBooking[i].InStock[0]" />
 
 
             <div class="row containerBody alternating_row dynamic-Font-Size-10">
@@ -173,7 +174,7 @@
                         <div class="col-12">
                             <div class="input-group input-group-sm mb-2">
 
-                                <input type="number" class="form-control" name="input" id=@("input_"+i) asp-for="@Model.ItemLines[i].Quantity" onchange="changeQuantity()" min="0" />
+                                <input type="number" class="form-control" name="input" id=@("input_"+i) asp-for="@Model.ItemLines[i].Quantity" onchange="changeQuantity()" min="0" max="@Model.InventoryBooking[0].InStock[0]" />
 
                             </div>
                         </div>
@@ -189,29 +190,29 @@
                     <div class="row center">
 
                         @*<div class="col-6">
-                            @if (ViewBag.id != null)
-                            {
-
-                                int basketCount = 0;
-                                for (int k = 0; k < Model.ItemLines.Count; k++)
+                                @if (ViewBag.id != null)
                                 {
-                                    if (Model.ItemLines[k].Model.ModelID == Model.InventoryBooking[i].ModelID)
-                                    {
-                                        basketCount = Model.ItemLines[k].Quantity;
 
+                                    int basketCount = 0;
+                                    for (int k = 0; k < Model.ItemLines.Count; k++)
+                                    {
+                                        if (Model.ItemLines[k].Model.ModelID == Model.InventoryBooking[i].ModelID)
+                                        {
+                                            basketCount = Model.ItemLines[k].Quantity;
+
+                                        }
+                                    }
+
+                                    if (basketCount > 0)
+                                    {
+                                        <div class=" text-green">@basketCount</div>
                                     }
                                 }
-
-                                if (basketCount > 0)
+                                else
                                 {
-                                    <div class=" text-green">@basketCount</div>
+                                    <div>&nbsp;</div>
                                 }
-                            }
-                            else
-                            {
-                                <div>&nbsp;</div>
-                            }
-                        </div>*@
+                            </div>*@
 
                         <div class="col-6">
 
