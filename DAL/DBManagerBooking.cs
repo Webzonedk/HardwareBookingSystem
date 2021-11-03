@@ -280,7 +280,7 @@ namespace HUS_project.DAL
         {
             SqlConnection con = new SqlConnection(connectionString);
             SqlCommand cmd = new SqlCommand("DeleteItemLine", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
             cmd.Parameters.AddWithValue("@modelName", modelName);
 
@@ -300,7 +300,7 @@ namespace HUS_project.DAL
         {
             SqlConnection con = new SqlConnection(connectionString);
             SqlCommand cmd = new SqlCommand("DeleteBooking", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
             cmd.Parameters.AddWithValue("@deleter", deleter);
             cmd.Parameters.AddWithValue("@deletionReason", reason);
@@ -326,7 +326,7 @@ namespace HUS_project.DAL
             SqlConnection con = new SqlConnection(connectionString);
 
             SqlCommand cmd = new SqlCommand("CountDevicesOfModelInStorage", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@modelName", modelName);
 
             con.Open();
@@ -348,7 +348,7 @@ namespace HUS_project.DAL
             SqlConnection con = new SqlConnection(connectionString);
 
             SqlCommand cmd = new SqlCommand("GetModelDeviceQuantityAvailable", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@rentDate", rentDate);
             cmd.Parameters.AddWithValue("@returnDate", returnDate);
             cmd.Parameters.AddWithValue("@modelName", modelName);
@@ -372,7 +372,7 @@ namespace HUS_project.DAL
             SqlConnection con = new SqlConnection(connectionString);
 
             SqlCommand cmd = new SqlCommand("GetModelDeviceQuantityAvailableExcludingBooking", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@rentDate", rentDate);
             cmd.Parameters.AddWithValue("@returnDate", returnDate);
             cmd.Parameters.AddWithValue("@modelName", modelName);
@@ -396,7 +396,7 @@ namespace HUS_project.DAL
             SqlConnection con = new SqlConnection(connectionString);
 
             SqlCommand cmd = new SqlCommand("GetAStorageLocationForModel", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@modelName", modelName);
 
             con.Open();
