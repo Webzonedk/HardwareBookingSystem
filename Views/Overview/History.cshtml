@@ -18,40 +18,30 @@
         <div class="col-xl-3 gx-3 gy-3"></div>
         <div class="col-xl-2 col-sm-4 gx-3 gy-3">
             <div class="form-floating">
-                <input class="form-select capitalized " id="buildingDropDown" list="buildings" aria-label="Vælg Bygning" pattern="[A-Za-z0-9æøåÆØÅ]{0,50}" title="Bogstaver og tal og max. 50 karakterer" maxlength="50" asp-for="@Model.Rooms" onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
-                <datalist id="buildings">
-                    @foreach (var item in Model.Buildings)
-                    {
-                        <option>@item</option>
-                    }
-                </datalist>
+                <input class="bi-calendar-dat" type="date" id="startDate" aria-label="Start dato" asp-for="@Model.SearchCriteria.RentDate">
+
                 <label for="floatingSelectGrid">Bygning:</label>
             </div>
 
         </div>
         <div class="col-xl-2 col-sm-4 gx-3 gy-3">
             <div class="form-floating">
-                <input class="form-select capitalized" id="roomNumberDropDown" list="roomNumbers" aria-label="Vælg lokalenummer" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.Location.RoomNumber" onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
-                <datalist id="roomNumbers">
-                    @foreach (var item in Model.RoomNumbers)
-                    {
-                        <option>@item</option>
-                    }
-                </datalist>
+                <input class="bi-calendar-date" type="date" id="roomNumberDropDown" list="roomNumbers" aria-label="Vælg lokalenummer" asp-for="@Model.SearchCriteria.ReturnDate" onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
+           
                 <label for="floatingSelectGrid">Lokale Nr:</label>
             </div>
 
         </div>
         <div class="col-xl-2 col-sm-4 gx-3 gy-3">
             <div class="form-floating">
-                <input class="form-select capitalized" id="chosenRoom" list="rooms" aria-label="room" pattern="^[A-Za-z0-9æøåÆØÅ]{1,50}[\.]{1}[A-Za-z0-9æøåÆØÅ]{1,10}$" title="Skal indeholde bygning og lokalenummer adskilt med et punktum (format: bygning.nummer) (max 50).(max 10)" maxlength="61" asp-for="@Model.Rooms" onsubmit="ClearInputField('chosenRoom')">
+                <input class="form-select capitalized" id="chosenRoom" list="rooms" aria-label="room" asp-for="@Model.Rooms">
                 <datalist id="rooms">
                     @for (int i = 0; i < Model.Rooms.Count; i++)
                     {
                         <option>@Model.Rooms[i]</option>
                     }
                 </datalist>
-                <label for="floatingSelectGrid">Reol navn:</label>
+                <label for="floatingSelectGrid">Lokale:</label>
             </div>
 
         </div>
@@ -68,7 +58,7 @@
         </div>
 
         <div class="col-xl-2 gx-3 gy-3">
-            <button type="submit" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" asp-action="CreateLocation">Tilføj Placering</button>
+            <button type="submit" class="btn btn-primary btn-blue" asp-action="SeachBookings">Søg</button>
 
         </div>
 

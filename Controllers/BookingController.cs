@@ -411,7 +411,7 @@ namespace HUS_project.Controllers
                 // Room Database Check:
                 if (validNewLocation) 
                 {
-                    DBManagerAdministration dBMAdmin = new DBManagerAdministration(configuration);
+                    DBManagerLocationAdmin dBMAdmin = new DBManagerLocationAdmin(configuration);
                     validNewLocation = dBMAdmin.DoesRoomExist(newRoom);
                     if (!validNewLocation)
                     {

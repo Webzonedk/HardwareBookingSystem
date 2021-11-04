@@ -13,13 +13,13 @@ using Microsoft.Extensions.Configuration;
 
 namespace HUS_project.Controllers
 {
-    public class AdministrationController : Controller
+    public class LocationAdminController : Controller
     {
         //public bool field for checking state of login & field for configuration 
         private readonly IConfiguration configuration;
 
         // constructor of homecontroller
-        public AdministrationController(IConfiguration config)
+        public LocationAdminController(IConfiguration config)
         {
             this.configuration = config;
         }
@@ -46,7 +46,7 @@ namespace HUS_project.Controllers
         [HttpPost]
         public IActionResult LocationAdminResult(EditStorageLocationModel dataFromView)
         {
-            DBManagerAdministration manager = new DBManagerAdministration(configuration);
+            DBManagerLocationAdmin manager = new DBManagerLocationAdmin(configuration);
             return View("LocationAdmin", manager.GetLocations(dataFromView));
         }
 
@@ -65,7 +65,7 @@ namespace HUS_project.Controllers
             selectedStorageLocation.Location = buildingModel;
             dropDownData.StorageLocation = selectedStorageLocation;
 
-            DBManagerAdministration manager = new DBManagerAdministration(configuration);
+            DBManagerLocationAdmin manager = new DBManagerLocationAdmin(configuration);
             DBManagerShared sharedManager = new DBManagerShared(configuration);
             List<string> buildings = manager.GetBuildings();
             List<string> roomNumbers = manager.GetRoomNumbers();
@@ -96,7 +96,7 @@ namespace HUS_project.Controllers
         [HttpPost]
         public IActionResult CreateLocation(EditStorageLocationModel dataFromView)
         {
-            DBManagerAdministration manager = new DBManagerAdministration(configuration);
+            DBManagerLocationAdmin manager = new DBManagerLocationAdmin(configuration);
 
             //Create building if filled in
             if (dataFromView.StorageLocation.Location.Building != null)
@@ -216,7 +216,7 @@ namespace HUS_project.Controllers
         [HttpPost]
         public IActionResult PrintSingleLocationQR(string printQR)
         {
-            DBManagerAdministration manager = new DBManagerAdministration(configuration);
+            DBManagerLocationAdmin manager = new DBManagerLocationAdmin(configuration);
             EditStorageLocationModel locations = manager.GetSpecificStorageLocation(printQR);
 
             string[] locationArray = new string[1];
@@ -275,7 +275,7 @@ namespace HUS_project.Controllers
             string[] substring = deleteLocation.Split('.');
             string locationID = substring[0];
             string selectedID = substring[1];
-            DBManagerAdministration manager = new DBManagerAdministration(configuration);
+            DBManagerLocationAdmin manager = new DBManagerLocationAdmin(configuration);
             string alert = manager.DeleteLocation(int.Parse(locationID));
             if (alert == "occupied")
             {
@@ -300,7 +300,7 @@ namespace HUS_project.Controllers
             {
                 try
                 {
-                    DBManagerAdministration manager = new DBManagerAdministration(configuration);
+                    DBManagerLocationAdmin manager = new DBManagerLocationAdmin(configuration);
                     string deleteMessage = manager.DeleteBuilding(deleteBuildingData);
                     if (deleteMessage != null)
                     {
@@ -338,7 +338,7 @@ namespace HUS_project.Controllers
             {
                 try
                 {
-                    DBManagerAdministration manager = new DBManagerAdministration(configuration);
+                    DBManagerLocationAdmin manager = new DBManagerLocationAdmin(configuration);
                     string deleteMessage = manager.DeleteRoomNumber(deleteRoomNumberData);
                     if (deleteMessage != null)
                     {
@@ -372,7 +372,7 @@ namespace HUS_project.Controllers
                 try
                 {
 
-                    DBManagerAdministration manager = new DBManagerAdministration(configuration);
+                    DBManagerLocationAdmin manager = new DBManagerLocationAdmin(configuration);
                     string[] substring = deleteRoomData.DeleteRoom.Split('.');
                     if (substring[0] != null)
                     {
@@ -432,7 +432,7 @@ namespace HUS_project.Controllers
             {
                 try
                 {
-                    DBManagerAdministration manager = new DBManagerAdministration(configuration);
+                    DBManagerLocationAdmin manager = new DBManagerLocationAdmin(configuration);
                     string deleteMessage = manager.DeleteShelfName(deleteShelfNameData);
                     if (deleteMessage != null)
                     {
@@ -465,7 +465,7 @@ namespace HUS_project.Controllers
             {
                 try
                 {
-                    DBManagerAdministration manager = new DBManagerAdministration(configuration);
+                    DBManagerLocationAdmin manager = new DBManagerLocationAdmin(configuration);
                     string deleteMessage = manager.DeleteShelfLevel(deleteShelfLevelData);
                     if (deleteMessage != null)
                     {
@@ -498,7 +498,7 @@ namespace HUS_project.Controllers
             {
                 try
                 {
-                    DBManagerAdministration manager = new DBManagerAdministration(configuration);
+                    DBManagerLocationAdmin manager = new DBManagerLocationAdmin(configuration);
                     string deleteMessage = manager.DeleteShelfSpot(deleteShelfSpotData);
                     if (deleteMessage != null)
                     {

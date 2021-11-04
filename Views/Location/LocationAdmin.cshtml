@@ -5,7 +5,7 @@
     ViewData["Title"] = "Placerings Administration";
 }
 
-<!--Variables to be used with JavaScripts-->
+<!--Variables to be used with JavaScripts and C#-->
 @{string tempData = ViewBag.alert;}
 @{string deleteBuildingAndRoomFeedback = ViewBag.deleteBuildingAndRoomFeedback;}
 @{string deleteLocationFeedback = ViewBag.deleteLocationFeedback;}
@@ -25,23 +25,12 @@
 
 
 
-@*<style>
-        body,html {
-            scroll-behavior: auto !important;
-        }
-    </style>*@
-
-
 
 <script>
     $(document).ready(function () {
         scrollToDiv('@deleteBuildingAndRoomFeedback', '@deleteLocationFeedback', '@selectedID');
         });
 </script>
-
-
-
-
 
 
 
