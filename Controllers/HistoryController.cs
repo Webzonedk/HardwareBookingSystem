@@ -12,6 +12,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 namespace HUS_project.Controllers
 {
+    //----------------------------------------------------------------------
+    //----------------------------------------------------------------------
+    //----------------------------------------------------------------------
+    //This Controller is not in use, as it has been cut away for version 1.0
+    //----------------------------------------------------------------------
+    //----------------------------------------------------------------------
     public class HistoryController : Controller
     {
         //public bool field for checking state of login & field for configuration 
@@ -23,8 +29,11 @@ namespace HUS_project.Controllers
             this.configuration = config;
         }
 
-
-
+        public IActionResult HistorySearch()
+        {
+            return View();
+        }
+        [HttpPost]
         public IActionResult SeachBookings()
         {
             HistoryModel dropDownData = new HistoryModel();
@@ -35,9 +44,15 @@ namespace HUS_project.Controllers
             List<string> rooms = sharedManager.GetRooms();
             dropDownData.Rooms = rooms;
 
-            return View("History", dropDownData);
+            return View("HistorySearch", dropDownData);
         }
 
+        public IActionResult ListBookings()
+        {
 
+            DBManagerHistory historySearchData = new DBManagerHistory(configuration);
+
+            return View("HistorySearch", historySearchData.GetReturnedBoookings());
+        }
     }
 }

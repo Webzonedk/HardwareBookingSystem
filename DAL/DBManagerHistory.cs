@@ -9,6 +9,13 @@ using System.Data.SqlClient;
 
 namespace HUS_project.DAL
 {
+
+    //----------------------------------------------------------------------
+    //----------------------------------------------------------------------
+    //----------------------------------------------------------------------
+    //This DBManager is not in use, as it has been cut away for version 1.0
+    //----------------------------------------------------------------------
+    //----------------------------------------------------------------------
     public class DBManagerHistory
     {
         //----------------------------------------------------------------------------
@@ -22,6 +29,39 @@ namespace HUS_project.DAL
         {
             this.configuration = _configuration;
             connectionString = configuration.GetConnectionString("DBContext");
+        }
+
+        //----------------------------------------------------------------------------
+        //Getting OldBookings
+        //----------------------------------------------------------------------------
+        internal List<HistoryModel> GetReturnedBoookings()
+        {
+            try
+            {
+                SqlConnection con = new SqlConnection(connectionString);
+                SqlCommand cmd = new SqlCommand("GetReturnedBoookings", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+
+
+
+                List<HistoryModel> bookings = new List<HistoryModel>();
+                con.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                   
+                }
+                con.Close();
+                return bookings;
+            }
+            finally
+            {
+
+            }
+
+
         }
 
 

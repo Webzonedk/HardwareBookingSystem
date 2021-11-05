@@ -45,21 +45,21 @@
                         </li>
                         @if (httpcontextAccessor.HttpContext.Session.GetInt32("accessLevel") > 1)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="History" asp-action="History">Historik</a>
-                            </li>
+                            @*<li class="nav-item">
+                                <a class="nav-link" asp-controller="History" asp-action="HistorySearch">Historik</a>
+                            </li>*@
 
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Device" asp-action="Inventory">Lagerstyring</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="LocationAdmin" asp-action="LocationAdmin">Placeringer</a>
+                                <a class="nav-link" asp-controller="Location" asp-action="LocationAdmin">Placeringer</a>
                             </li>
 
-                            <li class="nav-item">
+                            @*<li class="nav-item">
                                 <a class="nav-link" asp-controller="Overview" asp-action="DeletedDevices">Log</a>
-                            </li>
+                            </li>*@
                         }
                     </ul>
                     

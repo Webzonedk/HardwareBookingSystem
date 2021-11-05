@@ -13,13 +13,13 @@ using Microsoft.Extensions.Configuration;
 
 namespace HUS_project.Controllers
 {
-    public class LocationAdminController : Controller
+    public class LocationController : Controller
     {
         //public bool field for checking state of login & field for configuration 
         private readonly IConfiguration configuration;
 
         // constructor of homecontroller
-        public LocationAdminController(IConfiguration config)
+        public LocationController(IConfiguration config)
         {
             this.configuration = config;
         }
