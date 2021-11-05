@@ -99,7 +99,8 @@ namespace HUS_project.Controllers
                         }
                     }
 
-                    if (!deviceInBookingAlready)
+                    // If device is not already in booking, and the booking has not already been delivered..
+                    if (!deviceInBookingAlready && (booking.DeliveredBy == null || booking.DeliveredBy == ""))
                     {
                         // THe device does not already exist for this booking, therefore it should be created.. if the device is available.
                         // CreateBookedDevice() will perform an availability check on its own.
@@ -204,6 +205,8 @@ namespace HUS_project.Controllers
             booking.Items = dBManager.GetItemLines(booking.BookingID);
             booking.Devices = dBManager.GetBookedDevices(booking.BookingID);
 
+            booking.Notes = "";
+
             return View("BookingRUD", booking);
         }
 
@@ -257,7 +260,7 @@ namespace HUS_project.Controllers
         /// <param name="disableBooking"></param>
         /// <param name="deleteItemLine"></param>
         /// <returns></returns>
-        public IActionResult ProcessBookingEditSubmit(BookingModel bookingModel, string location, string updateBooking, string deleteBooking, string deleteItemLine, string deliverBooking)
+        public IActionResult ProcessBookingEditSubmit(BookingModel bookingModel, string location, string updateBooking, string deleteBooking, string deleteItemLine) //, string deliverBooking
         {
             if(updateBooking != null)
             {
@@ -273,10 +276,10 @@ namespace HUS_project.Controllers
                 // Delete ItemLine, no fuss, maybe?
                 return DeleteItemLine(bookingModel, deleteItemLine);
             }
-            else if(deliverBooking != null)
+            /*else if(deliverBooking != null)
             {
                 return DeliverBooking(bookingModel.BookingID);
-            }
+            }*/
             else
             {
                 // Should Never happen, but refreshes page
