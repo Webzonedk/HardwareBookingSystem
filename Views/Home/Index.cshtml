@@ -7,7 +7,7 @@
 <div class="row blue-oyster-bar center box-shadow">
     <div class="row text-white g-2">
         <h2 class="text-white" style="padding-top:30px;">ZBC HUS - Login side</h2>
-        <h4 class="text-white">Kun for Lærere eller SKP Elever</h4>
+        <h4 class="text-white">Kun for Undervisere og SKP Elever</h4>
     </div>
 </div>
 
@@ -16,7 +16,7 @@
 <div class="container containerMain box-shadow loginBox">
     @*LOGIN FORM*@
     <form asp-action="Login" method="post" id="loginForm">
-        <div class="row">
+        <div class="row g-3">
             <div class="col-md-2"></div>
             <div class="col-md-3 form-floating">
                 <input id="uniLoginBox" asp-for="@Model.UNILogin" type="text" style="max-height:55px" class="form-control" />
