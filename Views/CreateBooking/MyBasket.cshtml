@@ -217,7 +217,7 @@
 
                         <div class="col-6">
 
-                            <button class="btn btn-primary btn-sm btn-blue" type="submit" name="submitData" id=@("basket_"+i) value="@Model.ItemLines[i].Model.ModelID">Slet</button>
+                            <button class="btn btn-primary btn-sm btn-blue" formaction="DeleteItemLine" type="submit" name="submitData" id=@("basket_"+i) value="@i">Slet</button>
 
                         </div>
 
