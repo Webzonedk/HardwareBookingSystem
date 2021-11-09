@@ -5,111 +5,102 @@
 
 <script src="~/js/Inventory.js"></script>
 
-<div class=" row blue-oyster-bar center box-shadow">
 
-    <!--first row-->
-    <div class="row">
+<!--Blue Oister Bar with search fields-->
+<form id="searchform" asp-controller="Device" asp-action="Inventory" method="post">
+    <div class="row blue-oyster-bar center box-shadow">
+        <div class="col">
+            <!--first row-->
+            <div class="row">
 
+                <div class="col-xl-1 g-3">
+                </div>
 
-        <div class="col-6">
-
-            <form class="" id="searchform" asp-controller="Device" asp-action="Inventory" method="post">
-
-                <div class="row">
-
-                    <div class="col-2"></div>
-
-                    <!--dropdown for categories-->
-                    <div class="col-4 text-white">
-                        <label>Kategori:</label>
-
+                <!--dropdown for categories-->
+                <div class="col-xl-2 col-sm-6 g-3">
+                    <div class="form-floating">
                         <select class="form-select" id="categories" asp-for="@Model.Category" onchange="this.form.submit()">
                             <option></option>
                             @foreach (var item in Model.Categories)
                             {
                                 <option>@item</option>
                             }
-
                         </select>
+                        <label for="floatingSelectGrid">Kategori:</label>
+                    </div>
+                </div>
+
+
+
+                <!--Search term-->
+                <div class="col-lg-4 col-sm-12 g-3">
+                    <div class="form-floating">
+                        <input type="search" class="form-control" asp-for="@Model.SearchName" id="searchbar" onkeyup="SetTimeout()" onkeydown="ClearTimeout()">
+                        <label for="floatingSelectGrid">søg efter enhed:</label>
+
 
                     </div>
+                </div>
 
-                    <!--dropdown for status-->
-                    <div class="col-4 text-white">
-                        <label for="status">Status:</label>
 
+
+                <!--dropdown for status-->
+                <div class="col-xl-2 col-sm-6 g-3">
+                    <div class="form-floating">
                         <select class="form-select" id="status" asp-for="@Model.DeviceStatus" onchange="this.form.submit()">
                             <option hidden></option>
                             @foreach (var item in Model.InventoryStatuses)
                             {
                                 <option>@item</option>
                             }
-
                         </select>
+                        <label for="floatingSelectGrid">Status:</label>
 
                     </div>
-
-                    <div class="col-2"></div>
                 </div>
 
-                <div class="row">
-
-                    <div class="col-2"></div>
 
 
-                    <div class="col-8">
 
-                        <div class="form-floating mb-2">
-                            <input type="search" class="form-control" asp-for="@Model.SearchName" id="searchbar" onkeyup="SetTimeout()" onkeydown="ClearTimeout()" placeholder="name@example.com">
-                            <label for="searchbar">søg efter enhed:</label>
+                <div class="col-xl-1 g-3">
+                </div>
+
+                @*<div class="row">
+
+                        <div class="col-2"></div>
+
+
+                        <div class="col-8">
+
+                            <div class="form-floating mb-2">
+                                <input type="search" class="form-control" asp-for="@Model.SearchName" id="searchbar" onkeyup="SetTimeout()" onkeydown="ClearTimeout()" placeholder="name@example.com">
+                                <label for="searchbar">søg efter enhed:</label>
+                            </div>
+
                         </div>
 
-                    </div>
+                        <div class="col-2">
 
-                    <div class="col-2">
+                        </div>
 
-                    </div>
+                    </div>*@
 
-                </div>
-
-            </form>
-
-        </div>
-
-        <div class="col-6">
-
-            <form  method="post">
-
-
-                <div class="row">
-
-                    <!--edit category-->
-                    <div class="col-2 text-white">
-
-                        <button class="btn btn-primary btn-sm btn-blue" type="submit" asp-action="CategoryModelAdminView">Kategori/Model Administration</button>
-
-                    </div>
-
-                    <!--create device-->
-                    <div class="col-2 text-white">
-
-
-                        <button class="btn btn-primary btn-sm btn-blue" type="submit" asp-action="CreateDevice">Enheds oprettelse</button>
-
-                    </div>
-
-
-
-                </div>
-
-            </form>
+            </div>
 
         </div>
     </div>
 
-</div>
+</form>
 
 
+<!--
+---------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
+    List devices
+---------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
+
+-->
 <div class="container containerMain box-shadow">
     <form asp-action="EditView" asp-controller="Device" method="post">
 
