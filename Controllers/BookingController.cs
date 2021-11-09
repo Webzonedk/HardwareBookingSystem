@@ -205,8 +205,6 @@ namespace HUS_project.Controllers
             booking.Items = dBManager.GetItemLines(booking.BookingID);
             booking.Devices = dBManager.GetBookedDevices(booking.BookingID);
 
-            booking.Notes = "";
-
             return View("BookingRUD", booking);
         }
 
@@ -432,7 +430,9 @@ namespace HUS_project.Controllers
                         new List<DeviceModel>(),
                         validNewLocation ? newRoom : originalBooking.Location,
                         validNewStartDate ? bookingModel.PlannedBorrowDate : originalBooking.PlannedBorrowDate, 
-                        validNewReturnDate ? bookingModel.PlannedReturnDate : originalBooking.PlannedReturnDate
+                        validNewReturnDate ? bookingModel.PlannedReturnDate : originalBooking.PlannedReturnDate,
+                        null,
+                        bookingModel.Notes
                         );
 
                     int bookingLogID = dBManager.UpdateBookingAndLog(finalBooking, HttpContext.Session.GetString("uniLogin"));
