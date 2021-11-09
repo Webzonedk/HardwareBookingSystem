@@ -1,4 +1,4 @@
-﻿@model HUS_project.Models.ViewModels.EditDeviceModel
+﻿@model HUS_project.Models.ViewModels.DeviceQRScanningModel
 @{
     ViewData["Title"] = "Scan enhed";
 }
@@ -8,9 +8,9 @@
 <!--java script to count remaining text in description-->
 <script type="text/javascript" src="~/js/instascan.min.js"></script>
 <script src="~/js/ScanQRCode.js"></script>
-<script src="~/js/GetQRLocationForDevice.js"></script>
+<script src="~/js/GetQRForDevice.js"></script>
 
-<form id="ScanLocationForm" asp-action="ReturnScanData" method="post" form>
+<form id="ScanDeviceForm" asp-action="ReturnScanData" method="post" form>
 
     <div class="row blue-oyster-bar center box-shadow"></div>
 
@@ -19,7 +19,7 @@
         <!--header bar-->
         <div class=" row containerHeader">
 
-            <h4 class="text-white">Skan Hylden's QR</h4>
+            <h4 class="text-white">Skan Enheden's QR</h4>
 
         </div>
 
@@ -29,20 +29,19 @@
 
                 <video class=" centerVideo" id="preview" width="336" height="254"></video>
 
-                <input id="hiddenID" type="hidden" value="@Model.Device.DeviceID" />
+                <input id="hiddenID" type="hidden" value="@Model.BookingID"  />
                 <input id="ItemIsScanned" type="checkbox" onchange="SubmitQRCode();" hidden />
 
             </div>
 
             <div class="col-md-12 center p-1">
-
-                <input id="content" type="text" asp-for="@Model.Location" value="" />
-                <input id="deviceID" type="text" asp-for="@Model.Device.DeviceID" hidden />
+                <input id="content" type="text" asp-for="@Model.RawData" value="" />
+                <input id="bookingID" type="text" asp-for="@Model.BookingID" hidden />
 
             </div>
 
 
-            
+
 
         </div>
 

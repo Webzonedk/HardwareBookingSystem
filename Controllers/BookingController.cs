@@ -33,6 +33,34 @@ namespace HUS_project.Controllers
             return View();
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deviceID"></param>
+        /// <param name="bookingID"></param>
+        /// <returns></returns>
+        public IActionResult GoToLocationScanner(string deviceID, string bookingID)
+        {
+            TempData["bookingID"] = bookingID;
+            TempData["deviceID"] = deviceID;
+
+
+            return RedirectToAction("ScanLocation", "Device");
+        }
+
+        public IActionResult ReturnedFromLocationScanner()
+        {
+            return GoToScanDevices(TempData["bookingID"].ToString());
+        }
+
+
+        public IActionResult ReturnScanData(DeviceQRScanningModel model)
+        {
+            string[] data = model.RawData.Split('-');
+            return ProcessDeviceForBooking(data[1], model.BookingID.ToString());
+        }
+
         /// <summary>
         /// Contextively processes what to do with this device id for this booking id. Be it create BookedDevice, return BookedDevice, or even delete.
         /// </summary>
@@ -85,8 +113,10 @@ namespace HUS_project.Controllers
                                 // If only one device Was unreturned (now returned in DB), the Booking may now be deleted and Closed.
                                 if(unreturnedDevices < 2)
                                 {
-                                    return DeleteBooking(booking);
+                                    DeleteBooking(booking);
                                 }
+                                // Then we send the user to go and decide where the Device belongs now.
+                                return GoToLocationScanner(deviceID, bookingID);
                             }
                             else
                             {
@@ -190,7 +220,16 @@ namespace HUS_project.Controllers
                 modelsInStorage,
                 storageLocations
                 );
-            return View("BookedDevicesCRU", bookedDevicesCRUModel);
+
+            // It is possible that this was called, despite the last BookedDevice having been returned, and thus the whole booking has been deleted.
+            if(booking.Customer == null)
+            {
+                return RedirectToAction("RelocateUser", "Home");
+            }
+            else
+            {
+                return View("BookedDevicesCRU", bookedDevicesCRUModel);
+            }
         }
 
         /// <summary>
@@ -206,6 +245,12 @@ namespace HUS_project.Controllers
             booking.Devices = dBManager.GetBookedDevices(booking.BookingID);
 
             return View("BookingRUD", booking);
+        }
+
+
+        public IActionResult GoToScanDevice(string bookingID)
+        {
+            return View("ScanDevice", new DeviceQRScanningModel(Convert.ToInt32(bookingID), ""));
         }
 
 
@@ -295,6 +340,7 @@ namespace HUS_project.Controllers
             DBManagerBooking dBManager = new DBManagerBooking(configuration);
             BookingModel bookingModel = dBManager.GetBooking(bookingID);
             // Update Booking to be Delivered
+            bookingModel.Notes = "Ordre Leveret";
             int bookingLogID = dBManager.UpdateBookingAndLog(bookingModel, HttpContext.Session.GetString("uniLogin"), HttpContext.Session.GetString("uniLogin"));
 
             // Log BookedDevices
