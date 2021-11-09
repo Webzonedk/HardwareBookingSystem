@@ -45,234 +45,240 @@
 <form asp-action="LocationAdminResult" method="post" id="listStorageLocations">
     <input id="hiddenInputFieldID" type="hidden" asp-for="@Model.HiddenFieldID" />
     <div class="row blue-oyster-bar center box-shadow">
-        <div class="row">
+        <div class=" col">
+            <div class="row">
 
-            <div class="col-xl-1 gx-3 gy-3">
-            </div>
-            <div class="col-xl-2 col-sm-4 gx-3 gy-3">
-                <div class="form-floating">
-                    <input class="form-select capitalized " id="buildingDropDown" list="buildings" aria-label="Vælg Bygning" pattern="[A-Za-z0-9æøåÆØÅ]{0,50}" title="Bogstaver og tal og max. 50 karakterer" maxlength="50" asp-for="@Model.StorageLocation.Location.Building" onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
-                    <datalist id="buildings">
-                        @foreach (var item in Model.Buildings)
-                        {
-                            <option>@item</option>
-                        }
-                    </datalist>
-                    <label for="floatingSelectGrid">Bygning:</label>
+                <div class="col-xl-1">
                 </div>
-                @try
-                {
-                    @if (buildingNameFeedBack != null)
+                <div class="col-xl-2 col-sm-4 g-3">
+                    <div class="form-floating">
+                        <input class="form-select capitalized " id="buildingDropDown" list="buildings" aria-label="Vælg Bygning" pattern="[A-Za-z0-9æøåÆØÅ]{0,50}" title="Bogstaver og tal og max. 50 karakterer" maxlength="50" asp-for="@Model.StorageLocation.Location.Building" onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
+                        <datalist id="buildings">
+                            @foreach (var item in Model.Buildings)
+                            {
+                                <option>@item</option>
+                            }
+                        </datalist>
+                        <label for="floatingSelectGrid">Bygning:</label>
+                    </div>
+                    @try
                     {
-                        if (buildingNameFeedBack.Contains("allerede") == true)
+                        @if (buildingNameFeedBack != null)
                         {
-                            <div class="fadeUp text-red">@buildingNameFeedBack</div>
-                        }
-                        else
-                        {
-                            <div class="fadeUp text-white">@buildingNameFeedBack</div>
+                            if (buildingNameFeedBack.Contains("allerede") == true)
+                            {
+                                <div class="fadeUp text-red">@buildingNameFeedBack</div>
+                            }
+                            else
+                            {
+                                <div class="fadeUp text-white">@buildingNameFeedBack</div>
+                            }
                         }
                     }
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            </div>
-            <div class="col-xl-2 col-sm-4 gx-3 gy-3">
-                <div class="form-floating">
-                    <input class="form-select capitalized" id="roomNumberDropDown" list="roomNumbers" aria-label="Vælg lokalenummer" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.Location.RoomNumber" onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
-                    <datalist id="roomNumbers">
-                        @foreach (var item in Model.RoomNumbers)
-                        {
-                            <option>@item</option>
-                        }
-                    </datalist>
-                    <label for="floatingSelectGrid">Lokale Nr:</label>
-                </div>
-                @try
-                {
-                    @if (roomNumberFeedBack != null)
+                    catch (Exception)
                     {
-                        if (roomNumberFeedBack.Contains("allerede") == true)
+                        throw;
+                    }
+                </div>
+                <div class="col-xl-2 col-sm-4 g-3">
+                    <div class="form-floating">
+                        <input class="form-select capitalized" id="roomNumberDropDown" list="roomNumbers" aria-label="Vælg lokalenummer" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.Location.RoomNumber" onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
+                        <datalist id="roomNumbers">
+                            @foreach (var item in Model.RoomNumbers)
+                            {
+                                <option>@item</option>
+                            }
+                        </datalist>
+                        <label for="floatingSelectGrid">Lokale Nr:</label>
+                    </div>
+                    @try
+                    {
+                        @if (roomNumberFeedBack != null)
                         {
-                            <div class="fadeUp text-red">@roomNumberFeedBack</div>
-                        }
-                        else
-                        {
-                            <div class="fadeUp text-white">@roomNumberFeedBack</div>
+                            if (roomNumberFeedBack.Contains("allerede") == true)
+                            {
+                                <div class="fadeUp text-red">@roomNumberFeedBack</div>
+                            }
+                            else
+                            {
+                                <div class="fadeUp text-white">@roomNumberFeedBack</div>
+                            }
                         }
                     }
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            </div>
-            <div class="col-xl-2 col-sm-4 gx-3 gy-3">
-                <div class="form-floating">
-                    <input class="form-select capitalized" id="shelfNameDropDown" list="shelfNames" aria-label="Vælg ReolNavn" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.ShelfName" onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
-                    <datalist id="shelfNames">
-                        @foreach (var item in Model.ShelfNames)
-                        {
-                            <option>@item</option>
-                        }
-                    </datalist>
-                    <label for="floatingSelectGrid">Reol navn:</label>
-                </div>
-                @try
-                {
-                    @if (shelfNameFeedBack != null)
+                    catch (Exception)
                     {
-                        if (shelfNameFeedBack.Contains("allerede") == true)
+                        throw;
+                    }
+                </div>
+                <div class="col-xl-2 col-sm-4 g-3">
+                    <div class="form-floating">
+                        <input class="form-select capitalized" id="shelfNameDropDown" list="shelfNames" aria-label="Vælg ReolNavn" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.ShelfName" onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
+                        <datalist id="shelfNames">
+                            @foreach (var item in Model.ShelfNames)
+                            {
+                                <option>@item</option>
+                            }
+                        </datalist>
+                        <label for="floatingSelectGrid">Reol navn:</label>
+                    </div>
+                    @try
+                    {
+                        @if (shelfNameFeedBack != null)
                         {
-                            <div class="fadeUp text-red">@shelfNameFeedBack</div>
-                        }
-                        else
-                        {
-                            <div class="fadeUp text-white">@shelfNameFeedBack</div>
+                            if (shelfNameFeedBack.Contains("allerede") == true)
+                            {
+                                <div class="fadeUp text-red">@shelfNameFeedBack</div>
+                            }
+                            else
+                            {
+                                <div class="fadeUp text-white">@shelfNameFeedBack</div>
+                            }
                         }
                     }
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            </div>
-            <div class="col-xl-2 col-sm-6 gx-3 gy-3">
-                <div class="form-floating">
-                    <input class="form-select capitalized" id="shelfLevelDropDown" list="shelfLevels" aria-label="Vælg Etage" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.ShelfLevel" onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
-                    <datalist id="shelfLevels">
-                        @foreach (var item in Model.ShelfLevels)
-                        {
-                            <option>@item</option>
-                        }
-                    </datalist>
-                    <label for="floatingSelectGrid">Reol Etage:</label>
-                </div>
-                @try
-                {
-                    @if (shelfLevelFeedBack != null)
+                    catch (Exception)
                     {
-                        if (shelfLevelFeedBack.Contains("allerede") == true)
+                        throw;
+                    }
+                </div>
+                <div class="col-xl-2 col-sm-6 g-3">
+                    <div class="form-floating">
+                        <input class="form-select capitalized" id="shelfLevelDropDown" list="shelfLevels" aria-label="Vælg Etage" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.ShelfLevel" onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
+                        <datalist id="shelfLevels">
+                            @foreach (var item in Model.ShelfLevels)
+                            {
+                                <option>@item</option>
+                            }
+                        </datalist>
+                        <label for="floatingSelectGrid">Reol Etage:</label>
+                    </div>
+                    @try
+                    {
+                        @if (shelfLevelFeedBack != null)
                         {
-                            <div class="fadeUp text-red">@shelfLevelFeedBack</div>
-                        }
-                        else
-                        {
-                            <div class="fadeUp text-white">@shelfLevelFeedBack</div>
+                            if (shelfLevelFeedBack.Contains("allerede") == true)
+                            {
+                                <div class="fadeUp text-red">@shelfLevelFeedBack</div>
+                            }
+                            else
+                            {
+                                <div class="fadeUp text-white">@shelfLevelFeedBack</div>
+                            }
                         }
                     }
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            </div>
-            <div class="col-xl-2 col-sm-6 gx-3 gy-3">
-                <div class="form-floating">
-                    <input class="form-select capitalized" id="shelfSpotDropDown" list="shelfSpots" aria-label="Vælg Hyldeplads" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.ShelfSpot" onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
-                    <datalist id="shelfSpots">
-                        @foreach (var item in Model.ShelfSpots)
-                        {
-                            <option>@item</option>
-                        }
-                    </datalist>
-                    <label for="floatingSelectGrid">Hyldeplads:</label>
-                </div>
-                @try
-                {
-                    @if (shelfSpotFeedBack != null)
+                    catch (Exception)
                     {
-                        if (shelfSpotFeedBack.Contains("allerede") == true)
+                        throw;
+                    }
+                </div>
+                <div class="col-xl-2 col-sm-6 g-3">
+                    <div class="form-floating">
+                        <input class="form-select capitalized" id="shelfSpotDropDown" list="shelfSpots" aria-label="Vælg Hyldeplads" pattern="[A-Za-z0-9æøåÆØÅ]{0,10}" title="Bogstaver og tal og max. 10 karakterer" maxlength="10" asp-for="@Model.StorageLocation.ShelfSpot" onkeyup="SetTimeout(); returnToInputField();" onkeydown="clearTimeout()">
+                        <datalist id="shelfSpots">
+                            @foreach (var item in Model.ShelfSpots)
+                            {
+                                <option>@item</option>
+                            }
+                        </datalist>
+                        <label for="floatingSelectGrid">Hyldeplads:</label>
+                    </div>
+                    @try
+                    {
+                        @if (shelfSpotFeedBack != null)
                         {
-                            <div class="fadeUp text-red">@shelfSpotFeedBack</div>
-                        }
-                        else
-                        {
-                            <div class="fadeUp text-white">@shelfSpotFeedBack</div>
+                            if (shelfSpotFeedBack.Contains("allerede") == true)
+                            {
+                                <div class="fadeUp text-red">@shelfSpotFeedBack</div>
+                            }
+                            else
+                            {
+                                <div class="fadeUp text-white">@shelfSpotFeedBack</div>
+                            }
                         }
                     }
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                </div>
+                <div class="col-xl-1">
+                </div>
             </div>
-            <div class="col-xl-1">
+
+
+
+
+
+            <div class="row">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-4 g-3">
+                    @try
+                    {
+                        @if (roomFeedBack != null)
+                        {
+
+                            if (roomFeedBack.Contains("allerede") == true)
+                            {
+                                <div class="fadeUp text-red" id="feedback1">
+                                    @roomFeedBack
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="fadeUp text-white" id="feedback1">
+                                    @roomFeedBack
+                                </div>
+
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                </div>
+
+
+                @{string toolTip = "\nAlle felter kan oprettes enkeltvis, hvis ikke de findes i forvejen. \n\n" +
+                                                                                                                      "Hvis Bygning og Lokale er udfyldt samtidigt kan der \n" +
+                                                                                                                      "oprettes et Lokale, hvis ikke det eksisterer i forvejen.\n\n" +
+                                                                                                                      "Hvis alle felter er udfyldt, kan der oprettes en vareplacering,\n" +
+                                                                                                                      "hvis denne ikke findes i forvejen.\n"; }
+                <div class="col-sm-2 p-3">
+                    <button type="submit" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip" asp-action="CreateLocation">Tilføj Placering</button>
+
+                </div>
+
+
+                <div class="col-sm-4 g-3">
+
+                    @try
+                    {
+                        @if (storageLocationFeedBack != null)
+                        {
+                            if (storageLocationFeedBack.Contains("allerede") == true)
+                            {
+                                <div class="fadeUp text-red" id="feedback2">
+                                    @storageLocationFeedBack
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="fadeUp text-white" id="feedback2">
+                                    @storageLocationFeedBack
+                                </div>
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                </div>
+                <div class="col-sm-1"></div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-4 gx-3 gy-3">
-                @try
-                {
-                    @if (roomFeedBack != null)
-                    {
 
-                        if (roomFeedBack.Contains("allerede") == true)
-                        {
-                            <div class="fadeUp text-red" id="feedback1">
-                                @roomFeedBack
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="fadeUp text-white" id="feedback1">
-                                @roomFeedBack
-                            </div>
-
-                        }
-                    }
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            </div>
-
-
-            @{string toolTip = "\nAlle felter kan oprettes enkeltvis, hvis ikke de findes i forvejen. \n\n" +
-                                                                                                              "Hvis Bygning og Lokale er udfyldt samtidigt kan der \n" +
-                                                                                                              "oprettes et Lokale, hvis ikke det eksisterer i forvejen.\n\n" +
-                                                                                                              "Hvis alle felter er udfyldt, kan der oprettes en vareplacering,\n" +
-                                                                                                              "hvis denne ikke findes i forvejen.\n"; }
-            <div class="col-sm-2 p-3">
-                <button type="submit" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip" asp-action="CreateLocation">Tilføj Placering</button>
-
-            </div>
-
-
-            <div class="col-sm-4 gx-3 gy-3">
-
-                @try
-                {
-                    @if (storageLocationFeedBack != null)
-                    {
-                        if (storageLocationFeedBack.Contains("allerede") == true)
-                        {
-                            <div class="fadeUp text-red" id="feedback2">
-                                @storageLocationFeedBack
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="fadeUp text-white" id="feedback2">
-                                @storageLocationFeedBack
-                            </div>
-                        }
-                    }
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            </div>
-            <div class="col-sm-1"></div>
-        </div>
     </div>
-
-
 
 
 
