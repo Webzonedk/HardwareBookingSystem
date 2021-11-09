@@ -237,7 +237,27 @@ namespace HUS_project.Controllers
             return View("MyBasket",data);
         }
 
+        public IActionResult DeleteItemLine(CreateBookingModel data,string submitData)
+        {
+            DBManagerShared dbShared = new DBManagerShared(configuration);
 
+            int index = int.Parse(submitData);
+            data.ItemLines.RemoveAt(index);
+
+            data.CategoryDropdown = dbShared.GetCategories();
+            data.LocationDropdown = dbShared.GetRooms();
+            data.LocationDropdown.RemoveRange(0, 3);
+
+            //calculate basketcount
+            for (int i = 0; i < data.ItemLines.Count; i++)
+            {
+                data.BasketCount += data.ItemLines[i].Quantity;
+            }
+
+            ModelState.Clear();
+
+            return View("MyBasket", data);
+        }
 
 
         //helper methods
