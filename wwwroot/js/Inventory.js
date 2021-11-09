@@ -50,13 +50,15 @@ function doneTyping() {
 //sends quantity to button before submit
 function SendValueToButton(inputTitle) {
 
-    console.log(inputTitle);
+  
     let element = document.getElementById(event.target.id);
     let splitted = element.id.split("_");
     let id = "basket_" + splitted[1];
     let stock = document.getElementById("stock_" + splitted[1]);
     let button = document.getElementById(id);
     let modelID = button.value;
+
+   
 
     if (stock == null) {
         stock = '0';
@@ -74,7 +76,9 @@ function SendValueToButton(inputTitle) {
 
     }
 
-    button.value = modelID + "-" + stock + "-" + element.value +"-" + inputTitle;
+
+    button.value = modelID + "-" + stock + "-" + element.value;
+    console.log("button value:" + button.value);
 
 }
 

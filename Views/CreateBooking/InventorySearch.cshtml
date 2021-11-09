@@ -37,8 +37,13 @@
 
 
                     @*Borrow from this date*@
-                    <div class="col-3">
-                        <input placeholder="Vælg Dato" type="date" DateTimeFormat="d/M/yyyy" onfocus="ClearTimeout()" onfocusout="SetTimeout()" class="date" asp-for="@Model.SearchModel.RentDate">
+                    <div class="col-3 gx-3 gy-3">
+                        <div form-floating>
+                           
+                            <input placeholder="Vælg Dato" type="date" onfocus="ClearTimeout()" onfocusout="SetTimeout()" class="form-select" asp-for="@Model.SearchModel.RentDate">
+                            <label for="floatinSelectGrid">start dato:</label>
+
+                        </div>
                     </div>
 
                     @*Borrow until this date*@
@@ -49,7 +54,7 @@
                     <div class="col-3">
 
                         <div class="form-floating">
-                            <select class="form-select" id="locations" asp-for="@Model.Location" onchange="SendLocationToForm()" required>
+                            <select class="form-select" id="locations" asp-for="@Model.Location" onchange="SendLocationToForm()">
                                 <option hidden></option>
                                 @foreach (var item in Model.LocationDropdown)
                                 {
@@ -132,7 +137,7 @@
 
 <!--container listing search results-->
 <div class="container containerMain box-shadow">
-    <form asp-action="AddToBasket" id="basketForm" method="post">
+    <form asp-action="SearchToBasket" id="basketForm" method="post">
 
         <div class="row containerHeader">
             <h4 class="col">Lagerbeholdning</h4>
@@ -176,7 +181,9 @@
 
                     <input type="hidden" id=@("output_"+i) value="@Model.InventoryBooking[i].ModelName" asp-for="@Model.ModelName" />
 
-                    <input class="buttonLink" type="submit" asp-action="Inspect" name="link" id=@("link_"+i) value="@Model.InventoryBooking[i].ModelName"/>
+                    <button class="buttonLink" type="submit" asp-action="Inspect" name="link" id=@("link_"+i) value=@(Model.InventoryBooking[i].ModelName + "_" + Model.InventoryBooking[i].ModelID)> @Model.InventoryBooking[i].ModelName  </button>
+
+
 
                 </div>
                 <div class=" col-md-2 col-4 p-1 border-end border-white border-1">@Model.InventoryBooking[i].CategoryName</div>
@@ -197,6 +204,12 @@
 
                 <div class=" col-md-1 col-4 p-1 border-end border-white border-1">
 
+                    <!--add blank column if in stock-->
+                    @if (@Model.InventoryBooking[i].InStock[0] > 0)
+                    {
+                        <div>&nbsp;</div>
+                    }
+
                     @for (int j = 0; j < Model.InventoryBooking[i].NotInstock.Count; j++)
                     {
                         <div>@Model.InventoryBooking[i].NotInstock[j]</div>
@@ -206,6 +219,12 @@
                 </div>
 
                 <div class=" col-md-2 col-4 p-1 border-end border-white border-1">
+
+                    <!--add blank column if in stock-->
+                    @if (@Model.InventoryBooking[i].InStock[0] > 0)
+                    {
+                        <div>&nbsp;</div>
+                    }
 
                     @for (int j = 0; j < Model.InventoryBooking[i].RentDate.Count; j++)
                     {
