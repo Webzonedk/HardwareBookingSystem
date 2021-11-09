@@ -60,6 +60,23 @@ namespace HUS_project.DAL
             return inventory;
         }
 
+        //create booking
+        internal bool CreateBooking(CreateBookingModel data)
+        {
+            int bookingLogID = CreateBookingAndLog(data.BookingOrder);
+            int success = 0;
+            for (int i = 0; i < data.ItemLines.Count; i++)
+            {
+                success += CreateItemLinesAndLog(data.ItemLines[i], bookingLogID, data.SearchModel.RentDate, data.SearchModel.ReturnDate);
+            }
+
+            if (success > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
 
         //gets list of models in stock and exists in itemline
         private List<BookingSearchModel> Select_Models_In_Stock_Existing_Itemline(BookingSearchCriteriaModel inputData)
@@ -184,7 +201,7 @@ namespace HUS_project.DAL
                 item.CategoryName = (string)reader["categoryName"];
                 //item.ReturnDate.Add((DateTime)reader["returnDate"]);
                 //item.RentDate.Add((DateTime)reader["rentDate"]);
-                item.InStock.Add((int)reader["Instock"]);
+                item.InStock.Add(GetQuantityAvailable(inputData.RentDate, inputData.ReturnDate, item.ModelName));
 
                 inventoryInstock.Add(item);
             }
@@ -243,6 +260,89 @@ namespace HUS_project.DAL
 
             }
 
+        }
+
+        private int GetQuantityAvailable(DateTime rentDate, DateTime returnDate, string modelName)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("GetModelDeviceQuantityAvailable", con);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+            cmd.Parameters.Add("@modelName", System.Data.SqlDbType.VarChar).Value = modelName;
+            cmd.Parameters.Add("@rentDate", System.Data.SqlDbType.DateTime).Value = rentDate;
+            cmd.Parameters.Add("@returnDate", System.Data.SqlDbType.DateTime).Value = returnDate;
+            cmd.Parameters.Add("@QuantityOfAvailableDevices", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
+            cmd.ExecuteNonQuery();
+
+
+            int QuantityAvailable = Convert.ToInt32(cmd.Parameters["@QuantityOfAvailableDevices"].Value);
+            return QuantityAvailable;
+
+
+        }
+
+
+        //create booking and log
+        private int CreateBookingAndLog(BookingModel data)
+        {
+            int bookingLogID = 0;
+            try
+            {
+
+                SqlConnection con = new SqlConnection(connectionString);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("CreateBookingAndLog", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@uniLogin", System.Data.SqlDbType.VarChar).Value = data.Customer;
+                cmd.Parameters.Add("@notes", System.Data.SqlDbType.VarChar).Value = data.Notes;
+                cmd.Parameters.Add("@buildingName", System.Data.SqlDbType.VarChar).Value = data.Location.Building;
+                cmd.Parameters.Add("@roomNr", System.Data.SqlDbType.VarChar).Value = data.Location.RoomNumber;
+                cmd.Parameters.Add("@rentDate", System.Data.SqlDbType.DateTime).Value = data.PlannedBorrowDate;
+                cmd.Parameters.Add("@returnDate", System.Data.SqlDbType.DateTime).Value = data.PlannedReturnDate;
+                cmd.Parameters.Add("@bookingLogID", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
+                cmd.ExecuteNonQuery();
+                bookingLogID = Convert.ToInt32(cmd.Parameters["@bookingLogID"].Value);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+
+            return bookingLogID;
+        }
+
+        private int CreateItemLinesAndLog(ItemLineModel itemlines, int bookingLogID, DateTime rentDate, DateTime returnDate)
+        {
+            try
+            {
+                SqlConnection con = new SqlConnection(connectionString);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("CreateItemLineAndLog", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@bookingLogID", System.Data.SqlDbType.Int).Value = bookingLogID;
+                cmd.Parameters.Add("@modelID", System.Data.SqlDbType.VarChar).Value = itemlines.Model.ModelID;
+                cmd.Parameters.Add("@quantity", System.Data.SqlDbType.VarChar).Value = itemlines.Quantity;
+                cmd.Parameters.Add("@rentDate", System.Data.SqlDbType.DateTime).Value = rentDate;
+                cmd.Parameters.Add("@returnDate", System.Data.SqlDbType.DateTime).Value = returnDate;
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+
+
+            return 1;
         }
     }
 }

@@ -12,8 +12,32 @@ namespace HUS_project.Models.ViewModels
         private List<string> locationDropdown;
         private List<BookingSearchModel> inventoryBooking;
         private List<ItemLineModel> itemLines;
+        private BookingModel bookingOrder;
+        private string notes;
+
+        public string Notes
+        {
+            get { return notes; }
+            set { notes = value; }
+        }
+
+
+        public BookingModel BookingOrder
+        {
+            get { return bookingOrder; }
+            set { bookingOrder = value; }
+        }
+
         private string location;
         private string modelName;
+        private int modelID;
+
+        public int ModelID
+        {
+            get { return modelID; }
+            set { modelID = value; }
+        }
+
 
         public string ModelName
         {

@@ -360,9 +360,11 @@ namespace HUS_project.DAL
             cmd.Parameters.AddWithValue("@rentDate", rentDate);
             cmd.Parameters.AddWithValue("@returnDate", returnDate);
             cmd.Parameters.AddWithValue("@modelName", modelName);
+            cmd.Parameters.Add("@QuantityOfAvailableDevices", SqlDbType.Int).Direction = ParameterDirection.Output;
 
             con.Open();
-            int result = (int)cmd.ExecuteScalar();
+            cmd.ExecuteNonQuery();
+            int result = Convert.ToInt32(cmd.Parameters["@QuantityOfAvailableDevices"].Value);
             con.Close();
 
             return result;
@@ -385,9 +387,11 @@ namespace HUS_project.DAL
             cmd.Parameters.AddWithValue("@returnDate", returnDate);
             cmd.Parameters.AddWithValue("@modelName", modelName);
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
+            cmd.Parameters.Add("@lowestDeviceQuantity", SqlDbType.Int).Direction = ParameterDirection.Output;
 
             con.Open();
-            int result = (int)cmd.ExecuteScalar();
+            cmd.ExecuteNonQuery();
+            int result = Convert.ToInt32(cmd.Parameters["@lowestDeviceQuantity"].Value);
             con.Close();
 
             return result;

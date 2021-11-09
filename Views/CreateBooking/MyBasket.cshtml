@@ -21,7 +21,7 @@
                     <div class="col-3">
 
                         <div class="form-floating">
-                            <select class="form-select" id="categories" asp-for="@Model.SearchModel.Category" onchange="this.form.submit()" required>
+                            <select class="form-select" id="categories" asp-for="@Model.SearchModel.Category" onchange="this.form.submit()">
                                 <option></option>
                                 @foreach (var item in Model.CategoryDropdown)
                                 {
@@ -84,7 +84,7 @@
             <div class="col-2">
 
                 <div class="row">
-                    <button type="submit" class=" btn-primary btn Button-Size btn-sm" asp-action="CreateBooking">Bestil</button>
+                    @*<button type="submit" class=" btn-primary btn Button-Size btn-sm" asp-action="CreateBooking">Bestil</button>*@
                 </div>
 
                 <div class="row">
@@ -121,6 +121,8 @@
 
         <input type="hidden" id="basketHidden" asp-for="@Model.BasketCount" />
 
+
+
     </form>
     @*SEARCH FORM END*@
 
@@ -133,7 +135,10 @@
     <form asp-action="AddToBasket" method="post">
 
         <div class="row containerHeader">
-            <h4 class="col">Lagerbeholdning</h4>
+            <h4 class="col-10">Kurv</h4>
+            <div class="col-2">
+                <button type="submit" class=" btn-primary btn Button-Size btn-sm" asp-action="CreateBooking">Bestil</button>
+            </div>
         </div>
 
         <div class="row containerSubHeader border-top border-bottom border-white border-1 dynamic-Font-Size-10">
@@ -150,6 +155,8 @@
 
 
         <input type="hidden" id="location" asp-for="@Model.Location" />
+        <input type="hidden" id="notes" asp-for="@Model.BookingOrder.Notes" />
+        
 
         @for (int i = 0; i < Model.ItemLines.Count; i++)
         {
@@ -178,12 +185,6 @@
 
                             </div>
                         </div>
-
-
-
-
-
-
 
                     </div>
 
@@ -235,6 +236,25 @@
             </div>
 
         }
+
+    <div class="row">
+
+        <div class="col-4">
+
+        </div>
+
+        <div class="col-4 p-1">
+            
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Skriv en bemærkning til ordren" asp-for="@Model.Notes"></textarea>
+        </div>
+
+        <div class="col-4">
+
+        </div>
+
+
+       
+    </div>
 
         <div class="row containerFooter">
             <h4>&nbsp;</h4>

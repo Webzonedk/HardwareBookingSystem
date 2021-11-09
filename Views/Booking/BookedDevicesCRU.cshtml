@@ -82,6 +82,12 @@
                         }
                     </button>
                 }
+                @using (Html.BeginForm("GoToScanDevice", "Booking"))
+                {
+                    <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue">
+                        <span>Scan QR</span>
+                    </button>
+                }
             </div>
         </div>
         @if (httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError") != null && httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError") != "")
