@@ -39,7 +39,7 @@
 
                 }
             </div>
-            <div class="col-2">
+            <div class="col-1">
                 <p>Leverings Lokale:</p>
                 <!-- If end date isn't today or earlier, and you are the one who made the booking, the location can be changed.
                           !!!!!! Page 22, storage location       !!!!!!!!!!!!!!!!!      -->
@@ -55,6 +55,16 @@
                 }
             </div>
             <div class="col-2">
+                <!--NOTES-->
+                <p>Note:</p>
+                <textarea id="notes" asp-for="Notes" name="notes"></textarea>
+                <style>
+                    #notes{
+                        height: 120px;
+                    }
+                </style>
+            </div>
+            <div class="col-1">
                 <!-- If return date has not passed, the update button will be available.-->
                 @if (Model.PlannedReturnDate.Date > DateTime.Now.Date && httpContextAccessor.HttpContext.Session.GetString("uniLogin") == Model.Customer)
                 {
@@ -72,7 +82,7 @@
             </div>
 
             
-            <div class="col-2">
+            <div class="col-1">
                 <!-- If the planned borrow date has not yet come to pass, and it is the owner of the booking who logged in, then the booking may be deleted by the user.-->
                 @if (Model.Customer == httpContextAccessor.HttpContext.Session.GetString("uniLogin") && Model.PlannedBorrowDate.Date > DateTime.Now.Date)
                 {
