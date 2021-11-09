@@ -5,7 +5,7 @@
     ViewData["Title"] = "Placerings Administration";
 }
 
-<!--Variables to be used with JavaScripts-->
+<!--Variables to be used with JavaScripts and C#-->
 @{string tempData = ViewBag.alert;}
 @{string deleteBuildingAndRoomFeedback = ViewBag.deleteBuildingAndRoomFeedback;}
 @{string deleteLocationFeedback = ViewBag.deleteLocationFeedback;}
@@ -25,23 +25,12 @@
 
 
 
-@*<style>
-        body,html {
-            scroll-behavior: auto !important;
-        }
-    </style>*@
-
-
 
 <script>
     $(document).ready(function () {
         scrollToDiv('@deleteBuildingAndRoomFeedback', '@deleteLocationFeedback', '@selectedID');
         });
 </script>
-
-
-
-
 
 
 
@@ -244,10 +233,10 @@
 
 
             @{string toolTip = "\nAlle felter kan oprettes enkeltvis, hvis ikke de findes i forvejen. \n\n" +
-                                                                                                            "Hvis Bygning og Lokale er udfyldt samtidigt kan der \n" +
-                                                                                                            "oprettes et Lokale, hvis ikke det eksisterer i forvejen.\n\n" +
-                                                                                                            "Hvis alle felter er udfyldt, kan der oprettes en vareplacering,\n" +
-                                                                                                            "hvis denne ikke findes i forvejen.\n"; }
+                                                                                                              "Hvis Bygning og Lokale er udfyldt samtidigt kan der \n" +
+                                                                                                              "oprettes et Lokale, hvis ikke det eksisterer i forvejen.\n\n" +
+                                                                                                              "Hvis alle felter er udfyldt, kan der oprettes en vareplacering,\n" +
+                                                                                                              "hvis denne ikke findes i forvejen.\n"; }
             <div class="col-sm-2 p-3">
                 <button type="submit" class="btn btn-primary btn-blue black-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="@toolTip" asp-action="CreateLocation">Tilføj Placering</button>
 
@@ -278,8 +267,8 @@
                 {
                     throw;
                 }
-                <div class="col-sm-1"></div>
             </div>
+            <div class="col-sm-1"></div>
         </div>
     </div>
 

@@ -16,12 +16,26 @@ a.navbar-brand {
     white-space: normal;
     text-align: center;
     word-break: break-all;
-    color: #fd0202;
+    color: #ffffff;
+    font-weight: bold;
+    font-size:large !important;
+}
+
+a.navbar-brand:hover {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+    color: #cccccc !important;
+    font-weight: bold;
 }
 
 .nav-link {
     color: #ffffff;
     font-weight: bold;
+}
+
+.dropDown-background {
+    background-color: #353535;
 }
 
 /*    .nav-link:hover {
@@ -212,6 +226,17 @@ shadows
 }
 
 
+
+
+/*----------------------------------------------------------------------
+text
+----------------------------------------------------------------------*/
+.capitalized {
+    text-transform: uppercase;
+}
+
+
+
 /*----------------------------------------------------------------------
 text colors
 ----------------------------------------------------------------------*/
@@ -257,6 +282,19 @@ Background colors
 /*----------------------------------------------------------------------
 Containers
 ----------------------------------------------------------------------*/
+
+
+.loginBox {
+    margin-top: 10px;
+    padding: 10px 0px 10px 0px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: blue;
+    border-radius: 6px;
+    background-color: lightblue;
+}
+
+
 
 .containerMain {
     margin-top: 20px;
@@ -517,3 +555,141 @@ Row colors in lists
     font-size: 0.6em;
 }
 
+
+
+/*
+----------------------------------------------------------------------
+Paddings
+----------------------------------------------------------------------
+*/
+
+.padding-top {
+    padding-top: 2px;
+}
+
+.padding-right {
+}
+
+.padding.bottom {
+}
+
+.padding-left {
+}
+
+.padding-top-and-bottom {
+}
+
+
+
+/*
+----------------------------------------------------------------------
+Label spacing
+----------------------------------------------------------------------
+*/
+.label {
+    margin: 2px 0 2px 0;
+    padding: 5px 0 5px 0;
+}
+
+
+
+/*
+----------------------------------------------------------------------
+Col width
+----------------------------------------------------------------------
+*/
+.col50 {
+    width: 50px !important;
+}
+
+.col100 {
+    width: 100px !important;
+}
+
+.col150 {
+    width: 150px !important;
+}
+
+.col200 {
+    width: 200px !important;
+}
+
+.col250 {
+    width: 250px !important;
+}
+
+.co300 {
+    width: 300px !important;
+}
+
+.col350 {
+    width: 350px !important;
+}
+
+
+
+
+
+
+
+/*
+----------------------------------------------------------------------
+Tooltips
+----------------------------------------------------------------------
+*/
+.tool-tip {
+    display: inline-block;
+}
+
+    .tool-tip [disabled] {
+        pointer-events: none;
+    }
+
+
+
+
+/*
+----------------------------------------------------------------------
+Others
+----------------------------------------------------------------------
+*/
+.border_EditBox {
+    border-right: solid;
+    border-right-width: 2px;
+    border-right-color: #cdcdcd;
+    /* border-radius: 10px;*/
+    /*padding: 10px;*/
+}
+
+
+.centerVideo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.Button-Size {
+    min-width: 110px;
+    /*  min-height:70px;*/
+}
+
+.alignBottom {
+    position: absolute;
+    bottom: 0;
+}
+
+.Description_Size {
+    height: 140px !important;
+    resize: none;
+    /* width:300px;*/
+    /* max-height:500px;*/
+}
+
+.space {
+    display: flex;
+    justify-content: space-between;
+}
+
+.hidden {
+    visibility: hidden;
+}

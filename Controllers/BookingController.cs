@@ -33,6 +33,34 @@ namespace HUS_project.Controllers
             return View();
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deviceID"></param>
+        /// <param name="bookingID"></param>
+        /// <returns></returns>
+        public IActionResult GoToLocationScanner(string deviceID, string bookingID)
+        {
+            TempData["bookingID"] = bookingID;
+            TempData["deviceID"] = deviceID;
+
+
+            return RedirectToAction("ScanLocation", "Device");
+        }
+
+        public IActionResult ReturnedFromLocationScanner()
+        {
+            return GoToScanDevices(TempData["bookingID"].ToString());
+        }
+
+
+        public IActionResult ReturnScanData(DeviceQRScanningModel model)
+        {
+            string[] data = model.RawData.Split('-');
+            return ProcessDeviceForBooking(data[1], model.BookingID.ToString());
+        }
+
         /// <summary>
         /// Contextively processes what to do with this device id for this booking id. Be it create BookedDevice, return BookedDevice, or even delete.
         /// </summary>
@@ -85,8 +113,10 @@ namespace HUS_project.Controllers
                                 // If only one device Was unreturned (now returned in DB), the Booking may now be deleted and Closed.
                                 if(unreturnedDevices < 2)
                                 {
-                                    return DeleteBooking(booking);
+                                    DeleteBooking(booking);
                                 }
+                                // Then we send the user to go and decide where the Device belongs now.
+                                return GoToLocationScanner(deviceID, bookingID);
                             }
                             else
                             {
@@ -99,7 +129,8 @@ namespace HUS_project.Controllers
                         }
                     }
 
-                    if (!deviceInBookingAlready)
+                    // If device is not already in booking, and the booking has not already been delivered..
+                    if (!deviceInBookingAlready && (booking.DeliveredBy == null || booking.DeliveredBy == ""))
                     {
                         // THe device does not already exist for this booking, therefore it should be created.. if the device is available.
                         // CreateBookedDevice() will perform an availability check on its own.
@@ -189,7 +220,16 @@ namespace HUS_project.Controllers
                 modelsInStorage,
                 storageLocations
                 );
-            return View("BookedDevicesCRU", bookedDevicesCRUModel);
+
+            // It is possible that this was called, despite the last BookedDevice having been returned, and thus the whole booking has been deleted.
+            if(booking.Customer == null)
+            {
+                return RedirectToAction("RelocateUser", "Home");
+            }
+            else
+            {
+                return View("BookedDevicesCRU", bookedDevicesCRUModel);
+            }
         }
 
         /// <summary>
@@ -205,6 +245,12 @@ namespace HUS_project.Controllers
             booking.Devices = dBManager.GetBookedDevices(booking.BookingID);
 
             return View("BookingRUD", booking);
+        }
+
+
+        public IActionResult GoToScanDevice(string bookingID)
+        {
+            return View("ScanDevice", new DeviceQRScanningModel(Convert.ToInt32(bookingID), ""));
         }
 
 
@@ -257,7 +303,7 @@ namespace HUS_project.Controllers
         /// <param name="disableBooking"></param>
         /// <param name="deleteItemLine"></param>
         /// <returns></returns>
-        public IActionResult ProcessBookingEditSubmit(BookingModel bookingModel, string location, string updateBooking, string deleteBooking, string deleteItemLine, string deliverBooking)
+        public IActionResult ProcessBookingEditSubmit(BookingModel bookingModel, string location, string updateBooking, string deleteBooking, string deleteItemLine) //, string deliverBooking
         {
             if(updateBooking != null)
             {
@@ -273,10 +319,10 @@ namespace HUS_project.Controllers
                 // Delete ItemLine, no fuss, maybe?
                 return DeleteItemLine(bookingModel, deleteItemLine);
             }
-            else if(deliverBooking != null)
+            /*else if(deliverBooking != null)
             {
                 return DeliverBooking(bookingModel.BookingID);
-            }
+            }*/
             else
             {
                 // Should Never happen, but refreshes page
@@ -294,6 +340,7 @@ namespace HUS_project.Controllers
             DBManagerBooking dBManager = new DBManagerBooking(configuration);
             BookingModel bookingModel = dBManager.GetBooking(bookingID);
             // Update Booking to be Delivered
+            bookingModel.Notes = "Ordre Leveret";
             int bookingLogID = dBManager.UpdateBookingAndLog(bookingModel, HttpContext.Session.GetString("uniLogin"), HttpContext.Session.GetString("uniLogin"));
 
             // Log BookedDevices
@@ -411,7 +458,7 @@ namespace HUS_project.Controllers
                 // Room Database Check:
                 if (validNewLocation) 
                 {
-                    DBManagerAdministration dBMAdmin = new DBManagerAdministration(configuration);
+                    DBManagerLocationAdmin dBMAdmin = new DBManagerLocationAdmin(configuration);
                     validNewLocation = dBMAdmin.DoesRoomExist(newRoom);
                     if (!validNewLocation)
                     {
@@ -429,7 +476,9 @@ namespace HUS_project.Controllers
                         new List<DeviceModel>(),
                         validNewLocation ? newRoom : originalBooking.Location,
                         validNewStartDate ? bookingModel.PlannedBorrowDate : originalBooking.PlannedBorrowDate, 
-                        validNewReturnDate ? bookingModel.PlannedReturnDate : originalBooking.PlannedReturnDate
+                        validNewReturnDate ? bookingModel.PlannedReturnDate : originalBooking.PlannedReturnDate,
+                        null,
+                        bookingModel.Notes
                         );
 
                     int bookingLogID = dBManager.UpdateBookingAndLog(finalBooking, HttpContext.Session.GetString("uniLogin"));

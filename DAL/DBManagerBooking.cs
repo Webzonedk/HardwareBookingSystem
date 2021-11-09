@@ -37,7 +37,7 @@ namespace HUS_project.DAL
             SqlConnection con = new SqlConnection(connectionString);
 
             SqlCommand cmd = new SqlCommand("GetBookingOnID", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
 
             con.Open();
@@ -72,7 +72,7 @@ namespace HUS_project.DAL
 
             SqlConnection con = new SqlConnection(connectionString);
             SqlCommand cmd = new SqlCommand("GetBookingItemLines", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
 
             con.Open();
@@ -105,7 +105,7 @@ namespace HUS_project.DAL
         {
             SqlConnection con = new SqlConnection(connectionString);
             SqlCommand cmd = new SqlCommand("GetBookedDevicesForBooking", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
 
             List<DeviceModel> bookedDevices = new List<DeviceModel>();
@@ -153,7 +153,7 @@ namespace HUS_project.DAL
 
             SqlConnection con = new SqlConnection(connectionString);
             SqlCommand cmd = new SqlCommand("ReturnBookedDevice", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@deviceID", deviceID);
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
             cmd.Parameters.AddWithValue("@returnedBy", returnedBy);
@@ -173,7 +173,7 @@ namespace HUS_project.DAL
         {
             SqlConnection con = new SqlConnection(connectionString);
             SqlCommand cmd = new SqlCommand("CreateBookedDevice", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@deviceID", deviceID);
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
 
@@ -193,7 +193,7 @@ namespace HUS_project.DAL
         {
             SqlConnection con = new SqlConnection(connectionString);
             SqlCommand cmd = new SqlCommand("CreateBookedDevicesLogs", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@bookingLogID", bookingLogID);
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
 
@@ -214,7 +214,7 @@ namespace HUS_project.DAL
         {
             SqlConnection con = new SqlConnection(connectionString);
             SqlCommand cmd = new SqlCommand("UpdateBookingAndLog", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@bookingID", updatedBooking.BookingID);
             cmd.Parameters.AddWithValue("@rentDate", updatedBooking.PlannedBorrowDate);
             cmd.Parameters.AddWithValue("@returnDate", updatedBooking.PlannedReturnDate);
@@ -234,11 +234,18 @@ namespace HUS_project.DAL
             return bookingLogID;
         }
 
+        /// <summary>
+        /// Updates the ItemLine and creates a log.
+        /// </summary>
+        /// <param name="bookingID"></param>
+        /// <param name="bookingLogID"></param>
+        /// <param name="modelName"></param>
+        /// <param name="newQuantity"></param>
         internal void UpdateItemLineAndLog(int bookingID, int bookingLogID, string modelName, int newQuantity)
         {
             SqlConnection con = new SqlConnection(connectionString);
             SqlCommand cmd = new SqlCommand("UpdateItemLineAndLog", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
             cmd.Parameters.AddWithValue("@bookingLogID", bookingLogID);
             cmd.Parameters.AddWithValue("@modelName", modelName);
@@ -248,6 +255,7 @@ namespace HUS_project.DAL
             cmd.ExecuteNonQuery();
             con.Close();
         }
+
 
 
         /// <summary>
@@ -262,7 +270,7 @@ namespace HUS_project.DAL
 
             SqlConnection con = new SqlConnection(connectionString);
             SqlCommand cmd = new SqlCommand("DeleteBookedDevice", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@deviceID", deviceID);
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
 
@@ -352,9 +360,11 @@ namespace HUS_project.DAL
             cmd.Parameters.AddWithValue("@rentDate", rentDate);
             cmd.Parameters.AddWithValue("@returnDate", returnDate);
             cmd.Parameters.AddWithValue("@modelName", modelName);
+            cmd.Parameters.Add("@QuantityOfAvailableDevices", SqlDbType.Int).Direction = ParameterDirection.Output;
 
             con.Open();
-            int result = (int)cmd.ExecuteScalar();
+            cmd.ExecuteNonQuery();
+            int result = Convert.ToInt32(cmd.Parameters["@QuantityOfAvailableDevices"].Value);
             con.Close();
 
             return result;
@@ -377,9 +387,11 @@ namespace HUS_project.DAL
             cmd.Parameters.AddWithValue("@returnDate", returnDate);
             cmd.Parameters.AddWithValue("@modelName", modelName);
             cmd.Parameters.AddWithValue("@bookingID", bookingID);
+            cmd.Parameters.Add("@lowestDeviceQuantity", SqlDbType.Int).Direction = ParameterDirection.Output;
 
             con.Open();
-            int result = (int)cmd.ExecuteScalar();
+            cmd.ExecuteNonQuery();
+            int result = Convert.ToInt32(cmd.Parameters["@lowestDeviceQuantity"].Value);
             con.Close();
 
             return result;

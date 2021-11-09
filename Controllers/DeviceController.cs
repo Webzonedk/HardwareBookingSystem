@@ -577,9 +577,25 @@ namespace HUS_project.Controllers
             return View(infoList);
         }
 
+
+        public IActionResult AcquireDeviceDataForScanLocation(string deviceID)
+        {
+            EditDeviceModel data = new EditDeviceModel();
+            data.Device = new DeviceModel();
+            data.Device.DeviceID = Convert.ToInt32(deviceID);
+
+            return ScanLocation(data);
+        }
+
         //opens view for scanning of QR codes
         public IActionResult ScanLocation(EditDeviceModel data)
         {
+            // When BookedDevices are returned, BookingController's "GoToLocationScanner()" will call this function, but "data" variable will be null. 
+            if (TempData["deviceID"] != null)
+            {
+                data.Device = new DeviceModel();
+                data.Device.DeviceID = Convert.ToInt32(TempData["deviceID"]);
+            }
             data.Location = "";
             return View(data);
         }
@@ -659,8 +675,15 @@ namespace HUS_project.Controllers
             }
 
 
-            return View("EditView", newdata);
-
+            if(TempData["bookingID"] != null)
+            {
+                EditDevice(newdata);
+                return RedirectToAction("ReturnedFromLocationScanner", "Booking");
+            }
+            else
+            {
+                return View("EditView", newdata);
+            }
         }
 
         //gather data to be sent to QR Generator

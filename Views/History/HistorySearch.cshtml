@@ -1,0 +1,76 @@
+﻿@using Microsoft.AspNetCore.Http;
+@model HUS_project.Models.ViewModels.HistoryModel
+@inject IHttpContextAccessor httpContextAccessor;
+@{
+    ViewData["Title"] = "Historik";
+}
+
+
+
+@*This View is not in use at the moment, and needs to be added to _Layout before working*@
+
+
+
+
+<div class="row blue-oyster-bar center box-shadow">
+    <div class="row">
+
+        <div class="col-sm-3 gx-3 gy-3">
+
+        </div>
+        <div class="col-sm-2 col-4 gx-3 gy-3">
+            <div class="form-floating">
+                <input class="form-select" type="date" id="startDate" asp-for="@Model.SearchCriteria.RentDate">
+                <label for="floatingSelectGrid">Start dato:</label>
+            </div>
+        </div>
+        <div class="col-sm-2 col-4 gx-3 gy-3">
+            <div class="form-floating">
+                <input class="form-select" type="date" id="endDate" asp-for="@Model.SearchCriteria.ReturnDate">
+                <label for="floatingSelectGrid">Slut dato:</label>
+            </div>
+        </div>
+        <div class="col-sm-2 col-4 gx-3 gy-3">
+            <div class="form-floating">
+                <input class="form-select capitalized" id="chosenRoom" list="rooms" aria-label="room" asp-for="@Model.Rooms">
+                <datalist id="rooms">
+                    <option>A.1</option>
+                    <option>a.2</option>
+
+                </datalist>
+                <label for="floatingSelectGrid">Lokale:</label>
+            </div>
+        </div>
+        <div class="col-sm-3 gx-3 gy-3">
+
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-3 gx-3 gy-3">
+
+        </div>
+        <div class="col-sm-6 gx-3 gy-3">
+            <div class="form-floating">
+                <input class="form-select capitalized" id="chosenRoom" list="rooms" aria-label="room" asp-for="@Model.Rooms">
+                <datalist id="rooms">
+                    <option>A.1</option>
+                    <option>a.2</option>
+
+                </datalist>
+                <label for="floatingSelectGrid">Lokale:</label>
+            </div>
+
+        </div>
+
+        <div class="col-xl-2 gx-3 gy-3">
+            <button type="submit" class="btn btn-primary btn-blue" asp-action="SeachBookings">Søg</button>
+
+        </div>
+
+        <div class="col-sm-3 gx-3 gy-3">
+
+        </div>
+    </div>
+</div>

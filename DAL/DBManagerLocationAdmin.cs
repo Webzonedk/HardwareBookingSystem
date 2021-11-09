@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 
 namespace HUS_project.DAL
 {
-    public class DBManagerAdministration
+    public class DBManagerLocationAdmin
     {
         //----------------------------------------------------------------------------
         //private fields containting connectionstrings for databases
@@ -18,7 +18,7 @@ namespace HUS_project.DAL
         private readonly string connectionString;
 
         //constructor setting connectionstrings to databases
-        public DBManagerAdministration(IConfiguration _configuration)
+        public DBManagerLocationAdmin(IConfiguration _configuration)
         {
             this.configuration = _configuration;
             connectionString = configuration.GetConnectionString("DBContext");
