@@ -6,9 +6,10 @@
 }
 <form asp-action="ProcessBookingEditSubmit" method="post" id="processBookingEditSubmit">
     <div class="row blue-oyster-bar center box-shadow">
-        <div class="row">
+        <div class="row" style="margin-top:15px;">
             <div class="col-3 text-white align-items-center">
-                <h3 style="margin-top:30px;">Bestilling: @Model.BookingID af @Model.Customer</h3>
+                <h3 style="margin-top:15px;">Bestilling: @Model.BookingID af @Model.Customer</h3>
+                <p>@Model.Notes</p>@{Model.Notes = "";}
                 <input type="hidden" name="bookingID" asp-for="BookingID" value="@Model.BookingID" />
             </div>
             <div class="col-1">
@@ -57,10 +58,10 @@
             <div class="col-2">
                 <!--NOTES-->
                 <p>Note:</p>
-                <textarea id="notes" asp-for="Notes" name="notes"></textarea>
+                <textarea id="notes" asp-for="Notes" name="notes"></textarea> <!-- style="max-height:70px;" -->
                 <style>
-                    #notes{
-                        height: 120px;
+                    #notes {
+                        height: 70px;
                     }
                 </style>
             </div>
@@ -99,7 +100,7 @@
 
             </div>
             
-            @if (httpContextAccessor.HttpContext.Session.GetString("bookingEditError") != null || httpContextAccessor.HttpContext.Session.GetString("bookingEditError") != "")
+            @if (httpContextAccessor.HttpContext.Session.GetString("bookingEditError") != null && httpContextAccessor.HttpContext.Session.GetString("bookingEditError") != "")
             {
                 <div class="row">
                     <div class="col-2"></div>
