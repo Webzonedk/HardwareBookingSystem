@@ -30,12 +30,20 @@ namespace HUS_project.Controllers
 
         public IActionResult MyBookings()
         {
-            return View();
+            DBManagerBooking dBManager = new DBManagerBooking(configuration);
+            MyBookingsModel myBookings = new MyBookingsModel();
+            string user = HttpContext.Session.GetString("uniLogin");
+
+            myBookings.ActiveBookings = dBManager.GetUserBookingsCurrent(user);
+            myBookings.ComingBookings = dBManager.GetUserBookingsOpen(user);
+            myBookings.OldBookings = dBManager.GetUserBookingsOld(user);
+
+            return View("MyBookings", myBookings);
         }
 
 
         /// <summary>
-        /// 
+        /// Sends you to the ScanLocation view in DeviceController.
         /// </summary>
         /// <param name="deviceID"></param>
         /// <param name="bookingID"></param>
@@ -49,12 +57,22 @@ namespace HUS_project.Controllers
             return RedirectToAction("ScanLocation", "Device");
         }
 
+        /// <summary>
+        /// Sends you to the BookedDevicesCRUD for the given Booking.
+        /// </summary>
+        /// <returns></returns>
         public IActionResult ReturnedFromLocationScanner()
         {
-            return GoToScanDevices(TempData["bookingID"].ToString());
+            string bookingID = TempData["bookingID"].ToString();
+            TempData.Clear();
+            return GoToScanDevices(bookingID);
         }
 
-
+        /// <summary>
+        /// The scan data being returned from the ScanDevice view.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public IActionResult ReturnScanData(DeviceQRScanningModel model)
         {
             string[] data = model.RawData.Split('-');
@@ -247,7 +265,11 @@ namespace HUS_project.Controllers
             return View("BookingRUD", booking);
         }
 
-
+        /// <summary>
+        /// TAkes you to the device QR scanner.
+        /// </summary>
+        /// <param name="bookingID"></param>
+        /// <returns></returns>
         public IActionResult GoToScanDevice(string bookingID)
         {
             return View("ScanDevice", new DeviceQRScanningModel(Convert.ToInt32(bookingID), ""));
