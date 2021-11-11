@@ -53,9 +53,12 @@ namespace HUS_project.DAL
             AddListToInventory(notInstock, inventory);
             AddListToInventory(instockBooked, inventory);
 
-            // remove time if datetime is too long
-            //inventory.SearchModel.RentDate = inventory.SearchModel.RentDate.Date;
-            //inventory.SearchModel.ReturnDate = inventory.SearchModel.ReturnDate.Date;
+            //download images
+            for (int i = 0; i < inventory.InventoryBooking.Count; i++)
+            {
+                string sourcePath = GetImagePath(inventory.InventoryBooking[i].ModelID);
+                inventory.InventoryBooking[i].ImagePath = sourcePath;
+            }
 
             return inventory;
         }
@@ -109,6 +112,7 @@ namespace HUS_project.DAL
 
                 BookingSearchModel item = new BookingSearchModel();
                 item.ModelID = (int)reader["modelID"];
+                item.Description = (string)reader["modelDescription"];
                 item.ModelName = (string)reader["modelName"];
                 item.CategoryName = (string)reader["categoryName"];
                 item.ReturnDate.Add((DateTime)reader["returnDate"]);
@@ -154,6 +158,7 @@ namespace HUS_project.DAL
                 BookingSearchModel item = new BookingSearchModel();
                 item.ModelID = (int)reader["modelID"];
                 item.ModelName = (string)reader["modelName"];
+                item.Description = (string)reader["modelDescription"];
                 item.CategoryName = (string)reader["categoryName"];
                 item.ReturnDate.Add((DateTime)reader["returnDate"]);
                 item.RentDate.Add((DateTime)reader["rentDate"]);
@@ -198,11 +203,10 @@ namespace HUS_project.DAL
                 BookingSearchModel item = new BookingSearchModel();
                 item.ModelID = (int)reader["modelID"];
                 item.ModelName = (string)reader["modelName"];
+                item.Description = (string)reader["modelDescription"];
                 item.CategoryName = (string)reader["categoryName"];
-                //item.ReturnDate.Add((DateTime)reader["returnDate"]);
-                //item.RentDate.Add((DateTime)reader["rentDate"]);
                 item.InStock.Add(GetQuantityAvailable(inputData.RentDate, inputData.ReturnDate, item.ModelName));
-
+              
                 inventoryInstock.Add(item);
             }
 
@@ -304,6 +308,8 @@ namespace HUS_project.DAL
                 cmd.Parameters.Add("@bookingLogID", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
                 cmd.ExecuteNonQuery();
                 bookingLogID = Convert.ToInt32(cmd.Parameters["@bookingLogID"].Value);
+
+                con.Close();
             }
             catch (Exception)
             {
@@ -316,6 +322,7 @@ namespace HUS_project.DAL
             return bookingLogID;
         }
 
+        //create itemlines & log to database
         private int CreateItemLinesAndLog(ItemLineModel itemlines, int bookingLogID, DateTime rentDate, DateTime returnDate)
         {
             try
@@ -343,6 +350,26 @@ namespace HUS_project.DAL
 
 
             return 1;
+        }
+
+        //return image from Database
+        private string GetImagePath(int modelID)
+        {
+            DBManagerShared dbShared = new DBManagerShared(configuration);
+
+            ImageModel im = dbShared.DownloadImage(modelID);
+
+            //set image path if
+            if (im.ImageData != null)
+            {
+                string newbase64 = Convert.ToBase64String(im.ImageData);
+                string source = string.Format("data:image/png;base64,{0}", newbase64);
+                return source;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

@@ -77,7 +77,7 @@ function SendValueToButton(inputTitle) {
     }
 
 
-    button.value = modelID + "-" + stock + "-" + element.value;
+    button.value = modelID + "_" + stock + "_" + element.value;
     console.log("button value:" + button.value);
 
 }

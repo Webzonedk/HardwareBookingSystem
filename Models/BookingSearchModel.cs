@@ -10,6 +10,8 @@ namespace HUS_project.Models
         private int modelID;
         private string modelName;
         private string categoryName;
+        private string description;
+        private string imagePath;
         private List<int> inStock;
         private List<int> notInstock;
         private List<DateTime> rentDate;
@@ -31,7 +33,16 @@ namespace HUS_project.Models
             get { return modelID; }
             set { modelID = value; }
         }
-
+        public string Description
+        {
+            get { return description; }
+            set { description = value; }
+        }
+        public string ImagePath
+        {
+            get { return imagePath; }
+            set { imagePath = value; }
+        }
 
 
         public List<int> InStock { get => inStock; set => inStock = value; }

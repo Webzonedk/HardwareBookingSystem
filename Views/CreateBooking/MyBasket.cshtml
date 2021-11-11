@@ -136,8 +136,20 @@
 
         <div class="row containerHeader">
             <h4 class="col-10">Kurv</h4>
+
+            <!--create order-->
             <div class="col-2">
-                <button type="submit" class=" btn-primary btn Button-Size btn-sm" asp-action="CreateBooking">Bestil</button>
+                @if (Model.ItemLines.Count > 0)
+                {
+                    <button type="submit" class=" btn-primary btn Button-Size btn-sm" asp-action="CreateBooking">Bestil</button>
+
+                }
+                else
+                {
+                    <button type="submit" class=" btn-primary btn Button-Size btn-sm" disabled>Bestil</button>
+
+                }
+
             </div>
         </div>
 
@@ -150,13 +162,19 @@
 
         </div>
 
+        @if (ViewBag.bookingSuccess != null)
+        {
+            <div class="row">
+                <div class="col-12 text-green center ">@ViewBag.bookingSuccess&nbsp;</div>
 
+            </div>
+        }
 
 
 
         <input type="hidden" id="location" asp-for="@Model.Location" />
-        <input type="hidden" id="notes" asp-for="@Model.BookingOrder.Notes" />
-        
+        <input type="hidden" id="notes" asp-for="@Model.BookingOrder.Notes" required />
+
 
         @for (int i = 0; i < Model.ItemLines.Count; i++)
         {
@@ -165,7 +183,7 @@
             <input type="hidden" asp-for="@Model.ItemLines[i].Model.ModelDescription" />
             <input type="hidden" asp-for="@Model.ItemLines[i].Model.Category.Category" />
             <input type="hidden" id="test" asp-for="@Model.ItemLines[i].Quantity" />
-            <input type="hidden" id=@("stock_" + i) asp-for="@Model.InventoryBooking[i].InStock[0]" />
+            <input type="hidden" id=@("stock_" + i) asp-for="@Model.InventoryBooking[0].InStock[0]" />
 
 
             <div class="row containerBody alternating_row dynamic-Font-Size-10">
@@ -178,7 +196,7 @@
 
                     <div class="row">
 
-                        <div class="col-12">
+                        <div class="col-6">
                             <div class="input-group input-group-sm mb-2">
 
                                 <input type="number" class="form-control" name="input" id=@("input_"+i) asp-for="@Model.ItemLines[i].Quantity" onchange="changeQuantity()" min="0" max="@Model.InventoryBooking[0].InStock[0]" />
@@ -186,40 +204,19 @@
                             </div>
                         </div>
 
-                    </div>
-
-                    <div class="row center">
-
-                        @*<div class="col-6">
-                                @if (ViewBag.id != null)
-                                {
-
-                                    int basketCount = 0;
-                                    for (int k = 0; k < Model.ItemLines.Count; k++)
-                                    {
-                                        if (Model.ItemLines[k].Model.ModelID == Model.InventoryBooking[i].ModelID)
-                                        {
-                                            basketCount = Model.ItemLines[k].Quantity;
-
-                                        }
-                                    }
-
-                                    if (basketCount > 0)
-                                    {
-                                        <div class=" text-green">@basketCount</div>
-                                    }
-                                }
-                                else
-                                {
-                                    <div>&nbsp;</div>
-                                }
-                            </div>*@
-
+                        <!--delete item-->
                         <div class="col-6">
 
                             <button class="btn btn-primary btn-sm btn-blue" formaction="DeleteItemLine" type="submit" name="submitData" id=@("basket_"+i) value="@i">Slet</button>
 
                         </div>
+
+                    </div>
+
+                  
+                    <div class="row center">
+
+                       
 
                         <!--create message to show quantity is larger than stock-->
                         @if (ViewBag.quantityError != null && Model.InventoryBooking[i].ModelID == ViewBag.id)
@@ -237,24 +234,24 @@
 
         }
 
-    <div class="row">
+        <div class="row">
 
-        <div class="col-4">
+            <div class="col-4">
+
+            </div>
+
+            <div class="col-4 p-1">
+
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Skriv en bemærkning til ordren" asp-for="@Model.Notes"></textarea>
+            </div>
+
+            <div class="col-4">
+
+            </div>
+
+
 
         </div>
-
-        <div class="col-4 p-1">
-            
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Skriv en bemærkning til ordren" asp-for="@Model.Notes"></textarea>
-        </div>
-
-        <div class="col-4">
-
-        </div>
-
-
-       
-    </div>
 
         <div class="row containerFooter">
             <h4>&nbsp;</h4>

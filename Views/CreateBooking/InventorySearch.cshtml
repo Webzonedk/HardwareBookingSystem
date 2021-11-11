@@ -18,7 +18,8 @@
 
                 <div class="row">
 
-                    <div class="col-3">
+                    <!--select categories-->
+                    <div class="col-2 g-3">
 
                         <div class="form-floating">
                             <select class="form-select" id="categories" asp-for="@Model.SearchModel.Category" onchange="this.form.submit()">
@@ -35,26 +36,33 @@
                     </div>
 
 
-
                     @*Borrow from this date*@
-                    <div class="col-3 gx-3 gy-3">
-                        <div form-floating>
-                           
-                            <input placeholder="Vælg Dato" type="date" onfocus="ClearTimeout()" onfocusout="SetTimeout()" class="form-select" asp-for="@Model.SearchModel.RentDate">
-                            <label for="floatinSelectGrid">start dato:</label>
+                    <div class="col-3 g-3 ">
+
+                        <div class="form-floating">
+
+                            <input placeholder="Vælg Dato" type="date" onfocus="ClearTimeout()" onfocusout="SetTimeout()" id="floatinSelectGrid1" class="form-select" asp-for="@Model.SearchModel.RentDate">
+                            <label for="floatinSelectGrid1">start dato:</label>
 
                         </div>
+
                     </div>
 
                     @*Borrow until this date*@
-                    <div class="col-3">
-                        <input placeholder="Vælg Dato" type="date" DateTimeFormat="d/M/yyyy" onfocus="ClearTimeout()" onfocusout="SetTimeout()" class="date" asp-for="@Model.SearchModel.ReturnDate">
-                    </div>
-
-                    <div class="col-3">
+                    <div class="col-3 g-3 ">
 
                         <div class="form-floating">
-                            <select class="form-select" id="locations" asp-for="@Model.Location" onchange="SendLocationToForm()">
+                            <input placeholder="Vælg Dato" type="date" onfocus="ClearTimeout()" id="floatinSelectGrid2" onfocusout="SetTimeout()" class="form-select" asp-for="@Model.SearchModel.ReturnDate">
+                            <label for="floatinSelectGrid2">slut dato:</label>
+                        </div>
+
+                    </div>
+
+                    <!--select location-->
+                    <div class="col-2 g-3">
+
+                        <div class="form-floating">
+                            <select class="form-select" id="locations" asp-for="@Model.Location" onchange="SendLocationToForm()" required>
                                 <option hidden></option>
                                 @foreach (var item in Model.LocationDropdown)
                                 {
@@ -67,11 +75,30 @@
 
                     </div>
 
-                </div>
+                    <!--To basket button-->
+                    <div class="col-2 g-3">
 
-                <div class="row">
+                        <div class="row">
+                            <button type="submit" class=" btn-primary btn Button-Size btn-sm" asp-action="MyBasket">Se Kurv</button>
+                        </div>
 
-                    <div class="col">
+                        <div class="row">
+                            <div class="col-12">
+
+
+                                <label class="text-white">enheder i kurven @Model.BasketCount</label>
+
+
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!--searchBar-->
+                    <div class="col-4 g-3">
 
                         <div class="form-floating mb-sm-1">
                             <input type="search" class="form-control" asp-for="@Model.SearchModel.SearchName" id="searchbar" onkeyup="SetTimeout()" onkeydown="ClearTimeout()" placeholder="name@example.com">
@@ -80,36 +107,16 @@
 
                     </div>
 
+
+
+
                 </div>
+
+                
 
             </div>
 
 
-
-            <div class="col-2">
-
-                <div class="row">
-                    <button type="submit" class=" btn-primary btn Button-Size btn-sm" asp-action="MyBasket">Se Kurv</button>
-                </div>
-
-                <div class="row">
-                    <div class="col-12">
-
-
-                        <label class="text-white">enheder i kurven @Model.BasketCount</label>
-
-
-
-
-                    </div>
-
-                </div>
-
-
-
-
-
-            </div>
 
         </div>
 
@@ -159,6 +166,8 @@
         <input type="hidden" id="location" asp-for="@Model.Location" />
         <input type="hidden" id="location" asp-for="@Model.SearchModel.SearchName" />
         <input type="hidden" id="location" asp-for="@Model.SearchModel.Category" />
+        <input type="hidden" id="location" asp-for="@Model.SearchModel.RentDate" />
+        <input type="hidden" id="location" asp-for="@Model.SearchModel.ReturnDate" />
 
         <!--model binding of itemlines-->
         @for (int n = 0; n < Model.ItemLines.Count; n++)
@@ -175,22 +184,40 @@
         {
 
             <div class="row containerBody alternating_row dynamic-Font-Size-10">
-                <div class=" col-md-1 col-2 p-1 border-end border-white border-1">@Model.InventoryBooking[i].ModelID</div>
 
+                <!--show image-->
+                <div class=" col-md-1 col-2 p-1 border-end border-white border-1">
+                    <div>
+
+                        @if (Model.InventoryBooking[i].ImagePath != null)
+                        {
+                            <img class="img-bg" src="@Url.Content(Model.InventoryBooking[i].ImagePath)" style="width: 100%" />
+                        }
+                        else
+                        {
+                            <img class="img-bg" src="~/Graphic/missing_image.png" style="width: 100%" />
+                        }
+                    </div>
+                </div>
+
+
+                <!--show model name & link-->
                 <div class=" col-md-3 col-6 p-1 border-end border-white border-1">
 
                     <input type="hidden" id=@("output_"+i) value="@Model.InventoryBooking[i].ModelName" asp-for="@Model.ModelName" />
 
                     <button class="buttonLink" type="submit" asp-action="Inspect" name="link" id=@("link_"+i) value=@(Model.InventoryBooking[i].ModelName + "_" + Model.InventoryBooking[i].ModelID)> @Model.InventoryBooking[i].ModelName  </button>
 
-
+                    <div>@Model.InventoryBooking[i].Description</div>
 
                 </div>
+
+                <!--show category-->
                 <div class=" col-md-2 col-4 p-1 border-end border-white border-1">@Model.InventoryBooking[i].CategoryName</div>
 
 
 
-
+                <!--show in stock-->
                 <div class=" col-md-1 col-4 p-1 border-end border-white border-1">
 
                     @for (int j = 0; j < Model.InventoryBooking[i].InStock.Count; j++)
@@ -202,6 +229,7 @@
 
                 </div>
 
+                <!--show blank column if in stock-->
                 <div class=" col-md-1 col-4 p-1 border-end border-white border-1">
 
                     <!--add blank column if in stock-->
@@ -218,6 +246,7 @@
 
                 </div>
 
+                <!--show dates for rent & return-->
                 <div class=" col-md-2 col-4 p-1 border-end border-white border-1">
 
                     <!--add blank column if in stock-->
@@ -240,25 +269,9 @@
 
                     <div class="row">
 
-                        <div class="col-12">
-                            <div class="input-group input-group-sm mb-2">
-
-                                <input type="number" class="form-control" name="input" id=@("input_"+i) value="0" onchange="SendValueToButton('BookingSøgning')" min="0" />
-
-                            </div>
-                        </div>
-
-
-
-
-
-
-
-                    </div>
-
-                    <div class="row center">
-
-                        <div class="col-6">
+                        <!--count elements in basket-->
+                        @{int index = -1;}
+                        <div class="col-2">
                             @if (Model.ItemLines.Count > 0)
                             {
 
@@ -268,7 +281,7 @@
                                     if (Model.ItemLines[k].Model.ModelID == Model.InventoryBooking[i].ModelID)
                                     {
                                         basketCount = Model.ItemLines[k].Quantity;
-
+                                        index = k;
                                     }
                                 }
 
@@ -283,11 +296,39 @@
                             }
                         </div>
 
-                        <div class="col-6">
+                        <!--input field for quantity-->
+                        <div class="col-5">
+                            <div class="input-group input-group-sm mb-2">
 
-                            <button class="btn btn-primary btn-sm btn-blue" type="submit" name="submitData" id=@("basket_"+i) value="@Model.InventoryBooking[i].ModelID">Tilføj til Kurv </button>
+                                @if (Model.ItemLines.Count > 0 && index >= 0)
+                                {
+                                    <input type="number" class="form-control" name="input" id=@("input_"+i) value="@Model.ItemLines[index].Quantity" onchange="SendValueToButton('BookingSøgning')" asp-for="@Model.ItemLines[index].Quantity" min="0" max="@Model.InventoryBooking[i].InStock[0]" onkeypress="return event.keyCode != 13;" />
+
+                                }
+                                else
+                                {
+                                    <input type="number" class="form-control" name="input" id=@("input_"+i) value="0" onchange="SendValueToButton('BookingSøgning')" min="0" max="@Model.InventoryBooking[i].InStock[0]" onkeypress="return event.keyCode != 13;" />
+
+                                }
+
+
+                            </div>
+                        </div>
+
+
+                        <!--update basket button-->
+                        <div class="col-5">
+
+                            <button class="btn btn-primary btn-sm btn-blue" type="submit" name="submitData" id=@("basket_"+i) value="@Model.InventoryBooking[i].ModelID">Opdater Kurv </button>
 
                         </div>
+
+
+                    </div>
+
+                    <!--error messages-->
+                    <div class="row center">
+
 
                         <!--create message to show quantity is larger than stock-->
                         @if (ViewBag.quantityError != null && Model.InventoryBooking[i].ModelID == ViewBag.id)
@@ -295,9 +336,8 @@
                             <div class="col-12 text-red">@ViewBag.quantityError&nbsp;</div>
                         }
 
+
                     </div>
-
-
 
                 </div>
 

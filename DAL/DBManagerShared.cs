@@ -217,6 +217,7 @@ namespace HUS_project.DAL
                 im.ImageData = (byte[])reader["img"];
                 im.FileName = (string)reader["fileName"];
             }
+            con.Close();
 
             return im;
 
