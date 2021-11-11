@@ -5,42 +5,64 @@
     ViewData["Title"] = "Login";
 }
 <div class="row blue-oyster-bar center box-shadow">
-    <div class="row text-white g-2">
-        <h2 class="text-white" style="padding-top:30px;">ZBC HUS - Login side</h2>
-        <h4 class="text-white">Kun for Lærere eller SKP Elever</h4>
-    </div>
+
+        <h2 class="col-12 text-white pt-4 g-3">Velkommen til ZBC HUS</h2>
+
+        <h4 class="col-12 text-white">Kun for Undervisere og SKP Elever</h4>
+
 </div>
 
+<div class="row">
+    <div class="col-xl-4 col-md-3 col-2"></div>
+    <div class="container col-xl-4 col-md-6 col-8 containerMain box-shadow">
+        @*LOGIN FORM*@
+        <form asp-action="Login" method="post" id="loginForm">
 
-
-<div class="container containerMain box-shadow loginBox">
-    @*LOGIN FORM*@
-    <form asp-action="Login" method="post" id="loginForm">
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-3 form-floating">
-                <input id="uniLoginBox" asp-for="@Model.UNILogin" type="text" style="max-height:55px" class="form-control" />
-                <label for="uniLoginBox">ZBC Email initialer eller uniLogin:</label>
+            <div class="row containerHeader">
+                    <h4 class="col">Login</h4>
             </div>
-            <div class="col-md-3 form-floating">
-                <input id="passwordBox" asp-for="@Model.Password" type="password" style="max-height:55px" class="form-control" />
-                <label for="passwordBox">Kodeord:</label>
 
-            </div>
-            <div class="col-md-3 form-floating">
-                <button class="btn btn-primary border-white vertical-center" type="submit">Log ind</button>
-            </div>
-        </div>
+            <div class="row containerBody center">
 
-        @if (httpContextAccessor.HttpContext.Session.GetString("loginError") != null && httpContextAccessor.HttpContext.Session.GetString("loginError") != "")
-        {
-            <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-6" style="align-content:center; margin-top:8px;" id="loginError">
-                    <p style="text-align:center; padding:5px; background-color:indianred; border-radius:8px; border-width:3px; border-style:solid; border-color:darkred;">@httpContextAccessor.HttpContext.Session.GetString("loginError").ToString()</p>
+
+                <div class="col-md-2 col-1 g-3"></div>
+                <div class="col-md-8 col-10 g-3 form-floating">
+                    <input class="form-control" asp-for="@Model.UNILogin" type="text" />
+                    <label for="uniLoginBox">ZBC Email initialer eller uniLogin:</label>
                 </div>
+                <div class="col-md-2 col-1 g-3"></div>
+
+
+                <div class="col-md-2 col-1 g-3"></div>
+                <div class="col-md-8 col-10 g-3 form-floating">
+                    <input class="form-control" asp-for="@Model.Password" type="password" />
+                    <label for="passwordBox">Kodeord:</label>
+                </div>
+                <div class="col-md-2 col-1 g-3"></div>
+
+
+                <div class="col-12 p-3">
+                    <button class="btn btn-primary btn-blue" type="submit">Log ind</button>
+                </div>
+
+                @if (httpContextAccessor.HttpContext.Session.GetString("loginError") != null && httpContextAccessor.HttpContext.Session.GetString("loginError") != "")
+                {
+                    <div class="col-md-2 col-1 g-3"></div>
+
+                    <div class="col-md-8 col-10 g-3" style="align-content:center; margin-top:8px;" id="loginError">
+                        <p style="text-align:center; padding:5px; background-color:indianred; border-radius:8px; border-width:3px; border-style:solid; border-color:darkred;">@httpContextAccessor.HttpContext.Session.GetString("loginError").ToString()</p>
+                    </div>
+                    <div class="col-md-2 col-1 g-3"></div>
+
+                }
+
             </div>
-        }
-    </form>
-    @*LOGIN FORM END*@
+
+            <div class="row containerFooter">
+                <h4>&nbsp;</h4>
+            </div>
+        </form>
+        @*LOGIN FORM END*@
+    </div>
+    <div class="col-xl-4 col-md-3 col-2"></div>
 </div>

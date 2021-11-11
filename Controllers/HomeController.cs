@@ -144,7 +144,6 @@ namespace HUS_project.Controllers
             }
             else if(HttpContext.Session.GetInt32("accessLevel") == 1)
             {
-               // return View("Main");
                 return RedirectToAction("InventorySearch", "CreateBooking");
             }
             else

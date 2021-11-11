@@ -80,7 +80,7 @@ namespace HUS_project.DAL
             return bookings;
         }
 
-        internal List<BookingModel> GetBookingDeliveriesToBeMade ()
+        internal List<BookingModel> GetBookingDeliveriesToBeMade()
         {
             List<BookingModel> bookings = new List<BookingModel>();
             SqlConnection con = new SqlConnection(connectionString);
