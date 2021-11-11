@@ -138,7 +138,149 @@ namespace HUS_project.DAL
             return bookedDevices;
         }
 
-        
+        internal List<BookingModel> GetUserBookingsCurrent(string uniLogin)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("GetUserBookingsCurrent", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@uniLogin", uniLogin);
+
+            List<BookingModel> bookings = new List<BookingModel>();
+
+            con.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                string[] room = reader["Room"].ToString().Split('.');
+                bookings.Add(
+                    new BookingModel(
+                        (int)reader["bookingID"],
+                        uniLogin,
+                        new List<ItemLineModel>(),
+                        new List<DeviceModel>(),
+                        new BuildingModel(room[0], room[1]),
+                        (DateTime)reader["rentDate"],
+                        (DateTime)reader["returnDate"],
+                        reader["deliveredBy"].ToString(),
+                        reader["bookingNotes"].ToString()
+                        ));
+            }
+            con.Close();
+            return bookings;
+        }
+
+        internal List<BookingModel> GetUserBookingsOpen(string uniLogin)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("GetUserBookingsOpen", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@uniLogin", uniLogin);
+
+            List<BookingModel> bookings = new List<BookingModel>();
+
+            con.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                string[] room = reader["Room"].ToString().Split('.');
+                bookings.Add(
+                    new BookingModel(
+                        (int)reader["bookingID"],
+                        uniLogin,
+                        new List<ItemLineModel>(),
+                        new List<DeviceModel>(),
+                        new BuildingModel(room[0], room[1]),
+                        (DateTime)reader["rentDate"],
+                        (DateTime)reader["returnDate"],
+                        null,
+                        reader["bookingNotes"].ToString()
+                        ));
+            }
+            con.Close();
+            return bookings;
+        }
+
+        /// <summary>
+        /// Acquires the User's latest BookingLogs for each unique Booking which is done.
+        /// </summary>
+        /// <param name="uniLogin"></param>
+        /// <returns></returns>
+        internal List<BookingModel> GetUserBookingsOld(string uniLogin)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("GetUserBookingsClosed", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@uniLogin", uniLogin);
+
+            List<BookingModel> bookings = new List<BookingModel>();
+            List<int> bookingLogIDs = new List<int>();
+
+            con.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read() && bookings.Count() < 25)
+            {
+                string[] room = reader["room"].ToString().Split('.');
+                bookingLogIDs.Add((int)reader["bookingLogID"]);
+                bookings.Add(
+                    new BookingModel(
+                        (int)reader["bookingID"],
+                        uniLogin,
+                        new List<ItemLineModel>(),
+                        new List<DeviceModel>(),
+                        new BuildingModel(room[0], room[1]),
+                        (DateTime)reader["rentDate"],
+                        (DateTime)reader["returnDate"],
+                        reader["deliveredBy"].ToString(),
+                        reader["bookingNotes"].ToString()
+                        ));
+            }
+            con.Close();
+
+            // Here we get the ItemLineLogs for the booking
+            for (int i = 0; i < bookings.Count; i++)
+            {
+                bookings[i].Items = GetBookingLogItemLineLogs(bookingLogIDs[i]);
+            }
+
+            return bookings;
+        }
+
+        /// <summary>
+        /// Acquires all the ItemLineLogs for the given BookingLogID, if any.
+        /// </summary>
+        /// <param name="bookingLogID"></param>
+        /// <returns></returns>
+        internal List<ItemLineModel> GetBookingLogItemLineLogs(int bookingLogID)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("GetBookingLogItemLineLogs", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@bookingLogID", bookingLogID);
+
+            List<ItemLineModel> items = new List<ItemLineModel>();
+
+            con.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                items.Add(
+                    new ItemLineModel(
+                        (int)reader["quantity"],
+                        new ModelModel(
+                            reader["modelName"].ToString(),
+                            "",
+                            new CategoryModel(
+                                reader["categoryName"].ToString()
+                                )
+                            )
+                        )
+                    );
+            }
+            con.Close();
+
+            return items;
+        }
+
 
         /// <summary>
         /// Updates BookedDevice to be Returned
