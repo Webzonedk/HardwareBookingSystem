@@ -192,6 +192,7 @@ namespace HUS_project.DAL
                         new BuildingModel(room[0], room[1]),
                         (DateTime)reader["rentDate"],
                         (DateTime)reader["returnDate"],
+                        null,
                         reader["bookingNotes"].ToString()
                         ));
             }
@@ -199,6 +200,11 @@ namespace HUS_project.DAL
             return bookings;
         }
 
+        /// <summary>
+        /// Acquires the User's latest BookingLogs for each unique Booking which is done.
+        /// </summary>
+        /// <param name="uniLogin"></param>
+        /// <returns></returns>
         internal List<BookingModel> GetUserBookingsOld(string uniLogin)
         {
             SqlConnection con = new SqlConnection(connectionString);
@@ -207,12 +213,14 @@ namespace HUS_project.DAL
             cmd.Parameters.AddWithValue("@uniLogin", uniLogin);
 
             List<BookingModel> bookings = new List<BookingModel>();
+            List<int> bookingLogIDs = new List<int>();
 
             con.Open();
             SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
+            while (reader.Read() && bookings.Count() < 25)
             {
                 string[] room = reader["room"].ToString().Split('.');
+                bookingLogIDs.Add((int)reader["bookingLogID"]);
                 bookings.Add(
                     new BookingModel(
                         (int)reader["bookingID"],
@@ -227,9 +235,52 @@ namespace HUS_project.DAL
                         ));
             }
             con.Close();
+
+            // Here we get the ItemLineLogs for the booking
+            for (int i = 0; i < bookings.Count; i++)
+            {
+                bookings[i].Items = GetBookingLogItemLineLogs(bookingLogIDs[i]);
+            }
+
             return bookings;
         }
-        
+
+        /// <summary>
+        /// Acquires all the ItemLineLogs for the given BookingLogID, if any.
+        /// </summary>
+        /// <param name="bookingLogID"></param>
+        /// <returns></returns>
+        internal List<ItemLineModel> GetBookingLogItemLineLogs(int bookingLogID)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("GetBookingLogItemLineLogs", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@bookingLogID", bookingLogID);
+
+            List<ItemLineModel> items = new List<ItemLineModel>();
+
+            con.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                items.Add(
+                    new ItemLineModel(
+                        (int)reader["quantity"],
+                        new ModelModel(
+                            reader["modelName"].ToString(),
+                            "",
+                            new CategoryModel(
+                                reader["categoryName"].ToString()
+                                )
+                            )
+                        )
+                    );
+            }
+            con.Close();
+
+            return items;
+        }
+
 
         /// <summary>
         /// Updates BookedDevice to be Returned

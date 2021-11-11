@@ -35,7 +35,17 @@ namespace HUS_project.Controllers
             string user = HttpContext.Session.GetString("uniLogin");
 
             myBookings.ActiveBookings = dBManager.GetUserBookingsCurrent(user);
+            foreach (BookingModel booking in myBookings.ActiveBookings)
+            {
+                booking.Items = dBManager.GetItemLines(booking.BookingID);
+            }
+
             myBookings.ComingBookings = dBManager.GetUserBookingsOpen(user);
+            foreach (BookingModel booking in myBookings.ComingBookings)
+            {
+                booking.Items = dBManager.GetItemLines(booking.BookingID);
+            }
+
             myBookings.OldBookings = dBManager.GetUserBookingsOld(user);
 
             return View("MyBookings", myBookings);
