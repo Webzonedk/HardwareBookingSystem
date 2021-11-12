@@ -28,6 +28,10 @@ namespace HUS_project.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Fills out the ViewModel of, and sends you to, the "MyBookings" page.
+        /// </summary>
+        /// <returns></returns>
         public IActionResult MyBookings()
         {
             DBManagerBooking dBManager = new DBManagerBooking(configuration);
@@ -294,8 +298,11 @@ namespace HUS_project.Controllers
         public IActionResult DeleteBooking(BookingModel booking)
         {
             DBManagerBooking dBManagerBooking = new DBManagerBooking(configuration);
+            // Here we get the Booking as it exists in the database, because that's the version that matters.
+            booking = dBManagerBooking.GetBooking(booking.BookingID);
+
             string reason = DateTime.Now > booking.PlannedBorrowDate ? "Afsluttet: Sidste enhed returneret" : "Afsluttet: Ordre aflyst af bestiller";
-            if (dBManagerBooking.DeleteBooking(Convert.ToInt32(booking.BookingID), HttpContext.Session.GetString("uniLogin"), reason))
+            if (dBManagerBooking.DeleteBooking(booking.BookingID, HttpContext.Session.GetString("uniLogin"), reason))
             {
                 return RedirectToAction("RelocateUser", "Home");
             }
