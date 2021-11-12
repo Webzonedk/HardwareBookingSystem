@@ -77,14 +77,14 @@ function SendValueToButton(inputTitle) {
     }
 
 
-    button.value = modelID + "-" + stock + "-" + element.value;
+    button.value = modelID + ";" + stock + ";" + element.value;
     console.log("button value:" + button.value);
 
 }
 
 //sends location to different form
 function SendLocationToForm() {
-    let selectedLocation = document.getElementById("locations");
+    let selectedLocation = document.getElementById(event.target.id);
     let locationInput = document.getElementById("location");
 
     locationInput.value = selectedLocation.value;
