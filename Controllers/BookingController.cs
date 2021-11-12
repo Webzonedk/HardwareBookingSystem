@@ -507,7 +507,7 @@ namespace HUS_project.Controllers
 
 
                 // Apply Update as Appropriate
-                if(validItemLinesChange || validNewStartDate || validNewReturnDate || validNewLocation)
+                if(validItemLinesChange || validNewStartDate || validNewReturnDate || validNewLocation || (bookingModel.Notes != null && bookingModel.Notes != ""))
                 {
                     BookingModel finalBooking = new BookingModel(
                         originalBooking.BookingID, "", 
@@ -526,6 +526,18 @@ namespace HUS_project.Controllers
                     {
                         dBManager.UpdateItemLineAndLog(finalBooking.BookingID, bookingLogID, ilm.Model.ModelName, ilm.Quantity);
                     }
+
+                    HttpContext.Session.SetString("bookingEditSuccess", 
+                        (validItemLinesChange?" Varelinjer Ændret.":"") + 
+                        (validNewStartDate ? " Start Dato Ændret." : "") + 
+                        (validNewReturnDate ? " Slut Dato Ændret." : "") + 
+                        (validNewLocation ? " Lokation Ændret." : "") + 
+                        (bookingModel.Notes != null && bookingModel.Notes != "" ? " Note Gemt." : "")
+                        );
+                }
+                else
+                {
+                    errorMessages += "\nIngen valide ændringer opdaget.";
                 }
 
             }
