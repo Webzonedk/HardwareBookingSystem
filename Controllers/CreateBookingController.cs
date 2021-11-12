@@ -84,14 +84,6 @@ namespace HUS_project.Controllers
                 ViewBag.id = int.Parse(split[0]);
             }
 
-
-            ////calculate basket count
-            //newdata.BasketCount = 0;
-            //for (int i = 0; i < newdata.ItemLines.Count; i++)
-            //{
-            //    newdata.BasketCount += newdata.ItemLines[i].Quantity;
-            //}
-
             //clear model binding
             ModelState.Clear();
 
@@ -216,7 +208,7 @@ namespace HUS_project.Controllers
             newdata.BasketCount = data.BasketCount;
             newdata.ModelName = data.ModelName;
             newdata.ModelID = data.ModelID;
-
+            newdata.Location = data.Location;
             ModelState.Clear();
 
             return View(newdata);
@@ -306,7 +298,7 @@ namespace HUS_project.Controllers
             DBManagerShared dbShared = new DBManagerShared(configuration);
 
             //split data
-            string[] splittedData = submitData.Split('_');
+            string[] splittedData = submitData.Split(';');
 
             if (splittedData.Length > 1)
             {

@@ -5,108 +5,90 @@
 
 <script src="~/js/Inventory.js"></script>
 
-<div class="blue-oyster-bar">
+<form action="InventorySearch" method="post" id="searchform">
 
-    <form action="InventorySearch" method="post" id="searchform">
+    <div class="row  center box-shadow blue-oyster-bar">
 
-        <div class="row">
+        <div class="col-lg-1"></div>
 
-            <div class="col-2"></div>
+        @*Borrow from this date*@
+        <div class="col-lg-2 col-md-3 col-sm-6 g-3 ">
 
+            <div class="form-floating">
 
-            <div class="col-8">
-
-                <div class="row">
-
-                    <div class="col-3">
-
-                        <div class="form-floating">
-                            <select class="form-select" id="categories" asp-for="@Model.SearchModel.Category" onchange="this.form.submit()">
-                                <option></option>
-                                @foreach (var item in Model.CategoryDropdown)
-                                {
-                                    <option>@item</option>
-                                }
-
-                            </select>
-                            <label>vælg kategori</label>
-                        </div>
-
-                    </div>
-
-
-
-                    @*Borrow from this date*@
-                    <div class="col-3">
-                        <input placeholder="Vælg Dato" type="date" DateTimeFormat="d/M/yyyy" onfocus="ClearTimeout()" onfocusout="SetTimeout()" class="date" asp-for="@Model.SearchModel.RentDate">
-                    </div>
-
-                    @*Borrow until this date*@
-                    <div class="col-3">
-                        <input placeholder="Vælg Dato" type="date" DateTimeFormat="d/M/yyyy" onfocus="ClearTimeout()" onfocusout="SetTimeout()" class="date" asp-for="@Model.SearchModel.ReturnDate">
-                    </div>
-
-                    <div class="col-3">
-
-                        <div class="form-floating">
-                            <select class="form-select" id="locations" asp-for="@Model.Location" onchange="SendLocationToForm()" required>
-                                <option hidden></option>
-                                @foreach (var item in Model.LocationDropdown)
-                                {
-                                    <option>@item</option>
-                                }
-
-                            </select>
-                            <label>Leveringssted</label>
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="row">
-
-                    <div class="col">
-
-                        <div class="form-floating mb-sm-1">
-                            <input type="search" class="form-control" asp-for="@Model.SearchModel.SearchName" id="searchbar" onkeyup="SetTimeout()" onkeydown="ClearTimeout()" placeholder="name@example.com">
-                            <label for="searchbar">søg efter enhed:</label>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            <div class="col-2">
-
-                <div class="row">
-                    @*<button type="submit" class=" btn-primary btn Button-Size btn-sm" asp-action="CreateBooking">Bestil</button>*@
-                </div>
-
-                <div class="row">
-                    <div class="col-12">
-
-
-                        <label class="text-white" id="basket">enheder i kurven @Model.BasketCount</label>
-
-
-
-
-                    </div>
-
-                </div>
-
-
-
-
+                <input placeholder="Vælg Dato" type="date" onfocus="ClearTimeout()" onfocusout="SetTimeout()" id="floatinSelectGrid" class="form-select" asp-for="@Model.SearchModel.RentDate">
+                <label for="floatinSelectGrid">start dato:</label>
 
             </div>
 
         </div>
+
+        @*Borrow until this date*@
+        <div class="col-lg-2 col-md-3 col-sm-6 g-3 ">
+
+            <div class="form-floating">
+                <input placeholder="Vælg Dato" type="date" onfocus="ClearTimeout()" id="floatinSelectGrid" onfocusout="SetTimeout()" class="form-select" asp-for="@Model.SearchModel.ReturnDate">
+                <label for="floatinSelectGrid">slut dato:</label>
+            </div>
+
+        </div>
+
+        <!--select categories-->
+        <div class="col-lg-1 col-md-3 col-sm-6 g-3">
+
+            <div class="form-floating">
+                <select class="form-select" id="floatinSelectGrid" asp-for="@Model.SearchModel.Category" onchange="this.form.submit()">
+                    <option></option>
+                    @foreach (var item in Model.CategoryDropdown)
+                    {
+                        <option>@item</option>
+                    }
+
+                </select>
+                <label for="floatinSelectGrid">kategori</label>
+            </div>
+
+        </div>
+
+        <!--select location-->
+        <div class="col-lg-1 col-md-3 col-sm-6 g-3">
+
+            <div class="form-floating">
+                <select class="form-select" id="floatinSelectGrid" asp-for="@Model.Location" onchange="SendLocationToForm()" required>
+                    <option hidden></option>
+                    @foreach (var item in Model.LocationDropdown)
+                    {
+                        <option>@item</option>
+                    }
+
+                </select>
+                <label for="floatinSelectGrid">Leveringssted</label>
+            </div>
+
+        </div>
+
+        <!--searchBar-->
+        <div class="col-lg-4 col-md-6 col-sm-12 g-3">
+
+            <div class="form-floating mb-sm-1">
+                <input type="search" class="form-control" asp-for="@Model.SearchModel.SearchName" id="searchbar" onkeyup="SetTimeout()" onkeydown="ClearTimeout()" placeholder="name@example.com">
+                <label for="searchbar">søg efter enhed:</label>
+            </div>
+
+        </div>
+
+        <div class="col-lg-1 d-block d-none"></div>
+
+        <!--To basket button-->
+        <div class="col-lg-12 col-md-6 col-sm-12 p-3 g-md-2">
+
+            <button type="submit" class="btn btn-primary btn-blue btn-sm disabled" asp-action="MyBasket">Kurv (@Model.BasketCount)</button>
+
+        </div>
+
+
+
+
 
         <!--model binding of itemlines-->
         @for (int n = 0; n < Model.ItemLines.Count; n++)
@@ -115,20 +97,17 @@
             <input type="hidden" asp-for="@Model.ItemLines[n].Model.ModelName" />
             <input type="hidden" asp-for="@Model.ItemLines[n].Model.ModelDescription" />
             <input type="hidden" asp-for="@Model.ItemLines[n].Model.Category.Category" />
-            <input type="hidden" id=@("searchOutput_"+n) asp-for="@Model.ItemLines[n].Quantity" />
+            <input type="hidden" id=@("searchOutput_" + n) asp-for="@Model.ItemLines[n].Quantity" />
 
         }
 
         <input type="hidden" id="basketHidden" asp-for="@Model.BasketCount" />
+        <input type="hidden" id="modelNameHidden" asp-for="@Model.ModelName" />
+        <input type="hidden" id="modelIdHidden" asp-for="@Model.ModelID" />
 
+    </div>
 
-
-    </form>
-    @*SEARCH FORM END*@
-
-
-
-</div>
+</form>
 
 <!--container listing search results-->
 <div class="container containerMain box-shadow">
