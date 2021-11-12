@@ -13,7 +13,7 @@
 <div class="container containerMain box-shadow">
 
     <div class="row containerHeader">
-        <h4 class="col">Mine Aktive Bestillinger:</h4>
+        <h4 class="col">Aktive Bestillinger:</h4>
     </div>
 
     <div class="row containerSubHeader border-top border-bottom border-white border-1">
@@ -31,7 +31,7 @@
         @foreach (BookingModel booking in Model.ActiveBookings)
         {
             <div class="row border-bottom border-white border-1">
-                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.BookingID<br />@booking.Customer</div>
+                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.BookingID</div>
                 <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.Location.Building.@booking.Location.RoomNumber</div>
                 <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">@booking.Notes</div>
                 <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1 border-end border-white border-1">
@@ -51,7 +51,7 @@
                 <div class="col-lg-2 col-2 p-1 center">
                     @using (Html.BeginForm("GoToBooking", "Booking"))
                     {
-                        <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">Se Booking</button>
+                    <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">Se Bestilling</button>
                     }
                 </div>
             </div>
@@ -62,7 +62,7 @@
     </div>
 
     <div class="row containerHeader">
-        <h4 class="col">Mine Kommende Bestillinger:</h4>
+        <h4 class="col">Kommende Bestillinger:</h4>
     </div>
 
     <div class="row containerSubHeader border-top border-bottom border-white border-1">
@@ -79,7 +79,7 @@
         @foreach (BookingModel booking in Model.ComingBookings)
         {
             <div class="row border-bottom border-white border-1">
-                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.BookingID<br />@booking.Customer</div>
+                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.BookingID</div>
                 <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.Location.Building.@booking.Location.RoomNumber</div>
                 <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">@booking.Notes</div>
                 <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1 border-end border-white border-1">
@@ -98,7 +98,7 @@
                 <div class="col-lg-2 col-2 p-1 center">
                     @using (Html.BeginForm("GoToBooking", "Booking"))
                     {
-                        <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">Se Booking</button>
+                    <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">Se Bestilling</button>
                     }
                 </div>
             </div>
@@ -109,7 +109,7 @@
     </div>
 
     <div class="row containerHeader">
-        <h4 class="col">Mine Afsluttede Bestillinger:</h4>
+        <h4 class="col">Afsluttede Bestillinger:</h4>
     </div>
 
     <div class="row containerSubHeader border-top border-bottom border-white border-1">
@@ -127,7 +127,7 @@
         @foreach (BookingModel booking in Model.OldBookings)
         {
             <div class="row border-bottom border-white border-1">
-                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.BookingID<br />@booking.Customer</div>
+                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.BookingID</div>
                 <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.Location.Building.@booking.Location.RoomNumber</div>
                 <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">@booking.Notes</div>
                 <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1 border-end border-white border-1">
@@ -145,10 +145,8 @@
                 <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.PlannedReturnDate.ToString("dd/MM-yy")</div>
                 <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.DeliveredBy</div>
                 <div class="col-lg-2 col-2 p-1 center">
-                    @using (Html.BeginForm("GoToBooking", "Booking"))
-                    {
-                        <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">Se Booking</button>
-                    }
+                    @* Incomplete feature. *@
+                    <button disabled type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">Se Bestilling</button>
                 </div>
             </div>
         }
