@@ -44,15 +44,15 @@
                 <div class="col-lg-4 col-7 p-1 border-end border-white border-1">
                     @foreach (ItemLineModel item in booking.Items)
                     {
-                        <div class="row" style="margin-bottom:3px;">
-                            <div class="col-3">@item.Quantity</div>
-                            <div class="col-9 border-1 border-start border-white">
-                                (@item.Model.Category.Category) @item.Model.ModelName
-                            </div>
+
+                        <div class="row">
+                            <div class="col-3 text-end">@item.Quantity stk.</div>
+                            <div class="col-9 text-start">(@item.Model.Category.Category) @item.Model.ModelName</div>
                         </div>
+                       
                     }
                 </div>
-                <div class="col-lg-1 col-6 p-1 border-end border-white border-1 center">
+                <div class="col-lg-1 col-6 p-1 border-end border-white border-1 border-md-hide-right center">
                     @using (Html.BeginForm("GoToScanDevices", "Booking"))
                     {
                         <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:75px">Skan</button>
@@ -125,7 +125,7 @@
                         </div>
                     }
                 </div>
-                <div class="col-lg-1 col-6 p-1 border-end border-white border-1 center">
+                <div class="col-lg-1 col-6 p-1 border-end border-white border-1 border-md-hide-right center">
                     @using (Html.BeginForm("GoToScanDevices", "Booking"))
                     {
                         <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:75px">Skan</button>
