@@ -3,7 +3,7 @@
 //this method runs when view has loaded
 $(document).ready(function (e) {
 
-    var searchbar = document.getElementById("searchbar");
+    var searchbar = document.getElementById("searchBar");
     var length = searchbar.value.length;
 
 
