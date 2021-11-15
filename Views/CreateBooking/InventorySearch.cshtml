@@ -128,7 +128,7 @@
             <div class="col-xl-1 col-4 p-1 border-white border-1">Udlånt</div>
             <div class="col-xl-3 col-8 p-1 border-end border-white border-1">Lagerstatus</div>
             <div class="col-xl-1 d-none d-block p-1 border-white border-1">Antal</div>
-           
+
 
 
         </div>
@@ -140,7 +140,7 @@
         <input type="hidden" id="rent" asp-for="@Model.SearchModel.RentDate" />
         <input type="hidden" id="return" asp-for="@Model.SearchModel.ReturnDate" />
 
-        @{int index = -1; }
+
 
 
 
@@ -157,28 +157,6 @@
         <!--listing of each model-->
         @for (int i = 0; i < Model.InventoryBooking.Count; i++)
         {
-
-            <!--count number in basket-->
-            @if (Model.ItemLines.Count > 0)
-            {
-
-                int basketCount = 0;
-                for (int k = 0; k < Model.ItemLines.Count; k++)
-                {
-                    if (Model.ItemLines[k].Model.ModelID == Model.InventoryBooking[i].ModelID)
-                    {
-                        basketCount = Model.ItemLines[k].Quantity;
-                        index = k;
-                    }
-                }
-
-                if (basketCount > 0)
-                {
-                    @*<div class=" text-green">@basketCount</div>*@
-                }
-            }
-
-
             <div class="row containerBody alternating_row dynamic-Font-Size-10">
 
                 <!--show image-->
@@ -264,6 +242,27 @@
                 <!--show input field-->
                 <div class="col-lg-1 col-6 p-1 border-white border-1 center">
 
+                        @{int index = -1;} 
+                    <!--count number in basket-->
+                    @if (Model.ItemLines.Count > 0)
+                    {
+
+                        int basketCount = 0;
+                        for (int k = 0; k < Model.ItemLines.Count; k++)
+                        {
+                            if (Model.ItemLines[k].Model.ModelID == Model.InventoryBooking[i].ModelID)
+                            {
+                                basketCount = Model.ItemLines[k].Quantity;
+                                index = k;
+                            }
+                        }
+
+                        if (basketCount > 0)
+                        {
+                            @*<div class=" text-green">@basketCount</div>*@
+                        }
+                    }
+
                     <div class="input-group input-group-sm mb-2">
 
                         @if (Model.ItemLines.Count > 0 && index >= 0)
@@ -285,12 +284,12 @@
                     <!--<div class="row center">-->
                     <!--create message to show quantity is larger than stock-->
                     <!--@if (ViewBag.quantityError != null && Model.InventoryBooking[i].ModelID == ViewBag.id)
-                        {
-                            <div class="col-12 text-red">@ViewBag.quantityError&nbsp;</div>
-                        }
+        {
+            <div class="col-12 text-red">@ViewBag.quantityError&nbsp;</div>
+        }
 
 
-                    </div>-->
+    </div>-->
 
                 </div>
 
