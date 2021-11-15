@@ -12,48 +12,53 @@
 
 <div class="container containerMain box-shadow">
 
+
+    <!-----------------------------------------------------------------------
+        List Orders to be rethrieved
+        ---------------------------------------------------------------------
+        -->
     <div class="row containerHeader">
         <h4 class="col">Bestillinger til afhentnining:</h4>
     </div>
 
     <div class="row containerSubHeader border-top border-bottom border-white border-1">
-        <div class="col-lg-1 col-md-3 col-3 p-1 border-start border-end border-white border-1">Ordre Nr.<br />Bestiller</div>
-        <div class="col-lg-1 col-md-3 col-3 p-1 border-start border-end border-white border-1">Lokale</div>
-        <div class="col-lg-1 col-md-3 col-3 p-1 border-start border-end border-white border-1">Booking <br /> start</div>
-        <div class="col-lg-1 col-md-3 col-3 p-1 border-start border-end border-white border-1">Booking <br /> slut</div>
-        <div class="col-lg-2 col-md-5 col-5 p-1 border-start border-end border-white border-1">Bemærkninger</div>
-        <div class="col-lg-4 col-md-7 col-7 p-1 border-start border-end border-white border-1">Enheder til afhentning</div>
-        <div class="col-lg-1 d-none d-block p-1 border-start border-white border-1"></div>
-        <div class="col-lg-1 d-none d-block p-1 border-end border-white border-1"></div>
+        <div class="col-lg-1 col-3 p-1 border-end border-white border-1 border-md-hide-left">Ordre Nr.<br />Bestiller</div>
+        <div class="col-lg-1 col-3 p-1 border-end border-white border-1">Lokale</div>
+        <div class="col-lg-1 col-3 p-1 border-end border-white border-1">Booking start</div>
+        <div class="col-lg-1 col-3 p-1 border-end border-white border-1 border-md-hide-right">Booking slut</div>
+        <div class="col-lg-2 col-5 p-1 border-end border-white border-1">Bemærkninger</div>
+        <div class="col-lg-4 col-7 p-1 border-end border-white border-1 border-md-hide-right">Enheder til afhentning</div>
+        <div class="col-lg-1 d-none d-block p-1"></div>
+        <div class="col-lg-1 d-none d-block p-1"></div>
     </div>
     @if (Model.BookingsToBeRetrieved.Count > 0)
     {
         @foreach (BookingModel booking in Model.BookingsToBeRetrieved)
         {
             <div class="row containerBody border-bottom border-white border-1 alternating_row">
-                <div class="col-lg-1 col-md-3 col-1 p-1 border-end border-white border-1">@booking.BookingID<br />@booking.Customer</div>
-                <div class="col-lg-1 col-md-3 col-1 p-1 border-end border-white border-1">@booking.Location.Building.@booking.Location.RoomNumber</div>
-                <div class="col-lg-1 col-md-3 col-1 p-1 border-end border-white border-1">@booking.PlannedBorrowDate.ToString("dd/MM-yy")</div>
-                <div class="col-lg-1 col-md-3 col-1 p-1 border-end border-white border-1">@booking.PlannedReturnDate.ToString("dd/MM-yy")</div>
-                <div class="col-lg-2 col-md-5 col-2 p-1 border-end border-white border-1">@booking.Notes</div>
-                <div class="col-lg-4 col-md-7 col-3 p-1 border-end border-white border-1">
+                <div class="col-lg-1 col-3 p-1 border-end border-white border-1 border-md-hide-left">@booking.BookingID<br />@booking.Customer</div>
+                <div class="col-lg-1 col-3 p-1 border-end border-white border-1">@booking.Location.Building.@booking.Location.RoomNumber</div>
+                <div class="col-lg-1 col-3 p-1 border-end border-white border-1">@booking.PlannedBorrowDate.ToString("dd/MM-yy")</div>
+                <div class="col-lg-1 col-3 p-1 border-end border-white border-1 border-md-hide-right">@booking.PlannedReturnDate.ToString("dd/MM-yy")</div>
+                <div class="col-lg-2 col-5 p-1 border-end border-white border-1">@booking.Notes</div>
+                <div class="col-lg-4 col-7 p-1 border-end border-white border-1">
                     @foreach (ItemLineModel item in booking.Items)
                     {
-                        <div class="row" style="margin-bottom:3px;">
-                            <div class="col-3">@item.Quantity</div>
-                            <div class="col-9 border-1 border-start border-white">
-                                (@item.Model.Category.Category) @item.Model.ModelName
-                            </div>
+
+                        <div class="row">
+                            <div class="col-3 text-end">@item.Quantity stk.</div>
+                            <div class="col-9 text-start">(@item.Model.Category.Category) @item.Model.ModelName</div>
                         </div>
+                       
                     }
                 </div>
-                <div class="col-lg-1 col-md-6 col-2 p-1 center">
+                <div class="col-lg-1 col-6 p-1 border-end border-white border-1 border-md-hide-right center">
                     @using (Html.BeginForm("GoToScanDevices", "Booking"))
                     {
                         <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:75px">Skan</button>
                     }
                 </div>
-                <div class="col-lg-1 col-md-6 col-2 p-1 center">
+                <div class="col-lg-1 col-6 p-1 border-end border-white border-1 border-md-hide-right center">
                     @using (Html.BeginForm("GoToBooking", "Booking"))
                     {
                         <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:75px">Rediger</button>
@@ -65,14 +70,14 @@
     else
     {
         <div class="row containerBody border-bottom border-white border-1 alternating_row">
-            <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">&nbsp;</div>
-            <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1"></div>
-            <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1"></div>
-            <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1"></div>
-            <div class="col-lg-2 col-md-5 col-5 p-1 border-end border-white border-1"></div>
-            <div class="col-lg-4 col-md-7 col-7 p-1 border-end border-white border-1"></div>
-            <div class="col-lg-1 col-md-6 col-6 p-1 center"></div>
-            <div class="col-lg-1 col-md-6 col-6 p-1 center"></div>
+            <div class="col-lg-1 col-3 p-1 border-end border-white border-1 border-md-hide-left">&nbsp;</div>
+            <div class="col-lg-1 col-3 p-1 border-end border-white border-1"></div>
+            <div class="col-lg-1 col-3 p-1 border-end border-white border-1"></div>
+            <div class="col-lg-1 col-3 p-1 border-end border-white border-1 border-md-hide-right"></div>
+            <div class="col-lg-2 col-5 p-1 border-end border-white border-1">&nbsp;</div>
+            <div class="col-lg-4 col-7 p-1 border-end border-white border-1"></div>
+            <div class="col-lg-1 d-none d-block p-1">&nbsp;</div>
+            <div class="col-lg-1 d-none d-block p-1"></div>
         </div>
     }
 
@@ -83,53 +88,53 @@
 </div>
 
 
-
+<!-----------------------------------------------------------------------
+    List Orders to be delivered
+----------------------------------------------------------------------->
 <div class="container containerMain box-shadow">
     <div class="row containerHeader">
         <h4 class="col">Bestillinger til levering:</h4>
     </div>
 
     <div class="row containerSubHeader border-top border-bottom border-white border-1">
-        <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">Ordre Nr.<br />Bestiller</div>
-        <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">Lokale</div>
-        <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">Booking <br /> start</div>
-        <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">Booking <br /> slut</div>
-        <div class="col-lg-2 col-md-5 col-5 p-1 border-end border-white border-1">Bemærkninger</div>
-        <div class="col-lg-4 col-md-7 col-7 p-1 border-end border-white border-1">Bestilte enheder</div>
-        <div class="col-lg-1 d-none d-block p-1 border-start border-white border-1"></div>
-        <div class="col-lg-1 d-none d-block p-1 border-end border-white border-1"></div>
+        <div class="col-lg-1 col-3 p-1 border-end border-white border-1 border-md-hide-left">Ordre Nr.<br />Bestiller</div>
+        <div class="col-lg-1 col-3 p-1 border-end border-white border-1">Lokale</div>
+        <div class="col-lg-1 col-3 p-1 border-end border-white border-1">Booking start</div>
+        <div class="col-lg-1 col-3 p-1 border-end border-white border-1 border-md-hide-right">Booking slut</div>
+        <div class="col-lg-2 col-5 p-1 border-end border-white border-1">Bemærkninger</div>
+        <div class="col-lg-4 col-7 p-1 border-end border-white border-1 border-md-hide-right">Bestilte enheder</div>
+        <div class="col-lg-1 d-none d-block p-1"></div>
+        <div class="col-lg-1 d-none d-block p-1"></div>
     </div>
     @if (Model.BookingsToBeDelivered.Count > 0)
     {
         @foreach (BookingModel booking in Model.BookingsToBeDelivered)
         {
             <div class="row containerBody border-bottom border-white border-1 alternating_row">
-                <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">@booking.BookingID<br />@booking.Customer</div>
+                <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1 border-md-hide-left">@booking.BookingID<br />@booking.Customer</div>
                 <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">@booking.Location.Building.@booking.Location.RoomNumber</div>
                 <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">@booking.PlannedBorrowDate.ToString("dd/MM-yy")</div>
-                <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">@booking.PlannedReturnDate.ToString("dd/MM-yy")</div>
+                <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1 border-md-hide-right">@booking.PlannedReturnDate.ToString("dd/MM-yy")</div>
                 <div class="col-lg-2 col-md-5 col-5 p-1 border-end border-white border-1">@booking.Notes</div>
-                <div class="col-lg-4 col-md-7 col-7 p-1 border-end border-white border-1">
+                <div class="col-lg-4 col-md-7 col-7 p-1 border-end border-white border-1 border-md-hide-right">
                     @foreach (ItemLineModel item in booking.Items)
                     {
-                        <div class="row" style="margin-bottom:3px;">
+                        <div class="row">
                             <div class="col-3 text-end">@item.Quantity stk.</div>
-                            <div class="col-9 border-1 border-start border-white">
-                                (@item.Model.Category.Category) @item.Model.ModelName
-                            </div>
+                            <div class="col-9 text-start">(@item.Model.Category.Category) @item.Model.ModelName</div>
                         </div>
                     }
                 </div>
-                <div class="col-lg-1 col-md-6 col-6 p-1 border-end border-white center">
+                <div class="col-lg-1 col-6 p-1 border-end border-white border-1 border-md-hide-right center">
                     @using (Html.BeginForm("GoToScanDevices", "Booking"))
                     {
-                        <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:75px">Skan enheder</button>
+                        <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:75px">Skan</button>
                     }
                 </div>
-                <div class="col-lg-1 col-md-6 col-6 p-1 border-end border-white center">
+                <div class="col-lg-1 col-6 p-1 border-end border-white border-1 border-md-hide-right center">
                     @using (Html.BeginForm("GoToBooking", "Booking"))
                     {
-                        <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:75px">Rediger booking</button>
+                        <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:75px">Rediger</button>
                     }
                 </div>
             </div>
@@ -139,14 +144,14 @@
     else
     {
         <div class="row containerBody border-bottom border-white border-1 alternating_row">
-            <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1">&nbsp;</div>
+            <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1 border-md-hide-left">&nbsp;</div>
             <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1"></div>
             <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1"></div>
-            <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1"></div>
+            <div class="col-lg-1 col-md-3 col-3 p-1 border-end border-white border-1 border-md-hide-right"></div>
             <div class="col-lg-2 col-md-5 col-5 p-1 border-end border-white border-1"></div>
             <div class="col-lg-4 col-md-7 col-7 p-1 border-end border-white border-1"></div>
-            <div class="col-lg-1 col-md-6 col-6 p-1"></div>
-            <div class="col-lg-1 col-md-6 col-6 p-1"></div>
+            <div class="col-lg-1 d-none d-block p-1">&nbsp;</div>
+            <div class="col-lg-1 d-none d-block p-1"></div>
         </div>
     }
 

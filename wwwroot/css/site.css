@@ -86,11 +86,31 @@ html {
     html {
         font-size: 1em;
     }
+
 }
+
+@media only screen and (max-width: 992px) {
+    .border-md-hide-left {
+        border-left: 0px !important;
+    }
+
+    .border-md-hide-right {
+        border-right: 0px !important;
+    }
+}
+
 
 @media only screen and (max-width: 768px) {
     html {
         font-size: 0.875em;
+    }
+
+    .border-sm-hide-left {
+        border-left: 0px !important;
+    }
+
+    .border-sm-hide-right {
+        border-right: 0px !important;
     }
 }
 
@@ -98,11 +118,27 @@ html {
     html {
         font-size: 0.7em;
     }
+
+    .border-xs-hide-left {
+        border-left: 0px !important;
+    }
+
+    .border-xs-hide-right {
+        border-right: 0px !important;
+    }
 }
 
 @media only screen and (max-width: 375px) {
     html {
         font-size: 0.6em;
+    }
+
+    .border-xs-hide-left {
+        border-left: 0px !important;
+    }
+
+    .border-xs-hide-right {
+        border-right: 0px !important;
     }
 }
 

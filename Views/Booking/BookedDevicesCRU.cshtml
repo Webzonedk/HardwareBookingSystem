@@ -4,105 +4,139 @@
 @{
     ViewData["Title"] = "Skan Enheder";
 }
-<div class="row blue-oyster-bar center box-shadow">
-    <div class="row g-2">
-        <div class="row">
+<div class="row blue-oyster-bar box-shadow">
+    <div class="row center g-2 ">
+        <div class="col-lg-12">
+
             @if (Model.Booking.DeliveredBy != null)
             {
                 <h2 class="text-white align-items-center">
-                    Returner enheder fra bestilling @Model.Booking.BookingID
+                    Returner enheder fra booking nr. @Model.Booking.BookingID
                 </h2>
             }
             else
             {
                 <h2 class="text-white align-items-center">
-                    Lever enheder til bestilling @Model.Booking.BookingID
+                    Lever enheder til booking nr. @Model.Booking.BookingID
                 </h2>
             }
         </div>
-        <div class="row">
-            <div class="col-1">
-            </div>
-            <div class="col-5 text-white border-1 border-end border-white" style="margin-bottom:5px;">
-                <div class="row">
-                    <p>
-                        Bestiller: <span class="fw-bold">@Model.Booking.Customer</span> | Lokale: <span class="fw-bold">@Model.Booking.Location.Building.@Model.Booking.Location.RoomNumber</span>
-                        @if (Model.Booking.DeliveredBy != null)
-                        {
-                            <span> | Leveret af: <span class="fw-bold">@Model.Booking.DeliveredBy</span></span>
-                        }
-                    </p>
-                </div>
-                <div class="row">
-                    <p>Fra d. <span class="fw-bold">@Model.Booking.PlannedBorrowDate.ToString("dd/MM-yy")</span> til og med d. <span class="fw-bold">@Model.Booking.PlannedReturnDate.ToString("dd/MM-yy")</span></p>
-                </div>
-                <div class="row">
-                    @using (Html.BeginForm("GoToBooking", "Booking"))
-                    {
-                        <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
-                            <span>Rediger Booking</span>
-                        </button>
-                    }
-                    @using (Html.BeginForm("DeliverBooking", "Booking"))
-                    {
-                        if ((Model.Booking.DeliveredBy == null || Model.Booking.DeliveredBy == "") && Model.Booking.Devices.Count > 0)
-                        {
-                            <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
-                                <span>Lever Ordre</span>
-                            </button>
-                        }
-                        else
-                        {
-                            <button type="submit" disabled class="btn btn-primary btn-sm btn-dark" style="width:100px">
-                                <span>Lever Ordre</span>
-                            </button>
-                        }
-                    }
-                </div>
-            </div>
-            <div class="col-5">
-                @using (Html.BeginForm("ProcessDeviceForBooking", "Booking"))
-                {
+    </div>
+    <div class="row">
+        <div class="col-lg-1"> </div>
+        <div class="col-lg-5 col-12 text-white border-end border-white"">
+            <div class="row">
+                <div class="col-8">
                     <div class="row">
-                        <h4 class="text-white">Indtast enheds ID:</h4>
+                        <div class="col-12">
+                            <p><span class="fw-bold">Bestiller: </span><span>@Model.Booking.Customer</span></p>
+                        </div>
+                        <div class="col-12">
+                            <p><span class="fw-bold">Lokale: </span><span>@Model.Booking.Location.Building.@Model.Booking.Location.RoomNumber</span></p>
+                        </div>
+
+                        <div class="col-12">
+                            @if (Model.Booking.DeliveredBy != null)
+                            {
+                                <p><span class="fw-bold">Leveret af: </span><span>@Model.Booking.DeliveredBy</span></p>
+                            }
+                        </div>
+                        <div class="col-12">
+                            <p><span class="fw-bold">Booking start: </span><span>@Model.Booking.PlannedBorrowDate.ToString("MM\\/dd yyyy")</span></p>
+                        </div>
+                        <div class="col-12">
+                            <p><span class="fw-bold">Booking slut: </span><span>@Model.Booking.PlannedReturnDate.ToString("MM\\/dd yyyy")</span></p>
+                        </div>
+
                     </div>
+
+                </div>
+                <div class="col-4">
                     <div class="row">
-                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-0 col-sm-0 p-1"></div>
-                        <input class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-12 col-sm-12 p-1" name="deviceID" type="number" />
+                        <div class="col-12 g-3">
+                            @using (Html.BeginForm("GoToBooking", "Booking"))
+                            {
+                                <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
+                                    <span>Rediger Booking</span>
+                                </button>
+                            }
+                        </div>
+                        <div class="col-12 g-3">
+                            @using (Html.BeginForm("DeliverBooking", "Booking"))
+                            {
+                                if ((Model.Booking.DeliveredBy == null || Model.Booking.DeliveredBy == "") && Model.Booking.Devices.Count > 0)
+                                {
+                                    <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
+                                        <span>Lever Ordre</span>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="submit" disabled class="btn btn-primary btn-sm btn-dark" style="width:100px">
+                                        <span>Lever Ordre</span>
+                                    </button>
+                                }
+                            }
+                        </div>
                     </div>
-                    
-                    <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
-                        @if (Model.Booking.DeliveredBy != null)
-                        {
-                            <span>Tilføj/Returner Enhed</span>
-                        }
-                        else
-                        {
-                            <span>Tilføj/Fjern Enhed</span>
-                        }
-                    </button>
-                }
-                @using (Html.BeginForm("GoToScanDevice", "Booking"))
-                {
-                    <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue">
-                        <span>Scan QR</span>
-                    </button>
-                }
+
+                </div>
             </div>
         </div>
-        @if (httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError") != null && httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError") != "")
-        {
-            <div class="row">
-                <!-- Error Handling, if any -->
 
-                <div class="col-2"></div>
-                <div class="col-6" style="align-content:center; margin-top:8px;" id="bookedDeviceError">
-                    <p style="text-align:center; padding:5px; background-color:indianred; border-radius:8px; border-width:3px; border-style:solid; border-color:darkred;">@httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError").ToString()</p>
+
+
+
+
+        <div class="col-lg-5 col-12">
+            @using (Html.BeginForm("ProcessDeviceForBooking", "Booking"))
+            {
+                <div class="row">
+                    <h4 class="text-white">Indtast enheds ID:</h4>
                 </div>
-            </div>
-            httpContextAccessor.HttpContext.Session.SetString("bookedDeviceError", "");
-        }
+                <div class="row">
+                    <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-0 col-sm-0 p-1"></div>
+                    <input class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-12 col-sm-12 p-1" name="deviceID" type="number" />
+                </div>
+
+                <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
+                    @if (Model.Booking.DeliveredBy != null)
+                    {
+                        <span>Tilføj/Returner Enhed</span>
+                    }
+                    else
+                    {
+                        <span>Tilføj/Fjern Enhed</span>
+                    }
+                </button>
+            }
+            @using (Html.BeginForm("GoToScanDevice", "Booking"))
+            {
+                <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue">
+                    <span>Scan QR</span>
+                </button>
+            }
+        </div>
+        <div class="col-lg-1"> </div>
     </div>
+
+
+
+
+
+    @if (httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError") != null && httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError") != "")
+    {
+        <div class="row">
+            <!-- Error Handling, if any -->
+
+            <div class="col-2"></div>
+            <div class="col-6" style="align-content:center; margin-top:8px;" id="bookedDeviceError">
+                <p style="text-align:center; padding:5px; background-color:indianred; border-radius:8px; border-width:3px; border-style:solid; border-color:darkred;">@httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError").ToString()</p>
+            </div>
+        </div>
+        httpContextAccessor.HttpContext.Session.SetString("bookedDeviceError", "");
+    }
+
 </div>
 
 <div class="container containerMain box-shadow">
@@ -121,49 +155,49 @@
     <div class="row containerBody">
         @foreach (ItemLineModel ilm in Model.Booking.Items)
         {
-        <div class="row">
-            <div class="col-xl-4 col-lg-4 col-md-4 col-8 p-1 border-end border-white border-1">(@ilm.Model.Category.Category) @ilm.Model.ModelName</div>
-            @{
-                int countOfBookedDevices = 0;
-                int countOfReturnedBookedDevices = 0;
-                foreach (DeviceModel device in Model.Booking.Devices)
-                {
-                    if (device.Model.ModelName == ilm.Model.ModelName)
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-8 p-1 border-end border-white border-1">(@ilm.Model.Category.Category) @ilm.Model.ModelName</div>
+                @{
+                    int countOfBookedDevices = 0;
+                    int countOfReturnedBookedDevices = 0;
+                    foreach (DeviceModel device in Model.Booking.Devices)
                     {
-                        countOfBookedDevices++;
-                        if (device.ReturnedBy != null && device.ReturnedBy != "")
+                        if (device.Model.ModelName == ilm.Model.ModelName)
                         {
-                            countOfReturnedBookedDevices++;
+                            countOfBookedDevices++;
+                            if (device.ReturnedBy != null && device.ReturnedBy != "")
+                            {
+                                countOfReturnedBookedDevices++;
+                            }
                         }
                     }
-                }
-                <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 border-end border-white border-1 center">
-                    @ilm.Quantity / @countOfBookedDevices / @countOfReturnedBookedDevices
-                </div>
-                foreach (ItemLineModel item in Model.ModelsInStorage)
-                {
-                    if (item.Model.ModelName == ilm.Model.ModelName)
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 border-end border-white border-1 center">
+                        @ilm.Quantity / @countOfBookedDevices / @countOfReturnedBookedDevices
+                    </div>
+                    foreach (ItemLineModel item in Model.ModelsInStorage)
                     {
-                        if (item.Quantity > 0)
+                        if (item.Model.ModelName == ilm.Model.ModelName)
                         {
-                            <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 center">
-                                @item.Quantity / @Model.StorageLocations[item.Model.ModelName].Location.Building.@Model.StorageLocations[item.Model.ModelName].Location.RoomNumber
-                                @Model.StorageLocations[item.Model.ModelName].ShelfName.@Model.StorageLocations[item.Model.ModelName].ShelfLevel.@Model.StorageLocations[item.Model.ModelName].ShelfSpot
-                            </div>
+                            if (item.Quantity > 0)
+                            {
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 center">
+                                    @item.Quantity / @Model.StorageLocations[item.Model.ModelName].Location.Building.@Model.StorageLocations[item.Model.ModelName].Location.RoomNumber
+                                    @Model.StorageLocations[item.Model.ModelName].ShelfName.@Model.StorageLocations[item.Model.ModelName].ShelfLevel.@Model.StorageLocations[item.Model.ModelName].ShelfSpot
+                                </div>
+                            }
+                            else
+                            {
+                                // If there are none of this model in storage, storagelocation is Null!
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 center">
+                                    @item.Quantity / -.- -.-.-
+                                </div>
+                            }
+                            break;
                         }
-                        else
-                        {
-                            // If there are none of this model in storage, storagelocation is Null!
-                            <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 center">
-                                @item.Quantity / -.- -.-.-
-                            </div>
-                        }
-                        break;
-                    }
 
+                    }
                 }
-            }
-        </div>
+            </div>
         }
 
     </div>
