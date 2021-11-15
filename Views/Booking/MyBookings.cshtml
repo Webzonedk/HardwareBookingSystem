@@ -1,4 +1,5 @@
 ﻿@model HUS_project.Models.ViewModels.MyBookingsModel
+@using System.Globalization;
 @{
     ViewData["Title"] = "Mine Bestillinger";
 }
@@ -17,140 +18,140 @@
     </div>
 
     <div class="row containerSubHeader border-top border-bottom border-white border-1">
-        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Ordre ID</div>
-        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Hvor</div>
-        <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">Noter</div>
-        <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1 border-end border-white border-1">Hvad Er Bestilt:</div>
-        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Første Dag</div>
-        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Sidste Dag</div>
-        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Leveret af</div>
-        <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1"></div>
+        <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">Ordre ID</div>
+        <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">Hvor</div>
+        <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">Første Dag</div>
+        <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">Sidste Dag</div>
+        <div class="col-xl-2 col-lg-2 col-4 p-1 border-end border-white border-1">Bemærkning</div>
+        <div class="col-xl-3 col-lg-3 col-6 p-1 border-end border-white border-1">Hvad Er Bestilt:</div>
+        <div class="col-xl-1 col-lg-1 col-2 p-1 border-end border-white border-1">Leveret af</div>
+        <div class="col-lg-1 d-none d-block p-1"></div>
     </div>
-
-    <div class="row containerBody">
-        @foreach (BookingModel booking in Model.ActiveBookings)
-        {
-            <div class="row border-bottom border-white border-1">
-                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.BookingID</div>
-                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.Location.Building.@booking.Location.RoomNumber</div>
-                <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">@booking.Notes</div>
-                <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1 border-end border-white border-1">
-                    @foreach (ItemLineModel item in booking.Items)
-                    {
-                        <div class="row" style="margin-bottom:3px;">
-                            <div class="col-3">@item.Quantity</div>
-                            <div class="col-9 border-1 border-start border-white">
-                                (@item.Model.Category.Category) @item.Model.ModelName
-                            </div>
+    @foreach (BookingModel booking in Model.ActiveBookings)
+    {
+        <div class="row containerBody border-bottom border-white border-1 alternating_row">
+            <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">@booking.BookingID</div>
+            <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">@booking.Location.Building.@booking.Location.RoomNumber</div>
+            <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">@booking.PlannedBorrowDate.ToString("dd/MM-yy", CultureInfo.InvariantCulture)</div>
+            <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">@booking.PlannedReturnDate.ToString("dd/MM-yy", CultureInfo.InvariantCulture)</div>
+            <div class="col-xl-2 col-lg-2 col-4 p-1 border-end border-white border-1">@booking.Notes</div>
+            <div class="col-xl-3 col-lg-3 col-6 p-1 border-end border-white border-1">
+                @foreach (ItemLineModel item in booking.Items)
+                {
+                    <div class="row" style="margin-bottom:3px;">
+                        <div class="col-3">@item.Quantity stk.</div>
+                        <div class="col-9 border-1 border-start border-white">
+                            (@item.Model.Category.Category) @item.Model.ModelName
                         </div>
-                    }
-                </div>
-                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.PlannedBorrowDate.ToString("dd/MM-yy")</div>
-                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.PlannedReturnDate.ToString("dd/MM-yy")</div>
-                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.DeliveredBy</div>
-                <div class="col-lg-2 col-2 p-1 center">
-                    @using (Html.BeginForm("GoToBooking", "Booking"))
-                    {
-                    <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">Se Bestilling</button>
-                    }
-                </div>
+                    </div>
+                }
             </div>
-        }
-    </div>
+            <div class="col-xl-1 col-lg-1 col-2 p-1 border-end border-white border-1">@booking.DeliveredBy</div>
+            <div class="col-lg-2 col-12 p-1 center">
+                @using (Html.BeginForm("GoToBooking", "Booking"))
+                {
+                    <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">Se Bestilling</button>
+                }
+            </div>
+        </div>
+    }
     <div class="row containerFooter">
         <h4>&nbsp;</h4>
     </div>
+</div>
 
+
+<div class="container containerMain box-shadow">
     <div class="row containerHeader">
         <h4 class="col">Kommende Bestillinger:</h4>
     </div>
 
     <div class="row containerSubHeader border-top border-bottom border-white border-1">
-        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Ordre ID</div>
-        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Hvor</div>
-        <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">Noter</div>
-        <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1 border-end border-white border-1">Hvad Er Bestilt:</div>
-        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Første Dag</div>
-        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Sidste Dag</div>
-        <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1"></div>
+        <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">Ordre ID</div>
+        <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">Hvor</div>
+        <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">Første Dag</div>
+        <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">Sidste Dag</div>
+        <div class="col-xl-2 col-lg-2 col-5 p-1 border-end border-white border-1">Noter</div>
+        <div class="col-xl-3 col-lg-3 col-7 p-1 border-end border-white border-1">Hvad Er Bestilt:</div>
+        <div class="col-lg-1 d-none d-block p-1"></div>
     </div>
 
-    <div class="row containerBody">
-        @foreach (BookingModel booking in Model.ComingBookings)
-        {
-            <div class="row border-bottom border-white border-1">
-                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.BookingID</div>
-                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.Location.Building.@booking.Location.RoomNumber</div>
-                <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">@booking.Notes</div>
-                <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1 border-end border-white border-1">
-                    @foreach (ItemLineModel item in booking.Items)
-                    {
-                        <div class="row" style="margin-bottom:3px;">
-                            <div class="col-3">@item.Quantity</div>
-                            <div class="col-9 border-1 border-start border-white">
-                                (@item.Model.Category.Category) @item.Model.ModelName
-                            </div>
+    @foreach (BookingModel booking in Model.ComingBookings)
+    {
+        <div class="row containerBody border-bottom border-white border-1 alternating_row">
+            <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">@booking.BookingID</div>
+            <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">@booking.Location.Building.@booking.Location.RoomNumber</div>
+            <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">@booking.PlannedBorrowDate.ToString("dd/MM-yy", CultureInfo.InvariantCulture)</div>
+            <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">@booking.PlannedReturnDate.ToString("dd/MM-yy", CultureInfo.InvariantCulture)</div>
+            <div class="col-xl-2 col-lg-2 col-5 p-1 border-end border-white border-1">@booking.Notes</div>
+            <div class="col-xl-3 col-lg-3 col-7 p-1 border-end border-white border-1">
+                @foreach (ItemLineModel item in booking.Items)
+                {
+                    <div class="row" style="margin-bottom:3px;">
+                        <div class="col-3">@item.Quantity stk.</div>
+                        <div class="col-9 border-1 border-start border-white">
+                            (@item.Model.Category.Category) @item.Model.ModelName
                         </div>
-                    }
-                </div>
-                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.PlannedBorrowDate.ToString("dd/MM-yy")</div>
-                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.PlannedReturnDate.ToString("dd/MM-yy")</div>
-                <div class="col-lg-2 col-2 p-1 center">
-                    @using (Html.BeginForm("GoToBooking", "Booking"))
-                    {
-                    <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">Se Bestilling</button>
-                    }
-                </div>
+                    </div>
+                }
             </div>
-        }
-    </div>
+            <div class="col-lg-2 col-12 p-1 center">
+                @using (Html.BeginForm("GoToBooking", "Booking"))
+                {
+                    <button type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">Se Bestilling</button>
+                }
+            </div>
+        </div>
+    }
     <div class="row containerFooter">
         <h4>&nbsp;</h4>
     </div>
+</div>
 
+
+<div class="container containerMain box-shadow">
     <div class="row containerHeader">
         <h4 class="col">Afsluttede Bestillinger:</h4>
     </div>
 
     <div class="row containerSubHeader border-top border-bottom border-white border-1">
-        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Ordre ID</div>
-        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Hvor</div>
-        <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">Noter</div>
-        <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1 border-end border-white border-1">Hvad Var Bestilt:</div>
-        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Første Dag</div>
-        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Sidste Dag</div>
-        <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">Leveret af</div>
-        <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1"></div>
+        <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">Ordre ID</div>
+        <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">Hvor</div>
+        <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">Første Dag</div>
+        <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">Sidste Dag</div>
+        <div class="col-xl-2 col-lg-2 col-4 p-1 border-end border-white border-1">Noter</div>
+        <div class="col-xl-3 col-lg-3 col-6 p-1 border-end border-white border-1">Hvad Var Bestilt:</div>
+        <div class="col-xl-1 col-lg-1 col-2 p-1 border-end border-white border-1">Leveret af</div>
+        <div class="col-lg-1 d-none d-block p-1"></div>
     </div>
 
-    <div class="row containerBody">
-        @foreach (BookingModel booking in Model.OldBookings)
-        {
-            <div class="row border-bottom border-white border-1">
-                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.BookingID</div>
-                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.Location.Building.@booking.Location.RoomNumber</div>
-                <div class="col-xl-2 col-lg-2 col-md-2 col-2 p-1 border-end border-white border-1">@booking.Notes</div>
-                <div class="col-xl-3 col-lg-3 col-md-3 col-3 p-1 border-end border-white border-1">
-                    @foreach (ItemLineModel item in booking.Items)
-                    {
-                        <div class="row" style="margin-bottom:3px;">
-                            <div class="col-3">@item.Quantity</div>
-                            <div class="col-9 border-1 border-start border-white">
-                                (@item.Model.Category.Category) @item.Model.ModelName
-                            </div>
-                        </div>
-                    }
+    
+    @foreach (BookingModel booking in Model.OldBookings)
+    {
+    <div class="row containerBody border-bottom border-white border-1 alternating_row">
+        <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">@booking.BookingID</div>
+        <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">@booking.Location.Building.@booking.Location.RoomNumber</div>
+        <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">@booking.PlannedBorrowDate.ToString("dd/MM-yy", CultureInfo.InvariantCulture)</div>
+        <div class="col-xl-1 col-lg-1 col-3 p-1 border-end border-white border-1">@booking.PlannedReturnDate.ToString("dd/MM-yy", CultureInfo.InvariantCulture)</div>
+        <div class="col-xl-2 col-lg-2 col-4 p-1 border-end border-white border-1">@booking.Notes</div>
+        <div class="col-xl-3 col-lg-3 col-6 p-1 border-end border-white border-1">
+            @foreach (ItemLineModel item in booking.Items)
+            {
+                <div class="row" style="margin-bottom:3px;">
+                    <div class="col-3">@item.Quantity stk.</div>
+                    <div class="col-9 border-1 border-start border-white">
+                        (@item.Model.Category.Category) @item.Model.ModelName
+                    </div>
                 </div>
-                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.PlannedBorrowDate.ToString("dd/MM-yy")</div>
-                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.PlannedReturnDate.ToString("dd/MM-yy")</div>
-                <div class="col-xl-1 col-lg-1 col-md-1 col-1 p-1 border-end border-white border-1">@booking.DeliveredBy</div>
-                <div class="col-lg-2 col-2 p-1 center">
-                    @* Incomplete feature. *@
-                    <button disabled type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">Se Bestilling</button>
-                </div>
-            </div>
-        }
+            }
+        </div>
+        <div class="col-xl-1 col-lg-1 col-2 p-1 border-end border-white border-1">@booking.DeliveredBy</div>
+        <div class="col-lg-2 col-12 p-1 center">
+            @* Incomplete feature. *@
+            <button disabled type="submit" name="bookingID" value="@booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">Se Bestilling</button>
+        </div>
     </div>
+    }
 
     <div class="row containerFooter">
         <h4>&nbsp;</h4>
