@@ -120,5 +120,5 @@ function changeQuantity() {
     }
 
     hiddenbasket.value = basketCount;
-    basket.textContent = "enheder i kurven" + basketCount;
+    basket.textContent = "Kurv" +"(" + basketCount + ")";
 }
