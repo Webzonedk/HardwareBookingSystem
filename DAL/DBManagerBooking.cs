@@ -290,9 +290,6 @@ namespace HUS_project.DAL
         /// <param name="returnedBy">Who is logged in, marked this as returned</param>
         internal void ReturnBookedDevice(int deviceID, int bookingID, string returnedBy)
         {
-            // Delivery has already been made. Update BookedDevice to be Returned.
-            // "ReturnBookedDevice"
-
             SqlConnection con = new SqlConnection(connectionString);
             SqlCommand cmd = new SqlCommand("ReturnBookedDevice", con);
             cmd.CommandType = CommandType.StoredProcedure;
