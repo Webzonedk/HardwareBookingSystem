@@ -58,18 +58,19 @@ function SendValueToButton(inputTitle) {
     let button = document.getElementById(id);
     let modelID = button.value;
 
+  
    
 
     if (stock == null) {
         stock = '0';
     }
     else {
-        stock = stock.innerText;
+        stock = stock.value;
     }
 
+  
 
-
-    let splittedvalues = button.value.split("-");
+    let splittedvalues = button.value.split(";");
     if (splittedvalues.length > 0) {
 
         modelID = splittedvalues[0];

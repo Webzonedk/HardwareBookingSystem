@@ -9,20 +9,25 @@
     <div class="row blue-oyster-bar center box-shadow">
 
 
-
+        <!--blank col-->
         <div class="col-sm-4"></div>
+
+        <!--add category-->
         <div class="col-sm-4">
 
+            <!--header-->
             <div class="p-1">
                 <h4>Opret Ny Kategori:</h4>
 
             </div>
 
+            <!--input field for new category name-->
             <div class="p-1">
                 <input style="width:100%" asp-for="@Model.New_Category" />
 
             </div>
 
+            <!--button for add new category-->
             <div class="p-1">
                 <button type="submit" class="btn btn-primary btn-sm btn-blue" style="width:100px" asp-action="CreateCategory">Opret</button>
 
@@ -30,6 +35,8 @@
 
 
         </div>
+
+        <!--blank col-->
         <div class="col-sm-4"></div>
 
 
@@ -37,6 +44,7 @@
 
     <!-----------------------Redigering af kategorier eller Model navne------------------------------------------------>
     <div class="row ">
+       
         <div class="col-1">
 
         </div>
@@ -57,7 +65,7 @@
 
 
 
-
+            <!--header category-->
             <div class="row containerHeader">
                 <div class="col-md-12">
                     <h4 class="col text-white">Rediger Kategorier</h4>
@@ -77,24 +85,21 @@
 
                         <div class="row containerBody alternating_row dynamic-Font-Size-10">
 
+                            <!--category name-->
                             <div class="col-lg-6 col-12 p-1 ">
-
 
                                 <input style="width:100%" asp-for="@Model.CategoryNames[i]" />
 
-
                             </div>
 
+                            <!--save button-->
                             <div class="col-lg-3 col-6 p-1 center">
-
 
                                 <button type="submit" name="edit" class="btn btn-primary btn-sm btn-blue" style="width:100px" asp-action="EditCategory" value="@i-@Model.CategoryIds[i]">Gem</button>
 
-
-
                             </div>
 
-
+                            <!--delete button-->
                             <div class="col-lg-3 col-6 p-1 center">
 
                                 <button type="submit" name="delete" class="btn btn-primary btn-sm btn-red" style="width:100px" asp-action="DeleteCategory" value="@Model.CategoryIds[i]">Slet</button>
