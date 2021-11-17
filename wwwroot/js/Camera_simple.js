@@ -57,6 +57,14 @@ function SnapPicture() {
     context.drawImage(video, 0, 0, 332, 250);
     const dataurl = canvas.toDataURL();
 
+    ////resize canvas if image is bigger than video
+    //if (img.height > 250 && img.width > 332) {
+    //    canvas.width = 250;
+    //    canvas.height = 332;
+    //    context = canvas.getContext('2d');
+    //    dataurl = canvas.toDataURL();
+    //}
+
     //set source of image
     img.src = dataurl;
 
