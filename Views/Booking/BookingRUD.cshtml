@@ -22,28 +22,33 @@
                     <div class="col-6">
                         <p class="text-white">Udlån Start:</p>
                         <!-- If start date isn't today or earlier, and you are the one who made the booking, the start date can be moved. -->
-                        @if (httpContextAccessor.HttpContext.Session.GetString("uniLogin") == Model.Customer && Model.PlannedBorrowDate.Date > DateTime.Now.Date)
-                        {
-                            <input name="plannedBorrowDate" asp-for="PlannedBorrowDate" type="date">
-                        }
-                        else
-                        {
-                            <!-- StartDate is today or has passed, or you are not the one who booked, thus it cannot be changed. -->
-                            <!--<label class="text-white">@Model.PlannedBorrowDate.Date.ToString("dd/MM-yy")</label>-->
-                            <input disabled name="plannedBorrowDate" asp-for="PlannedBorrowDate" type="date">
-                        }
+                        <div class="form-floating">
+                            @if (httpContextAccessor.HttpContext.Session.GetString("uniLogin") == Model.Customer && Model.PlannedBorrowDate.Date > DateTime.Now.Date)
+                            {
+                                <input class="form-control" name="plannedBorrowDate" asp-for="PlannedBorrowDate" type="date">
+                            }
+                            else
+                            {
+                                <!-- StartDate is today or has passed, or you are not the one who booked, thus it cannot be changed. -->
+                                <!--<label class="text-white">@Model.PlannedBorrowDate.Date.ToString("dd/MM-yy")</label>-->
+                                <input class="form-control" disabled name="plannedBorrowDate" asp-for="PlannedBorrowDate" type="date">
+                            }
+                        </div>
+                        
                         <p class="text-white">Udlån Slut:</p>
                         <!-- If end date isn't today or earlier, and you are the one who made the booking, the end date can be moved. -->
-                        @if (httpContextAccessor.HttpContext.Session.GetString("uniLogin") == Model.Customer && Model.PlannedReturnDate.Date > DateTime.Now.Date)
-                        {
-                            <input name="plannedReturnDate" asp-for="PlannedReturnDate" type="date">
-                        }
-                        else
-                        {
-                            <!-- EndDate is today or has passed, or you are not the one who booked, thus it cannot be changed. -->
-                            <input disabled name="plannedReturnDate" asp-for="PlannedReturnDate" type="date">
+                        <div class="form-floating">
+                            @if (httpContextAccessor.HttpContext.Session.GetString("uniLogin") == Model.Customer && Model.PlannedReturnDate.Date > DateTime.Now.Date)
+                            {
+                                <input class="form-select" name="plannedReturnDate" asp-for="PlannedReturnDate" type="date">
+                            }
+                            else
+                            {
+                                <!-- EndDate is today or has passed, or you are not the one who booked, thus it cannot be changed. -->
+                                <input class="form-select" disabled name="plannedReturnDate" asp-for="PlannedReturnDate" type="date">
 
-                        }
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
@@ -53,34 +58,38 @@
                         <p class="text-white">Leverings Lokale:</p>
                         <!-- If end date is tomorrow or later, and you are the one who made the booking, the location can be changed.
                             !!!!!! Page 22, storage location       !!!!!!!!!!!!!!!!!      -->
-                        @if (httpContextAccessor.HttpContext.Session.GetString("uniLogin") == Model.Customer && Model.PlannedReturnDate.Date >= DateTime.Now.Date)
-                        {
-                            <input type="text" id="location" style="max-width:100%;" asp-for="Location" name="location" value='@Model.Location.Building.@Model.Location.RoomNumber' />
+                        <div class="form-floating">
+                            @if (httpContextAccessor.HttpContext.Session.GetString("uniLogin") == Model.Customer && Model.PlannedReturnDate.Date >= DateTime.Now.Date)
+                            {
+                                <input class="form-control" type="text" id="location" style="max-width:100%;" asp-for="Location" name="location" value='@Model.Location.Building.@Model.Location.RoomNumber' />
 
-                        }
-                        else
-                        {
-                            <!-- EndDate has passed, or you are not the one who booked, thus it cannot be changed. -->
-                            <label class="text-white" id="location" asp-for="Location" name="location">@Model.Location.Building.@Model.Location.RoomNumber</label>
-                        }
+                            }
+                            else
+                            {
+                                <!-- EndDate has passed, or you are not the one who booked, thus it cannot be changed. -->
+                                <label class="text-white" id="location" asp-for="Location" name="location">@Model.Location.Building.@Model.Location.RoomNumber</label>
+                            }
+                        </div>
                     </div>
                     <div class="col-lg-4 col-6">
                         <!--NOTES-->
                         <p class="text-white">Note:</p>
-                        @if (DateTime.Now.Date <= Model.PlannedReturnDate)
-                        {
-                            <textarea id="notes" asp-for="Notes" name="notes"></textarea>
-                        }
-                        else
-                        {
-                            <textarea disabled id="notes" asp-for="Notes" name="notes"></textarea>
-                        }
-                        <style>
-                            #notes {
-                                height: 70px;
-                                max-width: 100%;
+                        <div class="form-floating">
+                            @if (DateTime.Now.Date <= Model.PlannedReturnDate)
+                            {
+                                <textarea class="form-control" id="notes" asp-for="Notes" name="notes"></textarea>
                             }
-                        </style>
+                            else
+                            {
+                                <textarea class="form-control" disabled id="notes" asp-for="Notes" name="notes"></textarea>
+                            }
+                            <style>
+                                #notes {
+                                    height: 70px;
+                                    max-width: 100%;
+                                }
+                            </style>
+                        </div>
                     </div>
                     <div class="col-lg-4 col-12" style="margin-top: 15px; right:5px;">
                         <div class="row">
