@@ -5,143 +5,190 @@
     ViewData["Title"] = "Skan Enheder";
 }
 <div class="row blue-oyster-bar box-shadow">
-    <div class="row center g-2 ">
-        <div class="col-lg-12">
 
-            @if (Model.Booking.DeliveredBy != null)
-            {
-                <h2 class="text-white align-items-center">
-                    Returner enheder fra booking nr. @Model.Booking.BookingID
-                </h2>
-            }
-            else
-            {
-                <h2 class="text-white align-items-center">
-                    Lever enheder til booking nr. @Model.Booking.BookingID
-                </h2>
-            }
-        </div>
+
+    @*<div class="row center g-2 ">*@
+    <div class="col-lg-12 d-flex justify-content-center">
+
+        @if (Model.Booking.DeliveredBy != null)
+        {
+            <h2 class="text-white align-items-center">
+                Returner enheder fra booking nr. @Model.Booking.BookingID
+            </h2>
+        }
+        else
+        {
+            <h2 class="text-white align-items-center">
+                Lever enheder til booking nr. @Model.Booking.BookingID
+            </h2>
+        }
     </div>
-    <div class="row">
-        <div class="col-lg-1"> </div>
-        <div class="col-lg-5 col-12 text-white border-end border-white"">
-            <div class="row">
-                <div class="col-8">
+
+
+
+
+
+    <div class="col-xxl-1"></div>
+    <div class="col-xxl-2 col-6 text-white d-flex justify-content-center">
+        <p><span class="fw-bold">Levering: </span><span>@Model.Booking.PlannedBorrowDate.ToString("MM\\/dd yyyy")</span></p>
+    </div>
+    <div class="col-xxl-2 col-6 text-white d-flex justify-content-center">
+        <p><span class="fw-bold">Afhentning: </span><span>@Model.Booking.PlannedReturnDate.ToString("MM\\/dd yyyy")</span></p>
+    </div>
+    <div class="col-xxl-2 col-4 text-white d-flex justify-content-center">
+        <p><span class="fw-bold">Bestilt af: </span><span>@Model.Booking.Customer</span></p>
+    </div>
+    <div class="col-xxl-2 col-4 text-white d-flex justify-content-center">
+        <p><span class="fw-bold">Lokale: </span><span>@Model.Booking.Location.Building.@Model.Booking.Location.RoomNumber</span></p>
+    </div>
+    <div class="col-xxl-2 col-4 text-white d-flex justify-content-center">
+        @if (Model.Booking.DeliveredBy != null)
+        {
+            <p><span class="fw-bold">Leveret af: </span><span>@Model.Booking.DeliveredBy</span></p>
+        }
+    </div>
+    <div class="col-xxl-1"></div>
+
+
+
+
+
+
+
+
+
+    <div class="col-xxl-1 col-xl-1"></div>
+
+    <div class="col-xxl-7 col-xl-7 col-lg-8 col-md-12">
+
+        <div class="row p-2">
+
+            <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-3 col-sm-3 col-3 d-flex justify-content-center align-items-center">
+                @using (Html.BeginForm("GoToScanDevice", "Booking"))
+                {
+                    <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:95px">
+                        <span>Skan QR<br />på enhed</span>
+                    </button>
+                }
+            </div>
+
+            <div class="col-xxl-1 col-xl-1 col-lg-2 col-md-3 col-sm-3 col-2 text-white d-flex justify-content-center align-items-center fw-bold">eller indtast</div>
+
+            <div class="col-xxl-6 col-xl-7 col-lg-7 col-md-6 col-sm-6 col-7">
+                @using (Html.BeginForm("ProcessDeviceForBooking", "Booking"))
+                {
                     <div class="row">
-                        <div class="col-12">
-                            <p><span class="fw-bold">Bestiller: </span><span>@Model.Booking.Customer</span></p>
-                        </div>
-                        <div class="col-12">
-                            <p><span class="fw-bold">Lokale: </span><span>@Model.Booking.Location.Building.@Model.Booking.Location.RoomNumber</span></p>
+
+                        @* <div class="col-3 d-block d-sm-none"></div>*@
+
+                        <div class="col-xl-4 col-lg-4 col-sm-6 col-5">
+                            <div class="form-floating">
+                                <input class="form-control" name="deviceID" id="deviceId" type="number" style="width:95px" />
+                                <label>Enheds ID:</label>
+                            </div>
                         </div>
 
-                        <div class="col-12">
-                            @if (Model.Booking.DeliveredBy != null)
-                            {
-                                <p><span class="fw-bold">Leveret af: </span><span>@Model.Booking.DeliveredBy</span></p>
-                            }
-                        </div>
-                        <div class="col-12">
-                            <p><span class="fw-bold">Booking start: </span><span>@Model.Booking.PlannedBorrowDate.ToString("MM\\/dd yyyy")</span></p>
-                        </div>
-                        <div class="col-12">
-                            <p><span class="fw-bold">Booking slut: </span><span>@Model.Booking.PlannedReturnDate.ToString("MM\\/dd yyyy")</span></p>
-                        </div>
+                        <div class="col-1 d-block d-sm-none"></div>
 
-                    </div>
-
-                </div>
-                <div class="col-4">
-                    <div class="row">
-                        <div class="col-12 g-3">
-                            @using (Html.BeginForm("GoToBooking", "Booking"))
-                            {
-                                <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
-                                    <span>Rediger Booking</span>
-                                </button>
-                            }
-                        </div>
-                        <div class="col-12 g-3">
-                            @using (Html.BeginForm("DeliverBooking", "Booking"))
-                            {
-                                if ((Model.Booking.DeliveredBy == null || Model.Booking.DeliveredBy == "") && Model.Booking.Devices.Count > 0)
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-sm-6 col-6 d-flex align-items-center">
+                            <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:95px">
+                                @if (Model.Booking.DeliveredBy != null)
                                 {
-                                    <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
-                                        <span>Lever Ordre</span>
-                                    </button>
+                                    <span>Vælg<br />Enhed</span>
                                 }
                                 else
                                 {
-                                    <button type="submit" disabled class="btn btn-primary btn-sm btn-dark" style="width:100px">
-                                        <span>Lever Ordre</span>
-                                    </button>
+                                    <span>Vælg<br />Enhed</span>
                                 }
-                            }
+                            </button>
                         </div>
+
+                        <div class="col-lg-4 d-none d-lg-block"></div>
+                        @*   <div class="col-3 d-block d-sm-none"></div>*@
                     </div>
-
-                </div>
+                }
             </div>
+            @*<div class="col-xxl-3 col-xl-2 col-lg-1 d-none d-lg-block d-xl-block d-xxl-block"></div>*@
         </div>
-
-
-
-
-
-        <div class="col-lg-5 col-12">
-            @using (Html.BeginForm("ProcessDeviceForBooking", "Booking"))
-            {
-                <div class="row">
-                    <h4 class="text-white">Indtast enheds ID:</h4>
-                </div>
-                <div class="row">
-                    <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-0 col-sm-0 p-1"></div>
-                    <input class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-12 col-sm-12 p-1" name="deviceID" type="number" />
-                </div>
-
-                <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
-                    @if (Model.Booking.DeliveredBy != null)
-                    {
-                        <span>Tilføj/Returner Enhed</span>
-                    }
-                    else
-                    {
-                        <span>Tilføj/Fjern Enhed</span>
-                    }
-                </button>
-            }
-            @using (Html.BeginForm("GoToScanDevice", "Booking"))
-            {
-                <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue">
-                    <span>Scan QR</span>
-                </button>
-            }
-        </div>
-        <div class="col-lg-1"> </div>
     </div>
 
 
 
+    <div class="col-xl-3 col-lg-4 col-md-12">
+        <div class="row p-2">
 
+            @*    <div class="col-md-3 d-none d-sm-block d-lg-none"> </div>*@
 
-    @if (httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError") != null && httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError") != "")
-    {
-        <div class="row">
-            <!-- Error Handling, if any -->
-
-            <div class="col-2"></div>
-            <div class="col-6" style="align-content:center; margin-top:8px;" id="bookedDeviceError">
-                <p style="text-align:center; padding:5px; background-color:indianred; border-radius:8px; border-width:3px; border-style:solid; border-color:darkred;">@httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError").ToString()</p>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-6 d-flex justify-content-center align-items-center">
+                @using (Html.BeginForm("GoToBooking", "Booking"))
+                {
+                    <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:95px">
+                        <span>Rediger<br />Booking</span>
+                    </button>
+                }
             </div>
-        </div>
-        httpContextAccessor.HttpContext.Session.SetString("bookedDeviceError", "");
-    }
 
+            <div class="col-xl-6 col-lg-6 col-md-6 col-6 d-flex justify-content-center align-items-center">
+                @using (Html.BeginForm("DeliverBooking", "Booking"))
+                {
+
+                    @if ((Model.Booking.DeliveredBy == null || Model.Booking.DeliveredBy == "") && Model.Booking.Devices.Count > 0)
+                    {
+                        <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:95px">
+                            <span>Lever<br />Ordre</span>
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="submit" disabled class="btn btn-primary btn-sm btn-dark" style="width:95px">
+                            <span>Afslut<br />levering</span>
+                        </button>
+                    }
+                }
+            </div>
+
+
+            @*   <div class="col-md-3 d-none d-sm-block d-lg-none"> </div>*@
+
+
+
+
+
+            @if (httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError") != null && httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError") != "")
+            {
+                <div class="col-12" style="align-content:center; margin-top:8px;" id="bookedDeviceError">
+
+                    <!-- Error Handling, if any -->
+
+
+                    <p style="text-align:center; padding:5px; background-color:indianred; border-radius:8px; border-width:3px; border-style:solid; border-color:darkred;">@httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError").ToString()</p>
+
+                    httpContextAccessor.HttpContext.Session.SetString("bookedDeviceError", "");
+                </div>
+            }
+
+        </div>
+    </div>
+    <div class="col-xxl-1 col-xl-1"></div>
 </div>
 
+
+
+
+
+
+
+
+
+
+
+<!-- Listing The tasks -->
 <div class="container containerMain box-shadow">
     <div class="row containerHeader">
-        <h4 class="col">Varelinjer</h4>
+        <div class="col">
+
+            <h4 class="col">Varelinjer</h4>
+        </div>
     </div>
 
     <div class="row containerSubHeader border-top border-bottom border-white border-1">
@@ -209,7 +256,9 @@
 
 <div class="container containerMain box-shadow">
     <div class="row containerHeader">
-        <h4 class="col">Enheder</h4>
+        <div class="col">
+            <h4 class="col">Enheder</h4>
+        </div>
     </div>
 
     <div class="row containerBody">
