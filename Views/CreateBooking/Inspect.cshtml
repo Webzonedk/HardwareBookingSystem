@@ -33,6 +33,23 @@
 
         </div>
 
+        <!--select location-->
+        <div class="col-lg-1 col-md-3 col-sm-6 g-3">
+
+            <div class="form-floating">
+                <select class="form-select" id="locations" asp-for="@Model.Location" onchange="SendLocationToForm()" required oninvalid="this.setCustomValidity('Vælg venligst Lokale')" oninput="this.setCustomValidity('')">
+                    <option hidden></option>
+                    @foreach (var item in Model.LocationDropdown)
+                    {
+                        <option>@item</option>
+                    }
+
+                </select>
+                <label for="locations">Leveringssted</label>
+            </div>
+
+        </div>
+
         <!--select categories-->
         <div class="col-lg-1 col-md-3 col-sm-6 g-3">
 
@@ -46,23 +63,6 @@
 
                 </select>
                 <label for="category">kategori</label>
-            </div>
-
-        </div>
-
-        <!--select location-->
-        <div class="col-lg-1 col-md-3 col-sm-6 g-3">
-
-            <div class="form-floating">
-                <select class="form-select" id="locations" asp-for="@Model.Location" onchange="SendLocationToForm()" required>
-                    <option hidden></option>
-                    @foreach (var item in Model.LocationDropdown)
-                    {
-                        <option>@item</option>
-                    }
-
-                </select>
-                <label for="locations">Leveringssted</label>
             </div>
 
         </div>
@@ -153,14 +153,14 @@
         }
 
 
-        <div hidden id=@("stock_" + Model.ModelID)>@Model.InventoryBooking[0].InStock[0]</div>
+        <input type="hidden" id=@("stock_" + Model.ModelID) value="@Model.InventoryBooking[0].InStock[0]" />
         <input type="hidden" id="modelNameHidden" asp-for="@Model.ModelName" />
         <input type="hidden" id="modelIdHidden" asp-for="@Model.ModelID" />
 
         <div class="row containerBody alternating_row dynamic-Font-Size-10">
 
             <!--image of model-->
-            <div class="col-md-4 col-4 p-1 border-white border-1 center">
+            <div class="col-xl-4 col-6 p-1 center">
                 <div>
 
                     @if (Model.InventoryBooking[0].ImagePath != null)
@@ -174,79 +174,73 @@
                 </div>
             </div>
 
+            <!--blank col-->
+            <div class="col-xl-3 d-none d-xl-block"></div>
+
             <!--description of model-->
-            <div class="col-md-4 col-4 p-1 border-white border-1 center">
-
+            <div class="col-xl-2 col-6 p-1  center">
                 <h5>Beskrivelse</h5>
-
                 <label>@Model.InventoryBooking[0].Description</label>
             </div>
 
+           
+
             <!--quantity setting-->
-            <div class="col-md-4 col-4 p-1 border-white border-1 center">
+            <div class="col-xl-1 col-md-3 col-6 p-1 ">
 
-                <div class="row">
+                <div class="center">
 
-                    <div class="col-5">
-                        <div class="input-group input-group-sm mb-2">
-
-                            @if (Model.ItemLines.Count > 0 && index >= 0)
-                            {
-                                <input type="number" class="form-control" name="input" id=@("input_" + Model.ModelID) value="@Model.ItemLines[index].Quantity" onchange="SendValueToButton('Inspicer')" min="0" max="@Model.InventoryBooking[0].InStock[0]" />
-
-                            }
-                            else
-                            {
-                                <input type="number" class="form-control" name="input" id=@("input_" + Model.ModelID) value="0" onchange="SendValueToButton('Inspicer')" min="0" max="@Model.InventoryBooking[0].InStock[0]" />
-
-                            }
-
-
-                        </div>
-                    </div>
-
-                    <div class="col-2">
-                        @if (Model.ItemLines.Count > 0 && index >= 0)
-                        {
-                            <div class=" text-green">@(Model.ItemLines[index].Quantity + "/" + Model.InventoryBooking[0].InStock[0])</div>
-                        }
-                        else
-                        {
-                            <div class=" text-green">@(quantity + "/" + Model.InventoryBooking[0].InStock[0])</div>
-
-                        }
-                    </div>
-
-                    <div class="col-5">
-
-                        <button class="btn btn-primary btn-sm btn-blue" type="submit" name="submitData" id=@("basket_"+Model.ModelID) value="@Model.ModelID">Opdater Kurv </button>
-
-                    </div>
-
-
-                </div>
-
-                <!--input field-->
-                <div class="row">
-
-                    <div class="col-12">
-
-                    </div>
-
-                </div>
-
-                <!--update basket with info text-->
-                <div class="row center">
-
-                    <!--create message to show quantity is larger than stock-->
-                    @if (ViewBag.quantityError != null && Model.InventoryBooking[0].ModelID == ViewBag.id)
+                    @if (Model.ItemLines.Count > 0 && index >= 0)
                     {
-                        <div class="col-12 text-red">@ViewBag.quantityError&nbsp;</div>
+                        <input style="max-width:75px" type="number"  name="input" id=@("input_" + Model.ModelID) value="@Model.ItemLines[index].Quantity" onchange="SendValueToButton('Inspicer')" min="0" max="@Model.InventoryBooking[0].InStock[0]" />
+
                     }
+                    else
+                    {
+                        <input style="max-width:75px" type="number"  name="input" id=@("input_" + Model.ModelID) value="0" onchange="SendValueToButton('Inspicer')" min="0" max="@Model.InventoryBooking[0].InStock[0]" />
+
+                    }
+
 
                 </div>
 
             </div>
+
+            <!--show remaining in stock-->
+            <div class="col-xl-1 col-6 center">
+                @if (Model.ItemLines.Count > 0 && index >= 0)
+                {
+                    <div class=" text-green">@(Model.ItemLines[index].Quantity + "/" + Model.InventoryBooking[0].InStock[0])</div>
+                }
+                else
+                {
+                    <div class=" text-green">@(quantity + "/" + Model.InventoryBooking[0].InStock[0])</div>
+
+                }
+            </div>
+
+            <div class="col-xl-1 col-12 center">
+
+                <button class="btn btn-primary btn-sm btn-blue" type="submit" name="submitData" id=@("basket_"+Model.ModelID) value="@Model.ModelID">Opdater Kurv </button>
+
+            </div>
+
+           
+
+
+
+            <!--update basket with info text-->
+            <div class="row center">
+
+                <!--create message to show quantity is larger than stock-->
+                @if (ViewBag.quantityError != null && Model.InventoryBooking[0].ModelID == ViewBag.id)
+                {
+                    <div class="col-12 text-red">@ViewBag.quantityError&nbsp;</div>
+                }
+
+            </div>
+
+
 
         </div>
 
@@ -269,9 +263,9 @@
     <!--header columns-->
     <div class="row containerSubHeader border-top border-bottom border-white border-1 dynamic-Font-Size-10">
 
-        <div class="col-md-3 col-6 p-1 border-end border-white border-1">Beskrivelse</div>
-        <div class="col-md-3 col-6 p-1 border-end border-white border-1">Antal</div>
-        <div class="col-md-3 col-6 p-1 border-end border-white border-1">Lagerstatus</div>
+        <div class="col-xl-4 col-4 p-1 border-end border-white border-1">Beskrivelse</div>
+        <div class="col-xl-2 col-2 p-1 border-end border-white border-1">Antal</div>
+        <div class="col-xl-6 col-6 p-1 border-end border-white border-1">Lagerstatus</div>
 
     </div>
 
@@ -281,16 +275,16 @@
     {
         <div class="row containerBody alternating_row dynamic-Font-Size-10">
 
-            <div class=" col-md-3 col-4 p-1 border-end border-white border-1">@Model.InventoryBooking[i].ModelName</div>
-            <div class=" col-md-3 col-4 p-1 border-end border-white border-1">@Model.InventoryBooking[i].InStock[0]</div>
+            <div class="col-xl-4 col-4 p-1 border-end border-white border-1">@Model.InventoryBooking[i].ModelName</div>
+            <div class="col-xl-2 col-2 p-1 border-end border-white border-1">@Model.InventoryBooking[i].InStock[0]</div>
 
             @if (Model.InventoryBooking[i].InStock[0] > 0)
             {
-                <div class=" col-md-3 col-4 p-1 border-end border-white border-1 text-green">På Lager</div>
+                <div class="col-xl-6 col-6 p-1 border-end border-white border-1 text-green">På Lager</div>
             }
             else
             {
-                <div class=" col-md-3 col-4 p-1 border-end border-white border-1 text-red">ikke På Lager</div>
+                <div class="col-xl-6 col-6 p-1 border-end border-white border-1 text-red">ikke På Lager</div>
             }
 
         </div>

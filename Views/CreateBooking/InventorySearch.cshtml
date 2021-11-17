@@ -34,6 +34,23 @@
 
         </div>
 
+        <!--select location-->
+        <div class="col-lg-1 col-md-3 col-sm-6 g-3">
+
+            <div class="form-floating">
+                <select class="form-select" id="locations" asp-for="@Model.Location" onchange="SendLocationToForm()" required oninvalid="this.setCustomValidity('Vælg venligst Lokale')" oninput="this.setCustomValidity('')">
+                    <option hidden></option>
+                    @foreach (var item in Model.LocationDropdown)
+                    {
+                        <option>@item</option>
+                    }
+
+                </select>
+                <label for="locations">Leveringssted</label>
+            </div>
+
+        </div>
+
         <!--select categories-->
         <div class="col-lg-1 col-md-3 col-sm-6 g-3">
 
@@ -47,23 +64,6 @@
 
                 </select>
                 <label for="category">kategori</label>
-            </div>
-
-        </div>
-
-        <!--select location-->
-        <div class="col-lg-1 col-md-3 col-sm-6 g-3">
-
-            <div class="form-floating">
-                <select class="form-select" id="locations" asp-for="@Model.Location" onchange="SendLocationToForm()" required>
-                    <option hidden></option>
-                    @foreach (var item in Model.LocationDropdown)
-                    {
-                        <option>@item</option>
-                    }
-
-                </select>
-                <label for="locations">Leveringssted</label>
             </div>
 
         </div>
@@ -121,13 +121,13 @@
 
         <!--header for list-->
         <div class="row containerSubHeader border-top border-bottom border-white border-1 dynamic-Font-Size-10">
-            <div class="col-xl-1 col-3 p-1 border-end border-white border-1">ID</div>
-            <div class="col-xl-3 col-3 p-1 border-end border-white border-1">model navn</div>
-            <div class="col-xl-1 col-3 p-1 border-end border-white border-1">Kategori</div>
-            <div class="col-xl-1 col-3 p-1 border-end border-white border-1">På Lager</div>
-            <div class="col-xl-1 col-4 p-1 border-white border-1">Udlånt</div>
+            <div class="col-xl-2 col-4 p-1 border-end border-white border-1">ID</div>
+            <div class="col-xl-3 col-4 p-1 border-end border-white border-1">model navn</div>
+            <div class="col-xl-1 col-4 p-1 border-end border-white border-1">Kategori</div>
+            @*<div class="col-xl-1 col-2 p-1 border-end border-white border-1">På Lager</div>*@
+            <div class="col-xl-1 col-4 p-1 border-white border-1">Antal</div>
             <div class="col-xl-3 col-8 p-1 border-end border-white border-1">Lagerstatus</div>
-            <div class="col-xl-1 d-none d-block p-1 border-white border-1">Antal</div>
+            <div class="col-xl-2 d-none d-block p-1 border-white border-1">Antal</div>
 
 
 
@@ -160,7 +160,7 @@
             <div class="row containerBody alternating_row dynamic-Font-Size-10">
 
                 <!--show image-->
-                <div class="col-lg-1 col-3 p-1 border-end border-white border-1">
+                <div class="col-xl-2 col-4 p-1 border-end border-white border-1">
                     <div>
 
                         @if (Model.InventoryBooking[i].ImagePath != null)
@@ -176,7 +176,7 @@
 
 
                 <!--show model name & link-->
-                <div class="col-lg-3 col-3 p-1 border-end border-white border-1">
+                <div class="col-xl-3 col-4 p-1 border-end border-white border-1">
 
                     <input type="hidden" id=@("output_"+i) value="@Model.InventoryBooking[i].ModelName" asp-for="@Model.ModelName" />
 
@@ -187,11 +187,11 @@
                 </div>
 
                 <!--show category-->
-                <div class="col-lg-1 col-3 p-1 border-end border-white border-1">@Model.InventoryBooking[i].CategoryName</div>
+                <div class="col-xl-1 col-4 p-1 border-end border-white border-1">@Model.InventoryBooking[i].CategoryName</div>
 
 
                 <!--show in stock-->
-                <div class="col-lg-1 col-3 p-1 border-end border-white border-1">
+                @*<div class="col-lg-1 col-2 p-1 border-end border-white border-1">
 
                     @for (int j = 0; j < Model.InventoryBooking[i].InStock.Count; j++)
                     {
@@ -199,15 +199,17 @@
 
                     }
 
-                </div>
+                </div>*@
 
                 <!--show blank column if in stock-->
-                <div class="col-lg-1 col-2 p-1 border-end border-white border-1">
+                <div class="col-xl-1 col-4 p-1 border-end border-white border-1">
 
-                    <!--add blank column if in stock-->
+                    <!--show in stock column if in stock-->
                     @if (@Model.InventoryBooking[i].InStock[0] > 0)
                     {
-                        <div>&nbsp;</div>
+                        @*<div>&nbsp;</div>*@
+                        <input hidden id=@("stock_"+i)  value="@Model.InventoryBooking[i].InStock[0]"/>
+                        <div class="text-green" >@Model.InventoryBooking[i].InStock[0] stk </div>
                     }
 
                     <!--items not in stock-->
@@ -220,7 +222,7 @@
                 </div>
 
                 <!--show dates for rent & return-->
-                <div class="col-lg-3 col-10 p-1 border-end border-white border-1">
+                <div class="col-xl-3 col-8 p-1 border-end border-white border-1">
 
                     <!--add blank column if in stock-->
                     @if (@Model.InventoryBooking[i].InStock[0] > 0)
@@ -230,17 +232,17 @@
 
                     @for (int j = 0; j < Model.InventoryBooking[i].RentDate.Count; j++)
                     {
-                        <div style="color: #ABABAB">@(Model.InventoryBooking[i].RentDate[j].ToString("MM\\/dd yyyy")+" til "+ Model.InventoryBooking[i].ReturnDate[j].ToString("MM\\/dd yyyy"))</div>
-                        @*<div style="color: #ABABAB">@Model.InventoryBooking[i].RentDate[j].ToString("MM\\/dd yyyy")</div>*@
-
-
+                        <div style="color: #ABABAB">@(Model.InventoryBooking[i].RentDate[j].ToString("dd\\/MM yyyy")+" til "+ Model.InventoryBooking[i].ReturnDate[j].ToString("dd\\/MM yyyy"))</div>
+                       
                     }
 
 
                 </div>
 
+                <div class="d-xl-none d-xl-block col-8"></div>
+
                 <!--show input field-->
-                <div class="col-lg-1 col-6 p-1 border-white border-1 center">
+                <div class="col-xl-1 col-2 p-1 border-white border-1 center">
 
                         @{int index = -1;} 
                     <!--count number in basket-->
@@ -267,12 +269,12 @@
 
                         @if (Model.ItemLines.Count > 0 && index >= 0)
                         {
-                            <input type="number" class="form-control" name="input" id=@("input_"+i) value="@Model.ItemLines[index].Quantity" onchange="SendValueToButton('BookingSøgning')" asp-for="@Model.ItemLines[index].Quantity" min="0" max="@(Model.InventoryBooking[i].InStock[0] > -1 ? Model.InventoryBooking[i].InStock[0] : 0)" onkeypress="return event.keyCode != 13;" />
+                            <input style="max-width:75px" type="number" class="form-control" name="input" id=@("input_"+i) value="@Model.ItemLines[index].Quantity" onchange="SendValueToButton('BookingSøgning')" asp-for="@Model.ItemLines[index].Quantity" min="0" max="@(Model.InventoryBooking[i].InStock[0] > -1 ? Model.InventoryBooking[i].InStock[0] : 0)" onkeypress="return event.keyCode != 13;" />
 
                         }
                         else
                         {
-                            <input type="number" class="form-control" name="input" id=@("input_"+i) value="0" onchange="SendValueToButton('BookingSøgning')" min="0" max="@Model.InventoryBooking[i].InStock[0]" onkeypress="return event.keyCode != 13;" />
+                            <input style="max-width: 75px" type="number" class="form-control" name="input" id=@("input_"+i) value="0" onchange="SendValueToButton('BookingSøgning')" min="0" max="@Model.InventoryBooking[i].InStock[0]" onkeypress="return event.keyCode != 13;" />
                         }
 
 
@@ -294,7 +296,7 @@
                 </div>
 
                 <!--update basket button-->
-                <div class="col-lg-1 col-6 p-1 border-white border-1 center">
+                <div class="col-xl-1 col-2 p-1 border-white border-1 center">
 
                     <button class="btn btn-primary btn-sm btn-blue" type="submit" name="submitData" id=@("basket_"+i) value="@Model.InventoryBooking[i].ModelID">Opdater Kurv </button>
 
