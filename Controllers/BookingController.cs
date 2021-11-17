@@ -453,15 +453,19 @@ namespace HUS_project.Controllers
                 // Logic check, if the dates make somewhat basic sense in relation to now and each other (We don't approve of no time-travellers or non-euclideans).
 
                 // If new Start date is valid so far, is earlier than new potential/existing return date, and isn't today or prior, it can still be changed.
-                if (validNewStartDate && (validNewReturnDate ? newStartDate.Date > newReturnDate.Date : newStartDate.Date > originalBooking.PlannedReturnDate.Date))
+                if (validNewStartDate && (validNewReturnDate ? (newStartDate.Date > newReturnDate.Date) : (newStartDate.Date > originalBooking.PlannedReturnDate.Date)))
                 {
                     errorMessages += "\nStart Dato blev ikke ændret fordi start dato er efter slut dato";
                     validNewStartDate = false;
                 }
 
                 // If new return date is valid so far, is later than new potential/existing start date, and is later than Today, it can still be changed.
-                if (validNewReturnDate && ((validNewStartDate ? newReturnDate.Date < newStartDate.Date : newReturnDate.Date < originalBooking.PlannedBorrowDate.Date) ||
-                    newReturnDate.Date <= DateTime.Now.Date))
+                if (validNewReturnDate && (
+                        (validNewStartDate ? 
+                            (newReturnDate.Date < newStartDate.Date) : (newReturnDate.Date < originalBooking.PlannedBorrowDate.Date)
+                            ) || 
+                            newReturnDate.Date <= DateTime.Now.Date)
+                        )
                 {
                     errorMessages += "\nSlut Dato blev ikke ændret: slut dato er før start dato, eller er i dag eller før.";
                     validNewReturnDate = false;
