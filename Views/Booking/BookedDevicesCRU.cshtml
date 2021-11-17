@@ -6,8 +6,7 @@
 }
 <div class="row blue-oyster-bar box-shadow">
 
-
-    @*<div class="row center g-2 ">*@
+    <!--   Header in blue oisterbar -->
     <div class="col-lg-12 d-flex justify-content-center">
 
         @if (Model.Booking.DeliveredBy != null)
@@ -25,9 +24,7 @@
     </div>
 
 
-
-
-
+    <!--   info in line two in blue oisterbar -->
     <div class="col-xxl-1"></div>
     <div class="col-xxl-2 col-6 text-white d-flex justify-content-center">
         <p><span class="fw-bold">Levering: </span><span>@Model.Booking.PlannedBorrowDate.ToString("MM\\/dd yyyy")</span></p>
@@ -50,13 +47,7 @@
     <div class="col-xxl-1"></div>
 
 
-
-
-
-
-
-
-
+    <!--   Buttons and inputfield in blue oisterbar -->
     <div class="col-xxl-1 col-xl-1"></div>
 
     <div class="col-xxl-7 col-xl-7 col-lg-8 col-md-12">
@@ -78,8 +69,6 @@
                 @using (Html.BeginForm("ProcessDeviceForBooking", "Booking"))
                 {
                     <div class="row">
-
-                        @* <div class="col-3 d-block d-sm-none"></div>*@
 
                         <div class="col-xl-4 col-lg-4 col-sm-6 col-5">
                             <div class="form-floating">
@@ -104,20 +93,14 @@
                         </div>
 
                         <div class="col-lg-4 d-none d-lg-block"></div>
-                        @*   <div class="col-3 d-block d-sm-none"></div>*@
                     </div>
                 }
             </div>
-            @*<div class="col-xxl-3 col-xl-2 col-lg-1 d-none d-lg-block d-xl-block d-xxl-block"></div>*@
         </div>
     </div>
 
-
-
     <div class="col-xl-3 col-lg-4 col-md-12">
         <div class="row p-2">
-
-            @*    <div class="col-md-3 d-none d-sm-block d-lg-none"> </div>*@
 
             <div class="col-xl-6 col-lg-6 col-md-6 col-6 d-flex justify-content-center align-items-center">
                 @using (Html.BeginForm("GoToBooking", "Booking"))
@@ -146,28 +129,20 @@
                     }
                 }
             </div>
-
-
-            @*   <div class="col-md-3 d-none d-sm-block d-lg-none"> </div>*@
-
-
-
-
-
-            @if (httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError") != null && httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError") != "")
-            {
-                <div class="col-12" style="align-content:center; margin-top:8px;" id="bookedDeviceError">
-
-                    <!-- Error Handling, if any -->
-
-
-                    <p style="text-align:center; padding:5px; background-color:indianred; border-radius:8px; border-width:3px; border-style:solid; border-color:darkred;">@httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError").ToString()</p>
-
-                    httpContextAccessor.HttpContext.Session.SetString("bookedDeviceError", "");
-                </div>
-            }
-
         </div>
+    </div>
+
+    <!-- Error Handling, if any -->
+    <div class="col-12" style="align-content:center; margin-top:8px;" id="bookedDeviceError">
+        @if (httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError") != null && httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError") != "")
+        {
+
+
+
+            <p style="text-align:center; padding:5px; background-color:indianred; border-radius:8px; border-width:3px; border-style:solid; border-color:darkred;">@httpContextAccessor.HttpContext.Session.GetString("bookedDeviceError").ToString()</p>
+
+            httpContextAccessor.HttpContext.Session.SetString("bookedDeviceError", "");
+        }
     </div>
     <div class="col-xxl-1 col-xl-1"></div>
 </div>
@@ -182,7 +157,7 @@
 
 
 
-<!-- Listing The tasks -->
+<!-- Listing The itemlines -->
 <div class="container containerMain box-shadow">
     <div class="row containerHeader">
         <div class="col">
@@ -192,124 +167,137 @@
     </div>
 
     <div class="row containerSubHeader border-top border-bottom border-white border-1">
-        <div class="row">
-            <div class="col-xl-4 col-lg-4 col-md-4 col-8 p-1 center border-end border-white border-1">Model</div>
-            <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 center border-end border-white border-1">Bestilt / Leveret / Afleveret</div>
-            <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 center">Lagerbeholdning / Lokation</div>
-        </div>
+        <div class="col-xl-4 col-12 p-1 border-end border-white border-1 border-lg-hide-right">Model</div>
+        <div class="col-xl-3 col-5 p-1 border-end border-white border-1">Bestilt / Leveret / Afleveret</div>
+        <div class="col-xl-3 col-4 p-1 border-end border-white border-1">Placering</div>
+        <div class="col-xl-1 col-3 p-1">Beholdning</div>
     </div>
 
-    <div class="row containerBody">
-        @foreach (ItemLineModel ilm in Model.Booking.Items)
-        {
-            <div class="row">
-                <div class="col-xl-4 col-lg-4 col-md-4 col-8 p-1 border-end border-white border-1">(@ilm.Model.Category.Category) @ilm.Model.ModelName</div>
-                @{
-                    int countOfBookedDevices = 0;
-                    int countOfReturnedBookedDevices = 0;
-                    foreach (DeviceModel device in Model.Booking.Devices)
+    @foreach (ItemLineModel ilm in Model.Booking.Items)
+    {
+        <div class="row containerBody border-bottom border-white border-1 alternating_row">
+            <div class="col-xl-4 col-12 p-1 border-end border-white border-1 border-lg-hide-right">(@ilm.Model.Category.Category)&nbsp;<span class="fw-bold">@ilm.Model.ModelName</span></div>
+            @{
+                int countOfBookedDevices = 0;
+                int countOfReturnedBookedDevices = 0;
+                foreach (DeviceModel device in Model.Booking.Devices)
+                {
+                    if (device.Model.ModelName == ilm.Model.ModelName)
                     {
-                        if (device.Model.ModelName == ilm.Model.ModelName)
+                        countOfBookedDevices++;
+                        if (device.ReturnedBy != null && device.ReturnedBy != "")
                         {
-                            countOfBookedDevices++;
-                            if (device.ReturnedBy != null && device.ReturnedBy != "")
-                            {
-                                countOfReturnedBookedDevices++;
-                            }
+                            countOfReturnedBookedDevices++;
                         }
-                    }
-                    <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 border-end border-white border-1 center">
-                        @ilm.Quantity / @countOfBookedDevices / @countOfReturnedBookedDevices
-                    </div>
-                    foreach (ItemLineModel item in Model.ModelsInStorage)
-                    {
-                        if (item.Model.ModelName == ilm.Model.ModelName)
-                        {
-                            if (item.Quantity > 0)
-                            {
-                                <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 center">
-                                    @item.Quantity / @Model.StorageLocations[item.Model.ModelName].Location.Building.@Model.StorageLocations[item.Model.ModelName].Location.RoomNumber
-                                    @Model.StorageLocations[item.Model.ModelName].ShelfName.@Model.StorageLocations[item.Model.ModelName].ShelfLevel.@Model.StorageLocations[item.Model.ModelName].ShelfSpot
-                                </div>
-                            }
-                            else
-                            {
-                                // If there are none of this model in storage, storagelocation is Null!
-                                <div class="col-xl-2 col-lg-2 col-md-2 col-4 p-1 center">
-                                    @item.Quantity / -.- -.-.-
-                                </div>
-                            }
-                            break;
-                        }
-
                     }
                 }
-            </div>
-        }
+                <div class="col-xl-3 col-5 p-1 border-end border-white border-1">
+                    @ilm.Quantity / @countOfBookedDevices / @countOfReturnedBookedDevices
+                </div>
+                foreach (ItemLineModel item in Model.ModelsInStorage)
+                {
+                    if (item.Model.ModelName == ilm.Model.ModelName)
+                    {
+                        if (item.Quantity > 0)
+                        {
+                            <div class="col-xl-3 col-4 border-end border-white border-1">
+                                @Model.StorageLocations[item.Model.ModelName].Location.Building.@Model.StorageLocations[item.Model.ModelName].Location.RoomNumber &nbsp;_&nbsp;
+                                @Model.StorageLocations[item.Model.ModelName].ShelfName.@Model.StorageLocations[item.Model.ModelName].ShelfLevel.@Model.StorageLocations[item.Model.ModelName].ShelfSpot
+                            </div>
+                            <div class="col-xl-1 col-3 p-1">
+                                @item.Quantity
+                            </div>
+                        }
+                        else
+                        {
+                            // If there are none of this model in storage, storagelocation is Null!
+                            <div class="col-xl-3 col-4 border-end border-white border-1">
+                                -.- &nbsp;_&nbsp; -.-.-
+                            </div>
+                            <div class="col-xl-1 col-3 p-1">
+                                @item.Quantity
+                            </div>
+                        }
+                        break;
+                    }
 
-    </div>
+                }
+            }
+        </div>
+    }
+
 
     <div class="row containerFooter">
         <h4>&nbsp;</h4>
     </div>
 </div>
 
+<!--   Listing units -->
 <div class="container containerMain box-shadow">
     <div class="row containerHeader">
-        <div class="col">
-            <h4 class="col">Enheder</h4>
-        </div>
+        <h4 class="col">Enheder</h4>
     </div>
 
-    <div class="row containerBody">
-        @foreach (ItemLineModel ilm in Model.Booking.Items)
+    @foreach (ItemLineModel ilm in Model.Booking.Items)
+    {
+        bool modelHasDevices = false;
+
+        <div class="row containerSubHeader border-top border-bottom border-white border-1">
+            <h4 class="col-12 center">(@ilm.Model.Category.Category) @ilm.Model.ModelName</h4>
+            <div class="col-2 p-1 border-end border-white border-1">ID</div>
+            <div class="col-5 p-1 border-end border-white border-1">Serienummer</div>
+            <div class="col-5 p-1 border-white border-1">Status</div>
+        </div>
+
+
+
+        @foreach (DeviceModel device in Model.Booking.Devices)
         {
-            <div class="row">
-                <div class="row containerSubHeader border-top border-bottom border-white border-1">
-                    <h4 class="center col">(@ilm.Model.Category.Category) @ilm.Model.ModelName</h4>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-1"></div>
-                <div class="col-11">
-                    <div class="row">
-                        @foreach (DeviceModel device in Model.Booking.Devices)
+            if (device.Model.ModelName == ilm.Model.ModelName)
+            {
+                modelHasDevices = true;
+
+                <div class="row containerBody border-bottom border-white border-1 alternating_row">
+                    <div class="col-md-2 col-3 p-1 border-end border-white border-1">@device.DeviceID</div>
+                    <div class="col-md-5 col-6 p-1 border-end border-white border-1">@device.SerialNumber</div>
+                    <div class="col-md-3 col-3 p-1 border-white border-1">
+
+                        @if (device.ReturnedBy != null && device.ReturnedBy != "")
                         {
-                            if (device.Model.ModelName == ilm.Model.ModelName)
-                            {
-                                <div class="col-5 border-white border border-2" style="padding:3px; margin:3px;">
-                                    <span class="center">
-                                        <p class="center">
-                                            @device.DeviceID (SNR: @device.SerialNumber) -
-                                            @if (device.ReturnedBy != null && device.ReturnedBy != "")
-                                            {
-                                                <span>Returneret</span>
-                                            }
-                                            else if (Model.Booking.DeliveredBy == null || Model.Booking.DeliveredBy == "")
-                                            {
-                                                <span>Afventer Levering</span>
-                                            }
-                                            else
-                                            {
-                                                <span>Leveret</span>
-                                            }
-                                        </p>
-                                        @using (Html.BeginForm("EditView", "Device"))
-                                        {
-                                            <button type="submit" name="submit" value="@device.DeviceID" class="btn btn-primary btn-sm btn-blue" style="width:100px">
-                                                <span>Se Enhed</span>
-                                            </button>
-                                        }
-                                    </span>
-                                </div>
-                            }
+                            <span>Returneret</span>
+                        }
+                        else if (Model.Booking.DeliveredBy == null || Model.Booking.DeliveredBy == "")
+                        {
+                            <span>Afventer Levering</span>
+                        }
+                        else
+                        {
+                            <span>Leveret</span>
+                        }
+                    </div>
+                    <div class="col-md-2 col-12 p-1 border-end border-white border-1 center">
+                        @using (Html.BeginForm("EditView", "Device"))
+                        {
+                            <button type="submit" name="submit" value="@device.DeviceID" class="btn btn-primary btn-sm btn-blue" style="width:90px">
+                                <span>Se Enhed</span>
+                            </button>
                         }
                     </div>
                 </div>
+            }
+
+        }
+        if (!modelHasDevices)
+        {
+            <div class="row containerBody border-bottom border-white border-1 alternating_row">
+                <div class="col-12">&nbsp;</div>
+
             </div>
         }
 
-    </div>
+
+    }
+
 
     <div class="row containerFooter">
         <h4>&nbsp;</h4>
