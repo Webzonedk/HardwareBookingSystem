@@ -105,9 +105,18 @@
             <div class="col-xl-6 col-lg-6 col-md-6 col-6 d-flex justify-content-center align-items-center">
                 @using (Html.BeginForm("GoToBooking", "Booking"))
                 {
-                    <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:95px">
-                        <span>Rediger<br />Booking</span>
-                    </button>
+                    @if (Model.Booking.DeliveredBy != null)
+                    {
+                        <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:95px">
+                            <span>Se<br />Booking</span>
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="submit" name="bookingID" value="@Model.Booking.BookingID" class="btn btn-primary btn-sm btn-blue" style="width:95px">
+                            <span>Rediger<br />Booking</span>
+                        </button>
+                    }
                 }
             </div>
 
