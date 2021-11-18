@@ -73,12 +73,20 @@ namespace HUS_project.Controllers
         {
             // New attempt at logging in, means old login attempt errors are irrelevant.
             HttpContext.Session.SetString("loginError", "");
+            LDAPManager lDAPMan = new LDAPManager();
 
             if((userLogin.UNILogin != "" && userLogin.UNILogin != null) && (userLogin.Password != "" && userLogin.Password != null))
             {
                 // Verify and acquire the user's relevant groups for access and any errors encountered in this endeavour (i.e. "Unable to establish connection")
-                //List<string> reponses = LDAPManager.GetAccessResponses(userLogin.UNILogin, userLogin.Password);
-                List<string> responses = LDAPManager.TestLogin(userLogin.UNILogin, userLogin.Password);
+                List<string> responses = lDAPMan.TestLogin(userLogin.UNILogin, userLogin.Password);
+
+                bool attemptedLDAP = false;
+                if(responses.Count == 0)
+                {
+                    attemptedLDAP = true;
+                    responses = lDAPMan.GetAccessResponses(userLogin.UNILogin, userLogin.Password);
+                }
+
 
                 // Set Session data accordingly.
                 if (responses.Count > 0)
@@ -100,7 +108,7 @@ namespace HUS_project.Controllers
                         }
                         else if (response.Contains("FEJL: "))
                         {
-                            HttpContext.Session.SetString("loginError", response.Substring(6));
+                            HttpContext.Session.SetString("loginError", response.Substring(6) + (attemptedLDAP ? "\nLDAP was attempted!":""));
                         }
                     }
 

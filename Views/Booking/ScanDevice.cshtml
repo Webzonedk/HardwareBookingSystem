@@ -29,11 +29,11 @@
 
                 <video class=" centerVideo" id="preview" width="336" height="254"></video>
 
-                <input id="hiddenID" type="hidden" value="@Model.BookingID"  />
+                <input id="hiddenID" type="hidden" value="@Model.BookingID" />
                 <input id="ItemIsScanned" type="checkbox" onchange="SubmitQRCode();" hidden />
 
             </div>
-
+            <div class="col-md-12 center p-1">Benyt kamera på mobil eller håndscanner</div>
             <div class="col-md-12 center p-1">
                 <input id="content" type="text" asp-for="@Model.RawData" value="" />
                 <input id="bookingID" type="text" asp-for="@Model.BookingID" hidden />
