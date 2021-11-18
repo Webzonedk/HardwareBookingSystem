@@ -57,19 +57,18 @@
                     <div class="col-lg-4 col-6">
                         <p class="text-white">Leverings Lokale:</p>
                         <!-- If end date is tomorrow or later, and you are the one who made the booking, the location can be changed.
-                            !!!!!! Page 22, storage location       !!!!!!!!!!!!!!!!!      -->
-                        <div class="form-floating">
-                            @if (httpContextAccessor.HttpContext.Session.GetString("uniLogin") == Model.Customer && Model.PlannedReturnDate.Date >= DateTime.Now.Date)
-                            {
+        !!!!!! Page 22, storage location       !!!!!!!!!!!!!!!!!      -->
+                        @if (httpContextAccessor.HttpContext.Session.GetString("uniLogin") == Model.Customer && Model.PlannedReturnDate.Date >= DateTime.Now.Date)
+                        {
+                            <div class="form-floating">
                                 <input class="form-control" type="text" id="location" style="max-width:100%;" asp-for="Location" name="location" value='@Model.Location.Building.@Model.Location.RoomNumber' />
-
-                            }
-                            else
-                            {
-                                <!-- EndDate has passed, or you are not the one who booked, thus it cannot be changed. -->
-                                <label class="text-white" id="location" asp-for="Location" name="location">@Model.Location.Building.@Model.Location.RoomNumber</label>
-                            }
-                        </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <!-- EndDate has passed, or you are not the one who booked, thus it cannot be changed. -->
+                            <label class="text-white" id="location" asp-for="Location" name="location">@Model.Location.Building.@Model.Location.RoomNumber</label>
+                        }   
                     </div>
                     <div class="col-lg-4 col-6">
                         <!--NOTES-->
