@@ -385,7 +385,7 @@ namespace HUS_project.Controllers
             // Log BookedDevices
             dBManager.CreateBookedDevicesLogs(bookingLogID, bookingModel.BookingID);
 
-            return GoToBooking(bookingModel.BookingID.ToString());
+            return RedirectToAction("RelocateUser", "Home");
         }
 
         /// <summary>
