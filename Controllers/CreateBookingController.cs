@@ -293,6 +293,13 @@ namespace HUS_project.Controllers
 
 
         //helper methods
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="newdata"></param>
+        /// <param name="submitData"></param>
+        /// <returns></returns>
         private CreateBookingModel UpdateBasket(CreateBookingModel newdata, string submitData)
         {
             DBManagerShared dbShared = new DBManagerShared(configuration);
@@ -300,11 +307,10 @@ namespace HUS_project.Controllers
             //split data
             string[] splittedData = submitData.Split(';');
 
-            if (splittedData.Length > 1)
+            if (splittedData.Length > 2 && int.TryParse(splittedData[2], out int quantity))
             {
                 int id = int.Parse(splittedData[0]);
                 int stock = int.Parse(splittedData[1]);
-                int quantity = int.Parse(splittedData[2]);
                 
 
                 //check if model exists in itemlines

@@ -19,7 +19,7 @@ namespace HUS_project.DAL
         /// <param name="uniLogin"></param>
         /// <param name="pass"></param>
         /// <returns></returns>
-        public static List<string> TestLogin(string uniLogin, string pass)
+        internal List<string> TestLogin(string uniLogin, string pass)
         {
             List<UserLoginDataModel> TestAccounts = new List<UserLoginDataModel>()
             {
@@ -65,7 +65,7 @@ namespace HUS_project.DAL
         /// <param name="uniLogin"></param>
         /// <param name="password"></param>
         /// <returns>All relevant memberships in "List<string>", as well as any errors encountered in this endeavour.</returns>
-        public static List<string> GetAccessResponses(string uniLogin, string password)
+        internal List<string> GetAccessResponses(string uniLogin, string password)
         {
             // Directory Entry - This is the thing which controls how we connect to AD: the path there and our authentication.
             // ConnectionString, username, password - Any valid ZBC user can use their credentials for LDAP,
@@ -107,7 +107,7 @@ namespace HUS_project.DAL
         /// <param name="group">Group to check if user a member of.</param>
         /// <param name="ldapAccess"></param>
         /// <returns></returns>
-        static bool ConfirmUserMembership(string uniLogin, string group, DirectoryEntry ldapAccess)
+        bool ConfirmUserMembership(string uniLogin, string group, DirectoryEntry ldapAccess)
         {
             // A "DirectorySearcher" can search a directory for all kinds of AD objects. We are trying to find a user.
             DirectorySearcher dsFindUser = new DirectorySearcher(ldapAccess);
