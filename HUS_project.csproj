@@ -15,6 +15,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\DeviceContent\" />
     <Folder Include="wwwroot\DeviceImages\" />
+    <Folder Include="wwwroot\Graphic\temp\" />
   </ItemGroup>
 
 </Project>

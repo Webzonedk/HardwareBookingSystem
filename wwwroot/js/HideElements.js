@@ -3,7 +3,10 @@
 $(document).ready(function (e) {
 
     var video = document.getElementById("video");
-    video.style.display = "none";
+    if (video != null) {
+        video.style.display = "none";
+
+    }
 
     //check if user in on a mobile device
     var mobile = window.matchMedia("only screen and (max-width: 760px)").matches;

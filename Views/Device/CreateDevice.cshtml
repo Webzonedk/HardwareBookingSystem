@@ -8,20 +8,16 @@
 <div class="row blue-oyster-bar"></div>
 
 
+
+
+
+
 <div class="container center containerMain box-shadow">
 
-    <!--Header text-->
-    <div class=" row containerHeader">
-        <div class="col-12">
-            <h4>Opret enhed</h4>
-        </div>
-
-    </div>
 
 
 
     <form class="row containerBody center was-validated" id="form" asp-action="CheckImage" method="post" autocomplete="off">
-
         <!--empty col-->
         <div class="col-xl-2 col-md-6 gx-3 gy-3"></div>
 
@@ -65,10 +61,10 @@
                     }
 
                     <input type="file" id="FileUpload" accept="image/*" onchange="UploadImage(event)" />
-
+                    <div>(Max 2 mb)</div>
                 </div>
-            </div>
 
+            </div>
         </div>
 
         <!--user input fields-->
@@ -137,15 +133,45 @@
             </div>
         </div>
 
-
-
     </form>
 
+
+
+   
+
+
+    
+
+
+    <!-- Modal -->
+    <div id="croppingpanel" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Some text in the modal.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <div class="row containerFooter">
         <h4>&nbsp;</h4>
     </div>
+
 </div>
+
+
+
 
 <!--java script to count remaining text in description-->
 <script src="~/js/textCount.js"></script>
@@ -154,3 +180,6 @@
 <script src="~/js/Camera_simple.js"></script>
 <script src="~/js/HideElements.js"></script>
 <script src="~/js/PostImage.js"></script>
+
+
+
