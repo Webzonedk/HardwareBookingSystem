@@ -102,7 +102,7 @@ namespace HUS_project.Controllers
                         {
                             accessLevel += 2;
                         }
-                        else if (response == "ZBC-RIAH-Ansatte")
+                        else if (response == "zbc-riah-Data-IT")
                         {
                             accessLevel += 1;
                         }
