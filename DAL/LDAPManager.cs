@@ -23,9 +23,9 @@ namespace HUS_project.DAL
         {
             List<UserLoginDataModel> TestAccounts = new List<UserLoginDataModel>()
             {
-                new UserLoginDataModel("teach", "Kode1234"), // ZBC-RIAH-Ansatte
+                new UserLoginDataModel("teach", "Kode1234"), // zbc-riah-Data-IT
                 new UserLoginDataModel("skpstud", "Kode1234"), // ZBC-Ri-skpElev
-                new UserLoginDataModel("skpteach", "Kode1234"), // ZBC-Ri-skpElev + ZBC-RIAH-Ansatte
+                new UserLoginDataModel("skpteach", "Kode1234"), // ZBC-Ri-skpElev + zbc-riah-Data-IT
                 new UserLoginDataModel("dude", "Kode1234") // NO ACCESS
             };
 
@@ -39,13 +39,13 @@ namespace HUS_project.DAL
                         switch (uniLogin)
                         {
                             case "teach":
-                                groups.Add("ZBC-RIAH-Ansatte");
+                                groups.Add("zbc-riah-Data-IT");
                                 break;
                             case "skpstud":
                                 groups.Add("ZBC-Ri-skpElev");
                                 break;
                             case "skpteach":
-                                groups.Add("ZBC-RIAH-Ansatte");
+                                groups.Add("zbc-riah-Data-IT");
                                 groups.Add("ZBC-Ri-skpElev");
                                 break;
                         }
@@ -86,9 +86,9 @@ namespace HUS_project.DAL
                 }
 
                 // Now going to do the same, to see if there's a ZBC Ringsted Employee with this uniLogin.
-                if(ConfirmUserMembership(uniLogin, "ZBC-RIAH-Ansatte", ldapAccess))
+                if(ConfirmUserMembership(uniLogin, "zbc-riah-Data-IT", ldapAccess))
                 {
-                    reponses.Add("ZBC-RIAH-Ansatte");
+                    reponses.Add("zbc-riah-Data-IT");
                 }
             }
             catch (Exception e)
