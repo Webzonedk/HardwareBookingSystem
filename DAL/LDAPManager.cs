@@ -121,11 +121,11 @@ namespace HUS_project.DAL
                 (
                     "(&" +
                         "(objectCategory=person)" +
-                        "(mail={0})" +
+                        "(sAMAccountName={0})" +
                         "(memberof=CN={1},OU=ZBC,OU=Groups,DC=efif,DC=dk)" +
                     ")",
-                    uniLogin + "@zbc.dk", group
-                    // ^ This way 'uniLogin' + "@zbc.dk" will be put where it says {0}, same for 'group' for {1}. This is to prevent injections.
+                    uniLogin, group
+                // ^ This way 'uniLogin' will be put where it says {0}, same for 'group' for {1}. This is to prevent injections.
                 );
 
             // This is where the program tries to find in AD what we set it to look for. See the comments for the Filter above.
