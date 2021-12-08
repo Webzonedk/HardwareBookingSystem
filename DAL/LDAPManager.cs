@@ -113,7 +113,7 @@ namespace HUS_project.DAL
             DirectorySearcher dsFindUser = new DirectorySearcher(ldapAccess);
             dsFindUser.SearchScope = SearchScope.Subtree;
 
-            // If no properties are specified, it will load them all - However, common sense dictates we limit it to what we need. "mail" in our case.
+            // If no properties are specified, it will load them all - However, common sense dictates we limit it to what we need. "username" in our case.
             dsFindUser.PropertiesToLoad.Add("sAMAccountName");
 
             // Below is a LDAP Syntax Filter. It decides how the search works. It looks for a Person whose email is "uniLogin + @zbc.dk" and is a member of "group"
