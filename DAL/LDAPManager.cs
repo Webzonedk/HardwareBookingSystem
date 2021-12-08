@@ -114,7 +114,7 @@ namespace HUS_project.DAL
             dsFindUser.SearchScope = SearchScope.Subtree;
 
             // If no properties are specified, it will load them all - However, common sense dictates we limit it to what we need. "mail" in our case.
-            dsFindUser.PropertiesToLoad.Add("mail");
+            dsFindUser.PropertiesToLoad.Add("sAMAccountName");
 
             // Below is a LDAP Syntax Filter. It decides how the search works. It looks for a Person whose email is "uniLogin + @zbc.dk" and is a member of "group"
             dsFindUser.Filter = string.Format
@@ -131,14 +131,14 @@ namespace HUS_project.DAL
             // This is where the program tries to find in AD what we set it to look for. See the comments for the Filter above.
             SearchResult result = dsFindUser.FindOne();
 
-            if (result != null && result.Properties["mail"] != null)
+            if (result != null && result.Properties["sAMAccountName"] != null)
             {
                 // Here we will try to get the user's email address, just to see if the user exists.
                 // "result" itself is almost never null, even if it does not find a user. Therefore we have to check if there's any useful info in "mail".
-                string emailFound = result.Properties["mail"][0].ToString();
+                string emailFound = result.Properties["sAMAccountName"][0].ToString();
 
                 // User is not a member of the group, if user's email was not found.
-                if (emailFound == uniLogin + "@zbc.dk")
+                if (emailFound == uniLogin)
                 {
                     return true;
                 }
