@@ -135,10 +135,10 @@ namespace HUS_project.DAL
             {
                 // Here we will try to get the user's email address, just to see if the user exists.
                 // "result" itself is almost never null, even if it does not find a user. Therefore we have to check if there's any useful info in "mail".
-                string emailFound = result.Properties["sAMAccountName"][0].ToString();
+                string userFound = result.Properties["sAMAccountName"][0].ToString();
 
                 // User is not a member of the group, if user's email was not found.
-                if (emailFound == uniLogin)
+                if (userFound == uniLogin)
                 {
                     return true;
                 }
