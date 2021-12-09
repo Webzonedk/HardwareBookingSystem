@@ -19,7 +19,10 @@
 
                 <input placeholder="Vælg Dato" type="date" onfocus="ClearTimeout()" onfocusout="SetTimeout()" id="startDate" class="form-select" asp-for="@Model.SearchModel.RentDate">
                 <label for="startDate">start dato:</label>
-
+                @if (ViewBag.StartDateError != null)
+                {
+                    <div class="col-12 text-red">@ViewBag.StartDateError&nbsp;</div>
+                }
             </div>
 
         </div>
@@ -30,6 +33,10 @@
             <div class="form-floating">
                 <input placeholder="Vælg Dato" type="date" onfocus="ClearTimeout()" id="endDate" onfocusout="SetTimeout()" class="form-select" asp-for="@Model.SearchModel.ReturnDate">
                 <label for="endDate">slut dato:</label>
+                @if (ViewBag.EndDateError != null)
+                {
+                    <div class="col-12 text-red">@ViewBag.EndDateError&nbsp;</div>
+                }
             </div>
 
         </div>
@@ -193,13 +200,13 @@
                 <!--show in stock-->
                 @*<div class="col-lg-1 col-2 p-1 border-end border-white border-1">
 
-                    @for (int j = 0; j < Model.InventoryBooking[i].InStock.Count; j++)
-                    {
-                        <div class="text-green" id=@("stock_"+i)>@Model.InventoryBooking[i].InStock[j]</div>
+                        @for (int j = 0; j < Model.InventoryBooking[i].InStock.Count; j++)
+                        {
+                            <div class="text-green" id=@("stock_"+i)>@Model.InventoryBooking[i].InStock[j]</div>
 
-                    }
+                        }
 
-                </div>*@
+                    </div>*@
 
                 <!--show blank column if in stock-->
                 <div class="col-xl-1 col-4 p-1 border-end border-white border-1">
@@ -208,8 +215,8 @@
                     @if (@Model.InventoryBooking[i].InStock[0] > 0)
                     {
                         @*<div>&nbsp;</div>*@
-                        <input hidden id=@("stock_"+i)  value="@Model.InventoryBooking[i].InStock[0]"/>
-                        <div class="text-green" >@Model.InventoryBooking[i].InStock[0] stk </div>
+                        <input hidden id=@("stock_"+i) value="@Model.InventoryBooking[i].InStock[0]" />
+                        <div class="text-green">@Model.InventoryBooking[i].InStock[0] stk </div>
                     }
 
                     <!--items not in stock-->
@@ -233,7 +240,7 @@
                     @for (int j = 0; j < Model.InventoryBooking[i].RentDate.Count; j++)
                     {
                         <div style="color: #ABABAB">@(Model.InventoryBooking[i].RentDate[j].ToString("dd\\/MM yyyy")+" til "+ Model.InventoryBooking[i].ReturnDate[j].ToString("dd\\/MM yyyy"))</div>
-                       
+
                     }
 
 
@@ -244,7 +251,7 @@
                 <!--show input field-->
                 <div class="col-xl-1 col-2 p-1 border-white border-1 center">
 
-                        @{int index = -1;} 
+                    @{int index = -1;}
                     <!--count number in basket-->
                     @if (Model.ItemLines.Count > 0)
                     {
@@ -286,12 +293,12 @@
                     <!--<div class="row center">-->
                     <!--create message to show quantity is larger than stock-->
                     <!--@if (ViewBag.quantityError != null && Model.InventoryBooking[i].ModelID == ViewBag.id)
-        {
-            <div class="col-12 text-red">@ViewBag.quantityError&nbsp;</div>
-        }
+                        {
+                            <div class="col-12 text-red">@ViewBag.quantityError&nbsp;</div>
+                        }
 
 
-    </div>-->
+                    </div>-->
 
                 </div>
 

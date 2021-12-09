@@ -44,8 +44,12 @@ namespace HUS_project.Controllers
             newdata.ItemLines = data.ItemLines;
             newdata.SearchModel = data.SearchModel;
             newdata.BasketCount = data.BasketCount;
+            newdata.DateValidated = data.DateValidated;
 
-           
+            //validate dates
+            newdata.DateValidated = ValidateDates(data.SearchModel.RentDate, data.SearchModel.ReturnDate);
+
+
             return View(newdata);
         }
 
@@ -69,8 +73,8 @@ namespace HUS_project.Controllers
             newdata.ItemLines = data.ItemLines;
             newdata.Location = data.Location;
             newdata.LocationDropdown.RemoveRange(0, 3);
+            newdata.DateValidated = data.DateValidated;
 
-           
 
             //check if quantity is not zero
             if (submitData.Length > 1)
@@ -123,6 +127,7 @@ namespace HUS_project.Controllers
             newdata.Location = data.Location;
             newdata.ModelID = data.ModelID;
             newdata.ModelName = data.ModelName;
+            newdata.DateValidated = data.DateValidated;
             newdata.LocationDropdown.RemoveRange(0, 3);
             ModelState.Clear();
 
@@ -156,8 +161,13 @@ namespace HUS_project.Controllers
             data.CategoryDropdown = dbShared.GetCategories();
             data.LocationDropdown = dbShared.GetRooms();
             data.LocationDropdown.RemoveRange(0, 3);
+            data.DateValidated = data.DateValidated;
             ModelState.Clear();
-            
+
+            //validate dates
+            data.DateValidated = ValidateDates(data.SearchModel.RentDate, data.SearchModel.ReturnDate);
+
+            Debug.WriteLine(data.DateValidated);
 
             return View(data);
         }
@@ -387,6 +397,53 @@ namespace HUS_project.Controllers
             return newdata;
         }
 
-      
+        //return validation for date
+      private bool ValidateDates(DateTime startDate,DateTime endDate)
+        {
+            try
+            {
+                //compare startDate with current date
+                int compareCurrentDateAndStartDate = DateTime.Compare(startDate, DateTime.Now);
+                int compareCurrentDateAndEndDate = DateTime.Compare(endDate, DateTime.Now);
+
+                //check if start and end date is not before today´s date
+                if (compareCurrentDateAndStartDate < 0)
+                {
+                    ViewBag.StartDateError = "start dato kan ikke være før dags Dato";
+                    // newdata.DateValidated = false;
+                }
+                else if (compareCurrentDateAndEndDate < 0)
+                {
+                    ViewBag.EndDateError = "slut dato kan ikke være før dags Dato";
+                    //  newdata.DateValidated = false;
+                }
+
+                //check if startDate is before endDate
+                if (compareCurrentDateAndStartDate > 0 && compareCurrentDateAndEndDate > 0)
+                {
+                    int compareResult = DateTime.Compare(startDate, endDate);
+                    if (compareResult >= 0)
+                    {
+                        ViewBag.StartDateError = "start dato kan ikke være på slut dato eller efter";
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+           
+        }
     }
 }
