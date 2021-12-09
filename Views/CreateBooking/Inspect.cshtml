@@ -18,7 +18,10 @@
 
                 <input placeholder="Vælg Dato" type="date" onfocus="ClearTimeout()" onfocusout="SetTimeout()" id="startDate" class="form-select" asp-for="@Model.SearchModel.RentDate">
                 <label for="startDate">start dato:</label>
-
+                @if (ViewBag.StartDateError != null)
+                {
+                    <div class="col-12 text-red">@ViewBag.StartDateError&nbsp;</div>
+                }
             </div>
 
         </div>
@@ -29,6 +32,10 @@
             <div class="form-floating">
                 <input placeholder="Vælg Dato" type="date" onfocus="ClearTimeout()" id="endDate" onfocusout="SetTimeout()" class="form-select" asp-for="@Model.SearchModel.ReturnDate">
                 <label for="endDate">slut dato:</label>
+                @if (ViewBag.EndDateError != null)
+                {
+                    <div class="col-12 text-red">@ViewBag.EndDateError&nbsp;</div>
+                }
             </div>
 
         </div>

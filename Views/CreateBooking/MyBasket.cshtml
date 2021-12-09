@@ -18,7 +18,10 @@
 
                 <input placeholder="Vælg Dato" type="date" onfocus="ClearTimeout()" onfocusout="SetTimeout()" id="floatinSelectGrid" class="form-select" asp-for="@Model.SearchModel.RentDate">
                 <label for="floatinSelectGrid">start dato:</label>
-
+                @if (ViewBag.StartDateError != null)
+                {
+                    <div class="col-12 text-red">@ViewBag.StartDateError&nbsp;</div>
+                }
             </div>
 
         </div>
@@ -29,6 +32,10 @@
             <div class="form-floating">
                 <input placeholder="Vælg Dato" type="date" onfocus="ClearTimeout()" id="floatinSelectGrid" onfocusout="SetTimeout()" class="form-select" asp-for="@Model.SearchModel.ReturnDate">
                 <label for="floatinSelectGrid">slut dato:</label>
+                @if (ViewBag.EndDateError != null)
+                {
+                    <div class="col-12 text-red">@ViewBag.EndDateError&nbsp;</div>
+                }
             </div>
 
         </div>
@@ -118,7 +125,7 @@
 
             <!--create order-->
             <div class="col-xl-2 col-4 p-1">
-                @if (Model.ItemLines.Count > 0)
+                @if (Model.ItemLines.Count > 0 && Model.DateValidated)
                 {
                     <button type="submit" class=" btn-primary btn btn-blue Button-Size btn-sm" asp-action="CreateBooking">Bestil</button>
 
@@ -152,6 +159,8 @@
 
         <input type="hidden" id="location" asp-for="@Model.Location" />
         <input type="hidden" id="notes" asp-for="@Model.BookingOrder.Notes" required />
+        <input type="hidden" asp-for="@Model.SearchModel.RentDate"/>
+        <input type="hidden" asp-for="@Model.SearchModel.ReturnDate"/>
 
 
         @for (int i = 0; i < Model.ItemLines.Count; i++)

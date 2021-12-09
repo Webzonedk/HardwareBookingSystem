@@ -14,6 +14,14 @@ namespace HUS_project.Models.ViewModels
         private List<ItemLineModel> itemLines;
         private BookingModel bookingOrder;
         private string notes;
+        private bool datevalidated;
+
+        public bool DateValidated
+        {
+            get { return datevalidated; }
+            set { datevalidated = value; }
+        }
+
 
         public string Notes
         {
